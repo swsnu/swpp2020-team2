@@ -23,4 +23,4 @@ matrix:
       script:
         - pylint **/*.py --load-plugins pylint_django
         - coverage run --source='.' manage.py test
-        - coverage_xml
+        - coverage xml
