@@ -6,7 +6,7 @@ matrix:
       sonarcloud:
         organization: swsnu
         token:
-          secure: mbF9lqnQj95hm2My9owj4WtLPyZyGL+QruFyYmhYSmMFaYpgcl9Zcj9Fl0awZzU0s0HakV6ok05Kpy10BaGB6lxy2PU5svK9kdfuaUUCHBl8yob8EWZG5dWmaQOTw0TrI3Mj3ssoWZSudY72CnxwqlRJ5AgAFEG3NvUgFywQY7QjDSP0OO8sEwhaI6M2ZeUUfhTFYwUDGCGkKVggHXc+iFb/bM7FWjEAFtVA/DrYdCj7ieZJAroSgqvjtIdUS/Y9nqIiNrwzGMuA2CvjbDADYW1sw2b3O0y62vM31Z9pCalBwQXTKQTNjLcRP4exYjp0QghFRsSCc7jW1LhjoAcMpn4oh2W8vgUuZJTsZYxI75CVhsdLFecewN7SqJRY4qAXWTwwSDcX263YimNck/p+NXAYLJKorAcx3dVvjJsnwdJls+VhItPzUnSYR5Hsx07ta6VUbYsuzO3hlVoRbcaZjDzXsVsk7xlMrLNlNrxIqM9CHEtPuVa/ynI+IFx0kPWrOMqyusG5vbUxX9YW/N3DUwpQlk8/LZzDZY/xX2FHBWixv2ASrP68HMJ1Z7NTIPEabboos6ZgvxLQcbSIzv2OyvmXAGgrbiU1cTYiz4yweMyGsXAWX1W6S/6bhISpW30qqtCBc1ADGS5lOL7ymkogB2nklMEtdbrb7Kv7+7a4Zj0=
+          secure: "fqQVH/ae961lj4jv1CJrhG3UBTgp4qUjipZQz1e2CnmhVgB0FZot6/pIGzJ8eTAk/OEDq+l5kIPrHDEgk8E5D1cobdEW5HQyIC2NlgYqB6YjcxbATA2pBaxddqsY5XHzLo+/SLCNm6qG6FyJL+Xp6J+7uLLYp4Y9vRHGkTzQM3YwhZb7T/qupMWVIKGLbZNafF93ota+V6N4hL0SsNQt8M191jC83Ja8wx7++pDgsG4XSUz3OTHvt6dSyp32SyjJ7hdMrt5lFFl7JJXumFhabiKJuqQb2vpIF8E6+pOvgYb+ve+HmqRoUHQ10J5EtqIzYHnFSKpGUviSR5GtUvMWkEDEJH+XWpjikrXteaUv5heifkI8wgxbLFoKBBz0RFwZKpebGatHDRlIL/Yp9AY7une71JWqDSU2AqaoCZ3rCIMvqDXNxsJYnW8njrsT1pP0SSWJt21CVXyLIKpUD4NysxD+rIrvCKsqoooxteER9rULq8zUdb5lc7P9ZW1Xi/DGSg0wziFi7929wFm3fkwgImmZz3aLuYnK66QZljaS81/+eq/s7xkYsbl+3J/wRedCdUrJaf3eQ8Hxkr+f5y2EA6zqB5R/BqoHFqgMwcs6SpbXWrLOjEIOthRJEhIfno+2liY5Bodf0StpLykb0jajr8KMH4WfymFUVZBgzdX8m4g=" 
     cache:
     - yarn: true
     before_install:
@@ -29,6 +29,3 @@ matrix:
     - pylint **/*.py --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
-env:
-  global:
-  - secure: o66rRMXplMpRYpwDQL/e2xX+HMd0jl/rghr2dArRiZHeHV66oMZX+npyXAlGXGesZ6j24gRjYe12dmcmzEHO+EfbAI9uTJ7cmIPIIS57ffw+e/o0PHbeOK7LIitkeuBR9rBAP9rWl7DrlhuzOFfpLMFc0EoTiM0DdJ2vyB4cBr2O7645b/sWv9w1kiAhM1L3NnCOoMrr08zcNVRZAynpnBCEewFeRC72VtvjPunovO1dyS9jL0MwZKibPXRiEu1SbnaRxdXFjZjPYAs0LFgWYgMI1tWyVAH2WsHdYo5sFO/p6Lc+dnDxPhbkHw6BxusUc2dGvmQNvuPnwA8Zl3Qvzq1vmVRAayzCvbx0wQSH2543Zla38Y9C/fCJDx8epLLIBVi94ZW0WZTbAl2oUgcb80eSzK/JK9FkJ9e7MdxLmoi8DiJcPqcYhf6lPCsUhYuoF9nTMwNaOdu5ZJG6RVFam9ta9MRoEBXVFJVZ2kI37hmA7KrOaW+v7/qaqvloi0ZngzlhSaJfDZbfWvcOaGT8offYG8NIwI7pfmMe4H/ugIflVHt08OdBSJ0eTQLOpoGv2t3Hqdezem1J5ntDgHM1Xsa/Ow5UOPrvZQZUaLLQWikfaDjJgnHLpW6ZT+gsxWAWNd8Y+HuKDW27IGWjch/FkkXESeDBHoq8Q/kBZ+QqNDw=
