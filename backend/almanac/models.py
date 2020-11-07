@@ -128,6 +128,42 @@ class Event(models.Model):
         related_name='last_editor_group',
     )
 
+class EventReport(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='event_eventreport'
+    )
+    reporter = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reporter_eventreport',
+    )
+    content = models.TextField()
+
+class GroupReport(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name='event_groupreport'
+    )
+    reporter = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reporter_groupreport',
+    )
+    content = models.TextField()
+
 class UserPreference(models.Model):
 
     '''
@@ -149,5 +185,34 @@ class UserPreference(models.Model):
         on_delete=models.CASCADE,
         related_name='department_userpreference',
     )
-    title = models.CharField(max_length=64)
-    place = models.TextField()
+    profile = models.ForeignKey(
+        Image,
+        on_delete=models.CASCADE,
+        related_name='profile_userpreference'
+    )
+    background = models.ForeignKey(
+        Background,
+        on_delete=models.CASCADE,
+        related_name='background_userpreference'
+    )
+    language = models.ForeignKey(
+        Image,
+        on_delete=models.CASCADE,
+        related_name='language_userpreference'
+    )
+    likes = models.ManyToManyField(
+        Event,
+        related_name='likes_userpreference'
+    )
+    brings = models.ManyToManyField(
+        Event,
+        related_name='brings_userpreference'
+    )
+    likes_group = models.ManyToManyField(
+        Group,
+        related_name='likes_group_userpreference'
+    )
+    gets_notification = models.ManyToManyField(
+        Group,
+        related_name='gets_notification_userpreference'
+    )
