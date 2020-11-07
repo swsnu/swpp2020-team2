@@ -24,38 +24,29 @@ class Department(models.Model):
 
     name = models.CharField(max_length=30)
 
-class UserPreference(models.Model):
+class Image(models.Model):
 
     '''
     a class docstring
     '''
 
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        relate_name='user_set',
-    )
-    university = models.ForeignKey(
-        University,
-        on_delete=models.CASCADE,
-        relate_name='university_set',
-    )
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.CASCADE,
-        relate_name='department_set',
-    )
-    title = models.CharField(max_length=64)
-    place = models.TextField()
+    name = models.ImageField()
 
-class Event(models.Model):
+class Background(models.Model):
 
     '''
     a class docstring
     '''
 
-    title = models.CharField(max_length=64)
-    place = models.CharField(max_length=120)
+    name = models.IntegerField()
+
+class Language(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    name = models.IntegerField()
 
 class Category(models.Model):
 
@@ -72,3 +63,64 @@ class Tag(models.Model):
     '''
 
     name = models.CharField(max_length=30)
+
+class Group(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    name = models.CharField(max_length=30)
+    member = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='member_group'
+    )
+    admin = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='admin_group'
+    )
+    king = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='king_group'
+    )
+    description = models.TextField()
+    profile = models.ForeignKey(
+        Image,
+        on_delete=models.CASCADE,
+        related_name='profile_group'
+    )
+    privacy = models.IntegerField()
+
+class UserPreference(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='user_userpreference',
+    )
+    university = models.ForeignKey(
+        University,
+        on_delete=models.CASCADE,
+        related_name='university_userpreference',
+    )
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.CASCADE,
+        related_name='department_userpreference',
+    )
+    title = models.CharField(max_length=64)
+    place = models.TextField()
+
+class Event(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    title = models.CharField(max_length=64)
+    place = models.CharField(max_length=120)
