@@ -1,3 +1,7 @@
+'''
+a standard docstring
+'''
+
 from django.apps import AppConfig
 
 
