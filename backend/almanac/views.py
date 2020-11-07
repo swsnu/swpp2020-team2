@@ -3,9 +3,9 @@ a standard docstring
 '''
 
 # from django.shortcuts import render
+import json
 from django.http import HttpResponse, HttpResponseNotAllowed
 # from django.contrib.auth import authenticate, login, logout
-import json
 from django.conf import settings
 
 # Create your views here.
@@ -22,8 +22,7 @@ def signup(request):
         password = req_data['password']
         settings.AUTH_USER_MODEL.objects.create_user(username=username, password=password)
         return HttpResponse(status=201)
-    else:
-        return HttpResponseNotAllowed(['POST'])
+    return HttpResponseNotAllowed(['POST'])
 
 def index(request):
 
