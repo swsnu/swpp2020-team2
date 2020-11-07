@@ -11,6 +11,6 @@ def index(request):
 
     '''
     a function docstring
-    ''' 
+    '''
 
     return HttpResponse('Hello, world!')
