@@ -7,8 +7,8 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+'''
+a class docstring
+''' 
 def index(request):
-    '''
-    a class docstring
-    ''' 
     return HttpResponse('Hello, world!')
