@@ -92,6 +92,42 @@ class Group(models.Model):
     )
     privacy = models.IntegerField()
 
+class Event(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    title = models.CharField(max_length=64)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name='category_event'
+    )
+    tag = models.ManyToManyField(
+        Tag,
+        related_name='tag_group',
+    )
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name='group_event'
+    )
+    place = models.TextField()
+    date = models.DateField()
+    begin_time = models.TimeField()
+    end_time = models.TimeField()
+    content = models.TextField()
+    image = models.ManyToManyField(
+        Image,
+        related_name='image_group'
+    )
+    last_editor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='last_editor_group',
+    )
+
 class UserPreference(models.Model):
 
     '''
@@ -115,12 +151,3 @@ class UserPreference(models.Model):
     )
     title = models.CharField(max_length=64)
     place = models.TextField()
-
-class Event(models.Model):
-
-    '''
-    a class docstring
-    '''
-
-    title = models.CharField(max_length=64)
-    place = models.CharField(max_length=120)
