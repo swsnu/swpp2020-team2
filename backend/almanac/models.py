@@ -4,6 +4,7 @@ a standard docstring
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 
@@ -23,14 +24,14 @@ class Department(models.Model):
 
     name = models.CharField(max_length=30)
 
-class User_Preference(models.Model):
+class UserPreference(models.Model):
 
     '''
     a class docstring
     '''
 
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         relate_name='user_set',
     )
