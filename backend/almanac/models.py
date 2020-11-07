@@ -13,5 +13,21 @@ class Event(models.Model):
     a class docstring
     '''
 
-    title = models.CharField(max_length=120)
+    title = models.CharField(max_length=64)
     place = models.CharField(max_length=120)
+
+class Category(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    name = models.CharField(max_length=20)
+
+class Tag(models.Model):
+
+    '''
+    a class docstring
+    '''
+
+    name = models.CharField(max_length=20)
