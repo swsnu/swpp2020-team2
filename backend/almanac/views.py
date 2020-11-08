@@ -5,7 +5,7 @@ a standard docstring
 # from django.shortcuts import render
 import json
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.contrib.auth import login, authenticate#, logout
+from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
 from django.contrib.auth import get_user_model
@@ -53,6 +53,11 @@ def activate(request, uidb64, token):
     return HttpResponseNotAllowed(['PUT'])
 
 def signin(request):
+
+    '''
+    a function docstring
+    '''
+    
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         username = req_data['username']
@@ -65,6 +70,22 @@ def signin(request):
             return HttpResponse(status=401)
     else:
         return HttpResponseNotAllowed(['POST'])
+
+def signout(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            #user_dict = {'username': request.user.username, 'password': request.user.password}
+            logout(request)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=401)
+    else:
+        return HttpResponseNotAllowed(['GET'])
 
 def index(request):
 
