@@ -95,7 +95,7 @@ def index(request):
     return HttpResponse('Hello, world!')
 
 @ensure_csrf_cookie
-def token(request):
+def get_token(request):
 
     '''
     a function docstring
