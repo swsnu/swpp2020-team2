@@ -67,8 +67,7 @@ def signin(request):
             login(request, user)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
-    else:
-        return HttpResponseNotAllowed(['POST'])
+    return HttpResponseNotAllowed(['POST'])
 
 def signout(request):
 
@@ -82,8 +81,7 @@ def signout(request):
             logout(request)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
-    else:
-        return HttpResponseNotAllowed(['GET'])
+    return HttpResponseNotAllowed(['GET'])
 
 def index(request):
 
