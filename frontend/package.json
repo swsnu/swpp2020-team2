@@ -31,7 +31,7 @@
       "react-app"
     ],
     "extends": [
-      "react/reccommended",
+      "plugin:react/reccommended",
       "react-app/jest"
     ]
   },
