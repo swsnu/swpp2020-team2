@@ -108,6 +108,8 @@ def get_user(request, user_id):
         'email': user.email}
         return JsonResponse(response_dict)
 
+    return HttpResponseNotAllowed(['GET', 'DELETE'])
+
 def create_delete_university(request, university_id):
 
     '''
@@ -126,6 +128,8 @@ def create_delete_university(request, university_id):
         response_dict = {'id': university.id, 'name': university.name,
         'domain': university.domain}
         return JsonResponse(response_dict)
+
+    return HttpResponseNotAllowed(['GET', 'DELETE'])
 
 def index(request):
 
