@@ -24,6 +24,13 @@ matrix:
     python: '3.7'
     services: mysql
     sudo: true
+    addons:
+      apt:
+        sources:
+          - mysql-5.7-trusty
+        packages:
+          - mysql-server
+          - mysql-client
     cache:
     - pip: true
     before_install:
