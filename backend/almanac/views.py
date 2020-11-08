@@ -72,6 +72,8 @@ def signin(request):
             return HttpResponse(status=204)
         return HttpResponse(status=401)
 
+    return HttpResponseNotAllowed(['POST'])
+
 def signout(request):
 
     '''
@@ -87,6 +89,8 @@ def signout(request):
             logout(request)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
+
+    return HttpResponseNotAllowed(['GET'])
 
 def get_user(request, user_id):
 
