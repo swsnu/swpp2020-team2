@@ -4,14 +4,14 @@ a standard docstring
 
 # from django.shortcuts import render
 import json
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-# from .models import University
+from .models import User#, University
 from .tokens import account_activation_token
 
 User = get_user_model()
@@ -61,6 +61,9 @@ def signin(request):
     a function docstring
     '''
 
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         username = req_data['username']
@@ -70,7 +73,6 @@ def signin(request):
             login(request, user)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
-    return HttpResponseNotAllowed(['POST'])
 
 def signout(request):
 
@@ -78,13 +80,35 @@ def signout(request):
     a function docstring
     '''
 
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
     if request.method == 'GET':
         if request.user.is_authenticated:
             #user_dict = {'username': request.user.username, 'password': request.user.password}
             logout(request)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
-    return HttpResponseNotAllowed(['GET'])
+
+def get_user(request, id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not User.objects.filter(id=id).exists():
+        return HttpResponse(status=404)
+
+    user = User.objects.get(id=id)
+
+    if request.method == 'GET':
+        response_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email}
+        return JsonResponse(response_dict)
 
 def index(request):
 
