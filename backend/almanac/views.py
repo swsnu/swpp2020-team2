@@ -5,9 +5,9 @@ a standard docstring
 # from django.shortcuts import render
 import json
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login #, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
 from django.contrib.auth import get_user_model
 from .tokens import account_activation_token
 
