@@ -57,7 +57,7 @@ def signin(request):
     '''
     a function docstring
     '''
-    
+
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         username = req_data['username']
@@ -66,8 +66,7 @@ def signin(request):
         if user is not None:
             login(request, user)
             return HttpResponse(status=204)
-        else:
-            return HttpResponse(status=401)
+        return HttpResponse(status=401)
     else:
         return HttpResponseNotAllowed(['POST'])
 
@@ -82,8 +81,7 @@ def signout(request):
             #user_dict = {'username': request.user.username, 'password': request.user.password}
             logout(request)
             return HttpResponse(status=204)
-        else:
-            return HttpResponse(status=401)
+        return HttpResponse(status=401)
     else:
         return HttpResponseNotAllowed(['GET'])
 
