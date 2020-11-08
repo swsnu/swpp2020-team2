@@ -4,9 +4,9 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import Main from './containers/main/Main';
 
-function App(props) {
+function App({history}) {
   return (
-    <ConnectedRouter history={props.history}>
+    <ConnectedRouter history={history}>
       <div className="App">
         <Switch>
           <Route path='/main' exact component={Main}/>
