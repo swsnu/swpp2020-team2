@@ -23,6 +23,7 @@ matrix:
   - language: python
     python: '3.7'
     services: mysql
+    sudo: true
     cache:
     - pip: true
     before_install:
