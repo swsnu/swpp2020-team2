@@ -26,9 +26,12 @@
     "env":{
       "jest": true
     },
+    "plugins":[
+      "react",
+      "react-app"
+    ],
     "extends": [
-      "plugin:react/reccommended",
-      "react-app",
+      "react/reccommended",
       "react-app/jest"
     ]
   },
