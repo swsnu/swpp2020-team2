@@ -18,6 +18,9 @@ class University(models.Model):
     name = models.CharField(max_length=30)
     domain = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.name
+
 class Department(models.Model):
 
     '''

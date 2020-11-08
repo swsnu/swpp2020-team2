@@ -10,7 +10,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from .models import User, University
+from almanac.models import User, University
 from .tokens import account_activation_token
 
 # Create your views here.
