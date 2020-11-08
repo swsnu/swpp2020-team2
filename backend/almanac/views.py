@@ -88,7 +88,7 @@ def signout(request):
             return HttpResponse(status=204)
         return HttpResponse(status=401)
 
-def get_user(request, id):
+def get_user(request, user_id):
 
     '''
     a function docstring
@@ -97,10 +97,10 @@ def get_user(request, id):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if not User.objects.filter(id=id).exists():
+    if not User.objects.filter(id=user_id).exists():
         return HttpResponse(status=404)
 
-    user = User.objects.get(id=id)
+    user = User.objects.get(id=user_id)
 
     if request.method == 'GET':
         response_dict = {'id': user.id, 'username': user.username,
@@ -108,7 +108,7 @@ def get_user(request, id):
         'email': user.email}
         return JsonResponse(response_dict)
 
-def create_delete_university(request, id):
+def create_delete_university(request, university_id):
 
     '''
     a function docstring
@@ -117,10 +117,10 @@ def create_delete_university(request, id):
     if request.method not in ['GET', 'DELETE']:
         return HttpResponseNotAllowed(['GET', 'DELETE'])
 
-    if not University.objects.filter(id=id).exists():
+    if not University.objects.filter(id=university_id).exists():
         return HttpResponse(status=404)
 
-    university = University.objects.get(id=id)
+    university = University.objects.get(id=university_id)
 
     if request.method == 'GET':
         response_dict = {'id': university.id, 'name': university.name,

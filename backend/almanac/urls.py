@@ -12,7 +12,7 @@ urlpatterns = [
     path('signup/activate/<uidb64>/<token>', views.activate, name='activate'),
     path('signin/', views.signin, name='signin'),
     path('signout/', views.signout, name='signout'),
-    path('user/<int:id>/', views.get_user, name='get_user'),
-    path('university/<int:id>/', views.create_delete_university, name='create_delete_university'),
+    path('user/<int:user_id>/', views.get_user, name='get_user'),
+    path('university/<int:university_id>/', views.create_delete_university, name='create_delete_university'),
     path('token/', views.get_token, name='token'),
 ]
