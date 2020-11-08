@@ -1,14 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
 
-class Main extends Component{
-  render(){
-    return(
-      <div className="Main">
-        <h1>Almanac</h1>
-      </div>
-    )
-  }
-}
+const Main = () => (
+  <div className="Main">
+    <h1>Almanac</h1>
+  </div>
+);
 
-export default connect(null,null)(Main);
+export default Main;

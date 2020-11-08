@@ -1,10 +1,8 @@
-const initialState={
-    users:[],
-    loginedUser:null,
+const initialState = {
+  users: [],
+  loginedUser: null,
 };
 
-const userReducer=(state=initialState,action)=>{
-    return state;
-}
+const userReducer = (state = initialState) => state;
 
 export default userReducer;
