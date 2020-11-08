@@ -100,8 +100,7 @@ def token(request):
     '''
     a function docstring
     '''
-    
+
     if request.method == 'GET':
         return HttpResponse(status=204)
-    else:
-        return HttpResponseNotAllowed(['GET'])
+    return HttpResponseNotAllowed(['GET'])
