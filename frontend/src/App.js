@@ -11,7 +11,7 @@ function App(props) {
         <Switch>
           <Route path='/main' exact component={Main}/>
           <Redirect exact from='/' to='/main'/>
-          <Route render={()=><h1>Not found</h1>}/>
+          <Route render={()=><h1>Not Found</h1>}/>
         </Switch>
       </div>
     </ConnectedRouter>

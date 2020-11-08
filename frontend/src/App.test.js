@@ -6,12 +6,6 @@ import App from './App';
 import { getMockStore } from './test-utils/mocks';
 import { history } from './store/store';
 
-jest.mock('./containers/login/Login', () => {
-  return jest.fn(props => {
-    return (<div className="spyLogin"/>);
-  });
-});
-
 describe('App',()=>{
   const mockedstate={};
   const mockedStore=getMockStore(mockedstate);
