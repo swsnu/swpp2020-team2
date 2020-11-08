@@ -23,7 +23,11 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
+    "env":{
+      "jest": true
+    },
     "extends": [
+      "plugin:react/reccommended",
       "react-app",
       "react-app/jest"
     ]
