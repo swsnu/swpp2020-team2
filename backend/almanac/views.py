@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from .models import User#, University
+from .models import User, University
 from .tokens import account_activation_token
 
 User = get_user_model()
@@ -108,6 +108,25 @@ def get_user(request, id):
         response_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email}
+        return JsonResponse(response_dict)
+
+def create_delete_university(request, id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not University.objects.filter(id=id).exists():
+        return HttpResponse(status=404)
+
+    university = University.objects.get(id=id)
+
+    if request.method == 'GET':
+        response_dict = {'id': university.id, 'name': university.name,
+        'domain': university.domain}
         return JsonResponse(response_dict)
 
 def index(request):

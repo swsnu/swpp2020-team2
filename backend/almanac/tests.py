@@ -51,3 +51,23 @@ class AlmanacTestCase(TestCase):
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
+
+    def test_signup(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/signup/', json.dumps(
+            {'username': 'taekop', 'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/signup/', json.dumps(
+            {'username': 'taekop', 'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 201)
