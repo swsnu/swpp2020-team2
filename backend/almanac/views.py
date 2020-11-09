@@ -12,6 +12,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.encoding import force_bytes #, force_text
 
 from almanac.models import User, University
 from .tokens import account_activation_token
@@ -35,9 +36,10 @@ def signup(request):
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
-            ' via the link \nhttps://localhost/signup/{}/{}\n').format(
+            ' via the link \nhttps://localhost/signup/{}/{}'
+            '\nEnjoy your calenars!').format(
                 username,
-                urlsafe_base64_encode(user.id),
+                urlsafe_base64_encode(force_bytes(user.id)),
                 account_activation_token.make_token(user)
             )
             send_mail(
