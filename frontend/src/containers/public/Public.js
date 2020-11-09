@@ -6,10 +6,6 @@ import './Public.css';
 import Calendar from '../../components/Calendar/Calendar';
 import { createEventIcon } from '../../images/index';
 
-function onClickDate(day) {
-  // console.log('click date');
-}
-
 function onClickCreateEvent() {
   // console.log('click create event');
 }
@@ -28,9 +24,9 @@ class Public extends Component {
           <TopBar />
         </div>
         <div>
-          <Calendar events={events} onClickDate={onClickDate} />
+          <Calendar events={events} onClickCreateEvent={onClickCreateEvent} />
         </div>
-        <button className="createEventButton" src={createEventIcon} label="createEvent" type="button" onClick={onClickCreateEvent}>
+        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => onClickCreateEvent()}>
           <img className="img" src={createEventIcon} alt="+" />
         </button>
       </div>

@@ -9,28 +9,38 @@ import isSameMonth from 'date-fns/isSameMonth';
 import isSameDay from 'date-fns/isSameDay';
 import addMonths from 'date-fns/addMonths';
 import subMonths from 'date-fns/subMonths';
-import { categoryIcons } from '../../images/index';
+import { categoryIcons, createEventIcon } from '../../images/index';
+import List from '../List/List';
 import './Calendar.css';
 
-const Calendar = ({ events, onClickDate }) => {
+const Calendar = ({ events, onClickCreateEvent }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
+    if (selectedDate != null) setSelectedDate(addMonths(selectedDate, 1));
   };
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
+    if (selectedDate != null) setSelectedDate(subMonths(selectedDate, 1));
+  };
+  const onClickDate = (day) => {
+    setSelectedDate(day);
+  };
+  const onModalClose = () => {
+    setSelectedDate(null);
   };
   const header = () => {
     const dateFormat = 'yyyy. MM.';
     return (
       <div className="header">
-        <div className="arrow" onClick={prevMonth} onKeyPress={prevMonth} role="button" tabIndex="-1">
+        <div className="arrow" onClick={() => prevMonth()} onKeyPress={() => prevMonth()} role="button" tabIndex="-1">
           {'<'}
         </div>
         <div className="year_month">
           <span>{format(currentDate, dateFormat)}</span>
         </div>
-        <div className="arrow" onClick={nextMonth} onKeyPress={nextMonth} role="button" tabIndex="-1">
+        <div className="arrow" onClick={() => nextMonth()} onKeyPress={() => nextMonth()} role="button" tabIndex="-1">
           {'>'}
         </div>
       </div>
@@ -77,8 +87,8 @@ const Calendar = ({ events, onClickDate }) => {
           <div
             className={classNameConstructor(day_, monthStart)}
             key={day_}
-            onClick={onClickDate(day_)}
-            onKeyPress={onClickDate(day_)}
+            onClick={() => onClickDate(day_)}
+            onKeyPress={() => onClickDate(day_)}
             role="button"
             tabIndex="-1"
           >
@@ -97,10 +107,43 @@ const Calendar = ({ events, onClickDate }) => {
     }
     return <div className="body">{rows}</div>;
   };
+
+  const showModal = () => {
+    if (selectedDate === null) return <div />;
+    const day = selectedDate;
+    const dateFormat = 'yyyy. MM. dd. EEE';
+    const str = format(day, dateFormat);
+    const eventInDay = (typeof events === 'undefined') ? [] : events.filter((evt) => isSameDay(evt.date, day));
+    return (
+      <div className="Modal">
+        <div className="Window">
+          <div className="date">{str}</div>
+          <div className="events">
+            <div>
+              {`${eventInDay.length} events`}
+            </div>
+            <div>
+              <button className="createEventButton" src={createEventIcon} label="createEvent" type="button" onClick={onClickCreateEvent}>
+                <img className="img" src={createEventIcon} alt="+" />
+              </button>
+            </div>
+          </div>
+          <nav>
+            <List events={eventInDay} />
+          </nav>
+        </div>
+        <div className="CloseButton" onClick={() => onModalClose()} onKeyPress={() => onModalClose()} role="button" tabIndex="-1">X</div>
+      </div>
+    );
+  };
+
   return (
-    <div className="Calendar">
-      <div>{header()}</div>
-      <div>{cells()}</div>
+    <div className="View">
+      <div className="Calendar">
+        <div>{header()}</div>
+        <div>{cells()}</div>
+      </div>
+      <div>{showModal()}</div>
     </div>
   );
 };

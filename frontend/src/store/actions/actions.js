@@ -8,14 +8,24 @@ const sampleDate2 = addDays(sampleDate, 25);
 const sampleDate3 = addMonths(sampleDate, 1);
 const sample = [
   {
+    title: 'HIS 공연',
+    place: '학생회관',
+    group: {
+      name: 'HIS',
+    },
     category: {
-      id: 1,
+      id: 0,
     },
     date: sampleDate,
   },
   {
+    title: '제 27회 졸업전시회',
+    place: '미대 건물 1층',
+    group: {
+      name: '미대 학생회',
+    },
     category: {
-      id: 2,
+      id: 1,
     },
     date: sampleDate,
   },
