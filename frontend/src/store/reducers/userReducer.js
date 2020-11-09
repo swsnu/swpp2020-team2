@@ -1,8 +1,15 @@
+import * as actionTypes from '../actions/actionTypes';
+
 const initialState = {
-  users: [],
-  loginedUser: null,
+  signinedUser: null,
 };
 
-const userReducer = (state = initialState) => state;
+const userReducer = (state = initialState, action) => {
+  switch (action.type) {
+    default:
+      break;
+  }
+  return state;
+};
 
 export default userReducer;
