@@ -5,6 +5,7 @@ a standard docstring
 import json
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
+from django.core import mail
 
 # Create your tests here.
 
@@ -51,6 +52,10 @@ class AlmanacTestCase(TestCase):
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Almanac Email Verification')
+        self.assertEqual(len(mail.outbox[0].to), 1)
+        self.assertEqual(mail.outbox[0].to[0], 'taekop@snu.ac.kr')
 
     def test_signup(self):
 
