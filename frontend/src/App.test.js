@@ -6,6 +6,8 @@ import App from './App';
 import getMockStore from './test-utils/mocks';
 import { history } from './store/store';
 
+jest.mock('./containers/main/Main', () => jest.fn((props) => (<div className="spyMain" />)));
+
 describe('App', () => {
   const mockedstate = {};
   const mockedStore = getMockStore(mockedstate);

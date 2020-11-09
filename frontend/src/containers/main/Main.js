@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-const Main = () => (
-  <div className="Main">
-    <h1>Almanac</h1>
-  </div>
-);
+import * as actionCreators from '../../store/actions/index';
 
-export default Main;
+class Main extends Component {
+  render() {
+    return (
+      <div className="Main">
+        <h1>Almanac</h1>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  signinedUser: state.ur.signinedUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
