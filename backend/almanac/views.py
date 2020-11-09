@@ -188,6 +188,27 @@ def get_delete_university(request, university_id):
 
     return HttpResponseNotAllowed(['GET', 'DELETE'])
 
+def get_university_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not University.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    university = University.objects.get(name=name)
+
+    if request.method == 'GET':
+        university_dict = {'id': university.id, 'name': university.name,
+        'domain': university.domain}
+        return JsonResponse(university_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
 def index(request):
 
     '''

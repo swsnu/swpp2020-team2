@@ -17,5 +17,7 @@ urlpatterns = [
     views.get_create_university, name='create_university'),
     path('university/<int:university_id>/',
     views.get_delete_university, name='get_delete_university'),
+    path('university/<int:name>/',
+    views.get_university_by_name, name='get_university_by_name'),
     path('token/', views.get_token, name='token'),
 ]
