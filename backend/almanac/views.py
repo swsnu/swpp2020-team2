@@ -41,10 +41,10 @@ def signup(request):
                 account_activation_token.make_token(user)
             )
             send_mail(
-                'Almanac Email Verification',
-                content,
-                'almanac.staff@gmail.com',
-                [email],
+                subject='Almanac Email Verification',
+                message=content,
+                from_email=None,
+                recipient_list=[email],
                 fail_silently=False
             )
         except (KeyError, ValueError, JSONDecodeError, IntegrityError):
