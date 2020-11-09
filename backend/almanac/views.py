@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University, Department
+from almanac.models import User, University, Department, Event
 from .tokens import account_activation_token
 
 # Create your views here.
@@ -139,6 +139,61 @@ def get_user(request, user_id):
 
     return HttpResponseNotAllowed(['GET'])
 
+def get_event(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        events = [{'id': event['id'], 'title': event['title'],
+        'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
+        'end_time': event['end_time'], 'content': event['content']
+        } for event in Event.objects.all().values()]
+        return JsonResponse(events, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
+def get_put_delete_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'PUT', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'PUT', 'DELETE'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event = Event.objects.get(id=event_id)
+
+    if request.method == 'GET':
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return JsonResponse(event_dict)
+    if request.method == 'PUT':
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        place = req_data['place']
+        date = req_data['date']
+        begin_time = req_data['begin_time']
+        end_time = req_data['end_time']
+        content = req_data['content']
+        event = Event(title=title, place=place, date=date,
+        begin_time=begin_time, end_time=end_time, content=content)
+        event.save()
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return HttpResponse(content=json.dumps(event_dict), status=201)
+    # DELETE
+    event.delete()
+    return HttpResponse(status=200)
+
 def get_create_university(request):
 
     '''
@@ -218,15 +273,13 @@ def get_create_department(request):
         departments = [{'id': department['id'], 'name': department['name']
         } for department in Department.objects.all().values()]
         return JsonResponse(departments, safe=False)
-    else: # POST
-        req_data = json.loads(request.body.decode())
-        name = req_data['name']
-        department = Department(name=name)
-        department.save()
-        department_dict = {'id': department.id, 'name': department.name}
-        return HttpResponse(content=json.dumps(department_dict), status=201)
-
-    return HttpResponseNotAllowed(['GET'])
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    department = Department(name=name)
+    department.save()
+    department_dict = {'id': department.id, 'name': department.name}
+    return HttpResponse(content=json.dumps(department_dict), status=201)
 
 def get_delete_department(request, department_id):
 

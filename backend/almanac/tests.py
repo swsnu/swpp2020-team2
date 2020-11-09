@@ -310,6 +310,13 @@ class AlmanacUniversityTestCase(TransactionTestCase):
         self.assertEqual(response.json()[0]['name'], 'Seoul National University')
         self.assertEqual(response.json()[0]['domain'], 'snu.ac.kr')
 
+        response = client.post('/api/university/', json.dumps({'name': 'Yonsei University',
+        'domain': 'yonsei.ac.kr'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Yonsei University', response.content.decode())
+        self.assertIn('yonsei.ac.kr', response.content.decode())
+
     def test_get_delete_university(self):
 
         '''
