@@ -8,16 +8,61 @@ class Signup extends Component {
     username: '',
     password: '',
     pwConfirm: '',
-    university: 'Seoul National University',
+    university: '',
     department: '',
     email: '',
     firstName: '',
     lastName: '',
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.signinedUser !== prevProps.signinedUser) {
+      if (this.props.signinedUser) this.props.history.replace('/public_calendar');
+    }
+  }
+
   signupHandler=() => {
+    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.university === '' || this.state.department === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
+      alert('All fields must be filled.');
+      return;
+    }
+    let len = this.state.username.length;
+    for (var i = 0; i < len; ++i) {
+      var ch = this.state.username[i];
+      if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch === '_')) break;
+    }
+    if (i < len) {
+      alert('ID can only contain alphabet, number or underscore.');
+      return;
+    }
+    if (this.state.password !== this.state.pwConfirm) {
+      alert('Confirmed password is not the same as password.');
+      return;
+    }
+    if (this.state.email.substr(this.state.email.length - 10, 10) !== '@snu.ac.kr') {
+      alert('Email does not match with university.');
+      return;
+    }
+    len = this.state.firstName.length;
+    for (i = 0; i < len; ++i) {
+      ch = this.state.firstName[i];
+      if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) break;
+    }
+    if (i < len) {
+      alert('Name can only contain alphabet.');
+      return;
+    }
+    len = this.state.lastName.length;
+    for (i = 0; i < len; ++i) {
+      ch = this.state.lastName[i];
+      if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) break;
+    }
+    if (i < len) {
+      alert('Name can only contain alphabet.');
+      return;
+    }
     this.props.signup({
-      id: this.state.username,
+      username: this.state.username,
       password: this.state.password,
       university: this.state.university,
       department: this.state.department,
@@ -57,13 +102,15 @@ class Signup extends Component {
         <br />
         University:
         <select onChange={(event) => this.setState({ university: event.target.value })}>
+          <option value="">--choose your university--</option>
           <option value="Seoul National University">Seoul National University</option>
         </select>
         <br />
         Department:
         <select onChange={(event) => this.setState({ department: event.target.value })}>
-          <option value="CSE">Computer Science and Engineering</option>
-          <option value="ECE">Electrical and Computer Engineering</option>
+          <option value="">--choose your department--</option>
+          <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+          <option value="Electrical and Computer Engineering">Electrical and Computer Engineering</option>
         </select>
         <br />
         Email:

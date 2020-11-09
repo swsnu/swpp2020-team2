@@ -10,10 +10,16 @@ class Main extends Component {
   }
 
   componentDidUpdate(prevProps) {
-
+    if (this.props.signinedUser !== prevProps.signinedUser) {
+      if (this.props.signinedUser) this.props.history.replace('/public');
+    }
   }
 
   signinHandler=() => {
+    if (this.state.username === '' || this.state.password === '') {
+      alert('please fill in ID and password.');
+      return;
+    }
     this.props.signin({ username: this.state.username, password: this.state.password });
   }
 
@@ -38,7 +44,7 @@ class Main extends Component {
         />
         <div><button type="button" id="signin-button" onClick={() => this.signinHandler()}>sign in</button></div>
         or
-        <span onClick={() => this.props.history.push('/Signup')}> Sign Up</span>
+        <span onClick={() => this.props.history.push('/signup')}> Sign Up</span>
       </div>
     );
   }

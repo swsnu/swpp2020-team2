@@ -41,5 +41,10 @@ module.exports = {
     "react/no-unused-state": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/no-static-element-interactions": 0,
+    "no-alert": 0,
+    "vars-on-top": 0,
+    "no-var": 0,
+    "no-plusplus": 0,
+    "block-scoped-var": 0,
   },
 };
