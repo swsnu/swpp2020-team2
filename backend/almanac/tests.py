@@ -38,19 +38,19 @@ class AlmanacCsrfTestCase(TestCase):
 
         client = Client(enforce_csrf_checks=True)
 
-        response = client.head('/token/')
+        response = client.head('/api/token/')
         self.assertEqual(response.status_code, 405)
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.get('/token/')
+        response = client.get('/api/token/')
         csrftoken = response.cookies['csrftoken'].value
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
@@ -92,25 +92,25 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         client = Client()
 
-        response = client.put('/signup/', json.dumps(
+        response = client.put('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 405)
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop2', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
@@ -124,7 +124,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         client = Client()
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
@@ -136,13 +136,13 @@ class AlmanacSignupTestCase(TransactionTestCase):
         token = regx.group(2)
         token_wrong = token[:-1] + ('1' if token[-1] == '0' else '0')
 
-        response = client.head('/signup/activate/{}/{}/'.format(uidb64, token))
+        response = client.head('/api/signup/activate/{}/{}/'.format(uidb64, token))
         self.assertEqual(response.status_code, 405)
 
-        response = client.get('/signup/activate/{}/{}/'.format(uidb64, token_wrong))
+        response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token_wrong))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/signup/activate/{}/{}/'.format(uidb64, token))
+        response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
         self.assertEqual(response.status_code, 204)
         user = User.objects.get(username='taekop')
         self.assertEqual(user.is_active, True)
@@ -155,7 +155,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         client = Client()
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
@@ -166,30 +166,30 @@ class AlmanacSignupTestCase(TransactionTestCase):
         uidb64 = regx.group(1)
         token = regx.group(2)
 
-        response = client.get('/signup/activate/{}/{}/'.format(uidb64, token))
+        response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
         self.assertEqual(response.status_code, 204)
 
-        response = client.put('/signin/', json.dumps(
+        response = client.put('/api/signin/', json.dumps(
             {'username': 'not_a_user', 'password': 'password3'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 405)
 
-        response = client.post('/signin/', json.dumps(
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'not_a_user', 'password': 'password3'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 401)
 
-        response = client.post('/signin/', json.dumps(
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password3'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 401)
 
-        response = client.post('/signin/', json.dumps(
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'ray017', 'password': 'password'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 401)
 
-        response = client.post('/signin/', json.dumps(
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 204)
@@ -202,7 +202,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         client = Client()
 
-        response = client.post('/signup/', json.dumps(
+        response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
@@ -213,18 +213,18 @@ class AlmanacSignupTestCase(TransactionTestCase):
         uidb64 = regx.group(1)
         token = regx.group(2)
 
-        response = client.get('/signup/activate/{}/{}/'.format(uidb64, token))
+        response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
         self.assertEqual(response.status_code, 204)
 
-        response = client.post('/signin/', json.dumps(
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 204)
 
-        response = client.head('/signout/')
+        response = client.head('/api/signout/')
         self.assertEqual(response.status_code, 405)
 
-        response = client.get('/signout/')
+        response = client.get('/api/signout/')
         self.assertEqual(response.status_code, 204)
 
 class AlmanacUserTestCase(TransactionTestCase):
@@ -247,7 +247,7 @@ class AlmanacUserTestCase(TransactionTestCase):
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
 
 
-    def test_signup(self):
+    def test_user_get(self):
 
         '''
         a function docstring
@@ -255,5 +255,20 @@ class AlmanacUserTestCase(TransactionTestCase):
 
         client = Client()
 
-        response = client.head('/user/{}/'.format(1))
+        id1=(User.objects.get(username='ray017').id)
+        id2=(User.objects.get(username='taekop').id)
+        id_wrong = max(id1, id2)+1
+
+        response = client.head('/api/user/{}/'.format(id1))
         self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/{}/'.format(id1))
+        self.assertEqual(response.json()['username'], 'ray017')
+        self.assertEqual(response.json()['first_name'], 'Raegeon')
+        self.assertEqual(response.json()['last_name'], 'Lee')
+        self.assertEqual(response.json()['password'], 'password')
+        self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], False)
+
+        response = client.get('/user/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)

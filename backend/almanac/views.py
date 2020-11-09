@@ -127,19 +127,44 @@ def get_user(request, user_id):
         return HttpResponseNotAllowed(['GET'])
 
     if not User.objects.filter(id=user_id).exists():
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()
 
     user = User.objects.get(id=user_id)
 
     if request.method == 'GET':
-        response_dict = {'id': user.id, 'username': user.username,
+        user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email, 'is_active': user.is_active}
-        return JsonResponse(response_dict)
+        return JsonResponse(user_dict)
 
-    return HttpResponseNotAllowed(['GET', 'DELETE'])
+    return HttpResponseNotAllowed(['GET'])
 
-def create_delete_university(request, university_id):
+def get_create_university(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        universities = [{'id': university['id'], 'name': university['name'],
+        'domain': university['domain']} for university in University.objects.all().values()]
+        return JsonResponse(universities, safe=False)
+    else: # POST
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        domain = req_data['domain']
+        university = University(name=name, domain=domain)
+        university.save()
+        university_dict = {'id': university.id, 'name': university.name,
+        'domain': university.domain}
+        return HttpResponse(content=json.dumps(university_dict), status=201)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_delete_university(request, university_id):
 
     '''
     a function docstring
@@ -149,14 +174,17 @@ def create_delete_university(request, university_id):
         return HttpResponseNotAllowed(['GET', 'DELETE'])
 
     if not University.objects.filter(id=university_id).exists():
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()
 
     university = University.objects.get(id=university_id)
 
     if request.method == 'GET':
-        response_dict = {'id': university.id, 'name': university.name,
+        university_dict = {'id': university.id, 'name': university.name,
         'domain': university.domain}
-        return JsonResponse(response_dict)
+        return JsonResponse(university_dict)
+    else: # DELETE
+        university.delete()
+        return HttpResponse(status=200)
 
     return HttpResponseNotAllowed(['GET', 'DELETE'])
 
