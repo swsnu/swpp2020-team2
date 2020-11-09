@@ -9,7 +9,8 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from almanac.models import User, University
@@ -31,8 +32,21 @@ def signup(request):
             last_name = req_data['last_name']
             password = req_data['password']
             email = req_data['email']
-            User.objects.create_user(is_active=False, username=username,
+            user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
+            content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
+            ' via the link \nhttps://localhost/signup/{}/{}\n').format(
+                username,
+                urlsafe_base64_encode(user.id),
+                account_activation_token.make_token(user)
+            )
+            send_mail(
+                'Almanac Email Verification',
+                content,
+                'almanac.staff@gmail.com',
+                [email],
+                fail_silently=False
+            )
         except (KeyError, ValueError, JSONDecodeError, IntegrityError):
             return HttpResponseBadRequest()
         return HttpResponse(status=201)
