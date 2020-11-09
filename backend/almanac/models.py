@@ -15,8 +15,8 @@ class University(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(max_length=30)
-    domain = models.CharField(max_length=30)
+    name = models.CharField(null=False, blank=False, max_length=30)
+    domain = models.CharField(null=False, blank=False, max_length=30)
 
     def __str__(self):
         return self.name
@@ -27,7 +27,7 @@ class Department(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(max_length=30)
+    name = models.CharField(null=False, blank=False, max_length=30)
 
 class Image(models.Model):
 
@@ -51,7 +51,7 @@ class Language(models.Model):
     a class docstring
     '''
 
-    name = models.IntegerField()
+    name = models.IntegerField(null=False, blank=False)
 
 class Category(models.Model):
 
@@ -59,7 +59,7 @@ class Category(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(max_length=30)
+    name = models.CharField(null=False, blank=False, max_length=30)
 
 class Tag(models.Model):
 
@@ -67,7 +67,7 @@ class Tag(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(max_length=30)
+    name = models.CharField(null=False, blank=False, max_length=30)
 
 class Group(models.Model):
 
@@ -75,7 +75,7 @@ class Group(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(max_length=30)
+    name = models.CharField(null=False, blank=False, max_length=30)
     member = models.ManyToManyField(
         User,
         related_name='member_group'
@@ -103,7 +103,7 @@ class Event(models.Model):
     a class docstring
     '''
 
-    title = models.CharField(max_length=64)
+    title = models.CharField(null=False, blank=False, max_length=64)
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
@@ -167,7 +167,7 @@ class GroupReport(models.Model):
         on_delete=models.CASCADE,
         related_name='reporter_groupreport',
     )
-    content = models.TextField()
+    content = models.TextField(null=False, blank=False)
 
 class UserPreference(models.Model):
 

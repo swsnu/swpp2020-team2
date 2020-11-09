@@ -4,13 +4,18 @@ a standard docstring
 
 # from django.shortcuts import render
 import json
-from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
+from json import JSONDecodeError
+from django.db.utils import IntegrityError
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
+    HttpResponseNotFound, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University
+from almanac.models import User, University, Department
 from .tokens import account_activation_token
 
 # Create your views here.
@@ -22,14 +27,31 @@ def signup(request):
     '''
 
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        first_name = req_data['first_name']
-        last_name = req_data['last_name']
-        password = req_data['password']
-        email = req_data['email']
-        User.objects.create_user(is_active=False, username=username,
-        first_name=first_name, last_name=last_name, password=password, email=email)
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            first_name = req_data['first_name']
+            last_name = req_data['last_name']
+            password = req_data['password']
+            email = req_data['email']
+            user = User.objects.create_user(is_active=False, username=username,
+            first_name=first_name, last_name=last_name, password=password, email=email)
+            content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
+            ' via the link \nhttps://localhost/signup/{}/{}'
+            '\nEnjoy your calenars!').format(
+                username,
+                urlsafe_base64_encode(force_bytes(user.id)),
+                account_activation_token.make_token(user)
+            )
+            send_mail(
+                subject='Almanac Email Verification',
+                message=content,
+                from_email=None,
+                recipient_list=[email],
+                fail_silently=False
+            )
+        except (KeyError, ValueError, JSONDecodeError, IntegrityError):
+            return HttpResponseBadRequest()
         return HttpResponse(status=201)
     return HttpResponseNotAllowed(['POST'])
 
@@ -39,7 +61,7 @@ def activate(request, uidb64, token):
     a function docstring
     '''
 
-    if request.method == 'PUT':
+    if request.method == 'GET':
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(id=uid)
@@ -49,9 +71,9 @@ def activate(request, uidb64, token):
             user.is_active = True
             user.save()
             login(request, user)
-            return HttpResponse('Now your account is activated safely.')
-        return HttpResponse('Invalid link.')
-    return HttpResponseNotAllowed(['PUT'])
+            return HttpResponse(content='Now your account is activated safely.', status=204)
+        return HttpResponseNotFound()
+    return HttpResponseNotAllowed(['GET'])
 
 def signin(request):
 
@@ -63,13 +85,17 @@ def signin(request):
         return HttpResponseNotAllowed(['POST'])
 
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        password = req_data['password']
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            password = req_data['password']
+        except (KeyError, ValueError, JSONDecodeError):
+            return HttpResponseBadRequest()
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponse(status=204)
+            user_dict = {'username': user.username, 'password': user.password}
+            return HttpResponse(content=json.dumps(user_dict), status=204)
         return HttpResponse(status=401)
 
     return HttpResponseNotAllowed(['POST'])
@@ -85,7 +111,6 @@ def signout(request):
 
     if request.method == 'GET':
         if request.user.is_authenticated:
-            #user_dict = {'username': request.user.username, 'password': request.user.password}
             logout(request)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
@@ -102,19 +127,42 @@ def get_user(request, user_id):
         return HttpResponseNotAllowed(['GET'])
 
     if not User.objects.filter(id=user_id).exists():
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()
 
     user = User.objects.get(id=user_id)
 
     if request.method == 'GET':
-        response_dict = {'id': user.id, 'username': user.username,
+        user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email}
-        return JsonResponse(response_dict)
+        'email': user.email, 'is_active': user.is_active}
+        return JsonResponse(user_dict)
 
-    return HttpResponseNotAllowed(['GET', 'DELETE'])
+    return HttpResponseNotAllowed(['GET'])
 
-def create_delete_university(request, university_id):
+def get_create_university(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        universities = [{'id': university['id'], 'name': university['name'],
+        'domain': university['domain']} for university in University.objects.all().values()]
+        return JsonResponse(universities, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    domain = req_data['domain']
+    university = University(name=name, domain=domain)
+    university.save()
+    university_dict = {'id': university.id, 'name': university.name,
+    'domain': university.domain}
+    return HttpResponse(content=json.dumps(university_dict), status=201)
+
+def get_delete_university(request, university_id):
 
     '''
     a function docstring
@@ -124,16 +172,102 @@ def create_delete_university(request, university_id):
         return HttpResponseNotAllowed(['GET', 'DELETE'])
 
     if not University.objects.filter(id=university_id).exists():
-        return HttpResponse(status=404)
+        return HttpResponseNotFound()
 
     university = University.objects.get(id=university_id)
 
     if request.method == 'GET':
-        response_dict = {'id': university.id, 'name': university.name,
+        university_dict = {'id': university.id, 'name': university.name,
         'domain': university.domain}
-        return JsonResponse(response_dict)
+        return JsonResponse(university_dict)
+    # DELETE
+    university.delete()
+    return HttpResponse(status=200)
 
-    return HttpResponseNotAllowed(['GET', 'DELETE'])
+def get_university_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not University.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    university = University.objects.get(name=name)
+
+    if request.method == 'GET':
+        university_dict = {'id': university.id, 'name': university.name,
+        'domain': university.domain}
+        return JsonResponse(university_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_department(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        departments = [{'id': department['id'], 'name': department['name']
+        } for department in Department.objects.all().values()]
+        return JsonResponse(departments, safe=False)
+    else: # POST
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        department = Department(name=name)
+        department.save()
+        department_dict = {'id': department.id, 'name': department.name}
+        return HttpResponse(content=json.dumps(department_dict), status=201)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_delete_department(request, department_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Department.objects.filter(id=department_id).exists():
+        return HttpResponseNotFound()
+
+    department = Department.objects.get(id=department_id)
+
+    if request.method == 'GET':
+        department_dict = {'id': department.id, 'name': department.name}
+        return JsonResponse(department_dict)
+    # DELETE
+    department.delete()
+    return HttpResponse(status=200)
+
+def get_department_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Department.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    department = Department.objects.get(name=name)
+
+    if request.method == 'GET':
+        department_dict = {'id': department.id, 'name': department.name}
+        return JsonResponse(department_dict)
+
+    return HttpResponseNotAllowed(['GET'])
 
 def index(request):
 
