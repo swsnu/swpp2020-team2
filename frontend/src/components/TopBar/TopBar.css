@@ -1,0 +1,28 @@
+.TopBar{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(168, 240, 236);
+}
+
+.TopBar .title{
+  margin-right:15px;
+  font-size:20px;
+  padding:10px 20px ;
+  margin-bottom:15px;
+}
+
+.TopBar .tab{
+  margin-right:15px;
+  font-size:20px;
+  padding:10px 20px ;
+  margin-bottom:15px;
+}
+
+.TopBar .activeTab{
+  margin-right:15px;
+  font-size:20px;
+  padding:10px 20px ;
+  margin-bottom:15px;
+  font-weight:bold;
+}
