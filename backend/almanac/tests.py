@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+import re
 
 # Create your tests here.
 
@@ -60,6 +61,7 @@ class AlmanacCsrfTestCase(TestCase):
         self.assertEqual(len(mail_sent.to), 1)
         self.assertEqual(mail_sent.to[0], 'taekop@snu.ac.kr')
         user = User.objects.get(username='taekop')
+        self.assertEqual(user.is_active, False)
         body_pt = ('Hello, taekop. Welcome to the Almanac Service. You can activate your account '
         'via the link \nhttps://localhost/signup/{}/').format(
             urlsafe_base64_encode(force_bytes(user.id)))
@@ -113,3 +115,25 @@ class AlmanacSignupTestCase(TransactionTestCase):
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
+
+    def test_activate(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/signup/', json.dumps(
+            {'username': 'taekop', 'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(mail.outbox), 1)
+        mail_sent = mail.outbox[0]
+        regx = re.search(r"https://localhost/signup/(\S+)/(\S+)", mail_sent.body)
+
+        response = client.get('/signup/activate/{}/{}/'.format(regx.group(1), regx.group(2)))
+        self.assertEqual(response.status_code, 204)
+        user = User.objects.get(username='taekop')
+        self.assertEqual(user.is_active, True)

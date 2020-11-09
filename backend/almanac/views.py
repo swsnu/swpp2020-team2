@@ -60,7 +60,7 @@ def activate(request, uidb64, token):
     a function docstring
     '''
 
-    if request.method == 'PUT':
+    if request.method == 'GET':
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(id=uid)
@@ -70,9 +70,9 @@ def activate(request, uidb64, token):
             user.is_active = True
             user.save()
             login(request, user)
-            return HttpResponse('Now your account is activated safely.')
+            return HttpResponse(content='Now your account is activated safely.', status=204)
         return HttpResponse('Invalid link.')
-    return HttpResponseNotAllowed(['PUT'])
+    return HttpResponseNotAllowed(['GET'])
 
 def signin(request):
 
@@ -93,7 +93,8 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponse(status=204)
+            user_dict = {'username': user.username, 'password': user.password}
+            return HttpResponse(content=json.dumps(user_dict), status=204)
         return HttpResponse(status=401)
 
     return HttpResponseNotAllowed(['POST'])
@@ -109,7 +110,6 @@ def signout(request):
 
     if request.method == 'GET':
         if request.user.is_authenticated:
-            #user_dict = {'username': request.user.username, 'password': request.user.password}
             logout(request)
             return HttpResponse(status=204)
         return HttpResponse(status=401)
