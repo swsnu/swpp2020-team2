@@ -3,9 +3,11 @@ a standard docstring
 '''
 
 from django.db import models
-from django.conf import settings
+from django.contrib.auth import get_user_model
 
 # Create your models here.
+
+User = get_user_model()
 
 class University(models.Model):
 
@@ -15,6 +17,9 @@ class University(models.Model):
 
     name = models.CharField(max_length=30)
     domain = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
 
 class Department(models.Model):
 
@@ -72,15 +77,15 @@ class Group(models.Model):
 
     name = models.CharField(max_length=30)
     member = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        User,
         related_name='member_group'
     )
     admin = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        User,
         related_name='admin_group'
     )
     king = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='king_group'
     )
@@ -123,7 +128,7 @@ class Event(models.Model):
         related_name='image_group'
     )
     last_editor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='last_editor_group',
     )
@@ -140,7 +145,7 @@ class EventReport(models.Model):
         related_name='event_eventreport'
     )
     reporter = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='reporter_eventreport',
     )
@@ -158,7 +163,7 @@ class GroupReport(models.Model):
         related_name='event_groupreport'
     )
     reporter = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='reporter_groupreport',
     )
@@ -171,7 +176,7 @@ class UserPreference(models.Model):
     '''
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='user_userpreference',
     )
