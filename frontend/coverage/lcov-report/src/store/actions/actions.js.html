@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/20</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.73% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -96,39 +96,39 @@
 <a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import axios from 'axios';
 import * as actionTypes from './actionTypes';
@@ -136,19 +136,19 @@ import * as actionTypes from './actionTypes';
 axios.defaults.xsrfCookieName='csrftoken';
 axios.defaults.xsrfHeaderName='X-CSRFToken';
 &nbsp;
-export const signIn_ = <span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; (<span class="cstat-no" title="statement not covered" >{ type: actionTypes.SIGN_IN, user })</span>;
+export const signIn_ = (user) =&gt; ({ type: actionTypes.SIGN_IN, user });
 &nbsp;
-export const signIn = <span class="fstat-no" title="function not covered" >(a</span>rgs) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; <span class="cstat-no" title="statement not covered" >axios.post('api/signin/', {</span></span>
+export const signIn = (args) =&gt; (dispatch) =&gt; axios.post('api/signin/', {
   username: args.username,
   password: args.password,
 })
-  .then(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; {
-<span class="cstat-no" title="statement not covered" >    dispatch(signIn_(res.data));</span>
+  .then((res) =&gt; {
+    dispatch(signIn_(res.data));
   });
 &nbsp;
-export const signUp_ = <span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ type: actionTypes.SIGN_UP })</span>;
+export const signUp_ = () =&gt; ({ type: actionTypes.SIGN_UP });
 &nbsp;
-export const signUp = <span class="fstat-no" title="function not covered" >(a</span>rgs) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; <span class="cstat-no" title="statement not covered" >axios.post('api/signup/', {</span></span>
+export const signUp = (args) =&gt; (dispatch) =&gt; axios.post('api/signup/', {
   username: args.username,
   password: args.password,
   university: args.university,
@@ -157,15 +157,15 @@ export const signUp = <span class="fstat-no" title="function not covered" >(a</s
   first_name: args.firstName,
   last_name: args.lastName,
 })
-  .then(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; {
-<span class="cstat-no" title="statement not covered" >    dispatch(signUp_());</span>
+  .then((res) =&gt; {
+    dispatch(signUp_());
   });
 &nbsp;
-export const activate_ = <span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ type: actionTypes.ACTIVATE })</span>;
+export const activate_ = () =&gt; ({ type: actionTypes.ACTIVATE });
 &nbsp;
-export const activate = <span class="fstat-no" title="function not covered" >(a</span>rgs) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; <span class="cstat-no" title="statement not covered" >axios.get(`api/signup/activate/${args.uid}/${args.token}/`)</span></span>
-  .then(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; {
-<span class="cstat-no" title="statement not covered" >    dispatch(activate_());</span>
+export const activate = (args) =&gt; (dispatch) =&gt; axios.get(`api/signup/activate/${args.uidb64}/${args.token}/`)
+  .then((res) =&gt; {
+    dispatch(activate_());
   });
 &nbsp;</pre></td></tr></table></pre>
 
@@ -174,7 +174,7 @@ export const activate = <span class="fstat-no" title="function not covered" >(a<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 10 2020 02:44:28 GMT+0900 (Korean Standard Time)
+                at Tue Nov 10 2020 08:02:33 GMT+0900 (Korean Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

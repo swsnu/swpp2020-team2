@@ -10,7 +10,7 @@ class Main extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.signinedUser !== prevProps.signinedUser) {
+    if (prevProps.signinedUser !== this.props.signinedUser) {
       if (this.props.signinedUser) this.props.history.replace('/public');
     }
   }

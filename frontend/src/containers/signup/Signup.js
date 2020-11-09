@@ -17,7 +17,7 @@ class Signup extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.signinedUser !== prevProps.signinedUser) {
-      if (this.props.signinedUser) this.props.history.replace('/public_calendar');
+      if (this.props.signinedUser) this.props.history.replace('/public');
     }
   }
 
@@ -39,7 +39,7 @@ class Signup extends Component {
       alert('Confirmed password is not the same as password.');
       return;
     }
-    if (this.state.email.substr(this.state.email.length - 10, 10) !== '@snu.ac.kr') {
+    if (this.state.email.length < 10 || this.state.email.substr(this.state.email.length - 10, 10) !== '@snu.ac.kr') {
       alert('Email does not match with university.');
       return;
     }
@@ -101,13 +101,13 @@ class Signup extends Component {
         />
         <br />
         University:
-        <select onChange={(event) => this.setState({ university: event.target.value })}>
+        <select id="university-input" onChange={(event) => this.setState({ university: event.target.value })}>
           <option value="">--choose your university--</option>
           <option value="Seoul National University">Seoul National University</option>
         </select>
         <br />
         Department:
-        <select onChange={(event) => this.setState({ department: event.target.value })}>
+        <select id="department-input" onChange={(event) => this.setState({ department: event.target.value })}>
           <option value="">--choose your department--</option>
           <option value="Computer Science and Engineering">Computer Science and Engineering</option>
           <option value="Electrical and Computer Engineering">Electrical and Computer Engineering</option>

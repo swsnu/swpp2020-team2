@@ -46,5 +46,6 @@ module.exports = {
     "no-var": 0,
     "no-plusplus": 0,
     "block-scoped-var": 0,
+    "radix": ["error", "as-needed"],
   },
 };

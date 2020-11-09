@@ -16,9 +16,9 @@ const getMockReducer = jest.fn(
 );
 
 const getMockStore = (initialState) => {
-  const mockReducer = getMockReducer(initialState);
+  const mockUserReducer = getMockReducer(initialState);
   const rootReducer = combineReducers({
-    mr: mockReducer,
+    ur: mockUserReducer,
     router: connectRouter(history),
   });
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

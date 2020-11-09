@@ -4,19 +4,11 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 
 class Activate extends Component {
-  state={
-    uid: null,
-    token: null,
-  }
-
   componentDidMount() {
-    this.setState({ uid: this.props.match.params.uidb64, token: this.props.match.params.token });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state !== prevState) {
-      this.props.activate({ uid: this.state.uid, token: this.state.token });
-    }
+    this.props.activate({
+      uidb64: parseInt(this.props.match.params.uidb64),
+      token: parseInt(this.props.match.params.token),
+    });
   }
 
   render() {
