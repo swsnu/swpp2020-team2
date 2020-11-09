@@ -6,7 +6,8 @@ a standard docstring
 import json
 from json import JSONDecodeError
 from django.db.utils import IntegrityError
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
+    HttpResponseNotFound, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -71,7 +72,7 @@ def activate(request, uidb64, token):
             user.save()
             login(request, user)
             return HttpResponse(content='Now your account is activated safely.', status=204)
-        return HttpResponse('Invalid link.')
+        return HttpResponseNotFound()
     return HttpResponseNotAllowed(['GET'])
 
 def signin(request):
@@ -133,7 +134,7 @@ def get_user(request, user_id):
     if request.method == 'GET':
         response_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email}
+        'email': user.email, 'is_active': user.is_active}
         return JsonResponse(response_dict)
 
     return HttpResponseNotAllowed(['GET', 'DELETE'])
