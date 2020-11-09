@@ -4,15 +4,14 @@ a standard docstring
 
 import json
 from django.test import TransactionTestCase, TestCase, Client
-from django.contrib.auth import get_user_model
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 import re
 
-# Create your tests here.
+from .models import User, University
 
-User = get_user_model()
+# Create your tests here.
 
 class AlmanacCsrfTestCase(TestCase):
 
@@ -270,5 +269,64 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
 
-        response = client.get('/user/{}/'.format(id_wrong))
+        response = client.get('/api/user/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+class AlmanacUniversityTestCase(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
+        User.objects.create(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
+        University.objects.create(
+            name='Seoul National University', domain='snu.ac.kr'
+        )
+
+    def test_get_create_university(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/university/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/university/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'Seoul National University')
+        self.assertEqual(response.json()[0]['domain'], 'snu.ac.kr')
+
+    def test_get_delete_university(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_snu=(University.objects.get(name='Seoul National University').id)
+        id_wrong = id_snu+1
+
+        response = client.head('/api/university/{}/'.format(id_snu))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/university/{}/'.format(id_snu))
+        self.assertEqual(response.json()['name'], 'Seoul National University')
+        self.assertEqual(response.json()['domain'], 'snu.ac.kr')
+
+        response = client.get('/api/university/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)

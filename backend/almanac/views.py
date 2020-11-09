@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University
+from almanac.models import User, University, Department
 from .tokens import account_activation_token
 
 # Create your views here.
@@ -152,17 +152,15 @@ def get_create_university(request):
         universities = [{'id': university['id'], 'name': university['name'],
         'domain': university['domain']} for university in University.objects.all().values()]
         return JsonResponse(universities, safe=False)
-    else: # POST
-        req_data = json.loads(request.body.decode())
-        name = req_data['name']
-        domain = req_data['domain']
-        university = University(name=name, domain=domain)
-        university.save()
-        university_dict = {'id': university.id, 'name': university.name,
-        'domain': university.domain}
-        return HttpResponse(content=json.dumps(university_dict), status=201)
-
-    return HttpResponseNotAllowed(['GET'])
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    domain = req_data['domain']
+    university = University(name=name, domain=domain)
+    university.save()
+    university_dict = {'id': university.id, 'name': university.name,
+    'domain': university.domain}
+    return HttpResponse(content=json.dumps(university_dict), status=201)
 
 def get_delete_university(request, university_id):
 
@@ -182,11 +180,9 @@ def get_delete_university(request, university_id):
         university_dict = {'id': university.id, 'name': university.name,
         'domain': university.domain}
         return JsonResponse(university_dict)
-    else: # DELETE
-        university.delete()
-        return HttpResponse(status=200)
-
-    return HttpResponseNotAllowed(['GET', 'DELETE'])
+    # DELETE
+    university.delete()
+    return HttpResponse(status=200)
 
 def get_university_by_name(request, name):
 
@@ -206,6 +202,70 @@ def get_university_by_name(request, name):
         university_dict = {'id': university.id, 'name': university.name,
         'domain': university.domain}
         return JsonResponse(university_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_department(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        departments = [{'id': department['id'], 'name': department['name']
+        } for department in Department.objects.all().values()]
+        return JsonResponse(departments, safe=False)
+    else: # POST
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        department = Department(name=name)
+        department.save()
+        department_dict = {'id': department.id, 'name': department.name}
+        return HttpResponse(content=json.dumps(department_dict), status=201)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_delete_department(request, department_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Department.objects.filter(id=department_id).exists():
+        return HttpResponseNotFound()
+
+    department = Department.objects.get(id=department_id)
+
+    if request.method == 'GET':
+        department_dict = {'id': department.id, 'name': department.name}
+        return JsonResponse(department_dict)
+    # DELETE
+    department.delete()
+    return HttpResponse(status=200)
+
+def get_department_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Department.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    department = Department.objects.get(name=name)
+
+    if request.method == 'GET':
+        department_dict = {'id': department.id, 'name': department.name}
+        return JsonResponse(department_dict)
 
     return HttpResponseNotAllowed(['GET'])
 

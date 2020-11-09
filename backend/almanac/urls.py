@@ -19,5 +19,11 @@ urlpatterns = [
     views.get_delete_university, name='get_delete_university'),
     path('university/<int:name>/',
     views.get_university_by_name, name='get_university_by_name'),
+    path('department/',
+    views.get_create_department, name='create_department'),
+    path('department/<int:department_id>/',
+    views.get_delete_department, name='get_delete_department'),
+    path('department/<int:name>/',
+    views.get_department_by_name, name='get_department_by_name'),
     path('token/', views.get_token, name='token'),
 ]
