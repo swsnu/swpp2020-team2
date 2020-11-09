@@ -4,7 +4,9 @@ a standard docstring
 
 # from django.shortcuts import render
 import json
-from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
+from json import JSONDecodeError
+from django.db.utils import IntegrityError
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 # from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode #, urlsafe_base64_encode
@@ -22,14 +24,17 @@ def signup(request):
     '''
 
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        first_name = req_data['first_name']
-        last_name = req_data['last_name']
-        password = req_data['password']
-        email = req_data['email']
-        User.objects.create_user(is_active=False, username=username,
-        first_name=first_name, last_name=last_name, password=password, email=email)
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            first_name = req_data['first_name']
+            last_name = req_data['last_name']
+            password = req_data['password']
+            email = req_data['email']
+            User.objects.create_user(is_active=False, username=username,
+            first_name=first_name, last_name=last_name, password=password, email=email)
+        except (KeyError, ValueError, JSONDecodeError, IntegrityError):
+            return HttpResponseBadRequest()
         return HttpResponse(status=201)
     return HttpResponseNotAllowed(['POST'])
 
@@ -63,9 +68,12 @@ def signin(request):
         return HttpResponseNotAllowed(['POST'])
 
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        password = req_data['password']
+        try:
+            req_data = json.loads(request.body.decode())
+            username = req_data['username']
+            password = req_data['password']
+        except (KeyError, ValueError, JSONDecodeError):
+            return HttpResponseBadRequest()
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
