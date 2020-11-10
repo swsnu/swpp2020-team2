@@ -1,0 +1,91 @@
+.Main{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Main .top{
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    background-color: aquamarine;
+    margin-bottom: 30px;
+}
+
+.Main .top .title{
+    margin: 20px;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.Main .top .description{
+    margin: 10px;
+    font-size: 20px;
+}
+
+.Main .container{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Main .content{
+    display: flex;
+    flex-direction: row;
+}
+
+
+.Main .logo{
+    flex:1;
+    width: 10%;
+    margin-right: 50px;
+}
+
+.Main .signInBox{
+    flex:5;
+    display: flex;
+    flex-direction: column;
+}
+.Main .signInBox .idBox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.Main .signInBox .passwordBox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Main .signInBox input{
+    height: 24px;
+    margin: 10px;
+    float: right;
+}
+
+.Main .confirmBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Main .confirmBox button{
+    width: 80px;
+    font-weight: bold;
+    margin: 10px;
+    height: 32px;
+}
+
+.Main .confirmBox .signUpBox{
+    margin: 10px;
+    color: blue;
+    
+}

@@ -1,0 +1,82 @@
+.SignUp{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.SignUp h1{
+    padding-right: 240px;
+}
+
+.SignUp .top{
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    background-color: aquamarine;
+}
+
+.SignUp .top .title{
+    margin: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: aquamarine;
+    border: none;
+}
+
+.SignUp .top .description{
+    margin: 10px;
+    font-size: 20px;
+}
+.SignUp .container{
+    margin: 30px;
+    display: flex;
+    flex-direction: row;
+}
+.SignUp .container .logoBox{
+    flex:1;
+    margin: 20px;
+    width: 50%;
+}
+
+.SignUp .container .content{
+    flex:2;
+}
+
+.SignUp .signUpBox{
+    display: flex;
+    flex-direction: column;
+}
+.SignUp .signUpBox .box{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.SignUp .signUpBox input{
+    height: 24px;
+    margin: 10px;
+    float: right;
+}
+.SignUp .signUpBox select{
+    height: 24px;
+    margin: 10px;
+    float: right;
+}
+
+.SignUp .confirmBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.SignUp .confirmBox button{
+    width: 80px;
+    font-weight: bold;
+    margin: 10px;
+    height: 32px;
+}

@@ -21,3 +21,5 @@ export const categoryIcons = [
 const createEventIcon_ = require('./event_icons/createEvent.png');
 
 export const createEventIcon = createEventIcon_;
+
+export const appLogo = require('./logo.png')
