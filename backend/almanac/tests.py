@@ -8,8 +8,9 @@ from django.test import TransactionTestCase, TestCase, Client
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.conf import settings
 
-from .models import User, University, Department, Background, Language, Tag, Category
+from .models import User, University, Department, Background, Language, Tag, Category, Image
 
 # Create your tests here.
 
@@ -303,7 +304,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
+class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
     '''
     a class docstring
@@ -338,6 +339,9 @@ class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
         )
         Language.objects.create(
             name=1
+        )
+        Image.objects.create(
+            image_file='image/home.jpg'
         )
 
     def test_get_create_university(self):
@@ -700,3 +704,23 @@ class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
 
         response = client.get('/api/language/')
         self.assertEqual(len(response.json()), 0)
+
+    def test_get_create_image(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/image/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/image/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['image_file_url'], 'image/home.jpg')
+
+        with open(settings.MEDIA_ROOT / 'image/signup.jpg', 'rb') as file_pt:
+            response = client.post('/api/image/', {'name': 'signup', 'imagefile': file_pt})
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('image/signup', response.content.decode())

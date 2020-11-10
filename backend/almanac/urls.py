@@ -3,6 +3,8 @@ a standard docstring
 '''
 
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -49,5 +51,9 @@ urlpatterns = [
     views.get_create_language, name='create_language'),
     path('language/<int:language_id>/',
     views.get_delete_language, name='get_delete_language'),
+    path('image/',
+    views.get_create_image, name='create_image'),
+    path('image/<int:image_id>/',
+    views.get_delete_image, name='get_delete_image'),
     path('token/', views.get_token, name='token'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

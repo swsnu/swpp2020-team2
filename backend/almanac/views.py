@@ -15,8 +15,10 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University, Department, Event, Background, Language, Category, Tag
+from almanac.models import User, \
+    University, Department, Event, Background, Language, Category, Tag, Image
 from .tokens import account_activation_token
+from .forms import ImageForm
 
 # Create your views here.
 
@@ -576,6 +578,51 @@ def get_delete_language(request, language_id):
         return JsonResponse(language_dict)
     # DELETE
     language.delete()
+    return HttpResponse(status=200)
+
+def get_create_image(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        images = [{'id': image['id'], 'image_file_url': image['image_file']
+        } for image in Image.objects.all().order_by('id').values()]
+        return JsonResponse(images, safe=False)
+    # POST
+    print(request.FILES)
+    form = ImageForm(request.POST, request.FILES)
+    print(form)
+    if form.is_valid():
+        image = Image(image_file = request.FILES['imagefile'])
+        image.save()
+        image_dict = {'id': image.id, 'image_file_url': image.image_file.url}
+        return HttpResponse(content=json.dumps(image_dict), status=201)
+    return HttpResponse(content='Bad Image', status=401)
+
+def get_delete_image(request, image_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Image.objects.filter(id=image_id).exists():
+        return HttpResponseNotFound()
+
+    image = Image.objects.get(id=image_id)
+
+    if request.method == 'GET':
+        image_dict = {'id': image.id, 'image_file_url': image.image_file.url}
+        return JsonResponse(image_dict)
+    # DELETE
+    image.delete()
     return HttpResponse(status=200)
 
 def index(request):
