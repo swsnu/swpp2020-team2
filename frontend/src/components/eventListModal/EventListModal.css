@@ -1,13 +1,21 @@
 .EventListModal {
     display: flex;
+    position: absolute;
+    margin-top: 30px;
+    width: 70%;
+    height: 600px;
+    left: 60%;
+    transform: translate(-50%, 0%);
     flex-direction: column;
+    background-color: rgb(240,240,240);
+    border-radius: 60px;
 }
 
 .EventListModal .top{
     display: flex;
     flex-direction: row;
     height: 100px;
-    width: 80%;
+    width: 100%;
 }
 
 .EventListModal .top .left{
@@ -16,7 +24,7 @@
     flex-direction: row;
     float: left;
     align-items: center;
-    margin-left: 50px;
+    margin-left: 120px;
 }
 
 .EventListModal .top .right{
@@ -24,6 +32,7 @@
     margin-left: auto;
     flex-direction: row;
     align-items: center;
+    margin-right: 150px;
 }
 
 .EventListModal .top .right .createEvent{
@@ -32,6 +41,33 @@
     width:36px;
 }
 
+.EventListModal .createEventButton{
+    cursor: pointer;    
+}
+
+.EventListModal .top .rightCorner{
+    position:absolute;
+    top: 4%;
+    right: 4%;
+}
+
+.EventListModal .top .closeButton{
+    font-size: 150%;
+    border: none;
+    color: gray;
+    outline: none;
+    cursor: pointer;
+}
+
 .EventListModal .eventList{
     flex:1;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: block;
+}
+
+.EventListModal .nav{
+    height: 450px;
+    width: 100%;
+    overflow-y: scroll;
 }

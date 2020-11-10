@@ -118,17 +118,12 @@ class Public extends Component {
     let modal = null;
     if (this.state.modalBool) {
       modal = (
-        <div style={{
-          backgroundColor: 'white', width: 1000, height: 800, border: '10 solid black', position: 'fixed', left: 460, top: 100,
-        }}
-        >
-          <EventListModal
-            day={this.state.modalDay}
-            dayEventList={this.state.modalEvents}
-            onClickCloseModal={this.onClickCloseModal}
-            onClickCreateEvent={this.onClickCreateEvent}
-          />
-        </div>
+        <EventListModal
+          day={this.state.modalDay}
+          dayEventList={this.state.modalEvents}
+          onClickCloseModal={this.onClickCloseModal}
+          onClickCreateEvent={this.onClickCreateEvent}
+        />
       );
     }
 

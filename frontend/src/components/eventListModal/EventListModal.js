@@ -64,19 +64,23 @@ class EventListModal extends Component {
                 {this.state.NumEvents}
                 {' '}
                 events
-                <button type="button" onClick={() => this.props.onClickCloseModal()}>X</button>
               </div>
 
               <div className="createEvent">
-                <button type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
+                <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
                   <GrTableAdd size="100%" />
                 </button>
+              </div>
+              <div className="rightCorner">
+                <button className="closeButton" type="button" onClick={() => this.props.onClickCloseModal()}>X</button>
               </div>
             </div>
           </div>
 
           <div className="eventList">
-            {events}
+            <nav className="nav">
+              {events}
+            </nav>
           </div>
         </div>
       );
