@@ -1,3 +1,6 @@
 export {
-    getAllEvent, /* event */
+  getAllEvent, /* event */
+  signIn,
+  signUp,
+  activate,
 } from './actions';
