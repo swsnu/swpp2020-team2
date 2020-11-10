@@ -1,0 +1,101 @@
+.EventBox{
+    display: flex;
+    flex:1;
+    width: 80%;
+    height: 100px;
+    margin-left: 20px;
+
+    flex-direction: row;
+
+    border: solid;
+    border-width: 2px;
+    border-color: gray;
+
+    border-left-width: 5px;
+    border-left-color: red;
+}
+
+.EventBox .left{
+    display: flex;
+    flex-direction: column;
+    float: left;
+    flex:1;
+    height: 100%;
+    margin-left: 20px;
+    flex-grow: 1;
+}
+
+.EventBox .left .top{
+    display: flex;
+    flex:1;
+    align-items: center;
+    margin: 3px;
+}
+
+.EventBox .left .top .group{
+    color: gray;
+    font-size: 18px;
+}
+
+.EventBox .left .middle{
+    display: flex;
+    flex:2;
+    align-items: center;
+    margin: 3px;
+}
+
+.EventBox .left .middle .title{
+    color: black;
+    font-weight: bold;
+    font-size: 24px;
+    background-color: #fff;
+    border: none;
+}
+
+.EventBox .left .bottom{
+    display: flex;
+    flex:1;
+    align-items: center;
+    margin: 3px;
+}
+
+.EventBox .left .bottom .place{
+    color: gray;
+    font-size: 18px;
+}
+
+.EventBox .left .bottom .time{
+    color: gray;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+
+.EventBox .right{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.EventBox .right .btns{
+    margin-top: 30px;
+    display: flex;
+    flex:2;
+    
+}
+
+.EventBox .right .btns button{
+    align-items: center;
+    justify-content: center;
+    margin: 3px;
+    height: 30px;
+    width: 30px;
+}
+
+.EventBox .right .tags{
+    display: flex;
+    flex:1;
+    margin-left: auto;
+    color: red;
+}

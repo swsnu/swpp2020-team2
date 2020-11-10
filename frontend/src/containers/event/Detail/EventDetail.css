@@ -1,0 +1,113 @@
+.EventDetail{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.EventDetail .container{
+    display: flex;
+    flex-direction: column;
+    width:80%;
+}
+
+.EventDetail .container .btnBox{
+    display: flex;
+    flex-direction: row;
+}
+
+.EventDetail .container .btnBox .left{
+    flex: 1;
+}
+.EventDetail .container .btnBox .left .back{
+    margin-left: 5;
+}
+
+.EventDetail .container .btnBox .right{
+    flex: 1;
+    
+}
+.EventDetail .container .btnBox .right .btns{
+    float: right;
+    padding: 5px;
+}
+
+.EventDetail .container .btnBox button{
+    align-items: center;
+    justify-content: center;
+    margin: 3px;
+    height: 30px;
+    width: 30px;
+}
+
+.EventDetail .container .detailBox{
+    display: flex;
+    flex-direction: column;
+    background-color: gainsboro;
+    border: solid;
+    border-width: 3px;
+    border-color: gray;
+}
+
+.EventDetail .container .detailBox .top{
+    display: flex;
+    flex-direction: column; 
+}
+.EventDetail .container .detailBox .top .box{
+    display: flex;
+    flex-direction: row; 
+}
+
+.EventDetail .container .detailBox .top .infoBox{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    align-items: center;
+    
+    border-bottom:solid;
+    border-right:solid;
+    border-width: 1px;
+    border-color: gray;
+
+}
+
+.EventDetail .container .detailBox .top .infoBox .infoKey{
+    margin: 10px;
+    font-weight: bold;
+}
+
+.EventDetail .container .detailBox .content{
+    display: flex;
+    flex-direction: column;
+}
+
+.EventDetail .container .detailBox .content .box{
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: gray;
+}
+
+
+.EventDetail .container .descriptionBox{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+.EventDetail .container .descriptionBox .key{
+    font-weight: bold;
+}
+
+.lastEditor{
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+}
+
+.lastEditor .major{
+    margin-left: 10px;
+    color : gray;
+}
