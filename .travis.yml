@@ -14,12 +14,13 @@ matrix:
     install:
     - yarn install
     - yarn add coveralls
+    - gem install coveralls-lcov
     script:
     - "./node_modules/.bin/eslint src/"
     - yarn test --coverage --watchAll=false
     - cd .. && sonar-scanner
     after_success:
-    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - coveralls-locv -v -n coverage/lcov.info > coverage.json
   - language: python
     python: '3.7'
     services: mysql
@@ -41,4 +42,4 @@ matrix:
     - coverage run --source='.' manage.py test
     - coverage xml
     after_success:
-    - coveralls --merge=../frontend/coverage/coverage-final.json
+    - coveralls --merge=../frontend/coverage.json
