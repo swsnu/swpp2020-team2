@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
+import './Signup.css'
+import { appLogo } from '../../images/index'
 
 class Signup extends Component {
-  state={
+  state = {
     username: '',
     password: '',
     pwConfirm: '',
@@ -21,7 +23,7 @@ class Signup extends Component {
     }
   }
 
-  signupHandler=() => {
+  signupHandler = () => {
     if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.university === '' || this.state.department === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
       alert('All fields must be filled.');
       return;
@@ -74,69 +76,113 @@ class Signup extends Component {
 
   render() {
     return (
-      <div className="Signup">
-        <h1>Sign Up</h1>
-        ID:
-        <input
-          id="username-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ username: event.target.value })}
-        />
-        <br />
-        Password:
-        <input
-          id="password-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ password: event.target.value })}
-        />
-        <br />
-        Confirm Password:
-        <input
-          id="pwConfirm-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ pwConfirm: event.target.value })}
-        />
-        <br />
-        University:
-        <select id="university-input" onChange={(event) => this.setState({ university: event.target.value })}>
-          <option value="">--choose your university--</option>
-          <option value="Seoul National University">Seoul National University</option>
-        </select>
-        <br />
-        Department:
-        <select id="department-input" onChange={(event) => this.setState({ department: event.target.value })}>
-          <option value="">--choose your department--</option>
-          <option value="Computer Science and Engineering">Computer Science and Engineering</option>
-          <option value="Electrical and Computer Engineering">Electrical and Computer Engineering</option>
-        </select>
-        <br />
-        Email:
-        <input
-          id="email-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ email: event.target.value })}
-        />
-        <br />
-        First Name:
-        <input
-          id="firstName-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ firstName: event.target.value })}
-        />
-        <br />
-        Last Name:
-        <input
-          id="lastName-input"
-          type="text"
-          value={this.state.title}
-          onChange={(event) => this.setState({ lastName: event.target.value })}
-        />
-        <div><button type="button" id="signup-button" onClick={() => this.signupHandler()}>sign up</button></div>
+      <div className="SignUp">
+        <div className="top">
+
+          <button className="title" onClick={() => this.props.history.goBack()}>Almanac</button>
+          <div className="description">A university events calendar</div>
+        </div>
+
+        <div className="container">
+
+          <div className="logoBox">
+            <img className="logo" src={appLogo}/>
+          </div>
+
+          <div className="content">
+            <h1>Sign Up</h1>
+
+            <div className="signUpBox">
+              <div className="box">
+                <label className="label">ID</label>
+                <input
+                  id="username-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ username: event.target.value })}
+                />
+              </div>
+
+              <div className="box">
+
+                <label className="label">Password</label>
+                <input
+                  id="password-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ password: event.target.value })}
+                />
+              </div>
+
+              <div className="box">
+
+                <label className="label">Confirm Password</label>
+                <input
+                  id="pwConfirm-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ pwConfirm: event.target.value })}
+                />
+              </div>
+
+              <div className="box">
+
+                <label className="label">University</label>
+                <select id="university-input" onChange={(event) => this.setState({ university: event.target.value })}>
+                  <option value="">--choose your university--</option>
+                  <option value="Seoul National University">Seoul National University</option>
+                </select>
+              </div>
+
+              <div className="box">
+
+                <label className="label">Department</label>
+                <select id="department-input" onChange={(event) => this.setState({ department: event.target.value })}>
+                  <option value="">--choose your department--</option>
+                  <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                  <option value="Electrical and Computer Engineering">Electrical and Computer Engineering</option>
+                </select>
+              </div>
+
+              <div className="box">
+
+                <label className="label">Email</label>
+                <input
+                  id="email-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ email: event.target.value })}
+                />
+              </div>
+
+              <div className="box">
+
+                <label className="label">First Name</label>
+                <input
+                  id="firstName-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ firstName: event.target.value })}
+                />
+              </div>
+
+              <div className="box">
+
+                <label className="label">Last Name</label>
+                <input
+                  id="lastName-input"
+                  type="text"
+                  value={this.state.title}
+                  onChange={(event) => this.setState({ lastName: event.target.value })}
+                />
+              </div>
+              <div className="confirmBox">
+                <button type="button" id="signup-button" onClick={() => this.signupHandler()}>
+                  sign up</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

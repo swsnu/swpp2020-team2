@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
+import './Activate.css'
 
 class Activate extends Component {
   componentDidMount() {
@@ -14,12 +15,16 @@ class Activate extends Component {
   render() {
     return (
       <div className="Activate">
-        <h1>Activate</h1>
-        Your account is activated.
-        <br />
-        You can sign in with your account from now.
-        <br />
-        <span onClick={() => this.props.history.push('/main')}>Back to main page</span>
+        <div className="top">
+          <div className="title">Almanac</div>
+          <div className="description">A university events calendar</div>
+        </div>
+
+        <h1>Congratulation!</h1>
+        <div className="text">Your account is activated.</div>
+        <div className="text">You can sign in with your account from now.</div>
+
+        <span className="back" onClick={() => this.props.history.push('/main')}>Click to go to main page</span>
       </div>
     );
   }

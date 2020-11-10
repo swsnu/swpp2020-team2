@@ -1,0 +1,39 @@
+.Activate{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Activate .top{
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    background-color: aquamarine;
+}
+
+.Activate .top .title{
+    margin: 20px;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.Activate .top .description{
+    margin: 10px;
+    font-size: 20px;
+}
+
+.Activate .text{
+    margin: 10px;
+    font-size: 24px;
+}
+
+.Activate .back{
+    margin: 42px;
+    color: blue;
+    font-weight: bold;
+    font-size: 24px;
+}
