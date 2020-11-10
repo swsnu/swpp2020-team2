@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import './EventListModal.css';
 import { connect } from 'react-redux';
@@ -6,60 +6,84 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 
 import { GrTableAdd } from "react-icons/gr";
+import Event from '../eventBox/EventBox'
 
-const EventListModal = (props) => {
+class EventListModal extends Component {
+    state = {
+        NumEvents: 0,
+        date: "2020. 09. 12. SAT",
+        dayEventList: [{
+            id: 1,
+            title: "title",
+            group: "group",
+            place: "place",
+            begin_time: "begin_time",
+            end_time: "end_time",
+            category: "festival"
+        }]
+    }
+    componentDidMount() {
+        if (this.props.dayEventList?.length() > 0) {
+            this.setState({ NumEvents: this.props.dayEventList.length(), dayEventList: this.props.dayEventList })
+        }
+    }
 
-    const NumEvents = props.dayEventList.length()
+    onClickCreateEvent = (date) => {
 
-    const events= props.dayEventList.map(event=>{
-        return(
-            <Event
-                event={event}
-                bringEvent ={()=>onClickBringEvent(event.id)}
-                likeEvent ={()=>onClickLikeEvent(event.id)}
-                reportEvent ={()=>onClickReportEvent(event.id)}
-            />
-        )
-    })
+    }
 
-    onClickCreateEvent((date)=> {
-        
-    })
+    onClickBringEvent = (id) => {
 
-    onClickBringEvent((id) => {
+    }
+    onClickLikeEvent = (id) => {
 
-    })
-    onClickLikeEvent((id) => {
+    }
+    onClickReportEvent = (id) => {
 
-    })
-    onClickReportEvent((id) => {
+    }
+    onClickDetailEvent = (id) => {
 
-    })
+    }
 
-    return (
-        <div className="EventListModal" >
-            <div className="top">
-                <div className="left">
-                    {props.date}
+    render() {
+        const events = this.state.dayEventList?.map(event => {
+            return (
+                <Event
+                    event={event}
+                    bringEvent={() => this.onClickBringEvent(event.id)}
+                    likeEvent={() => this.onClickLikeEvent(event.id)}
+                    reportEvent={() => this.onClickReportEvent(event.id)}
+                    detailEvent={()=>this.onClickDetailEvent(event.id)}
+                />
+            )
+        })
+        return (
+
+            <div className="EventListModal" >
+                <div className="top">
+                    <div className="left">
+                        {this.state.date}
+                    </div>
+
+                    <div className="right">
+                        <div className="NumEvents">
+                            {this.state.NumEvents} events
+                        </div>
+                        
+                        <div className="createEvent">
+                            <button onClick={() => this.onClickCreateEvent(this.props.date)}>
+                                <GrTableAdd size="100%" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="right">
-                    <div className="NumEvents">
-                    {NumEvents} events 
-                    </div>
-                    <div className="createEvent">
-                        <button onClick={()=>onClickCreateEvent(props.date)}>
-                            <GrTableAdd size="12"/>
-                        </button>
-                    </div>
+                <div className="eventList">
+                    {events}
                 </div>
             </div>
-
-            <div className="eventList">
-                {events}
-            </div>
-        </div>
-    );
+        );
+    }
 };
 
 const mapStateToProps = (state) => ({

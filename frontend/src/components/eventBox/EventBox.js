@@ -16,9 +16,9 @@ const EventBox = (props) => {
                 </div>
 
                 <div className="middle">
-                    <div className='title'>
+                    <button className='title' onClick={()=>{props.detailEvent(props.event.id)}}>
                         {props.event.title}
-                    </div>
+                    </button>
                 </div>
 
                 <div className="bottom">
@@ -34,13 +34,13 @@ const EventBox = (props) => {
             <div className="right">
                 <div className="btns">
                     <button className="bringEvent" onClick={props.bringEvent}>
-                        <GoDiffAdded size="12" color="#fff" />
+                        <GoDiffAdded size="100%" color="black" />
                     </button>
                     <button className="likeEvent" onClick={props.likeEvent}>
-                        <GrLike size="12" color="#fff" />
+                        <GrLike size="100%" color="#fff" />
                     </button>
                     <button className="reportEvent" onClick={props.reportEvent}>
-                        <GoReport size="12" color="red" />
+                        <GoReport size="100%" color="red" />
                     </button>
                 </div>
 
