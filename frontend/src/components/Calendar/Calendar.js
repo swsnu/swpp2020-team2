@@ -108,12 +108,15 @@ const Calendar = ({ events, onClickCreateEvent }) => {
     return <div className="body">{rows}</div>;
   };
 
-  const showModal = () => {
+  const showModal = () => (
+    <div />
+    /*
     if (selectedDate === null) return <div />;
     const day = selectedDate;
     const dateFormat = 'yyyy. MM. dd. EEE';
     const str = format(day, dateFormat);
-    const eventInDay = (typeof events === 'undefined') ? [] : events.filter((evt) => isSameDay(evt.date, day));
+    const eventInDay = (typeof events === 'undefined') ? []
+                  : events.filter((evt) => isSameDay(evt.date, day));
     return (
       <div className="Modal">
         <div className="Window">
@@ -123,7 +126,8 @@ const Calendar = ({ events, onClickCreateEvent }) => {
               {`${eventInDay.length} events`}
             </div>
             <div>
-              <button className="createEventButton" src={createEventIcon} label="createEvent" type="button" onClick={onClickCreateEvent}>
+              <button className="createEventButton" src={createEventIcon}
+                      label="createEvent" type="button" onClick={onClickCreateEvent}>
                 <img className="img" src={createEventIcon} alt="+" />
               </button>
             </div>
@@ -132,10 +136,12 @@ const Calendar = ({ events, onClickCreateEvent }) => {
             <List events={eventInDay} />
           </nav>
         </div>
-        <div className="CloseButton" onClick={() => onModalClose()} onKeyPress={() => onModalClose()} role="button" tabIndex="-1">X</div>
+        <div className="CloseButton" onClick={() => onModalClose()}
+              onKeyPress={() => onModalClose()} role="button" tabIndex="-1">X</div>
       </div>
     );
-  };
+    */
+  );
 
   return (
     <div className="View">
