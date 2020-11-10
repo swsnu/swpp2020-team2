@@ -3,11 +3,11 @@ a standard docstring
 '''
 
 import json
+import re
 from django.test import TransactionTestCase, TestCase, Client
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-import re
 
 from .models import User, University
 
@@ -337,3 +337,30 @@ class AlmanacUniversityTestCase(TransactionTestCase):
 
         response = client.get('/api/university/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/university/{}/'.format(id_snu))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/university/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_university_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_snu=(University.objects.get(name='Seoul National University').id)
+
+        response = client.head('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/university/name/{}/'.format('Seoul National University'))
+        self.assertEqual(response.json()['id'], id_snu)
+        self.assertEqual(response.json()['name'], 'Seoul National University')
+        self.assertEqual(response.json()['domain'], 'snu.ac.kr')
