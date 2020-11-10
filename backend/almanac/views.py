@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University, Department, Event
+from almanac.models import User, University, Department, Event, Background, Language
 from .tokens import account_activation_token
 
 # Create your views here.
@@ -369,6 +369,90 @@ def get_department_by_name(request, name):
         return JsonResponse(department_dict)
 
     return HttpResponseNotAllowed(['GET'])
+
+def get_create_background(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        backgrounds = [{'id': background['id'], 'name': background['name']
+        } for background in Background.objects.all().values()]
+        return JsonResponse(backgrounds, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    background = Background(name=name)
+    background.save()
+    background_dict = {'id': background.id, 'name': background.name}
+    return HttpResponse(content=json.dumps(background_dict), status=201)
+
+def get_delete_background(request, background_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Background.objects.filter(id=background_id).exists():
+        return HttpResponseNotFound()
+
+    background = Background.objects.get(id=background_id)
+
+    if request.method == 'GET':
+        background_dict = {'id': background.id, 'name': background.name}
+        return JsonResponse(background_dict)
+    # DELETE
+    background.delete()
+    return HttpResponse(status=200)
+
+def get_create_language(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        languages = [{'id': language['id'], 'name': language['name']
+        } for language in Language.objects.all().values()]
+        return JsonResponse(languages, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    language = Language(name=name)
+    language.save()
+    language_dict = {'id': language.id, 'name': language.name}
+    return HttpResponse(content=json.dumps(language_dict), status=201)
+
+def get_delete_language(request, language_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Language.objects.filter(id=language_id).exists():
+        return HttpResponseNotFound()
+
+    language = Language.objects.get(id=language_id)
+
+    if request.method == 'GET':
+        language_dict = {'id': language.id, 'name': language.name}
+        return JsonResponse(language_dict)
+    # DELETE
+    language.delete()
+    return HttpResponse(status=200)
 
 def index(request):
 

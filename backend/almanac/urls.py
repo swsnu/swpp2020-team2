@@ -29,5 +29,13 @@ urlpatterns = [
     views.get_delete_department, name='get_delete_department'),
     path('department/name/<name>/',
     views.get_department_by_name, name='get_department_by_name'),
+    path('background/',
+    views.get_create_background, name='create_background'),
+    path('background/<int:background_id>/',
+    views.get_delete_background, name='get_delete_background'),
+    path('language/',
+    views.get_create_language, name='create_language'),
+    path('language/<int:language_id>/',
+    views.get_delete_language, name='get_delete_language'),
     path('token/', views.get_token, name='token'),
 ]

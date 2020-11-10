@@ -9,7 +9,7 @@ from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
-from .models import User, University, Department
+from .models import User, University, Department, Background, Language
 
 # Create your tests here.
 
@@ -303,7 +303,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-class AlmanacUniversityDepartmentTestCase(TransactionTestCase):
+class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
 
     '''
     a class docstring
@@ -326,6 +326,12 @@ class AlmanacUniversityDepartmentTestCase(TransactionTestCase):
         )
         Department.objects.create(
             name='Computer Science Engineering'
+        )
+        Background.objects.create(
+            name=1
+        )
+        Language.objects.create(
+            name=1
         )
 
     def test_get_create_university(self):
@@ -464,3 +470,95 @@ class AlmanacUniversityDepartmentTestCase(TransactionTestCase):
         response = client.get('/api/department/name/{}/'.format('Computer Science Engineering'))
         self.assertEqual(response.json()['id'], id_cse)
         self.assertEqual(response.json()['name'], 'Computer Science Engineering')
+
+    def test_get_create_background(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/background/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/background/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 1)
+
+        response = client.post('/api/background/', json.dumps({'name': 2}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('2', response.content.decode())
+
+    def test_get_delete_background(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_1=(Background.objects.get(name=1).id)
+        id_wrong = id_1+1
+
+        response = client.head('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.json()['name'], 1)
+
+        response = client.get('/api/background/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/background/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_create_language(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/language/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/language/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 1)
+
+        response = client.post('/api/language/', json.dumps({'name': 2}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('2', response.content.decode())
+
+    def test_get_delete_language(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_1=(Language.objects.get(name=1).id)
+        id_wrong = id_1+1
+
+        response = client.head('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.json()['name'], 1)
+
+        response = client.get('/api/language/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/language/')
+        self.assertEqual(len(response.json()), 0)
