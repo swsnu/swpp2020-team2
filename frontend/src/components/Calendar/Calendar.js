@@ -9,7 +9,7 @@ import isSameMonth from 'date-fns/isSameMonth';
 import isSameDay from 'date-fns/isSameDay';
 import addMonths from 'date-fns/addMonths';
 import subMonths from 'date-fns/subMonths';
-import { categoryIcons, createEventIcon } from '../../images/index';
+import { categoryIcons } from '../../images/index';
 import './Calendar.css';
 
 const Calendar = ({
