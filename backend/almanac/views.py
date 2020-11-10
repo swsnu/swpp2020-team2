@@ -117,6 +117,28 @@ def signout(request):
 
     return HttpResponseNotAllowed(['GET'])
 
+def get_user_signin(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+
+    if request.method == 'GET':
+        user_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email, 'is_active': user.is_active}
+        return JsonResponse(user_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
 def get_user(request, user_id):
 
     '''
@@ -155,6 +177,32 @@ def get_event(request):
         } for event in Event.objects.all().values()]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
+
+def create_event(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        place = req_data['place']
+        date = req_data['date']
+        begin_time = req_data['begin_time']
+        end_time = req_data['end_time']
+        content = req_data['content']
+        event = Event(title=title, place=place, date=date,
+        begin_time=begin_time, end_time=end_time, content=content)
+        event.save()
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return HttpResponse(content=json.dumps(event_dict), status=201)
+    return HttpResponseNotAllowed(['POST'])
 
 def get_put_delete_event(request, event_id):
 

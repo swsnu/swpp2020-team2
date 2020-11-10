@@ -3,13 +3,13 @@ a standard docstring
 '''
 
 import json
+import re
 from django.test import TransactionTestCase, TestCase, Client
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-import re
 
-from .models import User, University
+from .models import User, University, Department
 
 # Create your tests here.
 
@@ -238,13 +238,38 @@ class AlmanacUserTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create(
+        User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create(
+        User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
 
+    def test_user_get_singin(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/user/signin/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
     def test_user_get(self):
 
@@ -265,14 +290,20 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['username'], 'ray017')
         self.assertEqual(response.json()['first_name'], 'Raegeon')
         self.assertEqual(response.json()['last_name'], 'Lee')
-        self.assertEqual(response.json()['password'], 'password')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
+
+        response = client.get('/api/user/{}/'.format(id2))
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-class AlmanacUniversityTestCase(TransactionTestCase):
+class AlmanacUniversityDepartmentTestCase(TransactionTestCase):
 
     '''
     a class docstring
@@ -284,14 +315,17 @@ class AlmanacUniversityTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create(
+        User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create(
+        User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
         University.objects.create(
             name='Seoul National University', domain='snu.ac.kr'
+        )
+        Department.objects.create(
+            name='Computer Science Engineering'
         )
 
     def test_get_create_university(self):
@@ -337,3 +371,96 @@ class AlmanacUniversityTestCase(TransactionTestCase):
 
         response = client.get('/api/university/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/university/{}/'.format(id_snu))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/university/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_university_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_snu=(University.objects.get(name='Seoul National University').id)
+
+        response = client.head('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/university/name/{}/'.format('Seoul National University'))
+        self.assertEqual(response.json()['id'], id_snu)
+        self.assertEqual(response.json()['name'], 'Seoul National University')
+        self.assertEqual(response.json()['domain'], 'snu.ac.kr')
+
+    def test_get_create_department(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/department/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'Computer Science Engineering')
+
+        response = client.post('/api/department/', json.dumps({'name': 'Mathematical Sciences'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Mathematical Sciences', response.content.decode())
+
+    def test_get_delete_department(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_cse=(Department.objects.get(name='Computer Science Engineering').id)
+        id_wrong = id_cse+1
+
+        response = client.head('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.json()['name'], 'Computer Science Engineering')
+
+        response = client.get('/api/department/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/department/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_department_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_cse=(Department.objects.get(name='Computer Science Engineering').id)
+
+        response = client.head('/api/department/name/{}/'.format('Physics'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/name/{}/'.format('Physics'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/department/name/{}/'.format('Computer Science Engineering'))
+        self.assertEqual(response.json()['id'], id_cse)
+        self.assertEqual(response.json()['name'], 'Computer Science Engineering')
