@@ -238,13 +238,38 @@ class AlmanacUserTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create(
+        User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create(
+        User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
 
+    def test_user_get_singin(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/user/signin/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
     def test_user_get(self):
 
@@ -265,9 +290,15 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['username'], 'ray017')
         self.assertEqual(response.json()['first_name'], 'Raegeon')
         self.assertEqual(response.json()['last_name'], 'Lee')
-        self.assertEqual(response.json()['password'], 'password')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
+
+        response = client.get('/api/user/{}/'.format(id2))
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)

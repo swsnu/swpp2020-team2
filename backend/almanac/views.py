@@ -117,6 +117,28 @@ def signout(request):
 
     return HttpResponseNotAllowed(['GET'])
 
+def get_user_signin(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+
+    if request.method == 'GET':
+        user_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email, 'is_active': user.is_active}
+        return JsonResponse(user_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
 def get_user(request, user_id):
 
     '''
