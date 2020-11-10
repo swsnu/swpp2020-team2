@@ -4,3 +4,7 @@ export {
   signUp,
   activate,
 } from './actions';
+
+export {
+  getEvent,
+} from './events';

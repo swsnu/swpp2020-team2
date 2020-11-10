@@ -3,13 +3,14 @@ a standard docstring
 '''
 
 import json
+import re
 from django.test import TransactionTestCase, TestCase, Client
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-import re
+from django.conf import settings
 
-from .models import User, University
+from .models import User, University, Department, Background, Language, Tag, Category, Image
 
 # Create your tests here.
 
@@ -238,13 +239,38 @@ class AlmanacUserTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create(
+        User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create(
+        User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
 
+    def test_user_get_singin(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/user/signin/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/')
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
     def test_user_get(self):
 
@@ -265,14 +291,20 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['username'], 'ray017')
         self.assertEqual(response.json()['first_name'], 'Raegeon')
         self.assertEqual(response.json()['last_name'], 'Lee')
-        self.assertEqual(response.json()['password'], 'password')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
+
+        response = client.get('/api/user/{}/'.format(id2))
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-class AlmanacUniversityTestCase(TransactionTestCase):
+class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
     '''
     a class docstring
@@ -284,14 +316,32 @@ class AlmanacUniversityTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create(
+        User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create(
+        User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
         University.objects.create(
             name='Seoul National University', domain='snu.ac.kr'
+        )
+        Department.objects.create(
+            name='Computer Science Engineering'
+        )
+        Tag.objects.create(
+            name='waffle'
+        )
+        Category.objects.create(
+            name='performance'
+        )
+        Background.objects.create(
+            name=1
+        )
+        Language.objects.create(
+            name=1
+        )
+        Image.objects.create(
+            image_file='image/home.jpg'
         )
 
     def test_get_create_university(self):
@@ -337,3 +387,340 @@ class AlmanacUniversityTestCase(TransactionTestCase):
 
         response = client.get('/api/university/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/university/{}/'.format(id_snu))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/university/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_university_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_snu=(University.objects.get(name='Seoul National University').id)
+
+        response = client.head('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/university/name/{}/'.format('Hanyang University'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/university/name/{}/'.format('Seoul National University'))
+        self.assertEqual(response.json()['id'], id_snu)
+        self.assertEqual(response.json()['name'], 'Seoul National University')
+        self.assertEqual(response.json()['domain'], 'snu.ac.kr')
+
+    def test_get_create_department(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/department/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'Computer Science Engineering')
+
+        response = client.post('/api/department/', json.dumps({'name': 'Mathematical Sciences'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Mathematical Sciences', response.content.decode())
+
+    def test_get_delete_department(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_cse=(Department.objects.get(name='Computer Science Engineering').id)
+        id_wrong = id_cse+1
+
+        response = client.head('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.json()['name'], 'Computer Science Engineering')
+
+        response = client.get('/api/department/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/department/{}/'.format(id_cse))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/department/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_department_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_cse=(Department.objects.get(name='Computer Science Engineering').id)
+
+        response = client.head('/api/department/name/{}/'.format('Physics'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/department/name/{}/'.format('Physics'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/department/name/{}/'.format('Computer Science Engineering'))
+        self.assertEqual(response.json()['id'], id_cse)
+        self.assertEqual(response.json()['name'], 'Computer Science Engineering')
+
+    def test_get_create_category(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/category/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'performance')
+
+        response = client.post('/api/category/', json.dumps({'name': 'ililhof'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('ililhof', response.content.decode())
+
+    def test_get_delete_category(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_performance=(Category.objects.get(name='performance').id)
+        id_wrong = id_performance+1
+
+        response = client.head('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.json()['name'], 'performance')
+
+        response = client.get('/api/category/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/category/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_category_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_performance=(Category.objects.get(name='performance').id)
+
+        response = client.head('/api/category/name/{}/'.format('ililhof'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/name/{}/'.format('ililhof'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/category/name/{}/'.format('performance'))
+        self.assertEqual(response.json()['id'], id_performance)
+        self.assertEqual(response.json()['name'], 'performance')
+
+    def test_get_create_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/tag/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'waffle')
+
+        response = client.post('/api/tag/', json.dumps({'name': 'salad'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('salad', response.content.decode())
+
+    def test_get_delete_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_waffle=(Tag.objects.get(name='waffle').id)
+        id_wrong = id_waffle+1
+
+        response = client.head('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.json()['name'], 'waffle')
+
+        response = client.get('/api/tag/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/tag/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_tag_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_waffle=(Tag.objects.get(name='waffle').id)
+
+        response = client.head('/api/tag/name/{}/'.format('salad'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/name/{}/'.format('salad'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/tag/name/{}/'.format('waffle'))
+        self.assertEqual(response.json()['id'], id_waffle)
+        self.assertEqual(response.json()['name'], 'waffle')
+
+    def test_get_create_background(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/background/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/background/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 1)
+
+        response = client.post('/api/background/', json.dumps({'name': 2}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('2', response.content.decode())
+
+    def test_get_delete_background(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_1=(Background.objects.get(name=1).id)
+        id_wrong = id_1+1
+
+        response = client.head('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.json()['name'], 1)
+
+        response = client.get('/api/background/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/background/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/background/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_create_language(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/language/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/language/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 1)
+
+        response = client.post('/api/language/', json.dumps({'name': 2}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('2', response.content.decode())
+
+    def test_get_delete_language(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_1=(Language.objects.get(name=1).id)
+        id_wrong = id_1+1
+
+        response = client.head('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.json()['name'], 1)
+
+        response = client.get('/api/language/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/language/{}/'.format(id_1))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/language/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_create_image(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/image/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/image/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['image_file_url'], 'image/home.jpg')
+
+        with open(settings.MEDIA_ROOT / 'image/signup.jpg', 'rb') as file_pt:
+            response = client.post('/api/image/', {'name': 'signup', 'imagefile': file_pt})
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('image/signup', response.content.decode())

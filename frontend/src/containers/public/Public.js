@@ -6,14 +6,7 @@ import './Public.css';
 import Calendar from '../../components/Calendar/Calendar';
 import { createEventIcon } from '../../images/index';
 import SideBar from '../../components/SideBar/SideBar';
-
-function onClickCreateEvent() {
-  // redirect to create event page
-}
-
-function onClickDay(day, events) {
-  // show modal window
-}
+import EventListModal from '../../components/eventListModal/EventListModal';
 
 function onClickEvent(evt) {
   // redirect to event detail
@@ -23,6 +16,9 @@ class Public extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalBool: false,
+      modalEvents: [],
+      modalDay: null,
       viewOption: 'Calendar',
       including: '',
       tagOption: '',
@@ -31,6 +27,9 @@ class Public extends Component {
       eventOption: null,
       sortOption: 'recent',
     };
+    this.onClickDay = this.onClickDay.bind(this);
+    this.onClickCloseModal = this.onClickCloseModal.bind(this);
+    this.onClickCreateEvent = this.onClickCreateEvent.bind(this);
     this.setViewOption = this.setViewOption.bind(this);
     this.setIncluding = this.setIncluding.bind(this);
     this.setTagOption = this.setTagOption.bind(this);
@@ -43,6 +42,25 @@ class Public extends Component {
   componentDidMount() {
     const { onGetAllEvent } = this.props;
     onGetAllEvent();
+  }
+
+  onClickCreateEvent() {
+    this.props.history.push('/details/create');
+  }
+
+  onClickDay(day, events) {
+    // show modal window
+    this.setState({
+      modalBool: true,
+      modalEvents: events,
+      modalDay: day,
+    });
+  }
+
+  onClickCloseModal() {
+    this.setState({
+      modalBool: false,
+    });
   }
 
   setViewOption(str) {
@@ -96,6 +114,24 @@ class Public extends Component {
 
   render() {
     const { events } = this.props;
+
+    let modal = null;
+    if (this.state.modalBool) {
+      modal = (
+        <div style={{
+          backgroundColor: 'white', width: 1000, height: 800, border: '10 solid black', position: 'fixed', left: 460, top: 100,
+        }}
+        >
+          <EventListModal
+            day={this.state.modalDay}
+            dayEventList={this.state.modalEvents}
+            onClickCloseModal={this.onClickCloseModal}
+            onClickCreateEvent={this.onClickCreateEvent}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="Public">
         <div>
@@ -103,9 +139,9 @@ class Public extends Component {
         </div>
         <Calendar
           events={events}
-          onClickDay={onClickDay}
+          onClickDay={this.onClickDay}
         />
-        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => onClickCreateEvent()}>
+        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => this.onClickCreateEvent()}>
           <img className="img" src={createEventIcon} alt="+" />
         </button>
         <SideBar
@@ -117,6 +153,7 @@ class Public extends Component {
           setEventOption={this.setEventOption}
           setSortOption={this.setSortOption}
         />
+        {modal}
       </div>
     );
   }

@@ -35,7 +35,7 @@ class Image(models.Model):
     a class docstring
     '''
 
-    name = models.ImageField()
+    image_file = models.ImageField(upload_to='image/', default= 'image/home.jpg')
 
 class Background(models.Model):
 
