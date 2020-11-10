@@ -1,0 +1,37 @@
+.EventListModal {
+    display: flex;
+    flex-direction: column;
+}
+
+.EventListModal .top{
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    width: 80%;
+}
+
+.EventListModal .top .left{
+    display: flex;
+    flex:1;
+    flex-direction: row;
+    float: left;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.EventListModal .top .right{
+    display: flex;
+    margin-left: auto;
+    flex-direction: row;
+    align-items: center;
+}
+
+.EventListModal .top .right .createEvent{
+    margin: 10px;
+    height: 36px;
+    width:36px;
+}
+
+.EventListModal .eventList{
+    flex:1;
+}
