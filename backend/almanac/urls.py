@@ -3,6 +3,8 @@ a standard docstring
 '''
 
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -29,5 +31,29 @@ urlpatterns = [
     views.get_delete_department, name='get_delete_department'),
     path('department/name/<name>/',
     views.get_department_by_name, name='get_department_by_name'),
+    path('tag/',
+    views.get_create_tag, name='create_tag'),
+    path('tag/<int:tag_id>/',
+    views.get_delete_tag, name='get_delete_tag'),
+    path('tag/name/<name>/',
+    views.get_tag_by_name, name='get_tag_by_name'),
+    path('category/',
+    views.get_create_category, name='create_category'),
+    path('category/<int:category_id>/',
+    views.get_delete_category, name='get_delete_category'),
+    path('category/name/<name>/',
+    views.get_category_by_name, name='get_category_by_name'),
+    path('background/',
+    views.get_create_background, name='create_background'),
+    path('background/<int:background_id>/',
+    views.get_delete_background, name='get_delete_background'),
+    path('language/',
+    views.get_create_language, name='create_language'),
+    path('language/<int:language_id>/',
+    views.get_delete_language, name='get_delete_language'),
+    path('image/',
+    views.get_create_image, name='create_image'),
+    path('image/<int:image_id>/',
+    views.get_delete_image, name='get_delete_image'),
     path('token/', views.get_token, name='token'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

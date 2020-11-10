@@ -15,8 +15,10 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University, Department, Event
+from almanac.models import User, \
+    University, Department, Event, Background, Language, Category, Tag, Image
 from .tokens import account_activation_token
+from .forms import ImageForm
 
 # Create your views here.
 
@@ -174,7 +176,7 @@ def get_event(request):
         events = [{'id': event['id'], 'title': event['title'],
         'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
         'end_time': event['end_time'], 'content': event['content']
-        } for event in Event.objects.all().values()]
+        } for event in Event.objects.all().order_by('id').values()]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -253,7 +255,7 @@ def get_create_university(request):
 
     if request.method == 'GET':
         universities = [{'id': university['id'], 'name': university['name'],
-        'domain': university['domain']} for university in University.objects.all().values()]
+        'domain': university['domain']} for university in University.objects.all().order_by('name').values()]
         return JsonResponse(universities, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
@@ -319,7 +321,7 @@ def get_create_department(request):
 
     if request.method == 'GET':
         departments = [{'id': department['id'], 'name': department['name']
-        } for department in Department.objects.all().values()]
+        } for department in Department.objects.all().order_by('name').values()]
         return JsonResponse(departments, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
@@ -369,6 +371,259 @@ def get_department_by_name(request, name):
         return JsonResponse(department_dict)
 
     return HttpResponseNotAllowed(['GET'])
+
+def get_create_category(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        categories = [{'id': category['id'], 'name': category['name']
+        } for category in Category.objects.all().order_by('name').values()]
+        return JsonResponse(categories, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    category = Category(name=name)
+    category.save()
+    category_dict = {'id': category.id, 'name': category.name}
+    return HttpResponse(content=json.dumps(category_dict), status=201)
+
+def get_delete_category(request, category_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Category.objects.filter(id=category_id).exists():
+        return HttpResponseNotFound()
+
+    category = Category.objects.get(id=category_id)
+
+    if request.method == 'GET':
+        category_dict = {'id': category.id, 'name': category.name}
+        return JsonResponse(category_dict)
+    # DELETE
+    category.delete()
+    return HttpResponse(status=200)
+
+def get_category_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Category.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    category = Category.objects.get(name=name)
+
+    if request.method == 'GET':
+        category_dict = {'id': category.id, 'name': category.name}
+        return JsonResponse(category_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_tag(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        tags = [{'id': tag['id'], 'name': tag['name']
+        } for tag in Tag.objects.all().order_by('name').values()]
+        return JsonResponse(tags, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    tag = Tag(name=name)
+    tag.save()
+    tag_dict = {'id': tag.id, 'name': tag.name}
+    return HttpResponse(content=json.dumps(tag_dict), status=201)
+
+def get_delete_tag(request, tag_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Tag.objects.filter(id=tag_id).exists():
+        return HttpResponseNotFound()
+
+    tag = Tag.objects.get(id=tag_id)
+
+    if request.method == 'GET':
+        tag_dict = {'id': tag.id, 'name': tag.name}
+        return JsonResponse(tag_dict)
+    # DELETE
+    tag.delete()
+    return HttpResponse(status=200)
+
+def get_tag_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Tag.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    tag = Tag.objects.get(name=name)
+
+    if request.method == 'GET':
+        tag_dict = {'id': tag.id, 'name': tag.name}
+        return JsonResponse(tag_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_background(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        backgrounds = [{'id': background['id'], 'name': background['name']
+        } for background in Background.objects.all().order_by('name').values()]
+        return JsonResponse(backgrounds, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    background = Background(name=name)
+    background.save()
+    background_dict = {'id': background.id, 'name': background.name}
+    return HttpResponse(content=json.dumps(background_dict), status=201)
+
+def get_delete_background(request, background_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Background.objects.filter(id=background_id).exists():
+        return HttpResponseNotFound()
+
+    background = Background.objects.get(id=background_id)
+
+    if request.method == 'GET':
+        background_dict = {'id': background.id, 'name': background.name}
+        return JsonResponse(background_dict)
+    # DELETE
+    background.delete()
+    return HttpResponse(status=200)
+
+def get_create_language(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        languages = [{'id': language['id'], 'name': language['name']
+        } for language in Language.objects.all().order_by('name').values()]
+        return JsonResponse(languages, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    language = Language(name=name)
+    language.save()
+    language_dict = {'id': language.id, 'name': language.name}
+    return HttpResponse(content=json.dumps(language_dict), status=201)
+
+def get_delete_language(request, language_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Language.objects.filter(id=language_id).exists():
+        return HttpResponseNotFound()
+
+    language = Language.objects.get(id=language_id)
+
+    if request.method == 'GET':
+        language_dict = {'id': language.id, 'name': language.name}
+        return JsonResponse(language_dict)
+    # DELETE
+    language.delete()
+    return HttpResponse(status=200)
+
+def get_create_image(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        images = [{'id': image['id'], 'image_file_url': image['image_file']
+        } for image in Image.objects.all().order_by('id').values()]
+        return JsonResponse(images, safe=False)
+    # POST
+    print(request.FILES)
+    form = ImageForm(request.POST, request.FILES)
+    print(form)
+    if form.is_valid():
+        image = Image(image_file = request.FILES['imagefile'])
+        image.save()
+        image_dict = {'id': image.id, 'image_file_url': image.image_file.url}
+        return HttpResponse(content=json.dumps(image_dict), status=201)
+    return HttpResponse(content='Bad Image', status=401)
+
+def get_delete_image(request, image_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Image.objects.filter(id=image_id).exists():
+        return HttpResponseNotFound()
+
+    image = Image.objects.get(id=image_id)
+
+    if request.method == 'GET':
+        image_dict = {'id': image.id, 'image_file_url': image.image_file.url}
+        return JsonResponse(image_dict)
+    # DELETE
+    image.delete()
+    return HttpResponse(status=200)
 
 def index(request):
 
