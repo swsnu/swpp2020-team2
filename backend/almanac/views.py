@@ -39,7 +39,7 @@ def signup(request):
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
-            ' via the link \nhttps://localhost/signup/{}/{}'
+            ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
                 username,
                 urlsafe_base64_encode(force_bytes(user.id)),
@@ -97,7 +97,7 @@ def signin(request):
         if user is not None:
             login(request, user)
             user_dict = {'username': user.username, 'password': user.password}
-            return HttpResponse(content=json.dumps(user_dict), status=204)
+            return JsonResponse(user_dict)
         return HttpResponse(status=401)
 
     return HttpResponseNotAllowed(['POST'])

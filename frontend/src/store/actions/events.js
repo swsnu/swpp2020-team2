@@ -9,7 +9,7 @@ export const getEvent_ = (event) => ({
   target: event,
 });
 
-export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}`)
+export const getEvent = (id) => (dispatch) => axios.get(`api/event/${id}/`)
   .then((res) => dispatch(getEvent_(res.data)));
 
 /*
@@ -22,7 +22,7 @@ export const postEvent_=(event)=>{
 
 export const postEvent=(args)=>{
     return dispatch=>{
-        return axios.post('/api/event/upload/')
+        return axios.post('api/event/upload/')
         .then(res=>dispatch(postEvent_(res.data)));
     }
 }

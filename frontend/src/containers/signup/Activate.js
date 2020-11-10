@@ -7,8 +7,8 @@ import './Activate.css'
 class Activate extends Component {
   componentDidMount() {
     this.props.activate({
-      uidb64: parseInt(this.props.match.params.uidb64),
-      token: parseInt(this.props.match.params.token),
+      uidb64: this.props.match.params.uidb64,
+      token: this.props.match.params.token,
     });
   }
 
