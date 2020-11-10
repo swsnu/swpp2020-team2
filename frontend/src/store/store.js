@@ -6,10 +6,12 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 
 import userReducer from './reducers/userReducer';
+import eventReducer from './reducers/eventReducer';
 
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   ur: userReducer,
+  evt: eventReducer,
   router: connectRouter(history),
 });
 export const middlewares = [thunk, routerMiddleware(history)];

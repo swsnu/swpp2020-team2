@@ -1,0 +1,196 @@
+.View{
+    /* no drag */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+position: relative;
+}
+header {
+display: block;
+width: 100%;
+padding: 1.75em 0;
+border-bottom: 1px solid lightgray;
+background: white;
+}
+.row {
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+width: 100%;
+}
+.column {
+flex-grow: 1;
+flex-basis: 0;
+max-width: 100%;
+}
+.Calendar {
+display: block;
+position: relative;
+width: 80%;
+background: white;
+border: 1px solid lightgray;
+height: auto;
+margin:0 auto;
+
+}
+.Calendar .header {
+display:flex;
+flex-direction: row;
+align-items: center;
+align-content: center;
+justify-content: center;
+font-weight: 700;
+font-size: 200%;
+height: 100px;
+border-bottom: 1px solid lightgray;
+}
+.Calendar .year_month {
+    width: 30%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+
+}
+.Calendar .header .arrow{
+    display:inline-block;
+    text-align: center;
+    border: none;
+    outline:none;
+}
+.Calendar .header .arrow:hover{
+    display:inline-block;
+    text-align: center;
+    border: none;
+    outline:none;
+    color:green;
+    transform: scale(2);
+}
+.Calendar .body .cell {
+position: relative;
+height: 6em;
+border-right: 1px solid lightgray;
+overflow: hidden;
+cursor: pointer;
+background: white;
+outline:none;
+}
+
+.Calendar .body .row {
+border-bottom: 1px solid lightgray;
+}
+.Calendar .body .row:first-child {
+    pointer-events: none;
+}
+.Calendar .body .row:last-child {
+border-bottom: none;
+}
+.Calendar .body .cell:first-child {
+    color: red !important;
+}
+.Calendar .body .cell:last-child {
+border-right: none;
+color: blue !important;
+}
+.Calendar .body .cell .number {
+position: absolute;
+font-size: 82.5%;
+line-height: 1;
+top: .75em;
+left: .75em;
+font-weight: 700;
+}
+.Calendar .body .disabled * {
+color: gray;
+pointer-events: none;
+opacity: 0.7;
+}
+.Calendar .body .cell .icons{
+    position: absolute;
+    top: 1.7em;
+}
+.Calendar .body .cell .icons .img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+.Modal{
+border-radius: 25px;
+ position: absolute;
+ top: 10%;
+ left: 50%;
+ transform: translate(-50%, 0%);
+ width: 80%;
+ height: 100%;
+ background-color: lightgray;
+z-index: 8;
+
+}
+
+.Modal .CloseButton{
+    position: absolute;
+font-size: 200%;
+line-height: 1;
+top: .75em;
+right: .75em;
+font-weight: 100;
+outline: none;
+}
+
+.Modal .Window{
+    position: relative;
+    top: 5%;
+    left: 10%;
+    width: 80%;
+}
+
+.Modal .date{
+    position:absolute;
+font-size: 200%;
+top: .75em;
+left: .75em;
+font-weight: 400;
+outline: none;
+}
+
+.Modal .events{
+    position:absolute;
+    display:flex;
+    flex-direction: row;
+font-size: 200%;
+top: .75em;
+right: .75em;
+font-weight: 400;
+outline: none;
+margin-right:10px;
+}
+
+.Modal .createEventButton{
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.Modal .createEventButton .img{
+    display: block;
+    height: 40px;
+    width: 40px;
+}
+
+.Modal nav {
+    position: absolute;
+    top: 100px;
+    width:100%;
+    height: 580px;
+    overflow-y:scroll;
+}

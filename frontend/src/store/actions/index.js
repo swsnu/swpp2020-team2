@@ -1,4 +1,5 @@
 export {
+  getAllEvent, /* event */
   signIn,
   signUp,
   activate,
