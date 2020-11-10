@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1604962953728" clover="3.2.0">
+  <project timestamp="1604962953728" name="All files">
+    <metrics statements="110" coveredstatements="110" conditionals="66" coveredconditionals="66" methods="49" coveredmethods="49" elements="225" coveredelements="225" complexity="0" loc="110" ncloc="110" packages="7" files="10" classes="10"/>
+    <package name="src">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="App.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/App.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.containers.main">
+      <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="8" methods="10" coveredmethods="10"/>
+      <file name="Main.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/containers/main/Main.js">
+        <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="8" methods="10" coveredmethods="10"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="13" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="19" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="53" count="5" type="stmt"/>
+        <line num="57" count="5" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.containers.signup">
+      <metrics statements="54" coveredstatements="54" conditionals="47" coveredconditionals="47" methods="21" coveredmethods="21"/>
+      <file name="Activate.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/containers/signup/Activate.js">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+      </file>
+      <file name="Signup.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/containers/signup/Signup.js">
+        <metrics statements="48" coveredstatements="48" conditionals="47" coveredconditionals="47" methods="15" coveredmethods="15"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="19" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="7" type="cond" truecount="10" falsecount="0"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="29" count="6" type="stmt"/>
+        <line num="30" count="6" type="stmt"/>
+        <line num="31" count="79" type="stmt"/>
+        <line num="32" count="79" type="cond" truecount="9" falsecount="0"/>
+        <line num="34" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="42" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
+        <line num="47" count="3" type="stmt"/>
+        <line num="48" count="31" type="stmt"/>
+        <line num="49" count="31" type="cond" truecount="6" falsecount="0"/>
+        <line num="51" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="57" count="17" type="stmt"/>
+        <line num="58" count="17" type="cond" truecount="6" falsecount="0"/>
+        <line num="60" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="76" count="17" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="100" count="2" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="121" count="2" type="stmt"/>
+        <line num="129" count="2" type="stmt"/>
+        <line num="137" count="2" type="stmt"/>
+        <line num="139" count="7" type="stmt"/>
+        <line num="145" count="4" type="stmt"/>
+        <line num="149" count="4" type="stmt"/>
+        <line num="150" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.store">
+      <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+      <file name="store.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/store/store.js">
+        <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="0" coveredmethods="0"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="17" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.store.actions">
+      <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="12"/>
+      <file name="actionTypes.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/store/actions/actionTypes.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="5" type="stmt"/>
+        <line num="2" count="5" type="stmt"/>
+        <line num="3" count="5" type="stmt"/>
+      </file>
+      <file name="actions.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/store/actions/actions.js">
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="12" coveredmethods="12"/>
+        <line num="4" count="5" type="stmt"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="5" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="32" count="5" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+      </file>
+      <file name="index.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/store/actions/index.js">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="src.store.reducers">
+      <metrics statements="8" coveredstatements="8" conditionals="5" coveredconditionals="5" methods="1" coveredmethods="1"/>
+      <file name="userReducer.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/store/reducers/userReducer.js">
+        <metrics statements="8" coveredstatements="8" conditionals="5" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="7" count="5" type="cond" truecount="1" falsecount="0"/>
+        <line num="8" count="18" type="cond" truecount="4" falsecount="0"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="15" type="stmt"/>
+        <line num="18" count="15" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.test-utils">
+      <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+      <file name="mocks.js" path="/mnt/c/1래건/학교/소개원실/swpp2020-team2/frontend/src/test-utils/mocks.js">
+        <metrics statements="11" coveredstatements="11" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="9" count="12" type="cond" truecount="1" falsecount="0"/>
+        <line num="10" count="40" type="cond" truecount="1" falsecount="0"/>
+        <line num="12" count="40" type="stmt"/>
+        <line num="14" count="40" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="19" count="12" type="stmt"/>
+        <line num="20" count="12" type="stmt"/>
+        <line num="24" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="12" type="stmt"/>
+        <line num="27" count="12" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
