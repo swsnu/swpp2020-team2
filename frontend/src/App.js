@@ -17,11 +17,11 @@ function App({ history }) {
       <div className="App">
         <Switch>
           <Route path="/main" exact component={Main} />
+          <Redirect exact from="/" to="/main" />
           <Route path="/public" exact component={Public} />
           <Route path="/details/create/" exact component={EventCreate} />
           <Route path="/details/:event_id/" exact component={EventDetail} />
           <Route path="/details/modify/:event_id/" exact component={EventModify} />
-          <Redirect exact from="/" to="/main" />
           <Route path="/signup" exact component={Signup} />
           <Route path="/signup/activate/:uidb64/:token" exact component={Activate} />
           <Route render={() => <h1>Not Found</h1>} />
