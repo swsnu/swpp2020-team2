@@ -1,0 +1,125 @@
+.SideBar{
+    float:left;
+    margin-left: 1%;
+    margin-top: 1%;
+    width:18%;
+    border: 1px solid gray;
+}
+
+.SideBar .ViewDiv{
+    border-bottom: 1px solid lightgray;
+}
+
+.SideBar .ViewOption{
+    margin: 5%;
+}
+
+.SideBar .OptionName{
+    font-weight: 500;
+    font-size: 150%;
+    margin-bottom: 10px;
+}
+
+.SideBar .ViewOptionButtons{
+    display:flex;
+}
+
+.SideBar .ViewOptionButton{
+    padding:5px;
+    margin: 5px;
+    border-radius: 7px;
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.SideBar .FilterDiv{
+    border-bottom: 1px solid lightgray;
+}
+.SideBar .FilterOption{
+    margin: 5%;
+}
+
+.SideBar .Including{
+    display:flex;
+    margin-bottom:3%;
+}
+
+.SideBar .IncludingText{
+    width: 70%;
+}
+
+.SideBar .IncludingSubmit{
+    background-color:white;
+    border: 1px solid lightgray;
+    outline: none;
+    cursor: pointer;
+}
+
+.SideBar .TagOption{
+    display:flex;
+    margin-bottom:3%;
+}
+
+.SideBar .TagText{
+    width: 70%;
+}
+
+.SideBar .TagSubmit{
+    background-color:white;
+    border: 1px solid lightgray;
+    outline: none;
+    cursor: pointer;
+}
+
+.SideBar .CategoryOption{
+    width: 90%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.SideBar .CategoryOptionButton{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 3px;
+    
+}
+
+.SideBar .GroupOption{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.SideBar .GroupOptionButton{
+    margin: 2px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: rgb(240,240,240);
+    cursor: pointer;
+}
+
+.SideBar .EventOption{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.SideBar .EventOptionButton{
+    margin: 2px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid gray;
+    background-color: rgb(240,240,240);
+    cursor: pointer;
+}
+
+.SideBar .SortOption{
+    margin: 5%;
+}
+
+.SideBar .SortOptionSelect{
+    outline: none;
+}
