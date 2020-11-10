@@ -9,7 +9,7 @@ from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
-from .models import User, University, Department, Background, Language
+from .models import User, University, Department, Background, Language, Tag, Category
 
 # Create your tests here.
 
@@ -327,6 +327,12 @@ class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
         Department.objects.create(
             name='Computer Science Engineering'
         )
+        Tag.objects.create(
+            name='waffle'
+        )
+        Category.objects.create(
+            name='performance'
+        )
         Background.objects.create(
             name=1
         )
@@ -470,6 +476,138 @@ class AlmanacUnivDeptBackgroundLangTestCase(TransactionTestCase):
         response = client.get('/api/department/name/{}/'.format('Computer Science Engineering'))
         self.assertEqual(response.json()['id'], id_cse)
         self.assertEqual(response.json()['name'], 'Computer Science Engineering')
+
+    def test_get_create_category(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/category/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'performance')
+
+        response = client.post('/api/category/', json.dumps({'name': 'ililhof'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('ililhof', response.content.decode())
+
+    def test_get_delete_category(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_performance=(Category.objects.get(name='performance').id)
+        id_wrong = id_performance+1
+
+        response = client.head('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.json()['name'], 'performance')
+
+        response = client.get('/api/category/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/category/{}/'.format(id_performance))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/category/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_category_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_performance=(Category.objects.get(name='performance').id)
+
+        response = client.head('/api/category/name/{}/'.format('ililhof'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/category/name/{}/'.format('ililhof'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/category/name/{}/'.format('performance'))
+        self.assertEqual(response.json()['id'], id_performance)
+        self.assertEqual(response.json()['name'], 'performance')
+
+    def test_get_create_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/tag/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['name'], 'waffle')
+
+        response = client.post('/api/tag/', json.dumps({'name': 'salad'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('salad', response.content.decode())
+
+    def test_get_delete_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_waffle=(Tag.objects.get(name='waffle').id)
+        id_wrong = id_waffle+1
+
+        response = client.head('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.json()['name'], 'waffle')
+
+        response = client.get('/api/tag/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/tag/{}/'.format(id_waffle))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/tag/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_tag_by_name(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_waffle=(Tag.objects.get(name='waffle').id)
+
+        response = client.head('/api/tag/name/{}/'.format('salad'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/tag/name/{}/'.format('salad'))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/tag/name/{}/'.format('waffle'))
+        self.assertEqual(response.json()['id'], id_waffle)
+        self.assertEqual(response.json()['name'], 'waffle')
 
     def test_get_create_background(self):
 

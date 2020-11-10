@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, University, Department, Event, Background, Language
+from almanac.models import User, University, Department, Event, Background, Language, Category, Tag
 from .tokens import account_activation_token
 
 # Create your views here.
@@ -367,6 +367,130 @@ def get_department_by_name(request, name):
     if request.method == 'GET':
         department_dict = {'id': department.id, 'name': department.name}
         return JsonResponse(department_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_category(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        categories = [{'id': category['id'], 'name': category['name']
+        } for category in Category.objects.all().order_by('name').values()]
+        return JsonResponse(categories, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    category = Category(name=name)
+    category.save()
+    category_dict = {'id': category.id, 'name': category.name}
+    return HttpResponse(content=json.dumps(category_dict), status=201)
+
+def get_delete_category(request, category_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Category.objects.filter(id=category_id).exists():
+        return HttpResponseNotFound()
+
+    category = Category.objects.get(id=category_id)
+
+    if request.method == 'GET':
+        category_dict = {'id': category.id, 'name': category.name}
+        return JsonResponse(category_dict)
+    # DELETE
+    category.delete()
+    return HttpResponse(status=200)
+
+def get_category_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Category.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    category = Category.objects.get(name=name)
+
+    if request.method == 'GET':
+        category_dict = {'id': category.id, 'name': category.name}
+        return JsonResponse(category_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_create_tag(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        tags = [{'id': tag['id'], 'name': tag['name']
+        } for tag in Tag.objects.all().order_by('name').values()]
+        return JsonResponse(tags, safe=False)
+    # POST
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    tag = Tag(name=name)
+    tag.save()
+    tag_dict = {'id': tag.id, 'name': tag.name}
+    return HttpResponse(content=json.dumps(tag_dict), status=201)
+
+def get_delete_tag(request, tag_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Tag.objects.filter(id=tag_id).exists():
+        return HttpResponseNotFound()
+
+    tag = Tag.objects.get(id=tag_id)
+
+    if request.method == 'GET':
+        tag_dict = {'id': tag.id, 'name': tag.name}
+        return JsonResponse(tag_dict)
+    # DELETE
+    tag.delete()
+    return HttpResponse(status=200)
+
+def get_tag_by_name(request, name):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Tag.objects.filter(name=name).exists():
+        return HttpResponseNotFound()
+
+    tag = Tag.objects.get(name=name)
+
+    if request.method == 'GET':
+        tag_dict = {'id': tag.id, 'name': tag.name}
+        return JsonResponse(tag_dict)
 
     return HttpResponseNotAllowed(['GET'])
 
