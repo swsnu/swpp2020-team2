@@ -7,7 +7,15 @@ import Calendar from '../../components/Calendar/Calendar';
 import { createEventIcon } from '../../images/index';
 
 function onClickCreateEvent() {
-  // console.log('click create event');
+  // redirect to create event page
+}
+
+function onClickDay(day, events) {
+  // show modal window
+}
+
+function onClickEvent(evt) {
+  // redirect to event detail
 }
 
 class Public extends Component {
@@ -24,7 +32,10 @@ class Public extends Component {
           <TopBar />
         </div>
         <div>
-          <Calendar events={events} onClickCreateEvent={onClickCreateEvent} />
+          <Calendar
+            events={events}
+            onClickDay={onClickDay}
+          />
         </div>
         <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => onClickCreateEvent()}>
           <img className="img" src={createEventIcon} alt="+" />
