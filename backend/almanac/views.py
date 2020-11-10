@@ -174,7 +174,7 @@ def get_event(request):
         events = [{'id': event['id'], 'title': event['title'],
         'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
         'end_time': event['end_time'], 'content': event['content']
-        } for event in Event.objects.all().values()]
+        } for event in Event.objects.all().order_by('id').values()]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -253,7 +253,7 @@ def get_create_university(request):
 
     if request.method == 'GET':
         universities = [{'id': university['id'], 'name': university['name'],
-        'domain': university['domain']} for university in University.objects.all().values()]
+        'domain': university['domain']} for university in University.objects.all().order_by('name').values()]
         return JsonResponse(universities, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
@@ -319,7 +319,7 @@ def get_create_department(request):
 
     if request.method == 'GET':
         departments = [{'id': department['id'], 'name': department['name']
-        } for department in Department.objects.all().values()]
+        } for department in Department.objects.all().order_by('name').values()]
         return JsonResponse(departments, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
@@ -381,7 +381,7 @@ def get_create_background(request):
 
     if request.method == 'GET':
         backgrounds = [{'id': background['id'], 'name': background['name']
-        } for background in Background.objects.all().values()]
+        } for background in Background.objects.all().order_by('name').values()]
         return JsonResponse(backgrounds, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
@@ -423,7 +423,7 @@ def get_create_language(request):
 
     if request.method == 'GET':
         languages = [{'id': language['id'], 'name': language['name']
-        } for language in Language.objects.all().values()]
+        } for language in Language.objects.all().order_by('name').values()]
         return JsonResponse(languages, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
