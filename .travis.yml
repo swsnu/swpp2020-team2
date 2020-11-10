@@ -41,4 +41,4 @@ matrix:
     - coverage run --source='.' manage.py test
     - coverage xml
     after_success:
-    - coveralls
+    - coveralls --merge=../frontend/coverage/coverage-final.json
