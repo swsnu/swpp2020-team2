@@ -2,27 +2,22 @@ import React, { Component, Text } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../../store/actions/index';
-import './EventCreate.css'
+import './EventCreate.css';
 
-import { ImCalendar } from "react-icons/im";
-import { BiDownArrow } from "react-icons/bi";
+import { ImCalendar } from 'react-icons/im';
+import { BiDownArrow } from 'react-icons/bi';
 
 class EventCreate extends Component {
   state = {
-    title: "",
-    category: "",
-    group: "",
-    place: "",
-    date: "",
-    begin_time: "",
-    end_time: "",
+    title: '',
+    category: '',
+    group: '',
+    place: '',
+    date: '',
+    begin_time: '',
+    end_time: '',
   }
 
-  /*
-  componentDidMount(){
-    this.props.onGetEvent(parseInt(this.props.match.params.id));
-  }
-  */
   postEventHandler = () => {
 
   }
@@ -32,15 +27,12 @@ class EventCreate extends Component {
   }
 
   render() {
-
-    let disablebtn = !(this.state.title &&this.state.category &&this.state.group &&this.state.date)
+    const disablebtn = !(this.state.title && this.state.category && this.state.group && this.state.date);
 
     return (
       <div className="EventCreate">
         <h1>EventCreate</h1>
-        <div className="topBar">
-
-        </div>
+        <div className="topBar" />
 
         <div className="container">
 
@@ -48,7 +40,7 @@ class EventCreate extends Component {
             <div className="left">
               <button className="back" onClick={() => this.onClickBack()} style={{ width: 50 }}>
                 Back
-            </button>
+              </button>
             </div>
           </div>
 
@@ -69,18 +61,29 @@ class EventCreate extends Component {
 
                 <div className="infoBox">
                   <label className="infoKey">분류</label>
-                  <button className= "event-group-input" onClick={()=>{}}>
-                    <BiDownArrow color="black"/>
-                  </button>
+                  <select className="event-group-input" onChange={() => {}}>
+                    <option>--카테고리를 선택하세요--</option>
+                    <option>공연</option>
+                    <option>전시회</option>
+                    <option>일일호프</option>
+                    <option>축제</option>
+                    <option>장터</option>
+                    <option>세미나</option>
+                    <option>대회</option>
+                    <option>해당없음</option>
+                  </select>
                 </div>
               </div>
 
               <div className="box">
                 <div className="infoBox">
                   <label className="infoKey">단체</label>
-                  <button className= "event-group-input" onClick={()=>{}}>
-                    <BiDownArrow color="black"/>
-                  </button>
+                  <select className="event-group-input" onChange={() => {}}>
+                    <option>--단체를 선택하세요--</option>
+                    <option>단풍</option>
+                    <option>UPnL</option>
+                    <option>Zero</option>
+                  </select>
                 </div>
                 <div className="infoBox">
                   <label className="infoKey">장소</label>
@@ -97,10 +100,14 @@ class EventCreate extends Component {
               <div className="box">
                 <div className="infoBox">
                   <label className="infoKey">일시</label>
-                  <button className= "event-date-input" onClick={()=>{}}>
-                    <ImCalendar color="black"/>
+                  <button className="event-date-input" onClick={() => {}}>
+                    <ImCalendar color="black" />
                   </button>
-                  
+                  <input className="event-year-input" type="text" style={{ width: 40, textAlign: 'right' }} />
+                  &nbsp;.&nbsp;
+                  <input className="event-month-input" type="text" style={{ width: 20, textAlign: 'right' }} />
+                  &nbsp;.&nbsp;
+                  <input className="event-day-input" type="text" style={{ width: 20, textAlign: 'right' }} />
                 </div>
                 <div className="infoBox">
                   <label className="infoKey">시간</label>
@@ -132,14 +139,14 @@ class EventCreate extends Component {
                   value={this.state.content}
                   onChange={(event) => this.setState({ content: event.target.value })}
                   placeholder="내용을 입력하세요"
-              
+
                 />
               </div>
               <div className="box">
-                <button className="uploadImage" onClick={()=>{}}>사진 업로드</button>
+                <button className="uploadImage" onClick={() => {}}>사진 업로드</button>
               </div>
               <div className="box">
-                <button className="addTag" onClick={()=>{}}>#태그 추가</button>
+                <button className="addTag" onClick={() => {}}>#태그 추가</button>
               </div>
             </div>
           </div>
@@ -148,9 +155,12 @@ class EventCreate extends Component {
             <button
               className="confirm-create-event-button"
               onClick={() => this.postEventHandler()}
-              disabled={disablebtn}>Create</button>
+              disabled={disablebtn}
+            >
+              Create
+            </button>
           </div>
-        </div >
+        </div>
       </div>
     );
   }
@@ -161,10 +171,8 @@ const mapStateToProps = (state) => ({
 
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onGetEvent: (id) => dispatch(actionCreators.getEvent(id))
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);

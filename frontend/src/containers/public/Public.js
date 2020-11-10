@@ -5,10 +5,7 @@ import TopBar from '../../components/TopBar/TopBar';
 import './Public.css';
 import Calendar from '../../components/Calendar/Calendar';
 import { createEventIcon } from '../../images/index';
-
-function onClickCreateEvent() {
-  // redirect to create event page
-}
+import EventListModal from '../../components/eventListModal/EventListModal';
 
 function onClickDay(day, events) {
   // show modal window
@@ -19,13 +16,38 @@ function onClickEvent(evt) {
 }
 
 class Public extends Component {
+  state={
+    modalBool: false,
+  }
+
   componentDidMount() {
     const { onGetAllEvent } = this.props;
     onGetAllEvent();
   }
 
+  onClickCreateEvent() {
+    this.props.history.push('/details/create');
+  }
+
+  makeModal() {
+
+  }
+
   render() {
     const { events } = this.props;
+
+    let modal = null;
+    if (this.state.modalBool) {
+      modal = (
+        <div style={{
+          backgroundColor: 'white', width: 1000, height: 800, border: '10 solid black', position: 'fixed', left: 460, top: 100,
+        }}
+        >
+          <EventListModal />
+        </div>
+      );
+    }
+
     return (
       <div className="Public">
         <div>
@@ -37,9 +59,11 @@ class Public extends Component {
             onClickDay={onClickDay}
           />
         </div>
-        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => onClickCreateEvent()}>
+        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => this.onClickCreateEvent()}>
           <img className="img" src={createEventIcon} alt="+" />
         </button>
+        <button onClick={() => this.setState({ modalBool: !this.state.modalBool })} />
+        {modal}
       </div>
     );
   }
