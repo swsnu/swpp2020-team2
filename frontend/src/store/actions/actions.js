@@ -3,6 +3,9 @@ import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
 import * as actionTypes from './actionTypes';
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 const sampleDate = new Date();
 const sampleDate2 = addDays(sampleDate, 25);
 const sampleDate3 = addMonths(sampleDate, 1);
@@ -103,12 +106,10 @@ export const getAllEvent = () => {
     events: sample,
   };
 };
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 export const signIn_ = (user) => ({ type: actionTypes.SIGN_IN, user });
 
-export const signIn = (args) => (dispatch) => axios.post('api/signin/', {
+export const signIn = (args) => (dispatch) => axios.post('/api/signin/', {
   username: args.username,
   password: args.password,
 })
@@ -118,7 +119,7 @@ export const signIn = (args) => (dispatch) => axios.post('api/signin/', {
 
 export const signUp_ = () => ({ type: actionTypes.SIGN_UP });
 
-export const signUp = (args) => (dispatch) => axios.post('api/signup/', {
+export const signUp = (args) => (dispatch) => axios.post('/api/signup/', {
   username: args.username,
   password: args.password,
   university: args.university,
@@ -133,7 +134,7 @@ export const signUp = (args) => (dispatch) => axios.post('api/signup/', {
 
 export const activate_ = () => ({ type: actionTypes.ACTIVATE });
 
-export const activate = (args) => (dispatch) => axios.get(`api/signup/activate/${args.uidb64}/${args.token}/`)
+export const activate = (args) => (dispatch) => axios.get(`/api/signup/activate/${args.uidb64}/${args.token}/`)
   .then((res) => {
     dispatch(activate_());
   });

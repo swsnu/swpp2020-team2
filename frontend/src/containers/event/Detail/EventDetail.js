@@ -2,25 +2,25 @@ import React, { Component, Text } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../../store/actions/index';
-import './EventDetail.css'
+import './EventDetail.css';
 
-import { GoDiffAdded } from "react-icons/go";
-import { GoReport } from "react-icons/go";
-import { GrLike } from "react-icons/gr";
+import { GoDiffAdded, GoReport } from 'react-icons/go';
+
+import { GrLike } from 'react-icons/gr';
 
 class EventDetail extends Component {
   state = {
     event: {
-      id:1,
-      title: "",
-      category: "",
-      group: "",
-      place: "",
-      date: "",
-      begin_time: "해당없음",
-      end_time: "해당없음",
-      content: "내용",
-    }
+      id: 1,
+      title: '',
+      category: '',
+      group: '',
+      place: '',
+      date: '',
+      begin_time: '해당없음',
+      end_time: '해당없음',
+      content: '내용',
+    },
   }
   /*
   componentDidMount(){
@@ -33,38 +33,41 @@ class EventDetail extends Component {
   }
 
   onClickEditEvent = () => {
-    this.props.history.push(`/details/modify/${this.state.event.id}/`)
+    this.props.history.push(`/details/modify/${this.state.event.id}/`);
   }
+
   onClickBringEvent = () => {
 
   }
+
   onClickLikeEvent = () => {
 
   }
+
   onClickReportEvent = () => {
 
   }
+
   onClickDeleteEvent = () => {
 
   }
 
   render() {
-    let lastEditor =
+    const lastEditor = (
       <div className="lastEditor">
         <div className="name">
           래건
-            </div>
+        </div>
         <div className="major">
           컴퓨터공학부
-            </div>
+        </div>
       </div>
+    );
 
     return (
       <div className="EventDetail">
         <h1>EventDetail</h1>
-        <div className="topBar">
-
-        </div>
+        <div className="topBar" />
 
         <div className="container">
 
@@ -72,7 +75,7 @@ class EventDetail extends Component {
             <div className="left">
               <button className="back" onClick={() => this.onClickBack()} style={{ width: 50 }}>
                 Back
-            </button>
+              </button>
             </div>
 
             <div className="right">
@@ -122,7 +125,13 @@ class EventDetail extends Component {
                 </div>
                 <div className="infoBox">
                   <div className="infoKey">시간</div>
-                  <div className="infoValue">{this.state.event.begin_time} ~ {this.state.event.end_time}</div>
+                  <div className="infoValue">
+                    {this.state.event.begin_time}
+                    {' '}
+                    ~
+                    {' '}
+                    {this.state.event.end_time}
+                  </div>
                 </div>
               </div>
 
@@ -149,7 +158,7 @@ class EventDetail extends Component {
               {lastEditor}
             </div>
           </div>
-        </div >
+        </div>
       </div>
     );
   }
@@ -160,10 +169,8 @@ const mapStateToProps = (state) => ({
 
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return{
-    onGetEvent: (id)=> dispatch(actionCreators.getEvent(id))
-  }
-};
+const mapDispatchToProps = (dispatch) => ({
+  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetail);

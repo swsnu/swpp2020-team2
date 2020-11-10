@@ -5,6 +5,6 @@ export {
   activate,
 } from './actions';
 
-export { 
-    getEvent
+export {
+  getEvent,
 } from './events';
