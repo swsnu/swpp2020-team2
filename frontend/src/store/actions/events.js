@@ -22,7 +22,7 @@ export const postEvent_=(event)=>{
 
 export const postEvent=(args)=>{
     return dispatch=>{
-        return axios.post('api/event/upload/')
+        return axios.post('/api/event/upload/')
         .then(res=>dispatch(postEvent_(res.data)));
     }
 }

@@ -162,7 +162,7 @@ export const getAllEvent_ = (events_) => ({
 });
 
 export const getAllEvent = () => {
-  const res = axios.get('api/event/');
+  const res = axios.get('/api/event/');
   return {
     type: actionTypes.GET_ALL_EVENT,
     events: sample,
