@@ -9,7 +9,7 @@ export const getEvent_ = (event) => ({
   target: event,
 });
 
-export const getEvent = (id) => (dispatch) => axios.get(`api/event/${id}/`)
+export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/`)
   .then((res) => dispatch(getEvent_(res.data)));
 
 /*
