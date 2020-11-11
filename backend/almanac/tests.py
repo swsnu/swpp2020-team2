@@ -4,6 +4,7 @@ a standard docstring
 
 import json
 import re
+import os
 from django.test import TransactionTestCase, TestCase, Client
 from django.core import mail
 from django.utils.http import urlsafe_base64_encode
@@ -26,6 +27,7 @@ class AlmanacCsrfTestCase(TestCase):
         a function docstring
         '''
 
+        User.objects.all().delete()
         User.objects.create(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
@@ -63,7 +65,7 @@ class AlmanacCsrfTestCase(TestCase):
         user = User.objects.get(username='taekop')
         self.assertEqual(user.is_active, False)
         body_pt = ('Hello, taekop. Welcome to the Almanac Service. You can activate your account '
-        'via the link \nhttps://localhost/signup/{}/').format(
+        'via the link \nhttp://localhost:3000/signup/activate/{}/').format(
             urlsafe_base64_encode(force_bytes(user.id)))
         self.assertIn(body_pt, mail_sent.body)
 
@@ -79,6 +81,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         a function docstring
         '''
 
+        User.objects.all().delete()
         User.objects.create(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
@@ -131,7 +134,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"https://localhost/signup/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
         token_wrong = token[:-1] + ('1' if token[-1] == '0' else '0')
@@ -162,7 +165,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"https://localhost/signup/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
 
@@ -192,7 +195,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
     def test_signout(self):
 
@@ -209,7 +212,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"https://localhost/signup/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
 
@@ -219,7 +222,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         response = client.head('/api/signout/')
         self.assertEqual(response.status_code, 405)
@@ -239,6 +242,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         a function docstring
         '''
 
+        User.objects.all().delete()
         User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
@@ -263,7 +267,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
 
         response = client.get('/api/user/signin/')
         self.assertEqual(response.json()['username'], 'taekop')
@@ -720,7 +724,11 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertEqual(len(response.json()), 1)
         self.assertEqual(response.json()[0]['image_file_url'], 'image/home.jpg')
 
-        with open(settings.MEDIA_ROOT / 'image/signup.jpg', 'rb') as file_pt:
+        with open(settings.MEDIA_ROOT / 'image/test/signup.jpg', 'rb') as file_pt:
             response = client.post('/api/image/', {'name': 'signup', 'imagefile': file_pt})
         self.assertEqual(response.status_code, 201)
         self.assertIn('image/signup', response.content.decode())
+
+        print(Image.objects.all().values())
+        Image.objects.get(image_file='image/signup.jpg').delete()    
+        os.remove(settings.MEDIA_ROOT / 'image/signup.jpg')
