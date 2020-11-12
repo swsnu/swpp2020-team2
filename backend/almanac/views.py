@@ -40,8 +40,8 @@ def signup(request):
             #department = req_data['department']
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
-            #user_preference = UserPreference.objects.create(user=user.id, university=university,
-            #department=department)
+            #UserPreference.add_new_preference(user=user.id,
+            #university=university, department=department)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
@@ -598,9 +598,7 @@ def get_create_image(request):
         } for image in Image.objects.all().order_by('id').values()]
         return JsonResponse(images, safe=False)
     # POST
-    print(request.FILES)
     form = ImageForm(request.POST, request.FILES)
-    print(form)
     if form.is_valid():
         image = Image(image_file = request.FILES['imagefile'])
         image.save()

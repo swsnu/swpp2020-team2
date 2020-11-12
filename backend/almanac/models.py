@@ -22,7 +22,7 @@ class University(models.Model):
         return self.name
 
     @staticmethod
-    def get_default_id():
+    def get_default():
 
         '''
         a function docstring
@@ -30,7 +30,7 @@ class University(models.Model):
 
         obj, _ = University.objects.get_or_create(name='Seoul National University',
         domain='snu.ac.kr')
-        return obj.id
+        return obj
 
 class Department(models.Model):
 
@@ -44,14 +44,14 @@ class Department(models.Model):
         return self.name
 
     @staticmethod
-    def get_default_id():
+    def get_default():
 
         '''
         a function docstring
         '''
 
         obj, _ = Department.objects.get_or_create(name='Computer Science Engineering')
-        return obj.id
+        return obj
 
 class Image(models.Model):
 
@@ -73,14 +73,14 @@ class Background(models.Model):
         return self.name
 
     @staticmethod
-    def get_default_id():
+    def get_default():
 
         '''
         a function docstring
         '''
 
         obj, _ = Background.objects.get_or_create(name='green')
-        return obj.id
+        return obj
 
 class Language(models.Model):
 
@@ -94,14 +94,14 @@ class Language(models.Model):
         return self.name
 
     @staticmethod
-    def get_default_id():
+    def get_default():
 
         '''
         a function docstring
         '''
 
         obj, _ = Language.objects.get_or_create(name='English')
-        return obj.id
+        return obj
 
 class Category(models.Model):
 
@@ -251,7 +251,7 @@ class UserPreference(models.Model):
         related_name='background_userpreference'
     )
     language = models.ForeignKey(
-        Image,
+        Language,
         on_delete=models.CASCADE,
         related_name='language_userpreference'
     )
@@ -273,15 +273,18 @@ class UserPreference(models.Model):
     )
 
     @staticmethod
-    def add_new_user_and_preference(username, first_name, last_name, email, password, is_active, university, department):
+    def add_new_preference(user, university, department):
 
         '''
         a function docstring
         '''
 
-        user = User.objects.create_user(username=username, first_name=first_name,
-        last_name=last_name, email=email, password=password, is_active=is_active)
         image = Image.objects.create()
-        UserPreference.objects.create(user=user.id, university=university, department=department,
-        image=image.id, background=Background.get_default_id(), language=Language.get_default_id())
-        return user.id
+        user_preference = UserPreference.objects.create(
+            user=user,
+            university=university, department=department,
+            profile=image,
+            background=Background.get_default(),
+            language=Language.get_default()
+        )
+        return user_preference

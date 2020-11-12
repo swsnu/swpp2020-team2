@@ -11,7 +11,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.conf import settings
 
-from .models import User, University, Department, Background, Language, Tag, Category, Image
+from .models import User, UserPreference, \
+    University, Department, Background, Language, Tag, Category, Image
 
 # Create your tests here.
 
@@ -28,9 +29,16 @@ class AlmanacCsrfTestCase(TestCase):
         '''
 
         User.objects.all().delete()
-        User.objects.create(
+        user1 = User.objects.create_user(
             username='ray017', first_name='Raegeon',
-            last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
 
     def test_csrf(self):
 
@@ -82,9 +90,16 @@ class AlmanacSignupTestCase(TransactionTestCase):
         '''
 
         User.objects.all().delete()
-        User.objects.create(
+        user1 = User.objects.create_user(
             username='ray017', first_name='Raegeon',
-            last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
 
 
     def test_signup(self):
@@ -243,12 +258,26 @@ class AlmanacUserTestCase(TransactionTestCase):
         '''
 
         User.objects.all().delete()
-        User.objects.create_user(
+        user1 = User.objects.create(
             username='ray017', first_name='Raegeon',
-            last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create_user(
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
-            last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user=user2,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
 
     def test_user_get_singin(self):
 
@@ -320,29 +349,31 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         a function docstring
         '''
 
-        User.objects.create_user(
+        user1 = User.objects.create(
             username='ray017', first_name='Raegeon',
-            last_name='Lee', password='password', email='cbda117@snu.ac.kr', is_active=False)
-        User.objects.create_user(
-            username='taekop', first_name='Seungtaek',
-            last_name='Oh', password='password2', email='taekop@snu.ac.kr', is_active=True)
-        University.objects.create(
-            name='Seoul National University', domain='snu.ac.kr'
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
         )
-        Department.objects.create(
-            name='Computer Science Engineering'
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user=user2,
+            university=University.get_default(),
+            department=Department.get_default()
         )
         Tag.objects.create(
             name='waffle'
         )
         Category.objects.create(
             name='performance'
-        )
-        Background.objects.create(
-            name='green'
-        )
-        Language.objects.create(
-            name='English'
         )
         Image.objects.create(
         )
@@ -355,7 +386,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         snu_id = University.objects.get(name='Seoul National University').id
 
-        default_id = University.get_default_id()
+        default_id = University.get_default().id
         self.assertEqual(default_id, snu_id)
 
     def test_get_create_university(self):
@@ -437,7 +468,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         cse_id = Department.objects.get(name='Computer Science Engineering').id
 
-        default_id = Department.get_default_id()
+        default_id = Department.get_default().id
         self.assertEqual(default_id, cse_id)
 
     def test_get_create_department(self):
@@ -646,7 +677,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         green_id = Background.objects.get(name='green').id
 
-        default_id = Background.get_default_id()
+        default_id = Background.get_default().id
         self.assertEqual(default_id, green_id)
 
     def test_get_create_background(self):
@@ -703,7 +734,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         english_id = Language.objects.get(name='English').id
 
-        default_id = Language.get_default_id()
+        default_id = Language.get_default().id
         self.assertEqual(default_id, english_id)
 
     def test_get_create_language(self):
@@ -764,14 +795,13 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/image/')
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['image_file_url'], 'image/home.jpg')
+        self.assertEqual(len(response.json()), 3) # 2(user1,2)+1
+        self.assertEqual(response.json()[2]['image_file_url'], 'image/home.jpg')
 
         with open(settings.MEDIA_ROOT / 'image/test/signup.jpg', 'rb') as file_pt:
             response = client.post('/api/image/', {'name': 'signup', 'imagefile': file_pt})
         self.assertEqual(response.status_code, 201)
         self.assertIn('image/signup', response.content.decode())
 
-        print(Image.objects.all().values())
         Image.objects.get(image_file='image/signup.jpg').delete()
         os.remove(settings.MEDIA_ROOT / 'image/signup.jpg')
