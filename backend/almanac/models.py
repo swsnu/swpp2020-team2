@@ -43,7 +43,7 @@ class Background(models.Model):
     a class docstring
     '''
 
-    name = models.IntegerField()
+    name = models.CharField(null=False, blank=False, max_length=30)
 
 class Language(models.Model):
 
@@ -51,7 +51,7 @@ class Language(models.Model):
     a class docstring
     '''
 
-    name = models.IntegerField(null=False, blank=False)
+    name = models.CharField(null=False, blank=False, max_length=30)
 
 class Category(models.Model):
 

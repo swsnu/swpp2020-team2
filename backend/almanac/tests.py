@@ -339,10 +339,10 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
             name='performance'
         )
         Background.objects.create(
-            name=1
+            name='green'
         )
         Language.objects.create(
-            name=1
+            name='English'
         )
         Image.objects.create(
             image_file='image/home.jpg'
@@ -630,12 +630,12 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/background/')
         self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['name'], 1)
+        self.assertEqual(response.json()[0]['name'], 'green')
 
-        response = client.post('/api/background/', json.dumps({'name': 2}),
+        response = client.post('/api/background/', json.dumps({'name': 'red'}),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertIn('2', response.content.decode())
+        self.assertIn('red', response.content.decode())
 
     def test_get_delete_background(self):
 
@@ -645,14 +645,14 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         client = Client()
 
-        id_1=(Background.objects.get(name=1).id)
+        id_1=(Background.objects.get(name='green').id)
         id_wrong = id_1+1
 
         response = client.head('/api/background/{}/'.format(id_1))
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/background/{}/'.format(id_1))
-        self.assertEqual(response.json()['name'], 1)
+        self.assertEqual(response.json()['name'], 'green')
 
         response = client.get('/api/background/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
@@ -676,12 +676,12 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/language/')
         self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['name'], 1)
+        self.assertEqual(response.json()[0]['name'], 'English')
 
-        response = client.post('/api/language/', json.dumps({'name': 2}),
+        response = client.post('/api/language/', json.dumps({'name': 'French'}),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertIn('2', response.content.decode())
+        self.assertIn('French', response.content.decode())
 
     def test_get_delete_language(self):
 
@@ -691,14 +691,14 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         client = Client()
 
-        id_1=(Language.objects.get(name=1).id)
+        id_1=(Language.objects.get(name='English').id)
         id_wrong = id_1+1
 
         response = client.head('/api/language/{}/'.format(id_1))
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/language/{}/'.format(id_1))
-        self.assertEqual(response.json()['name'], 1)
+        self.assertEqual(response.json()['name'], 'English')
 
         response = client.get('/api/language/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)

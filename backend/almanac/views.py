@@ -15,7 +15,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes #, force_text
 
-from almanac.models import User, \
+from almanac.models import User, UserPreference, \
     University, Department, Event, Background, Language, Category, Tag, Image
 from .tokens import account_activation_token
 from .forms import ImageForm
@@ -36,8 +36,11 @@ def signup(request):
             last_name = req_data['last_name']
             password = req_data['password']
             email = req_data['email']
+            #university = req_data['university']
+            #department = req_data['department']
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
+            #user_preference = UserPreference.objects.create(user=user.id, university=university, department=department)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
