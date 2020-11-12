@@ -123,6 +123,7 @@ class Public extends Component {
           dayEventList={this.state.modalEvents}
           onClickCloseModal={this.onClickCloseModal}
           onClickCreateEvent={this.onClickCreateEvent}
+          history={this.props.history}
         />
       );
     }
