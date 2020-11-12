@@ -101,9 +101,12 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            user_preference = UserPreference.objects.get(user=user.id)
             user_dict = {'id': user.id, 'username': user.username,
             'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-            'email': user.email, 'is_active': user.is_active}
+            'email': user.email, 'is_active': user.is_active,
+            'university': user_preference.university.id,
+            'department': user_preference.department.id}
             return JsonResponse(user_dict)
         return HttpResponse(status=401)
 
@@ -139,11 +142,14 @@ def get_user_signin(request):
         return HttpResponse(status=401)
 
     user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
 
     if request.method == 'GET':
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active}
+        'email': user.email, 'is_active': user.is_active,
+        'university': user_preference.university.id,
+        'department': user_preference.department.id}
         return JsonResponse(user_dict)
 
     return HttpResponseNotAllowed(['GET'])
@@ -161,11 +167,14 @@ def get_user(request, user_id):
         return HttpResponseNotFound()
 
     user = User.objects.get(id=user_id)
+    user_preference = UserPreference.objects.get(user=user.id)
 
     if request.method == 'GET':
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active}
+        'email': user.email, 'is_active': user.is_active,
+        'university': user_preference.university.id,
+        'department': user_preference.department.id}
         return JsonResponse(user_dict)
 
     return HttpResponseNotAllowed(['GET'])
@@ -261,8 +270,11 @@ def get_create_university(request):
         return HttpResponseNotAllowed(['GET', 'POST'])
 
     if request.method == 'GET':
-        universities = [{'id': university['id'], 'name': university['name'],
-        'domain': university['domain']} for university in University.objects.all().order_by('name').values()]
+        universities = [{
+            'id': university['id'],
+            'name': university['name'],
+            'domain': university['domain']}
+            for university in University.objects.all().order_by('name').values()]
         return JsonResponse(universities, safe=False)
     # POST
     req_data = json.loads(request.body.decode())
