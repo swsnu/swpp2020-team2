@@ -345,7 +345,6 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
             name='English'
         )
         Image.objects.create(
-            image_file='image/home.jpg'
         )
 
     def test_university_general(self):
@@ -774,5 +773,5 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertIn('image/signup', response.content.decode())
 
         print(Image.objects.all().values())
-        Image.objects.get(image_file='image/signup.jpg').delete()    
+        Image.objects.get(image_file='image/signup.jpg').delete()
         os.remove(settings.MEDIA_ROOT / 'image/signup.jpg')

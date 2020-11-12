@@ -28,7 +28,8 @@ class University(models.Model):
         a function docstring
         '''
 
-        obj, _ = University.objects.get_or_create(name='Seoul National University', domain='snu.ac.kr')
+        obj, _ = University.objects.get_or_create(name='Seoul National University',
+        domain='snu.ac.kr')
         return obj.id
 
 class Department(models.Model):
@@ -58,7 +59,7 @@ class Image(models.Model):
     a class docstring
     '''
 
-    image_file = models.ImageField(upload_to='image/', default= 'image/home.jpg')
+    image_file = models.ImageField(upload_to='image/', default='image/home.jpg')
 
 class Background(models.Model):
 
@@ -224,7 +225,7 @@ class UserPreference(models.Model):
     a class docstring
     '''
 
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='user_userpreference',
@@ -270,3 +271,17 @@ class UserPreference(models.Model):
         Group,
         related_name='gets_notification_userpreference'
     )
+
+    @staticmethod
+    def add_new_user_and_preference(username, first_name, last_name, email, password, is_active, university, department):
+
+        '''
+        a function docstring
+        '''
+
+        user = User.objects.create_user(username=username, first_name=first_name,
+        last_name=last_name, email=email, password=password, is_active=is_active)
+        image = Image.objects.create()
+        UserPreference.objects.create(user=user.id, university=university, department=department,
+        image=image.id, background=Background.get_default_id(), language=Language.get_default_id())
+        return user.id

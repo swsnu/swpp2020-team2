@@ -41,7 +41,7 @@ def signup(request):
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
             #user_preference = UserPreference.objects.create(user=user.id, university=university,
-            # department=department)
+            #department=department)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
