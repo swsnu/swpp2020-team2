@@ -361,7 +361,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
+class AlmanacUnivDeptCatTag(TransactionTestCase):
 
     '''
     a class docstring
@@ -399,7 +399,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         Category.objects.create(
             name='performance'
         )
-        self.im = Image.objects.create(
+        self.sample_image = Image.objects.create(
         )
 
     def test_university_general(self):
@@ -697,6 +697,47 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_waffle)
         self.assertEqual(response.json()['name'], 'waffle')
 
+class AlmanacBackLangImTestCase(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user=user2,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        Tag.objects.create(
+            name='waffle'
+        )
+        Category.objects.create(
+            name='performance'
+        )
+        self.sample_image = Image.objects.create(
+        )
+
     def test_background_general(self):
 
         '''
@@ -846,7 +887,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         client = Client()
 
-        id_im=self.im.id
+        id_im=self.sample_image.id
         #id_wrong = id_im+1
 
         response = client.head('/api/image/{}/'.format(id_im))
