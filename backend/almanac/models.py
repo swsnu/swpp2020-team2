@@ -15,11 +15,22 @@ class University(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
-    domain = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+    domain = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_default():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = University.objects.get_or_create(name='Seoul National University',
+        domain='snu.ac.kr')
+        return obj
 
 class Department(models.Model):
 
@@ -27,7 +38,20 @@ class Department(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Department.objects.get_or_create(name='Computer Science Engineering')
+        return obj
 
 class Image(models.Model):
 
@@ -35,7 +59,7 @@ class Image(models.Model):
     a class docstring
     '''
 
-    image_file = models.ImageField(upload_to='image/', default= 'image/home.jpg')
+    image_file = models.ImageField(upload_to='image/', default='image/home.jpg')
 
 class Background(models.Model):
 
@@ -43,7 +67,20 @@ class Background(models.Model):
     a class docstring
     '''
 
-    name = models.IntegerField()
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Background.objects.get_or_create(name='green')
+        return obj
 
 class Language(models.Model):
 
@@ -51,7 +88,20 @@ class Language(models.Model):
     a class docstring
     '''
 
-    name = models.IntegerField(null=False, blank=False)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Language.objects.get_or_create(name='English')
+        return obj
 
 class Category(models.Model):
 
@@ -59,7 +109,7 @@ class Category(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
 class Tag(models.Model):
 
@@ -67,7 +117,7 @@ class Tag(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
 class Group(models.Model):
 
@@ -175,7 +225,7 @@ class UserPreference(models.Model):
     a class docstring
     '''
 
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='user_userpreference',
@@ -201,7 +251,7 @@ class UserPreference(models.Model):
         related_name='background_userpreference'
     )
     language = models.ForeignKey(
-        Image,
+        Language,
         on_delete=models.CASCADE,
         related_name='language_userpreference'
     )
@@ -221,3 +271,20 @@ class UserPreference(models.Model):
         Group,
         related_name='gets_notification_userpreference'
     )
+
+    @staticmethod
+    def add_new_preference(user, university, department):
+
+        '''
+        a function docstring
+        '''
+
+        image = Image.objects.create()
+        user_preference = UserPreference.objects.create(
+            user=user,
+            university=university, department=department,
+            profile=image,
+            background=Background.get_default(),
+            language=Language.get_default()
+        )
+        return user_preference
