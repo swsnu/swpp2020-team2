@@ -15,11 +15,21 @@ class University(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
-    domain = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+    domain = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_default_id():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = University.objects.get_or_create(name='Seoul National University', domain='snu.ac.kr')
+        return obj.id
 
 class Department(models.Model):
 
@@ -27,7 +37,20 @@ class Department(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default_id():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Department.objects.get_or_create(name='Computer Science Engineering')
+        return obj.id
 
 class Image(models.Model):
 
@@ -43,7 +66,20 @@ class Background(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default_id():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Background.objects.get_or_create(name='green')
+        return obj.id
 
 class Language(models.Model):
 
@@ -51,7 +87,20 @@ class Language(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_default_id():
+
+        '''
+        a function docstring
+        '''
+
+        obj, _ = Language.objects.get_or_create(name='English')
+        return obj.id
 
 class Category(models.Model):
 
@@ -59,7 +108,7 @@ class Category(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
 class Tag(models.Model):
 
@@ -67,7 +116,7 @@ class Tag(models.Model):
     a class docstring
     '''
 
-    name = models.CharField(null=False, blank=False, max_length=30)
+    name = models.CharField(null=False, blank=False, unique=True, max_length=30)
 
 class Group(models.Model):
 

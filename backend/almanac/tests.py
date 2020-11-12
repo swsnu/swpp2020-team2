@@ -348,6 +348,17 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
             image_file='image/home.jpg'
         )
 
+    def test_university_general(self):
+
+        '''
+        a function docstring
+        '''
+
+        snu_id = University.objects.get(name='Seoul National University').id
+
+        default_id = University.get_default_id()
+        self.assertEqual(default_id, snu_id)
+
     def test_get_create_university(self):
 
         '''
@@ -418,6 +429,17 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_snu)
         self.assertEqual(response.json()['name'], 'Seoul National University')
         self.assertEqual(response.json()['domain'], 'snu.ac.kr')
+
+    def test_department_general(self):
+
+        '''
+        a function docstring
+        '''
+
+        cse_id = Department.objects.get(name='Computer Science Engineering').id
+
+        default_id = Department.get_default_id()
+        self.assertEqual(default_id, cse_id)
 
     def test_get_create_department(self):
 
@@ -617,6 +639,17 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_waffle)
         self.assertEqual(response.json()['name'], 'waffle')
 
+    def test_background_general(self):
+
+        '''
+        a function docstring
+        '''
+
+        green_id = Background.objects.get(name='green').id
+
+        default_id = Background.get_default_id()
+        self.assertEqual(default_id, green_id)
+
     def test_get_create_background(self):
 
         '''
@@ -662,6 +695,17 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/background/')
         self.assertEqual(len(response.json()), 0)
+
+    def test_language_general(self):
+
+        '''
+        a function docstring
+        '''
+
+        english_id = Language.objects.get(name='English').id
+
+        default_id = Language.get_default_id()
+        self.assertEqual(default_id, english_id)
 
     def test_get_create_language(self):
 
