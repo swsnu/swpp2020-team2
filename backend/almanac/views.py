@@ -15,7 +15,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes
 
 from almanac.models import User, UserPreference, \
-    University, Department, Event, Background, Language, Category, Tag, Image
+    University, Department, Event, Group, Background, Language, Category, Tag, Image
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -259,6 +259,42 @@ def get_put_delete_event(request, event_id):
     # DELETE
     event.delete()
     return HttpResponse(status=200)
+
+def get_group(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        groups = [{'id': group['id'], 'name': group['name'],
+        'description': group['description'], 'privacy': group['privacy']
+        } for group in Group.objects.all().order_by('id').values()]
+        return JsonResponse(groups, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
+def create_group(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        description = req_data['description']
+        group = Group(name=name, description=description) # privacy = 1
+        group.save()
+        group_dict = {'id': group.id, 'name': group.name,
+        'description': group.description, 'privacy': group.privacy}
+        return HttpResponse(content=json.dumps(group_dict), status=201)
+    return HttpResponseNotAllowed(['POST'])
 
 def get_create_university(request):
 

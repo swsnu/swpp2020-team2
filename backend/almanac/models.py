@@ -145,7 +145,7 @@ class Group(models.Model):
         on_delete=models.CASCADE,
         related_name='profile_group'
     )
-    privacy = models.IntegerField()
+    privacy = models.IntegerField(default=1)
 
 class Event(models.Model):
 
