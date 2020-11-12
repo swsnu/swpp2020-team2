@@ -297,7 +297,7 @@ class AlmanacUserTestCase(TransactionTestCase):
             department=Department.get_default()
         )
 
-    def test_user_get_singin(self):
+    def test_user_get_signin(self):
 
         '''
         a function docstring
@@ -322,6 +322,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
 
     def test_user_get(self):
 
@@ -344,6 +346,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Lee')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
 
         response = client.get('/api/user/{}/'.format(id2))
         self.assertEqual(response.json()['username'], 'taekop')
@@ -351,6 +355,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
