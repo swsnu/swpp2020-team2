@@ -177,7 +177,10 @@ export const signIn = (args) => (dispatch) => axios.post('/api/signin/', {
 })
   .then((res) => {
     dispatch(signIn_(res.data));
-  });
+  })
+  .catch((err)=>{
+    if(err.response.status===401)alert("ID or password is wrong");
+  })
 
 export const signUp_ = () => ({ type: actionTypes.SIGN_UP });
 
@@ -192,6 +195,7 @@ export const signUp = (args) => (dispatch) => axios.post('/api/signup/', {
 })
   .then((res) => {
     dispatch(signUp_());
+    alert("verification link is sent to your mail!");
   });
 
 export const activate_ = () => ({ type: actionTypes.ACTIVATE });
