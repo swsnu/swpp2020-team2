@@ -53,7 +53,9 @@ class AlmanacCsrfTestCase(TestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
@@ -62,7 +64,9 @@ class AlmanacCsrfTestCase(TestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -112,25 +116,33 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         response = client.put('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 405)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop2', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
@@ -144,7 +156,9 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -175,7 +189,9 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -222,7 +238,9 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
-            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr'}),
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default().id,
+            'department': Department.get_default().id}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)

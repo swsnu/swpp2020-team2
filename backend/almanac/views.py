@@ -9,11 +9,10 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
     HttpResponseNotFound, JsonResponse
 from django.contrib.auth import login, authenticate, logout
-# from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.encoding import force_bytes #, force_text
+from django.utils.encoding import force_bytes
 
 from almanac.models import User, UserPreference, \
     University, Department, Event, Background, Language, Category, Tag, Image
@@ -36,12 +35,14 @@ def signup(request):
             last_name = req_data['last_name']
             password = req_data['password']
             email = req_data['email']
-            #university = req_data['university']
-            #department = req_data['department']
+            university_id = req_data['university']
+            department_id = req_data['department']
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
-            #UserPreference.add_new_preference(user=user.id,
-            #university=university, department=department)
+            university = University.objects.get(id=university_id)
+            department = Department.objects.get(id=department_id)
+            UserPreference.add_new_preference(user=user,
+            university=university, department=department)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
@@ -100,7 +101,9 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            user_dict = {'username': user.username, 'password': user.password}
+            user_dict = {'id': user.id, 'username': user.username,
+            'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+            'email': user.email, 'is_active': user.is_active}
             return JsonResponse(user_dict)
         return HttpResponse(status=401)
 
