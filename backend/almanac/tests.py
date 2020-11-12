@@ -399,7 +399,7 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
         Category.objects.create(
             name='performance'
         )
-        Image.objects.create(
+        self.im = Image.objects.create(
         )
 
     def test_university_general(self):
@@ -410,8 +410,10 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         snu_id = University.objects.get(name='Seoul National University').id
 
-        default_id = University.get_default().id
+        default_univ = University.get_default()
+        default_id = default_univ.id
         self.assertEqual(default_id, snu_id)
+        self.assertEqual('Seoul National University', str(default_univ))
 
     def test_get_create_university(self):
 
@@ -492,8 +494,10 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         cse_id = Department.objects.get(name='Computer Science Engineering').id
 
-        default_id = Department.get_default().id
+        default_dept = Department.get_default()
+        default_id = default_dept.id
         self.assertEqual(default_id, cse_id)
+        self.assertEqual('Computer Science Engineering', str(default_dept))
 
     def test_get_create_department(self):
 
@@ -701,8 +705,10 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         green_id = Background.objects.get(name='green').id
 
-        default_id = Background.get_default().id
+        default_back = Background.get_default()
+        default_id = default_back.id
         self.assertEqual(default_id, green_id)
+        self.assertEqual('green', str(default_back))
 
     def test_get_create_background(self):
 
@@ -758,8 +764,10 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         english_id = Language.objects.get(name='English').id
 
-        default_id = Language.get_default().id
+        default_lang = Language.get_default()
+        default_id = default_lang.id
         self.assertEqual(default_id, english_id)
+        self.assertEqual('English', str(default_lang))
 
     def test_get_create_language(self):
 
@@ -829,3 +837,26 @@ class AlmanacUnivDeptCatTagBackLangImTestCase(TransactionTestCase):
 
         Image.objects.get(image_file='image/signup.jpg').delete()
         os.remove(settings.MEDIA_ROOT / 'image/signup.jpg')
+
+    def test_get_delete_image(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_im=self.im.id
+        #id_wrong = id_im+1
+
+        response = client.head('/api/image/{}/'.format(id_im))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/image/{}/'.format(id_im))
+        self.assertEqual(response.json()['image_file_url'], '/image/home.jpg')
+
+        #response = client.get('/api/image/{}/'.format(id_wrong))
+        #self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/image/{}/'.format(id_im))
+        self.assertEqual(response.status_code, 200)
