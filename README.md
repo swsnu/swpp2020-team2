@@ -7,3 +7,17 @@ Almanac, the calendar service
 
 ### Wiki page
 [Wiki](https://github.com/swsnu/swpp2020-team2/wiki)
+
+## Environments
+* Yarn ????
+* Python 3.7.1
+* pip 20.1.1
+
+## Frontend
+
+## Backend
+
+### run
+
+
+### test
