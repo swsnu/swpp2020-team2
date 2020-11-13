@@ -18,7 +18,6 @@ matrix:
     script:
     - "./node_modules/.bin/eslint src/"
     - yarn test --coverage --watchAll=false
-    - cd .. && sonar-scanner
     after_success:
     - coveralls-locv -v -n coverage/lcov.info > coverage.json
   - language: python
@@ -43,3 +42,4 @@ matrix:
     - coverage xml
     after_success:
     - coveralls --merge=../frontend/coverage.json
+    - cd .. && sonar-scanner
