@@ -6,7 +6,7 @@ import Main from './Main';
 import getMockStore from '../../test-utils/mocks';
 import { history } from '../../store/store';
 
-import * as actionCreators from '../../store/actions/actions';
+import * as actionCreators from '../../store/actions/user';
 
 describe('Main', () => {
   function makeComponent(store) {

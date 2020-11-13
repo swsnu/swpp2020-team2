@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
-import './Main.css'
-import { appLogo } from '../../images/index'
+import './Main.css';
+import { appLogo } from '../../images/index';
 
 class Main extends Component {
   state = {
@@ -62,16 +62,17 @@ class Main extends Component {
 
             <div className="confirmBox">
               <button type="button" id="signin-button" onClick={() => this.signinHandler()}>
-                sign in</button>
+                sign in
+              </button>
               <div className="signUpBox">
                 <span onClick={() => this.props.history.push('/signup')}>
-                  Sign Up?</span>
+                  Sign Up?
+                </span>
               </div>
             </div>
           </div>
 
         </div>
-
 
       </div>
     );

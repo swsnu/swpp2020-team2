@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
-import './Activate.css'
+import './Activate.css';
 
 class Activate extends Component {
   componentDidMount() {
