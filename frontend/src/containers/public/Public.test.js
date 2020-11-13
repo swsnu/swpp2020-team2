@@ -124,7 +124,7 @@ describe('<Articles />', () => {
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
-            <Route path="/" exact render={() => <Public />} />
+            <Route path="/" exact render={() => <Public history={history} />} />
           </Switch>
         </ConnectedRouter>
       </Provider>
@@ -135,5 +135,67 @@ describe('<Articles />', () => {
     const component = mount(publicComponent);
     const wrapper = component.find('.Public');
     expect(wrapper.length).toBe(1);
+  });
+
+  it('should handle click', () => {
+    const div1 = document.createElement('div');
+    div1.setAttribute('id', 'including');
+    document.body.appendChild(div1);
+
+    const div2 = document.createElement('div');
+    div2.setAttribute('id', 'tagOption');
+    document.body.appendChild(div2);
+
+    const component = mount(publicComponent, { attachTo: document.getElementById('including') });
+
+    const viewOptionButton = component.find('.ViewOptionButton');
+    expect(viewOptionButton.length).toBe(2);
+    viewOptionButton.at(0).simulate('click');
+    viewOptionButton.at(1).simulate('click');
+
+    const includingSubmit = component.find('.IncludingSubmit');
+    expect(includingSubmit.length).toBe(1);
+    includingSubmit.simulate('click');
+
+    const tagSubmit = component.find('.TagSubmit');
+    expect(tagSubmit.length).toBe(1);
+    tagSubmit.simulate('click');
+
+    const groupOptionButton = component.find('.GroupOptionButton');
+    expect(groupOptionButton.length).toBe(3);
+    groupOptionButton.at(0).simulate('click');
+    groupOptionButton.at(0).simulate('click');
+    groupOptionButton.at(1).simulate('click');
+    groupOptionButton.at(2).simulate('click');
+
+    const eventOptionButton = component.find('.EventOptionButton');
+    expect(eventOptionButton.length).toBe(1);
+    eventOptionButton.simulate('click');
+    eventOptionButton.simulate('click');
+
+    const categoryOptionButton = component.find('.CategoryOptionButton');
+    expect(categoryOptionButton.length).toBe(8);
+    categoryOptionButton.at(0).simulate('click');
+    categoryOptionButton.at(0).simulate('click');
+
+    const sortOptionSelect = component.find('.SortOptionSelect');
+    expect(sortOptionSelect.length).toBe(1);
+    sortOptionSelect.simulate('change', {
+      target: {
+        value: 'recent',
+      },
+    });
+
+    const dayComponent = component.find('.abled');
+    expect(dayComponent.length).toBe(30);
+    dayComponent.at(0).simulate('click');
+
+    const close = component.find('.closeButton');
+    expect(close.length).toBe(1);
+    close.simulate('click');
+
+    const createEventButtonInCalendar = component.find('.createEventButtonInCalendar');
+    expect(createEventButtonInCalendar.length).toBe(1);
+    createEventButtonInCalendar.simulate('click');
   });
 });
