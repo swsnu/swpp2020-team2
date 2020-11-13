@@ -38,7 +38,7 @@ class EventListModal extends Component {
     }
 
     onClickDetailEvent = (id) => {
-      this.props.history.push('/details/'+id)
+      this.props.history.push(`/details/${id}`);
     }
 
     render() {

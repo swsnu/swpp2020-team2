@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 import store from '../store';
-import * as actionCreators from './actions';
+import * as actionCreators from './user';
 
 describe('actions', () => {
+  window.alert=jest.fn();
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -22,6 +24,44 @@ describe('actions', () => {
     store.dispatch(actionCreators.signIn(stubUser)).then(() => {
       expect(store.getState().ur.signinedUser).toEqual(stubUser);
       expect(spyOnPost).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it('signIn should operate correctly when input is wrong', (done) => {
+    const stubUser = { username: 'wrong_username', password: 'wrong_password' };
+    const spyOnPost = jest.spyOn(axios, 'post')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 401,
+          response:{status:401}
+        };
+        reject(result);
+      }));
+    const spyOnAlert=jest.spyOn(window,'alert')
+    .mockImplementation();
+
+    store.dispatch(actionCreators.signIn(stubUser)).then(() => {
+      expect(spyOnAlert).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it('additional test for coverage', (done) => {
+    const stubUser = { username: 'wrong_username', password: 'wrong_password' };
+    const spyOnPost = jest.spyOn(axios, 'post')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 400,
+          response:{status:400}
+        };
+        reject(result);
+      }));
+    const spyOnAlert=jest.spyOn(window,'alert')
+    .mockImplementation();
+
+    store.dispatch(actionCreators.signIn(stubUser)).then(() => {
+      expect(spyOnAlert).toHaveBeenCalledTimes(0);
       done();
     });
   });

@@ -6,16 +6,19 @@ import { GrLike } from 'react-icons/gr';
 import './EventBox.css';
 
 const EventBox = (props) => (
-  <div className="EventBox" style={{
-      borderLeftColor: props.event.category.id==0? "red" : 
-                      props.event.category.id==1? "orange" :
-                      props.event.category.id==2? "yellow" :
-                      props.event.category.id==3? "green" :
-                      props.event.category.id==4? "skyblue" :
-                      props.event.category.id==5? "blue" :
-                      props.event.category.id==6? "purple" :
-                      "gray"
-      }}>
+  <div
+    className="EventBox"
+    style={{
+      borderLeftColor: props.event.category.id == 0 ? 'red'
+        : props.event.category.id == 1 ? 'orange'
+          : props.event.category.id == 2 ? 'yellow'
+            : props.event.category.id == 3 ? 'green'
+              : props.event.category.id == 4 ? 'skyblue'
+                : props.event.category.id == 5 ? 'blue'
+                  : props.event.category.id == 6 ? 'purple'
+                    : 'gray',
+    }}
+  >
     <div className="left">
       <div className="top">
         <div className="group">

@@ -6,7 +6,7 @@ import Signup from './Signup';
 import getMockStore from '../../test-utils/mocks';
 import { history } from '../../store/store';
 
-import * as actionCreators from '../../store/actions/actions';
+import * as actionCreators from '../../store/actions/user';
 
 describe('Signup', () => {
   function makeComponent(store) {
@@ -90,5 +90,15 @@ describe('Signup', () => {
     instance = component.find(Signup.WrappedComponent).instance();
     instance.componentDidUpdate(mockedState);
     expect(spyOnReplace).toHaveBeenCalledWith('/public');
+  });
+
+  it('should call history.back when almanac is clicked',()=>{
+    const spyOnBack = jest.spyOn(history, 'goBack')
+      .mockImplementation();
+
+    let component = mount(makeComponent(getMockStore(mockedState)));
+    let wrapper=component.find('.title');
+    wrapper.simulate('click');
+    expect(spyOnBack).toHaveBeenCalledTimes(1);
   });
 });
