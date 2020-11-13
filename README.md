@@ -11,7 +11,34 @@ Almanac, the calendar service
 ## Environments
 
 ### Frontend
-* Yarn ????
+You can also get info from frontend/package.json
+* @testing-library/jest-dom: 5.11.4
+* @testing-library/react: 11.1.0
+* @testing-library/user-event: 12.1.10
+* axios": 0.21.0
+* connected-react-router: 6.8.0
+* date-fns: 2.16.1
+* history: 4.10.1
+* react: 16.13.1
+* react-dom: 16.13.1
+* react-icons: 3.11.0
+* react-redux: 7.2.1
+* react-router: 5.2.0
+* react-router-dom: 5.2.0
+* react-scripts: 3.4.3
+* react-tabs: 3.1.1
+* redux: 4.0.5
+* redux-thunk: 2.3.0
+* babel-eslint: 10.1.0
+* enzyme: 3.11.0
+* enzyme-adapter-react-16: "^1.15.5
+* enzyme-to-json: 3.6.1
+* eslint: 6.6.0
+* eslint-config-airbnb: 18.2.1
+* eslint-plugin-import: 2.22.1
+* eslint-plugin-jsx-a11y: 6.4.1
+* eslint-plugin-react: 7.21.5
+* eslint-plugin-react-hooks: 4.2.0
 
 ### Backend
 You can also get info from backend/requirements.txt
@@ -27,9 +54,20 @@ You can also get info from backend/requirements.txt
 ## Frontend
 
 ### run
-
+At root repository, type the following commands
+```
+cd frontend
+yarn install
+yarn start
+```
 
 ### test
+At root repository, type the following commands
+```
+cd frontend
+yarn install
+yarn test --coverage --watchAll=false
+```
 
 ## Backend
 
