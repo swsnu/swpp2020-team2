@@ -15,7 +15,7 @@ You can also get info from frontend/package.json
 * @testing-library/jest-dom: 5.11.4
 * @testing-library/react: 11.1.0
 * @testing-library/user-event: 12.1.10
-* axios": 0.21.0
+* axios: 0.21.0
 * connected-react-router: 6.8.0
 * date-fns: 2.16.1
 * history: 4.10.1
@@ -31,7 +31,7 @@ You can also get info from frontend/package.json
 * redux-thunk: 2.3.0
 * babel-eslint: 10.1.0
 * enzyme: 3.11.0
-* enzyme-adapter-react-16: "^1.15.5
+* enzyme-adapter-react-16: 1.15.5
 * enzyme-to-json: 3.6.1
 * eslint: 6.6.0
 * eslint-config-airbnb: 18.2.1
