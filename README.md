@@ -41,7 +41,7 @@ First, log in to mysql (by inserting password if needed):
 mysql -u root -p
 ```
 
-In mysql, do followings (`mysql>` ):
+In mysql, do followings in mysql (`mysql>` ):
 ```
 create database almanac_db;
 create user "altroot"@"localhost" identified by "";
@@ -49,9 +49,11 @@ grant all privileges on * . * to "altroot"@"localhost";
 flush privileges;
 ```
 
-Now we can use `altroot` with blank password for mysql. And do followings:
+Now we can use `altroot` with blank password for mysql. And do followings (this is not needed for unit test alone) also in mysql:
 ```
-
+use almanac_db;
+insert into almanac_university(id, name, domain) values(1, 'Seoul National University', 'snu.ac.kr');
+insert into almanac_department(id, name) values(1, 'Computer Science Engineering');
 ```
 
 The above procedure should be done once. Next time, skip above.
