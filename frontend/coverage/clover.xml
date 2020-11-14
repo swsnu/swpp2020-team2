@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1605341826337" clover="3.2.0">
-  <project timestamp="1605341826337" name="All files">
-    <metrics statements="316" coveredstatements="264" conditionals="99" coveredconditionals="90" methods="156" coveredmethods="99" elements="571" coveredelements="453" complexity="0" loc="316" ncloc="316" packages="18" files="24" classes="24"/>
+<coverage generated="1605342940918" clover="3.2.0">
+  <project timestamp="1605342940919" name="All files">
+    <metrics statements="310" coveredstatements="261" conditionals="99" coveredconditionals="90" methods="153" coveredmethods="100" elements="562" coveredelements="451" complexity="0" loc="310" ncloc="310" packages="18" files="24" classes="24"/>
     <package name="src">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
       <file name="App.js" path="/Users/dongmin/lecture/sogae/swpp2020-team2/frontend/src/App.js">
@@ -131,27 +131,21 @@
       </file>
     </package>
     <package name="src.components.eventListModal">
-      <metrics statements="18" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="13" coveredmethods="2"/>
+      <metrics statements="12" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="3"/>
       <file name="EventListModal.js" path="/Users/dongmin/lecture/sogae/swpp2020-team2/frontend/src/components/eventListModal/EventListModal.js">
-        <metrics statements="18" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="13" coveredmethods="2"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="1" type="stmt"/>
+        <metrics statements="12" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="3"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="28" count="1" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="36" count="1" type="stmt"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="76" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.containers.event.Create">
