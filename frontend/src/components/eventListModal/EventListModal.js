@@ -86,7 +86,7 @@ class EventListModal extends Component {
       );
     }
 }
-
+/*
 const mapStateToProps = (state) => ({
 
 });
@@ -94,5 +94,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 
 });
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventListModal);
+*/
+export default EventListModal;
