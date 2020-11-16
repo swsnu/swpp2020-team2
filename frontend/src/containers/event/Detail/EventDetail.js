@@ -32,10 +32,11 @@ class EventDetail extends Component {
     this.props.history.goBack();
   }
 
+  /*
   onClickEditEvent = () => {
     this.props.history.push(`/details/modify/${this.state.event.id}/`);
   }
-
+  
   onClickBringEvent = () => {
 
   }
@@ -51,6 +52,7 @@ class EventDetail extends Component {
   onClickDeleteEvent = () => {
 
   }
+  */
 
   render() {
     const lastEditor = (
@@ -80,13 +82,13 @@ class EventDetail extends Component {
 
             <div className="right">
               <div className="btns">
-                <button className="bringEvent" onClick={() => this.onClickBringEvent()}>
+                <button className="bringEvent" onClick={() => {}} >
                   <GoDiffAdded size="100%" color="black" />
                 </button>
-                <button className="likeEvent" onClick={() => this.onClickLikeEvent()}>
+                <button className="likeEvent" onClick={() => {}} >
                   <GrLike size="100%" color="#fff" />
                 </button>
-                <button className="reportEvent" onClick={() => this.onClickReportEvent()}>
+                <button className="reportEvent" onClick={() => {}} >
                   <GoReport size="100%" color="red" />
                 </button>
               </div>
@@ -165,12 +167,12 @@ class EventDetail extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  signinedUser: state.ur.signinedUser,
+//  signinedUser: state.ur.signinedUser,
 
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+//  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetail);

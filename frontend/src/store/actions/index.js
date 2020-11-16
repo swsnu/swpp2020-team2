@@ -3,7 +3,7 @@ export {
   signIn,
   signUp,
   activate,
-} from './actions';
+} from './user';
 
 export {
   getEvent,

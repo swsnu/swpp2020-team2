@@ -263,6 +263,10 @@ class UserPreference(models.Model):
         Event,
         related_name='brings_userpreference'
     )
+    join_requests = models.ManyToManyField(
+        Group,
+        related_name='join_requests_userpreference'
+    )
     likes_group = models.ManyToManyField(
         Group,
         related_name='likes_group_userpreference'

@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">98.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>52/53</span>
+                <span class='fraction'>53/53</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">93.75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>15/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">97.83% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>45/46</span>
+                <span class='fraction'>46/46</span>
             </div>
         
             
@@ -257,7 +257,8 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,7 +266,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -282,7 +283,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -336,7 +337,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -449,11 +466,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,8 +480,8 @@
 import { connect } from 'react-redux';
 &nbsp;
 import * as actionCreators from '../../store/actions/index';
-import './Signup.css'
-import { appLogo } from '../../images/index'
+import './Signup.css';
+import { appLogo } from '../../images/index';
 &nbsp;
 class Signup extends Component {
   state = {
@@ -541,14 +559,14 @@ class Signup extends Component {
       &lt;div className="SignUp"&gt;
         &lt;div className="top"&gt;
 &nbsp;
-          &lt;button className="title" onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >this.props.history.goBack()}</span>&gt;Almanac&lt;/button&gt;
+          &lt;button className="title" onClick={() =&gt; this.props.history.goBack()}&gt;Almanac&lt;/button&gt;
           &lt;div className="description"&gt;A university events calendar&lt;/div&gt;
         &lt;/div&gt;
 &nbsp;
         &lt;div className="container"&gt;
 &nbsp;
           &lt;div className="logoBox"&gt;
-            &lt;img className="logo" src={appLogo}/&gt;
+            &lt;img className="logo" src={appLogo} /&gt;
           &lt;/div&gt;
 &nbsp;
           &lt;div className="content"&gt;
@@ -640,7 +658,8 @@ class Signup extends Component {
               &lt;/div&gt;
               &lt;div className="confirmBox"&gt;
                 &lt;button type="button" id="signup-button" onClick={() =&gt; this.signupHandler()}&gt;
-                  sign up&lt;/button&gt;
+                  sign up
+                &lt;/button&gt;
               &lt;/div&gt;
             &lt;/div&gt;
           &lt;/div&gt;
@@ -666,7 +685,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Signup);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sat Nov 14 2020 02:08:27 GMT+0900 (Korean Standard Time)
+                at Sat Nov 14 2020 17:38:55 GMT+0900 (대한민국 표준시)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
