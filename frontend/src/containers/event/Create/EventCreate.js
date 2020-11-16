@@ -17,17 +17,18 @@ class EventCreate extends Component {
     begin_time: '',
     end_time: '',
   }
-
+  /*
   postEventHandler = () => {
 
   }
+  */
 
   onClickBack = () => {
     this.props.history.goBack();
   }
 
   render() {
-    const disablebtn = !(this.state.title && this.state.category && this.state.group && this.state.date);
+    const disablebtn = true//!(this.state.title && this.state.category && this.state.group && this.state.date);
 
     return (
       <div className="EventCreate">
@@ -61,7 +62,7 @@ class EventCreate extends Component {
 
                 <div className="infoBox">
                   <label className="infoKey">분류</label>
-                  <select className="event-group-input" onChange={() => {}}>
+                  <select className="event-category-input" onChange={() => {}}>
                     <option>--카테고리를 선택하세요--</option>
                     <option>공연</option>
                     <option>전시회</option>
@@ -154,7 +155,7 @@ class EventCreate extends Component {
           <div className="confirmBox">
             <button
               className="confirm-create-event-button"
-              onClick={() => this.postEventHandler()}
+              onClick={() => {}}//this.postEventHandler()}
               disabled={disablebtn}
             >
               Create
@@ -167,12 +168,12 @@ class EventCreate extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  signinedUser: state.ur.signinedUser,
+//  signinedUser: state.ur.signinedUser,
 
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+// onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);
