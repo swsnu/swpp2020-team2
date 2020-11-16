@@ -609,6 +609,9 @@ def create_event(request):
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
+        category_id = req_data['category']
+        tag_id_arr = req_data['tag']
+        group_id = req_data['group']
         place = req_data['place']
         date = req_data['date']
         begin_time = req_data['begin_time']
