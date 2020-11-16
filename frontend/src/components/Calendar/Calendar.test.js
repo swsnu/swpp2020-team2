@@ -86,7 +86,7 @@ const mockOnClickDate = jest.fn();
 
 describe('<Calendar />', () => {
   it('should render Calendar', () => {
-    const component = mount(<Calendar events={sample} onClickDate={mockOnClickDate} />);
+    const component = mount(<Calendar events={sample} onClickDay={mockOnClickDate} />);
     const wrapper = component.find('.Calendar');
     expect(wrapper.length).toBe(1);
 
@@ -101,6 +101,11 @@ describe('<Calendar />', () => {
     expect(wrapperYearMonth.at(0).text()).toEqual('2020. 10.');
     wrapperArrow.at(1).simulate('click');
     expect(wrapperYearMonth.at(0).text()).toEqual('2020. 11.');
+
+    const dayComponent = component.find('.abled');
+    expect(dayComponent.length).toBe(30);
+    dayComponent.at(0).simulate('click');
+    dayComponent.at(0).simulate('keypress');
 
     const component2 = mount(<Calendar onClickDate={mockOnClickDate} />);
     const wrapper2 = component2.find('.Calendar');

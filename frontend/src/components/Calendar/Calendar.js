@@ -16,14 +16,11 @@ const Calendar = ({
   events, onClickDay,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
-    if (selectedDate != null) setSelectedDate(addMonths(selectedDate, 1));
   };
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
-    if (selectedDate != null) setSelectedDate(subMonths(selectedDate, 1));
   };
   const header = () => {
     const dateFormat = 'yyyy. MM.';
