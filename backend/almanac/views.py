@@ -1,5 +1,5 @@
 '''
-a standard docstring
+The main code for views
 '''
 
 # from django.shortcuts import render
@@ -20,6 +20,7 @@ from .tokens import account_activation_token
 from .forms import ImageForm
 
 # Create your views here.
+# User (Sign)
 
 def signup(request):
 
@@ -129,6 +130,8 @@ def signout(request):
 
     return HttpResponseNotAllowed(['GET'])
 
+# User (Non-sign)
+
 def get_user_signin(request):
 
     '''
@@ -179,122 +182,7 @@ def get_user(request, user_id):
 
     return HttpResponseNotAllowed(['GET'])
 
-def get_event(request):
-
-    '''
-    a function docstring
-    '''
-
-    if request.method not in ['GET']:
-        return HttpResponseNotAllowed(['GET'])
-
-    if request.method == 'GET':
-        events = [{'id': event['id'], 'title': event['title'],
-        'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
-        'end_time': event['end_time'], 'content': event['content']
-        } for event in Event.objects.all().order_by('id').values()]
-        return JsonResponse(events, safe=False)
-    return HttpResponseNotAllowed(['GET'])
-
-def create_event(request):
-
-    '''
-    a function docstring
-    '''
-
-    if request.method not in ['POST']:
-        return HttpResponseNotAllowed(['POST'])
-
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        title = req_data['title']
-        place = req_data['place']
-        date = req_data['date']
-        begin_time = req_data['begin_time']
-        end_time = req_data['end_time']
-        content = req_data['content']
-        event = Event(title=title, place=place, date=date,
-        begin_time=begin_time, end_time=end_time, content=content)
-        event.save()
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
-        return HttpResponse(content=json.dumps(event_dict), status=201)
-    return HttpResponseNotAllowed(['POST'])
-
-def get_put_delete_event(request, event_id):
-
-    '''
-    a function docstring
-    '''
-
-    if request.method not in ['GET', 'PUT', 'DELETE']:
-        return HttpResponseNotAllowed(['GET', 'PUT', 'DELETE'])
-
-    if not Event.objects.filter(id=event_id).exists():
-        return HttpResponseNotFound()
-
-    event = Event.objects.get(id=event_id)
-
-    if request.method == 'GET':
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
-        return JsonResponse(event_dict)
-    if request.method == 'PUT':
-        req_data = json.loads(request.body.decode())
-        title = req_data['title']
-        place = req_data['place']
-        date = req_data['date']
-        begin_time = req_data['begin_time']
-        end_time = req_data['end_time']
-        content = req_data['content']
-        event = Event(title=title, place=place, date=date,
-        begin_time=begin_time, end_time=end_time, content=content)
-        event.save()
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
-        return HttpResponse(content=json.dumps(event_dict), status=201)
-    # DELETE
-    event.delete()
-    return HttpResponse(status=200)
-
-def get_group(request):
-
-    '''
-    a function docstring
-    '''
-
-    if request.method not in ['GET']:
-        return HttpResponseNotAllowed(['GET'])
-
-    if request.method == 'GET':
-        groups = [{'id': group['id'], 'name': group['name'],
-        'description': group['description'], 'privacy': group['privacy']
-        } for group in Group.objects.all().order_by('id').values()]
-        return JsonResponse(groups, safe=False)
-    return HttpResponseNotAllowed(['GET'])
-
-def create_group(request):
-
-    '''
-    a function docstring
-    '''
-
-    if request.method not in ['POST']:
-        return HttpResponseNotAllowed(['POST'])
-
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        name = req_data['name']
-        description = req_data['description']
-        group = Group(name=name, description=description) # privacy = 1
-        group.save()
-        group_dict = {'id': group.id, 'name': group.name,
-        'description': group.description, 'privacy': group.privacy}
-        return HttpResponse(content=json.dumps(group_dict), status=201)
-    return HttpResponseNotAllowed(['POST'])
+# University
 
 def get_create_university(request):
 
@@ -365,6 +253,8 @@ def get_university_by_name(request, name):
 
     return HttpResponseNotAllowed(['GET'])
 
+# Department
+
 def get_create_department(request):
 
     '''
@@ -426,6 +316,8 @@ def get_department_by_name(request, name):
         return JsonResponse(department_dict)
 
     return HttpResponseNotAllowed(['GET'])
+
+# Category
 
 def get_create_category(request):
 
@@ -489,6 +381,8 @@ def get_category_by_name(request, name):
 
     return HttpResponseNotAllowed(['GET'])
 
+# Tag
+
 def get_create_tag(request):
 
     '''
@@ -551,6 +445,8 @@ def get_tag_by_name(request, name):
 
     return HttpResponseNotAllowed(['GET'])
 
+# Background
+
 def get_create_background(request):
 
     '''
@@ -592,6 +488,8 @@ def get_delete_background(request, background_id):
     # DELETE
     background.delete()
     return HttpResponse(status=200)
+
+# Language
 
 def get_create_language(request):
 
@@ -635,6 +533,8 @@ def get_delete_language(request, language_id):
     language.delete()
     return HttpResponse(status=200)
 
+# Image
+
 def get_create_image(request):
 
     '''
@@ -677,6 +577,132 @@ def get_delete_image(request, image_id):
     # DELETE
     image.delete()
     return HttpResponse(status=200)
+
+# Event
+
+def get_event(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        events = [{'id': event['id'], 'title': event['title'],
+        'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
+        'end_time': event['end_time'], 'content': event['content']
+        } for event in Event.objects.all().order_by('id').values()]
+        return JsonResponse(events, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
+def create_event(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        category_id = req_data['category']
+        tag_id_arr = req_data['tag']
+        group_id = req_data['group']
+        place = req_data['place']
+        date = req_data['date']
+        begin_time = req_data['begin_time']
+        end_time = req_data['end_time']
+        content = req_data['content']
+        event = Event(title=title, place=place, date=date,
+        begin_time=begin_time, end_time=end_time, content=content)
+        event.save()
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return HttpResponse(content=json.dumps(event_dict), status=201)
+    return HttpResponseNotAllowed(['POST'])
+
+def get_put_delete_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'PUT', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'PUT', 'DELETE'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event = Event.objects.get(id=event_id)
+
+    if request.method == 'GET':
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return JsonResponse(event_dict)
+    if request.method == 'PUT':
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        place = req_data['place']
+        date = req_data['date']
+        begin_time = req_data['begin_time']
+        end_time = req_data['end_time']
+        content = req_data['content']
+        event = Event(title=title, place=place, date=date,
+        begin_time=begin_time, end_time=end_time, content=content)
+        event.save()
+        event_dict = {'id': event.id, 'title': event.title,
+        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
+        'end_time': event.end_time, 'content': event.content}
+        return HttpResponse(content=json.dumps(event_dict), status=201)
+    # DELETE
+    event.delete()
+    return HttpResponse(status=200)
+
+# Group
+
+def get_group(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        groups = [{'id': group['id'], 'name': group['name'],
+        'description': group['description'], 'privacy': group['privacy']
+        } for group in Group.objects.all().order_by('id').values()]
+        return JsonResponse(groups, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
+def create_group(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        description = req_data['description']
+        group = Group(name=name, description=description) # privacy = 1
+        group.save()
+        group_dict = {'id': group.id, 'name': group.name,
+        'description': group.description, 'privacy': group.privacy}
+        return HttpResponse(content=json.dumps(group_dict), status=201)
+    return HttpResponseNotAllowed(['POST'])
+
+# Others
 
 def index(request):
 
