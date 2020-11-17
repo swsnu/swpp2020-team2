@@ -326,6 +326,41 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['university'], University.get_default().id)
         self.assertEqual(response.json()['department'], Department.get_default().id)
 
+    def test_user_get_signin_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/user/signin/full/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+
     def test_user_get(self):
 
         '''
@@ -360,6 +395,56 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['department'], Department.get_default().id)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+    def test_user_get_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id1=(User.objects.get(username='ray017').id)
+        id2=(User.objects.get(username='taekop').id)
+        id_wrong = max(id1, id2)+1
+
+        response = client.head('/api/user/{}/full/'.format(id1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/{}/full/'.format(id1))
+        self.assertEqual(response.json()['username'], 'ray017')
+        self.assertEqual(response.json()['first_name'], 'Raegeon')
+        self.assertEqual(response.json()['last_name'], 'Lee')
+        self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], False)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+
+        response = client.get('/api/user/{}/full/'.format(id2))
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+
+        response = client.get('/api/user/{}/full/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
 class AlmanacUnivDeptCatTag(TransactionTestCase):
