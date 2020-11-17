@@ -551,9 +551,11 @@ def get_create_image(request):
     # POST
     form = ImageForm(request.POST, request.FILES)
     if form.is_valid():
-        image = Image(image_file = request.FILES['imagefile'])
-        image.save()
-        image_dict = {'id': image.id, 'image_file_url': image.image_file.url}
+        image_dict = []
+        for image_file in request.FILES.getlist('imagefile'):
+            image = Image(image_file = image_file)
+            image.save()
+            image_dict.append({'id': image.id, 'image_file_url': image.image_file.url})
         return HttpResponse(content=json.dumps(image_dict), status=201)
     return HttpResponse(content='Bad Image', status=401)
 
@@ -610,15 +612,22 @@ def create_event(request):
         req_data = json.loads(request.body.decode())
         title = req_data['title']
         category_id = req_data['category']
-        tag_id_arr = req_data['tag']
+        tag_id_list = req_data['tag']
         group_id = req_data['group']
         place = req_data['place']
         date = req_data['date']
         begin_time = req_data['begin_time']
         end_time = req_data['end_time']
         content = req_data['content']
+        #image = req_data['image']
+        category = Category.objects.get(id=category_id)
+        group = Group.objects.get(id=group_id)
         event = Event(title=title, place=place, date=date,
+        category=category, group=group,
         begin_time=begin_time, end_time=end_time, content=content)
+        for t_id in tag_id_list:
+            tag = Tag.objects.get(id=t_id)
+            event.tag.add(tag)
         event.save()
         event_dict = {'id': event.id, 'title': event.title,
         'place': event.place, 'date': event.date, 'begin_time': event.begin_time,

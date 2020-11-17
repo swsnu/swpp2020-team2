@@ -736,7 +736,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
             name='performance'
         )
         self.sample_image = Image.objects.create(
-        )
+        ) # final image (last id assumed)
 
     def test_background_general(self):
 
@@ -869,10 +869,10 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/image/')
         self.assertEqual(len(response.json()), 3) # 2(user1,2)+1
-        self.assertEqual(response.json()[2]['image_file_url'], 'image/home.jpg')
+        self.assertEqual(response.json()[2]['image_file_url'], 'image/home.jpg') # since no 'url'
 
         with open(settings.MEDIA_ROOT / 'image/test/signup.jpg', 'rb') as file_pt:
-            response = client.post('/api/image/', {'name': 'signup', 'imagefile': file_pt})
+            response = client.post('/api/image/', {'name': 'signup', 'imagefile': [file_pt]})
         self.assertEqual(response.status_code, 201)
         self.assertIn('image/signup', response.content.decode())
 
@@ -888,7 +888,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
         client = Client()
 
         id_im=self.sample_image.id
-        #id_wrong = id_im+1
+        id_wrong = id_im+1
 
         response = client.head('/api/image/{}/'.format(id_im))
         self.assertEqual(response.status_code, 405)
@@ -896,8 +896,62 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
         response = client.get('/api/image/{}/'.format(id_im))
         self.assertEqual(response.json()['image_file_url'], '/image/home.jpg')
 
-        #response = client.get('/api/image/{}/'.format(id_wrong))
-        #self.assertEqual(response.status_code, 404)
+        response = client.get('/api/image/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
 
         response = client.delete('/api/image/{}/'.format(id_im))
         self.assertEqual(response.status_code, 200)
+
+class AlmanacEventTag(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user=user1,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user=user2,
+            university=University.get_default(),
+            department=Department.get_default()
+        )
+        Tag.objects.create(
+            name='waffle'
+        )
+        Category.objects.create(
+            name='performance'
+        )
+        self.sample_image = Image.objects.create(
+        )
+
+    def test_create_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        snu_id = University.objects.get(name='Seoul National University').id
+
+        default_univ = University.get_default()
+        default_id = default_univ.id
+        self.assertEqual(default_id, snu_id)
+        self.assertEqual('Seoul National University', str(default_univ))
