@@ -157,6 +157,40 @@ def get_user_signin(request):
 
     return HttpResponseNotAllowed(['GET'])
 
+def get_user_signin_full(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    if request.method == 'GET':
+        user_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email, 'is_active': user.is_active,
+        'university': user_preference.university.id,
+        'department': user_preference.department.id,
+        'profile': user_preference.profile.id,
+        'background': user_preference.background.id,
+        'language': user_preference.language.id,
+        'likes': [event.id for event in user_preference.likes.all()],
+        'brings': [event.id for event in user_preference.brings.all()],
+        'join_requests': [group.id for group in user_preference.join_requests.all()],
+        'likes_group': [group.id for group in user_preference.likes_group.all()],
+        'gets_notification': [group.id for group in user_preference.gets_notification.all()],
+        }
+        return JsonResponse(user_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
 def get_user(request, user_id):
 
     '''
@@ -178,6 +212,40 @@ def get_user(request, user_id):
         'email': user.email, 'is_active': user.is_active,
         'university': user_preference.university.id,
         'department': user_preference.department.id}
+        return JsonResponse(user_dict)
+
+    return HttpResponseNotAllowed(['GET'])
+
+def get_user_full(request, user_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not User.objects.filter(id=user_id).exists():
+        return HttpResponseNotFound()
+
+    user = User.objects.get(id=user_id)
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    if request.method == 'GET':
+        user_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email, 'is_active': user.is_active,
+        'university': user_preference.university.id,
+        'department': user_preference.department.id,
+        'profile': user_preference.profile.id,
+        'background': user_preference.background.id,
+        'language': user_preference.language.id,
+        'likes': [event.id for event in user_preference.likes.all()],
+        'brings': [event.id for event in user_preference.brings.all()],
+        'join_requests': [group.id for group in user_preference.join_requests.all()],
+        'likes_group': [group.id for group in user_preference.likes_group.all()],
+        'gets_notification': [group.id for group in user_preference.gets_notification.all()],
+        }
         return JsonResponse(user_dict)
 
     return HttpResponseNotAllowed(['GET'])
@@ -602,7 +670,8 @@ def get_event(request):
         'end_time': event.end_time,
         'last_editor': event.last_editor.id,
         'image': [image.id for image in event.image.all()],
-        'content': event.content} for event in Event.objects.all().order_by('id')]
+        'content': event.content
+        } for event in Event.objects.all().order_by('id')]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -730,9 +799,10 @@ def get_group(request):
         return HttpResponseNotAllowed(['GET'])
 
     if request.method == 'GET':
-        groups = [{'id': group['id'], 'name': group['name'],
-        'description': group['description'], 'privacy': group['privacy']
-        } for group in Group.objects.all().order_by('id').values()]
+        groups = [{'id': group.id, 'name': group.name,
+        'king': group.king.id,
+        'description': group.description, 'privacy': group.privacy
+        } for group in Group.objects.all().order_by('id')]
         return JsonResponse(groups, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -749,9 +819,11 @@ def create_group(request):
         req_data = json.loads(request.body.decode())
         name = req_data['name']
         description = req_data['description']
-        group = Group(name=name, description=description) # privacy = 1
-        group.save()
+        king_id = req_data['king']
+        king = User.objects.get(id=king_id)
+        group = Group.add_new_group(name=name, king=king, description=description) # privacy = 1
         group_dict = {'id': group.id, 'name': group.name,
+        'king': group.king.id,
         'description': group.description, 'privacy': group.privacy}
         return HttpResponse(content=json.dumps(group_dict), status=201)
     return HttpResponseNotAllowed(['POST'])
