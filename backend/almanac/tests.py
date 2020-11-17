@@ -870,7 +870,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/image/')
         self.assertEqual(len(response.json()), 3) # 2(user1,2)+1
-        self.assertEqual(response.json()[2]['image_file_url'], 'image/home.jpg') # since no 'url'
+        self.assertEqual(response.json()[2]['image_file_url'], '/image/home.jpg')
 
         with open(settings.MEDIA_ROOT / 'image/test/signup.jpg', 'rb') as file_pt:
             response = client.post('/api/image/', {'name': 'signup', 'imagefile': [file_pt]})

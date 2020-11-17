@@ -545,8 +545,8 @@ def get_create_image(request):
         return HttpResponseNotAllowed(['GET', 'POST'])
 
     if request.method == 'GET':
-        images = [{'id': image['id'], 'image_file_url': image['image_file']
-        } for image in Image.objects.all().order_by('id').values()]
+        images = [{'id': image.id, 'image_file_url': image.image_file.url
+        } for image in Image.objects.all().order_by('id')]
         return JsonResponse(images, safe=False)
     # POST
     form = ImageForm(request.POST, request.FILES)
