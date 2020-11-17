@@ -592,11 +592,14 @@ def get_event(request):
         return HttpResponseNotAllowed(['GET'])
 
     if request.method == 'GET':
-        events = [{'id': event['id'], 'title': event['title'],
+        events = [{'id': event['id'],
+        'title': event['title'],
         'place': event['place'], 'date': event['date'],
         'category': event['category'].id,
+        'group': event['group'].id,
         'begin_time': event['begin_time'],
         'end_time': event['end_time'],
+        'last_editor': event['last_editor'].id,
         'content': event['content']
         } for event in Event.objects.all().order_by('id').values()]
         return JsonResponse(events, safe=False)
@@ -645,7 +648,7 @@ def create_event(request):
         'title': event.title,
         'place': event.place, 'date': event.date,
         'category': event.category.id,
-        'tag': [tag.id for tag in event.tag.all().values()],
+        'tag': [tag.id for tag in event.tag.all()],
         'group': event.group.id,
         'begin_time': event.begin_time,
         'end_time': event.end_time,
@@ -669,9 +672,16 @@ def get_put_delete_event(request, event_id):
     event = Event.objects.get(id=event_id)
 
     if request.method == 'GET':
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
+        event_dict = {'id': event.id,
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': event.category.id,
+        'tag': [tag.id for tag in event.tag.all()],
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': event.last_editor.id,
+        'content': event.content}
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         req_data = json.loads(request.body.decode())

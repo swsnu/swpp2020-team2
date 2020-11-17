@@ -983,6 +983,14 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.get('/api/event/{}/'.format(id_event))
         self.assertEqual(response.json()['title'], 'Event Title')
+        self.assertEqual(response.json()['category'], self.event.category.id)
+        self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
+        self.assertEqual(response.json()['place'], self.event.place)
+        self.assertEqual(response.json()['date'], self.event.date)
+        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event.end_time)
+        self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
