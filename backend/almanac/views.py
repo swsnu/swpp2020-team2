@@ -617,26 +617,18 @@ def create_event(request):
 
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
-        title = req_data['title']
-        category_id = req_data['category']
         tag_id_list = req_data['tag']
-        group_id = req_data['group']
-        place = req_data['place']
-        date = req_data['date']
-        begin_time = req_data['begin_time']
-        end_time = req_data['end_time']
-        content = req_data['content']
         image_id_list = req_data['image']
-        last_editor = req_data['last_editor']
-        category = Category.objects.get(id=category_id)
-        group = Group.objects.get(id=group_id)
+        category = Category.objects.get(id=req_data['category'])
+        group = Group.objects.get(id=req_data['group'])
+        last_editor = Group.objects.get(id=req_data['last_editor'])
         event = Event(
-            title=title,
-            place=place, date=date,
+            title=req_data['title'],
+            place=req_data['place'], date=req_data['date'],
             category=category, group=group,
-            begin_time=begin_time, end_time=end_time,
+            begin_time=req_data['begin_time'], end_time=req_data['end_time'],
             last_editor=last_editor,
-            content=content
+            content=req_data['content']
         )
         for t_id in tag_id_list:
             tag = Tag.objects.get(id=t_id)
@@ -688,26 +680,18 @@ def get_put_delete_event(request, event_id):
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         req_data = json.loads(request.body.decode())
-        title = req_data['title']
-        category_id = req_data['category']
         tag_id_list = req_data['tag']
-        group_id = req_data['group']
-        place = req_data['place']
-        date = req_data['date']
-        begin_time = req_data['begin_time']
-        end_time = req_data['end_time']
-        content = req_data['content']
         image_id_list = req_data['image']
-        last_editor = req_data['last_editor']
-        category = Category.objects.get(id=category_id)
-        group = Group.objects.get(id=group_id)
+        category = Category.objects.get(id=req_data['category'])
+        group = Group.objects.get(id=req_data['group'])
+        last_editor = Group.objects.get(id=req_data['last_editor'])
         event = Event(
-            title=title,
-            place=place, date=date,
+            title=req_data['title'],
+            place=req_data['place'], date=req_data['date'],
             category=category, group=group,
-            begin_time=begin_time, end_time=end_time,
+            begin_time=req_data['begin_time'], end_time=req_data['end_time'],
             last_editor=last_editor,
-            content=content
+            content=req_data['content']
         )
         event.tag.clear()
         event.image.clear()
