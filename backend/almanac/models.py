@@ -147,6 +147,24 @@ class Group(models.Model):
     )
     privacy = models.IntegerField(default=1)
 
+    @staticmethod
+    def add_new_group(name, king, description):
+
+        '''
+        a function docstring
+        '''
+
+        image = Image.objects.create()
+        group = Group.objects.create(
+            name=name,
+            king=king,
+            description=description,
+            profile=image
+        )
+        group.member.add(king)
+        group.admin.add(king)
+        return group
+
 class Event(models.Model):
 
     '''

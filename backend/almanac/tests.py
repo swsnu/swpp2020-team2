@@ -12,7 +12,8 @@ from django.utils.encoding import force_bytes
 from django.conf import settings
 
 from .models import User, UserPreference, \
-    University, Department, Background, Language, Tag, Category, Image
+    University, Department, Background, Language, Tag, Category, Image, \
+    Group, Event
 
 # Create your tests here.
 
@@ -914,7 +915,7 @@ class AlmanacEventTag(TransactionTestCase):
         a function docstring
         '''
 
-        user1 = User.objects.create(
+        user1 = User.objects.create_user(
             username='ray017', first_name='Raegeon',
             last_name='Lee', password='password',
             email='cbda117@snu.ac.kr', is_active=False
@@ -924,34 +925,83 @@ class AlmanacEventTag(TransactionTestCase):
             university=University.get_default(),
             department=Department.get_default()
         )
-        user2 = User.objects.create_user(
+        self.user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
             last_name='Oh', password='password2',
             email='taekop@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
-            user=user2,
+            user=self.user2,
             university=University.get_default(),
             department=Department.get_default()
         )
-        Tag.objects.create(
+        self.tag1 = Tag.objects.create(
             name='waffle'
         )
-        Category.objects.create(
+        self.tag2 = Tag.objects.create(
+            name='winter'
+        )
+        self.category = Category.objects.create(
             name='performance'
         )
         self.sample_image = Image.objects.create(
         )
+        self.group = Group.add_new_group(
+            name='Group Name',
+            king=self.user2,
+            description='Group Description'
+        )
+        self.group.member.add(self.user2)
+        self.group.admin.add(self.user2)
+        self.event = Event.objects.create(
+            title='Event Title',
+            category=self.category,
+            group=self.group,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:40:00',
+            content='Event Content',
+            last_editor=self.user2
+        )
+        self.event.tag.add(self.tag1)
+        self.event.tag.add(self.tag2)
 
-    def test_create_event(self):
+    def test_get_event(self):
 
         '''
         a function docstring
         '''
 
-        snu_id = University.objects.get(name='Seoul National University').id
+        client = Client()
 
-        default_univ = University.get_default()
-        default_id = default_univ.id
-        self.assertEqual(default_id, snu_id)
-        self.assertEqual('Seoul National University', str(default_univ))
+        id_event = self.event.id
+        id_wrong = id_event+1
+
+        response = client.head('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.json()['title'], 'Event Title')
+        self.assertEqual(response.json()['category'], self.event.category.id)
+        self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
+        self.assertEqual(response.json()['place'], self.event.place)
+        self.assertEqual(response.json()['date'], self.event.date)
+        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event.end_time)
+        self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
+
+        response = client.get('/api/event/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        #response = client.delete('/api/event/{}/'.format(id_event))
+        #self.assertEqual(response.status_code, 200)
+
+        #response = client.get('/api/event/')
+        #self.assertEqual(len(response.json()), 0)
+
+        #default_univ = University.get_default()
+        #default_id = default_univ.id
+        #self.assertEqual(default_id, snu_id)
+        #self.assertEqual('Seoul National University', str(default_univ))
