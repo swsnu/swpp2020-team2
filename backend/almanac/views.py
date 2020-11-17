@@ -619,15 +619,23 @@ def create_event(request):
         begin_time = req_data['begin_time']
         end_time = req_data['end_time']
         content = req_data['content']
-        #image = req_data['image']
+        image_id_list = req_data['image']
+        last_editor = req_data['last_editor']
         category = Category.objects.get(id=category_id)
         group = Group.objects.get(id=group_id)
-        event = Event(title=title, place=place, date=date,
-        category=category, group=group,
-        begin_time=begin_time, end_time=end_time, content=content)
+        event = Event(
+            title=title, place=place, date=date,
+            category=category, group=group,
+            begin_time=begin_time, end_time=end_time,
+            last_editor=last_editor,
+            content=content
+        )
         for t_id in tag_id_list:
             tag = Tag.objects.get(id=t_id)
             event.tag.add(tag)
+        for i_id in image_id_list:
+            image = Image.objects.get(id=i_id)
+            event.image.add(image)
         event.save()
         event_dict = {'id': event.id, 'title': event.title,
         'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
