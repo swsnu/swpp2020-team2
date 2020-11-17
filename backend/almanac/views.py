@@ -593,8 +593,11 @@ def get_event(request):
 
     if request.method == 'GET':
         events = [{'id': event['id'], 'title': event['title'],
-        'place': event['place'], 'date': event['date'], 'begin_time': event['begin_time'],
-        'end_time': event['end_time'], 'content': event['content']
+        'place': event['place'], 'date': event['date'],
+        'category': event['category'].id,
+        'begin_time': event['begin_time'],
+        'end_time': event['end_time'],
+        'content': event['content']
         } for event in Event.objects.all().order_by('id').values()]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
@@ -624,7 +627,8 @@ def create_event(request):
         category = Category.objects.get(id=category_id)
         group = Group.objects.get(id=group_id)
         event = Event(
-            title=title, place=place, date=date,
+            title=title,
+            place=place, date=date,
             category=category, group=group,
             begin_time=begin_time, end_time=end_time,
             last_editor=last_editor,
@@ -637,9 +641,16 @@ def create_event(request):
             image = Image.objects.get(id=i_id)
             event.image.add(image)
         event.save()
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
+        event_dict = {'id': event.id,
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': event.category.id,
+        'tag': [tag.id for tag in event.tag.all().values()],
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': event.last_editor.id,
+        'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
     return HttpResponseNotAllowed(['POST'])
 
