@@ -990,18 +990,8 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.json()['begin_time'], self.event.begin_time)
         self.assertEqual(response.json()['end_time'], self.event.end_time)
         self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['image'], [])
         self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
-
-        #response = client.delete('/api/event/{}/'.format(id_event))
-        #self.assertEqual(response.status_code, 200)
-
-        #response = client.get('/api/event/')
-        #self.assertEqual(len(response.json()), 0)
-
-        #default_univ = University.get_default()
-        #default_id = default_univ.id
-        #self.assertEqual(default_id, snu_id)
-        #self.assertEqual('Seoul National University', str(default_univ))

@@ -592,16 +592,17 @@ def get_event(request):
         return HttpResponseNotAllowed(['GET'])
 
     if request.method == 'GET':
-        events = [{'id': event['id'],
-        'title': event['title'],
-        'place': event['place'], 'date': event['date'],
-        'category': event['category'].id,
-        'group': event['group'].id,
-        'begin_time': event['begin_time'],
-        'end_time': event['end_time'],
-        'last_editor': event['last_editor'].id,
-        'content': event['content']
-        } for event in Event.objects.all().order_by('id').values()]
+        events = [{'id': event.id,
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': event.category.id,
+        'tag': [tag.id for tag in event.tag.all()],
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': event.last_editor.id,
+        'image': [image.id for image in event.image.all()],
+        'content': event.content} for event in Event.objects.all().order_by('id')]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -653,6 +654,7 @@ def create_event(request):
         'begin_time': event.begin_time,
         'end_time': event.end_time,
         'last_editor': event.last_editor.id,
+        'image': [image.id for image in event.image.all()],
         'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
     return HttpResponseNotAllowed(['POST'])
@@ -681,22 +683,52 @@ def get_put_delete_event(request, event_id):
         'begin_time': event.begin_time,
         'end_time': event.end_time,
         'last_editor': event.last_editor.id,
+        'image': [image.id for image in event.image.all()],
         'content': event.content}
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
+        category_id = req_data['category']
+        tag_id_list = req_data['tag']
+        group_id = req_data['group']
         place = req_data['place']
         date = req_data['date']
         begin_time = req_data['begin_time']
         end_time = req_data['end_time']
         content = req_data['content']
-        event = Event(title=title, place=place, date=date,
-        begin_time=begin_time, end_time=end_time, content=content)
+        image_id_list = req_data['image']
+        last_editor = req_data['last_editor']
+        category = Category.objects.get(id=category_id)
+        group = Group.objects.get(id=group_id)
+        event = Event(
+            title=title,
+            place=place, date=date,
+            category=category, group=group,
+            begin_time=begin_time, end_time=end_time,
+            last_editor=last_editor,
+            content=content
+        )
+        event.tag.clear()
+        event.image.clear()
+        for t_id in tag_id_list:
+            tag = Tag.objects.get(id=t_id)
+            event.tag.add(tag)
+        for i_id in image_id_list:
+            image = Image.objects.get(id=i_id)
+            event.image.add(image)
         event.save()
-        event_dict = {'id': event.id, 'title': event.title,
-        'place': event.place, 'date': event.date, 'begin_time': event.begin_time,
-        'end_time': event.end_time, 'content': event.content}
+        event_dict = {'id': event.id,
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': event.category.id,
+        'tag': [tag.id for tag in event.tag.all()],
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': event.last_editor.id,
+        'image': [image.id for image in event.image.all()],
+        'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
     # DELETE
     event.delete()
