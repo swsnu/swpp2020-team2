@@ -2,7 +2,6 @@
 The main code for views
 '''
 
-# from django.shortcuts import render
 import json
 import operator
 from functools import reduce
@@ -726,15 +725,16 @@ def get_event_filtered(request):
             q_list = [Q(tag=Tag.objects.get(id=x)) for x in tag_list]
             event_objects = event_objects.filter(reduce(operator.or_, q_list))
         # Sort(List)
-        if 'id' in sort_options_list:
-            event_objects = event_objects.order_by('id')
-        if 'date' in sort_options_list:
-            event_objects = event_objects.order_by('date')
+        for option in sort_options_list:
+            if option == 'id':
+                event_objects = event_objects.order_by('id')
+            if option == 'date':
+                event_objects = event_objects.order_by('date')
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
             event_objects = event_objects[count_options_dict['from']:]
         if 'num' in count_options_dict.keys():
-            event_objects = event_objects[count_options_dict['num']:]
+            event_objects = event_objects[:count_options_dict['num']]
         events = [{'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
@@ -888,8 +888,6 @@ def get_group_simple(request):
 
     if request.method == 'GET':
         groups = [{'id': group.id, 'name': group.name,
-        'member': [user.id for user in group.member.all()],
-        'admin': [user.id for user in group.admin.all()],
         'king': group.king.id,
         'description': group.description, 'privacy': group.privacy
         } for group in Group.objects.all().order_by('id')]
@@ -907,7 +905,12 @@ def get_group(request):
 
     if request.method == 'GET':
         groups = [{'id': group.id, 'name': group.name,
+        'member': [user.id for user in group.member.all()],
+        'admin': [user.id for user in group.admin.all()],
         'king': group.king.id,
+        'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
+        'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
+        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
         'description': group.description, 'privacy': group.privacy
         } for group in Group.objects.all().order_by('id')]
         return JsonResponse(groups, safe=False)

@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'almanac_db',
         'USER': 'altroot',
-        'PASSWORD': '',
+        'PASSWORD': '1234qwerasdf',
         'HOST': 'localhost',
         'PORT': '3306',
     }
