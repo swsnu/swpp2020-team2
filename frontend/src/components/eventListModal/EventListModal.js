@@ -46,9 +46,9 @@ class EventListModal extends Component {
       const events = this.state.dayEventList?.map((event) => (
         <Event
           event={event}
-          bringEvent={() => {}}//this.onClickBringEvent(event.id)}
-          likeEvent={() => {}}//this.onClickLikeEvent(event.id)}
-          reportEvent={() => {}}//this.onClickReportEvent(event.id)}
+          bringEvent={() => {}}// this.onClickBringEvent(event.id)}
+          likeEvent={() => {}}// this.onClickLikeEvent(event.id)}
+          reportEvent={() => {}}// this.onClickReportEvent(event.id)}
           detailEvent={() => this.onClickDetailEvent(event.id)}
         />
       ));

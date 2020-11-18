@@ -35,7 +35,7 @@ class Main extends Component {
 
         <div className="content">
 
-          <img className="logo" src={appLogo} />
+          <img className="logo" alt="" src={appLogo} />
 
           <div className="container">
             <div className="signInBox">
@@ -61,7 +61,7 @@ class Main extends Component {
             </div>
 
             <div className="confirmBox">
-              <button type="button" id="signin-button" onClick={() => this.signinHandler()}>
+              <button id="signin-button" onClick={() => this.signinHandler()}>
                 sign in
               </button>
               <div className="signUpBox">

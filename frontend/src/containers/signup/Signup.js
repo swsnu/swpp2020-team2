@@ -24,7 +24,7 @@ class Signup extends Component {
   }
 
   signupHandler = () => {
-    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.university === '' || this.state.department === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
+    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
       alert('All fields must be filled.');
       return;
     }
@@ -88,7 +88,7 @@ class Signup extends Component {
         <div className="container">
 
           <div className="logoBox">
-            <img className="logo" src={appLogo} />
+            <img className="logo" alt="" src={appLogo} />
           </div>
 
           <div className="content">
@@ -179,7 +179,7 @@ class Signup extends Component {
                 />
               </div>
               <div className="confirmBox">
-                <button type="button" id="signup-button" onClick={() => this.signupHandler()}>
+                <button id="signup-button" onClick={() => this.signupHandler()}>
                   sign up
                 </button>
               </div>

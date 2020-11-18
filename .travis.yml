@@ -16,12 +16,21 @@ matrix:
     - yarn add coveralls
     - gem install coveralls-lcov
     script:
-    - "./node_modules/.bin/eslint src/"
+    - ./node_modules/.bin/eslint src/
     - yarn test --coverage --watchAll=false
+    - cd ..
+    - sonar-scanner
     after_success:
-    - coveralls-locv -v -n coverage/lcov.info > coverage.json
+    - cd frontend
+    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - language: python
     python: '3.7'
+    addons:
+      sonarcloud:
+        organization: swsnu
+        token:
+          secure: "fqQVH/ae961lj4jv1CJrhG3UBTgp4qUjipZQz1e2CnmhVgB0FZot6/pIGzJ8eTAk/OEDq+l5kIPrHDEgk8E5D1cobdEW5HQyIC2NlgYqB6YjcxbATA2pBaxddqsY5XHzLo+/SLCNm6qG6FyJL+Xp6J+7uLLYp4Y9vRHGkTzQM3YwhZb7T/qupMWVIKGLbZNafF93ota+V6N4hL0SsNQt8M191jC83Ja8wx7++pDgsG4XSUz3OTHvt6dSyp32SyjJ7hdMrt5lFFl7JJXumFhabiKJuqQb2vpIF8E6+pOvgYb+ve+HmqRoUHQ10J5EtqIzYHnFSKpGUviSR5GtUvMWkEDEJH+XWpjikrXteaUv5heifkI8wgxbLFoKBBz0RFwZKpebGatHDRlIL/Yp9AY7une71JWqDSU2AqaoCZ3rCIMvqDXNxsJYnW8njrsT1pP0SSWJt21CVXyLIKpUD4NysxD+rIrvCKsqoooxteER9rULq8zUdb5lc7P9ZW1Xi/DGSg0wziFi7929wFm3fkwgImmZz3aLuYnK66QZljaS81/+eq/s7xkYsbl+3J/wRedCdUrJaf3eQ8Hxkr+f5y2EA6zqB5R/BqoHFqgMwcs6SpbXWrLOjEIOthRJEhIfno+2liY5Bodf0StpLykb0jajr8KMH4WfymFUVZBgzdX8m4g=" 
+    cache:
     services: mysql
     sudo: true
     cache:
@@ -38,8 +47,13 @@ matrix:
     - mysql -e 'flush privileges;'
     script:
     - pylint **/*.py --rcfile=.pylintrc --load-plugins pylint_django
+    - python manage.py migrate
     - coverage run --source='.' manage.py test
     - coverage xml
+    - cd ..
+    - sonar-scanner
     after_success:
-    - coveralls --merge=../frontend/coverage.json
-    - cd .. && sonar-scanner
+    - cd backend
+    - coveralls
+    after_script:
+    - cd ..

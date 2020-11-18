@@ -92,12 +92,12 @@ describe('Signup', () => {
     expect(spyOnReplace).toHaveBeenCalledWith('/public');
   });
 
-  it('should call history.back when almanac is clicked',()=>{
+  it('should call history.back when almanac is clicked', () => {
     const spyOnBack = jest.spyOn(history, 'goBack')
       .mockImplementation();
 
-    let component = mount(makeComponent(getMockStore(mockedState)));
-    let wrapper=component.find('.title');
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    const wrapper = component.find('.title');
     wrapper.simulate('click');
     expect(spyOnBack).toHaveBeenCalledTimes(1);
   });
