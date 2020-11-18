@@ -711,15 +711,20 @@ def get_event_filtered(request):
     if request.method == 'GET':
         req_data = json.loads(request.body.decode())
         filter_options_dict = req_data['filter_options']
-        sort_options_dict = req_data['sort_options']
+        sort_options_list = req_data['sort_options']
         count_options_dict = req_data['count_options']
         event_objects = Event.objects.all()
+        # Filter(Dictionary)
         if 'tag' in filter_options_dict.keys():
             tag_list = filter_options_dict['tag']
             q_list = [Q(tag=Tag.objects.get(id=x)) for x in tag_list]
             event_objects = event_objects.filter(reduce(operator.or_, q_list))
-        if 'id' in sort_options_dict.keys():
+        # Sort(List)
+        if 'id' in sort_options_list:
             event_objects = event_objects.order_by('id')
+        if 'date' in sort_options_list:
+            event_objects = event_objects.order_by('date')
+        # Count(Dictionary)
         if 'from' in count_options_dict.keys():
             event_objects = event_objects[count_options_dict['from']:]
         if 'num' in count_options_dict.keys():
