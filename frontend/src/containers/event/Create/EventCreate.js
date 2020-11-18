@@ -1,11 +1,11 @@
 import React, { Component, Text } from 'react';
 import { connect } from 'react-redux';
 
-import * as actionCreators from '../../../store/actions/index';
-import './EventCreate.css';
-
 import { ImCalendar } from 'react-icons/im';
 import { BiDownArrow } from 'react-icons/bi';
+
+import * as actionCreators from '../../../store/actions/index';
+import './EventCreate.css';
 
 class EventCreate extends Component {
   state = {
@@ -28,7 +28,7 @@ class EventCreate extends Component {
   }
 
   render() {
-    const disablebtn = true//!(this.state.title && this.state.category && this.state.group && this.state.date);
+    const disablebtn = true;//! (this.state.title && this.state.category && this.state.group && this.state.date);
 
     return (
       <div className="EventCreate">
@@ -155,7 +155,7 @@ class EventCreate extends Component {
           <div className="confirmBox">
             <button
               className="confirm-create-event-button"
-              onClick={() => {}}//this.postEventHandler()}
+              onClick={() => {}}// this.postEventHandler()}
               disabled={disablebtn}
             >
               Create

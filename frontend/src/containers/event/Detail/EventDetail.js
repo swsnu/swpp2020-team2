@@ -1,12 +1,12 @@
 import React, { Component, Text } from 'react';
 import { connect } from 'react-redux';
 
-import * as actionCreators from '../../../store/actions/index';
-import './EventDetail.css';
-
 import { GoDiffAdded, GoReport } from 'react-icons/go';
 
 import { GrLike } from 'react-icons/gr';
+
+import * as actionCreators from '../../../store/actions/index';
+import './EventDetail.css';
 
 class EventDetail extends Component {
   state = {
@@ -36,7 +36,7 @@ class EventDetail extends Component {
   onClickEditEvent = () => {
     this.props.history.push(`/details/modify/${this.state.event.id}/`);
   }
-  
+
   onClickBringEvent = () => {
 
   }
@@ -82,13 +82,13 @@ class EventDetail extends Component {
 
             <div className="right">
               <div className="btns">
-                <button className="bringEvent" onClick={() => {}} >
+                <button className="bringEvent" onClick={() => {}}>
                   <GoDiffAdded size="100%" color="black" />
                 </button>
-                <button className="likeEvent" onClick={() => {}} >
+                <button className="likeEvent" onClick={() => {}}>
                   <GrLike size="100%" color="#fff" />
                 </button>
-                <button className="reportEvent" onClick={() => {}} >
+                <button className="reportEvent" onClick={() => {}}>
                   <GoReport size="100%" color="red" />
                 </button>
               </div>
