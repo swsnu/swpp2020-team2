@@ -42,7 +42,7 @@ matrix:
     - pip install coveralls
     before_script:
     - mysql -e 'create database almanac_db;'
-    - mysql -e 'create user "altroot"@"localhost" identified by "";'
+    - mysql -e 'create user "altroot"@"localhost" identified by "1234qwerasdf";'
     - mysql -e 'grant all privileges on * . * to "altroot"@"localhost";'
     - mysql -e 'flush privileges;'
     script:

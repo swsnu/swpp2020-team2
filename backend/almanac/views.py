@@ -2,7 +2,6 @@
 The main code for views
 '''
 
-# from django.shortcuts import render
 import json
 import operator
 from functools import reduce
