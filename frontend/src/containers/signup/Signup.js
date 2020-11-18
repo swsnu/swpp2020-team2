@@ -24,7 +24,7 @@ class Signup extends Component {
   }
 
   signupHandler = () => {
-    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.university === '' || this.state.department === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
+    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
       alert('All fields must be filled.');
       return;
     }
