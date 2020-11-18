@@ -690,7 +690,7 @@ def create_event(request):
         image_id_list = req_data['image']
         category = Category.objects.get(id=req_data['category'])
         group = Group.objects.get(id=req_data['group'])
-        last_editor = Group.objects.get(id=req_data['last_editor'])
+        last_editor = User.objects.get(id=req_data['last_editor'])
         event = Event(
             title=req_data['title'],
             place=req_data['place'], date=req_data['date'],
@@ -699,6 +699,7 @@ def create_event(request):
             last_editor=last_editor,
             content=req_data['content']
         )
+        event.save()
         for t_id in tag_id_list:
             tag = Tag.objects.get(id=t_id)
             event.tag.add(tag)
@@ -753,7 +754,7 @@ def get_put_delete_event(request, event_id):
         image_id_list = req_data['image']
         category = Category.objects.get(id=req_data['category'])
         group = Group.objects.get(id=req_data['group'])
-        last_editor = Group.objects.get(id=req_data['last_editor'])
+        last_editor = User.objects.get(id=req_data['last_editor'])
         event = Event(
             title=req_data['title'],
             place=req_data['place'], date=req_data['date'],

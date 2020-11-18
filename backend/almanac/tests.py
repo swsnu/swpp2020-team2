@@ -1052,7 +1052,7 @@ class AlmanacEventTag(TransactionTestCase):
         self.event.tag.add(self.tag1)
         self.event.tag.add(self.tag2)
 
-    def test_get_event(self):
+    def test_get_edit_delete_event(self):
 
         '''
         a function docstring
@@ -1080,3 +1080,44 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+    def test_create_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/event/create/', json.dumps({
+            'title': 'New Event Title',
+            'category': self.category.id,
+            'group': self.group.id,
+            'place': 'New Event Place',
+            'date': '2020-11-05',
+            'begin_time': '14:20:00',
+            'end_time': '16:40:00',
+            'content': 'Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id, self.tag2.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/event/create/', json.dumps({
+            'title': 'New Event Title',
+            'category': self.category.id,
+            'group': self.group.id,
+            'place': 'New Event Place',
+            'date': '2020-11-05',
+            'begin_time': '14:20:00',
+            'end_time': '16:40:00',
+            'content': 'Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id, self.tag2.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('New Event Title', response.content.decode())
