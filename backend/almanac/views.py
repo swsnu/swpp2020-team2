@@ -726,15 +726,16 @@ def get_event_filtered(request):
             q_list = [Q(tag=Tag.objects.get(id=x)) for x in tag_list]
             event_objects = event_objects.filter(reduce(operator.or_, q_list))
         # Sort(List)
-        if 'id' in sort_options_list:
-            event_objects = event_objects.order_by('id')
-        if 'date' in sort_options_list:
-            event_objects = event_objects.order_by('date')
+        for option in sort_options_list:
+            if option == 'id':
+                event_objects = event_objects.order_by('id')
+            if option == 'date':
+                event_objects = event_objects.order_by('date')
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
             event_objects = event_objects[count_options_dict['from']:]
         if 'num' in count_options_dict.keys():
-            event_objects = event_objects[count_options_dict['num']:]
+            event_objects = event_objects[:count_options_dict['num']]
         events = [{'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
