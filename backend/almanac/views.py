@@ -755,14 +755,15 @@ def get_put_delete_event(request, event_id):
         category = Category.objects.get(id=req_data['category'])
         group = Group.objects.get(id=req_data['group'])
         last_editor = User.objects.get(id=req_data['last_editor'])
-        event = Event(
-            title=req_data['title'],
-            place=req_data['place'], date=req_data['date'],
-            category=category, group=group,
-            begin_time=req_data['begin_time'], end_time=req_data['end_time'],
-            last_editor=last_editor,
-            content=req_data['content']
-        )
+        event.title = req_data['title']
+        event.place = req_data['place']
+        event.date = req_data['date']
+        event.category = category
+        event.group = group
+        event.begin_time = req_data['begin_time']
+        event.end_time = req_data['end_time']
+        event.last_editor = last_editor
+        event.content = req_data['content']
         event.tag.clear()
         event.image.clear()
         for t_id in tag_id_list:
