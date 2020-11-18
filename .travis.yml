@@ -37,7 +37,7 @@ matrix:
     - mysql -e 'grant all privileges on * . * to "altroot"@"localhost";'
     - mysql -e 'flush privileges;'
     script:
-    - pylint **/*.py --load-plugins pylint_django
+    - pylint **/*.py --rcfile=.pylintrc --load-plugins pylint_django
     - coverage run --source='.' manage.py test
     - coverage xml
     after_success:

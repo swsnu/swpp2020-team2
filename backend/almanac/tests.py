@@ -326,6 +326,44 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['university'], University.get_default().id)
         self.assertEqual(response.json()['department'], Department.get_default().id)
 
+    def test_user_get_signin_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/user/signin/full/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
+
     def test_user_get(self):
 
         '''
@@ -360,6 +398,62 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['department'], Department.get_default().id)
 
         response = client.get('/api/user/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+    def test_user_get_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id1=(User.objects.get(username='ray017').id)
+        id2=(User.objects.get(username='taekop').id)
+        id_wrong = max(id1, id2)+1
+
+        response = client.head('/api/user/{}/full/'.format(id1))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/user/{}/full/'.format(id1))
+        self.assertEqual(response.json()['username'], 'ray017')
+        self.assertEqual(response.json()['first_name'], 'Raegeon')
+        self.assertEqual(response.json()['last_name'], 'Lee')
+        self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], False)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
+
+        response = client.get('/api/user/{}/full/'.format(id2))
+        self.assertEqual(response.json()['username'], 'taekop')
+        self.assertEqual(response.json()['first_name'], 'Seungtaek')
+        self.assertEqual(response.json()['last_name'], 'Oh')
+        self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
+        self.assertEqual(response.json()['is_active'], True)
+        self.assertEqual(response.json()['university'], University.get_default().id)
+        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['background'], Background.get_default().id)
+        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['likes'], [])
+        self.assertEqual(response.json()['brings'], [])
+        self.assertEqual(response.json()['join_requests'], [])
+        self.assertEqual(response.json()['likes_group'], [])
+        self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
+
+        response = client.get('/api/user/{}/full/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
 class AlmanacUnivDeptCatTag(TransactionTestCase):
@@ -870,7 +964,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
 
         response = client.get('/api/image/')
         self.assertEqual(len(response.json()), 3) # 2(user1,2)+1
-        self.assertEqual(response.json()[2]['image_file_url'], 'image/home.jpg') # since no 'url'
+        self.assertEqual(response.json()[2]['image_file_url'], '/image/home.jpg')
 
         with open(settings.MEDIA_ROOT / 'image/test/signup.jpg', 'rb') as file_pt:
             response = client.post('/api/image/', {'name': 'signup', 'imagefile': [file_pt]})
@@ -967,7 +1061,101 @@ class AlmanacEventTag(TransactionTestCase):
         self.event.tag.add(self.tag1)
         self.event.tag.add(self.tag2)
 
+    def test_get_event_simple(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event.id
+
+        response = client.head('/api/event/simple/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/simple/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_event)
+        self.assertEqual(response.json()[0]['title'], 'Event Title')
+        self.assertEqual(response.json()[0]['category'], self.event.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event.group.id)
+        self.assertEqual(response.json()[0]['date'], self.event.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+
     def test_get_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event.id
+
+        response = client.head('/api/event/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_event)
+        self.assertEqual(response.json()[0]['title'], 'Event Title')
+        self.assertEqual(response.json()[0]['category'], self.event.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event.group.id)
+        self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
+        self.assertEqual(response.json()[0]['place'], self.event.place)
+        self.assertEqual(response.json()[0]['date'], self.event.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+        self.assertEqual(response.json()[0]['content'], self.event.content)
+        self.assertEqual(response.json()[0]['image'], [])
+        self.assertEqual(response.json()[0]['last_editor'], self.event.last_editor.id)
+
+    def test_create_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/event/create/', json.dumps({
+            'title': 'New Event Title',
+            'category': self.category.id,
+            'group': self.group.id,
+            'place': 'New Event Place',
+            'date': '2020-11-06',
+            'begin_time': '08:20:00',
+            'end_time': '13:40:00',
+            'content': 'New Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/event/create/', json.dumps({
+            'title': 'New Event Title',
+            'category': self.category.id,
+            'group': self.group.id,
+            'place': 'New Event Place',
+            'date': '2020-11-06',
+            'begin_time': '08:20:00',
+            'end_time': '13:40:00',
+            'content': 'New Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('New Event Title', response.content.decode())
+        self.assertIn('New Event Place', response.content.decode())
+        self.assertIn('New Event Content', response.content.decode())
+
+    def test_get_edit_delete_event(self):
 
         '''
         a function docstring
@@ -982,26 +1170,65 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'Event Title')
         self.assertEqual(response.json()['category'], self.event.category.id)
+        self.assertEqual(response.json()['group'], self.event.group.id)
         self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
         self.assertEqual(response.json()['place'], self.event.place)
         self.assertEqual(response.json()['date'], self.event.date)
         self.assertEqual(response.json()['begin_time'], self.event.begin_time)
         self.assertEqual(response.json()['end_time'], self.event.end_time)
         self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['image'], [])
         self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-        #response = client.delete('/api/event/{}/'.format(id_event))
-        #self.assertEqual(response.status_code, 200)
+        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Event Title', response.content.decode())
+        self.assertIn('Event Place', response.content.decode())
+        self.assertIn('Event Content', response.content.decode())
 
-        #response = client.get('/api/event/')
-        #self.assertEqual(len(response.json()), 0)
+        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+            'title': 'New Event Title',
+            'category': self.category.id,
+            'group': self.group.id,
+            'place': 'New Event Place',
+            'date': '2020-11-06',
+            'begin_time': '08:20:00',
+            'end_time': '13:40:00',
+            'content': 'New Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('New Event Title', response.content.decode())
+        self.assertIn('New Event Place', response.content.decode())
+        self.assertIn('New Event Content', response.content.decode())
 
-        #default_univ = University.get_default()
-        #default_id = default_univ.id
-        #self.assertEqual(default_id, snu_id)
-        #self.assertEqual('Seoul National University', str(default_univ))
+        response = client.get('/api/event/{}/'.format(id_event)) #id_event??
+        self.assertEqual(response.json()['id'], id_event)
+        self.assertEqual(response.json()['title'], 'New Event Title')
+        self.assertEqual(response.json()['category'], self.category.id)
+        self.assertEqual(response.json()['group'], self.group.id)
+        self.assertEqual(response.json()['tag'], [self.tag1.id])
+        self.assertEqual(response.json()['place'], 'New Event Place')
+        self.assertEqual(response.json()['date'], '2020-11-06')
+        self.assertEqual(response.json()['begin_time'], '08:20:00')
+        self.assertEqual(response.json()['end_time'], '13:40:00')
+        self.assertEqual(response.json()['content'], 'New Event Content')
+        self.assertEqual(response.json()['image'], [])
+        self.assertEqual(response.json()['last_editor'], self.user2.id)
+
+        response = client.delete('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/event/')
+        self.assertEqual(len(response.json()), 0)
