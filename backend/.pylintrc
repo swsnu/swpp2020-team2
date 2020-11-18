@@ -1,2 +1,2 @@
-disable =
-    too-many-lines
+[MESSAGES CONTROL]
+disable=too-many-lines

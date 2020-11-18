@@ -696,6 +696,34 @@ def get_event(request):
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
+def get_event_filtered(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        req_data = json.loads(request.body.decode())
+        #tag_id_list = req_data['tag']
+        #image_id_list = req_data['image']
+        events = [{'id': event.id,
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': event.category.id,
+        'tag': [tag.id for tag in event.tag.all()],
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': event.last_editor.id,
+        'image': [image.id for image in event.image.all()],
+        'content': event.content
+        } for event in Event.objects.all().order_by('id')]
+        return JsonResponse(events, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
 def create_event(request):
 
     '''
