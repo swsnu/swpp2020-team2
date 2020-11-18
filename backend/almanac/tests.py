@@ -1052,7 +1052,7 @@ class AlmanacEventTag(TransactionTestCase):
         self.event.tag.add(self.tag1)
         self.event.tag.add(self.tag2)
 
-    def test_get_edit_delete_event(self):
+    def test_get_event(self):
 
         '''
         a function docstring
@@ -1061,25 +1061,23 @@ class AlmanacEventTag(TransactionTestCase):
         client = Client()
 
         id_event = self.event.id
-        id_wrong = id_event+1
 
-        response = client.head('/api/event/{}/'.format(id_event))
+        response = client.head('/api/event/')
         self.assertEqual(response.status_code, 405)
 
-        response = client.get('/api/event/{}/'.format(id_event))
-        self.assertEqual(response.json()['title'], 'Event Title')
-        self.assertEqual(response.json()['category'], self.event.category.id)
-        self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
-        self.assertEqual(response.json()['place'], self.event.place)
-        self.assertEqual(response.json()['date'], self.event.date)
-        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()['end_time'], self.event.end_time)
-        self.assertEqual(response.json()['content'], self.event.content)
-        self.assertEqual(response.json()['image'], [])
-        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
-
-        response = client.get('/api/event/{}/'.format(id_wrong))
-        self.assertEqual(response.status_code, 404)
+        response = client.get('/api/event/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_event)
+        self.assertEqual(response.json()[0]['title'], 'Event Title')
+        self.assertEqual(response.json()[0]['category'], self.event.category.id)
+        self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
+        self.assertEqual(response.json()[0]['place'], self.event.place)
+        self.assertEqual(response.json()[0]['date'], self.event.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+        self.assertEqual(response.json()[0]['content'], self.event.content)
+        self.assertEqual(response.json()[0]['image'], [])
+        self.assertEqual(response.json()[0]['last_editor'], self.event.last_editor.id)
 
     def test_create_event(self):
 
@@ -1110,10 +1108,10 @@ class AlmanacEventTag(TransactionTestCase):
             'category': self.category.id,
             'group': self.group.id,
             'place': 'New Event Place',
-            'date': '2020-11-05',
-            'begin_time': '14:20:00',
-            'end_time': '16:40:00',
-            'content': 'Event Content',
+            'date': '2020-11-06',
+            'begin_time': '08:20:00',
+            'end_time': '13:40:00',
+            'content': 'New Event Content',
             'last_editor': self.user2.id,
             'image': [],
             'tag': [self.tag1.id, self.tag2.id]
@@ -1121,3 +1119,35 @@ class AlmanacEventTag(TransactionTestCase):
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertIn('New Event Title', response.content.decode())
+        self.assertIn('New Event Place', response.content.decode())
+        self.assertIn('New Event Content', response.content.decode())
+
+    def test_get_edit_delete_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event.id
+        id_wrong = id_event+1
+
+        response = client.head('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.json()['id'], id_event)
+        self.assertEqual(response.json()['title'], 'Event Title')
+        self.assertEqual(response.json()['category'], self.event.category.id)
+        self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
+        self.assertEqual(response.json()['place'], self.event.place)
+        self.assertEqual(response.json()['date'], self.event.date)
+        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event.end_time)
+        self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['image'], [])
+        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
+
+        response = client.get('/api/event/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
