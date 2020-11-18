@@ -650,6 +650,27 @@ def get_delete_image(request, image_id):
 
 # Event
 
+def get_event_simple(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        events = [{'id': event.id,
+        'title': event.title,
+        'date': event.date,
+        'category': event.category.id,
+        'group': event.group.id,
+        'begin_time': event.begin_time,
+        'end_time': event.end_time
+        } for event in Event.objects.all().order_by('id')]
+        return JsonResponse(events, safe=False)
+    return HttpResponseNotAllowed(['GET'])
+
 def get_event(request):
 
     '''
@@ -790,6 +811,25 @@ def get_put_delete_event(request, event_id):
     return HttpResponse(status=200)
 
 # Group
+
+def get_group_simple(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if request.method == 'GET':
+        groups = [{'id': group.id, 'name': group.name,
+        'member': [user.id for user in group.member.all()],
+        'admin': [user.id for user in group.admin.all()],
+        'king': group.king.id,
+        'description': group.description, 'privacy': group.privacy
+        } for group in Group.objects.all().order_by('id')]
+        return JsonResponse(groups, safe=False)
+    return HttpResponseNotAllowed(['GET'])
 
 def get_group(request):
 

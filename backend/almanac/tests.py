@@ -1052,6 +1052,29 @@ class AlmanacEventTag(TransactionTestCase):
         self.event.tag.add(self.tag1)
         self.event.tag.add(self.tag2)
 
+    def test_get_event_simple(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event.id
+
+        response = client.head('/api/event/simple/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/simple/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_event)
+        self.assertEqual(response.json()[0]['title'], 'Event Title')
+        self.assertEqual(response.json()[0]['category'], self.event.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event.group.id)
+        self.assertEqual(response.json()[0]['date'], self.event.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+
     def test_get_event(self):
 
         '''
@@ -1070,6 +1093,7 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
         self.assertEqual(response.json()[0]['category'], self.event.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event.group.id)
         self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
         self.assertEqual(response.json()[0]['place'], self.event.place)
         self.assertEqual(response.json()[0]['date'], self.event.date)
