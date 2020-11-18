@@ -4,6 +4,8 @@ The main code for views
 
 # from django.shortcuts import render
 import json
+import operator
+from functools import reduce
 from json import JSONDecodeError
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
@@ -13,6 +15,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes
+from django.db.models import Q
 
 from almanac.models import User, UserPreference, \
     University, Department, Event, Group, Background, Language, Category, Tag, Image
@@ -662,11 +665,11 @@ def get_event_simple(request):
     if request.method == 'GET':
         events = [{'id': event.id,
         'title': event.title,
-        'date': event.date,
+        'date': str(event.date),
         'category': event.category.id,
         'group': event.group.id,
-        'begin_time': event.begin_time,
-        'end_time': event.end_time
+        'begin_time': str(event.begin_time),
+        'end_time': str(event.end_time)
         } for event in Event.objects.all().order_by('id')]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
@@ -683,12 +686,12 @@ def get_event(request):
     if request.method == 'GET':
         events = [{'id': event.id,
         'title': event.title,
-        'place': event.place, 'date': event.date,
+        'place': event.place, 'date': str(event.date),
         'category': event.category.id,
         'tag': [tag.id for tag in event.tag.all()],
         'group': event.group.id,
-        'begin_time': event.begin_time,
-        'end_time': event.end_time,
+        'begin_time': str(event.begin_time),
+        'end_time': str(event.end_time),
         'last_editor': event.last_editor.id,
         'image': [image.id for image in event.image.all()],
         'content': event.content
@@ -707,20 +710,32 @@ def get_event_filtered(request):
 
     if request.method == 'GET':
         req_data = json.loads(request.body.decode())
-        #tag_id_list = req_data['tag']
-        #image_id_list = req_data['image']
+        filter_options_dict = req_data['filter_options']
+        sort_options_dict = req_data['sort_options']
+        count_options_dict = req_data['count_options']
+        event_objects = Event.objects.all()
+        if 'tag' in filter_options_dict.keys():
+            tag_list = filter_options_dict['tag']
+            q_list = [Q(tag=Tag.objects.get(id=x)) for x in tag_list]
+            event_objects = event_objects.filter(reduce(operator.or_, q_list))
+        if 'id' in sort_options_dict.keys():
+            event_objects = event_objects.order_by('id')
+        if 'from' in count_options_dict.keys():
+            event_objects = event_objects[count_options_dict['from']:]
+        if 'num' in count_options_dict.keys():
+            event_objects = event_objects[count_options_dict['num']:]
         events = [{'id': event.id,
         'title': event.title,
-        'place': event.place, 'date': event.date,
+        'place': event.place, 'date': str(event.date),
         'category': event.category.id,
         'tag': [tag.id for tag in event.tag.all()],
         'group': event.group.id,
-        'begin_time': event.begin_time,
-        'end_time': event.end_time,
+        'begin_time': str(event.begin_time),
+        'end_time': str(event.end_time),
         'last_editor': event.last_editor.id,
         'image': [image.id for image in event.image.all()],
         'content': event.content
-        } for event in Event.objects.all().order_by('id')]
+        } for event in event_objects]
         return JsonResponse(events, safe=False)
     return HttpResponseNotAllowed(['GET'])
 
@@ -758,12 +773,12 @@ def create_event(request):
         event.save()
         event_dict = {'id': event.id,
         'title': event.title,
-        'place': event.place, 'date': event.date,
+        'place': event.place, 'date': str(event.date),
         'category': event.category.id,
         'tag': [tag.id for tag in event.tag.all()],
         'group': event.group.id,
-        'begin_time': event.begin_time,
-        'end_time': event.end_time,
+        'begin_time': str(event.begin_time),
+        'end_time': str(event.end_time),
         'last_editor': event.last_editor.id,
         'image': [image.id for image in event.image.all()],
         'content': event.content}
@@ -799,37 +814,48 @@ def get_put_delete_event(request, event_id):
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         req_data = json.loads(request.body.decode())
-        tag_id_list = req_data['tag']
-        image_id_list = req_data['image']
-        category = Category.objects.get(id=req_data['category'])
-        group = Group.objects.get(id=req_data['group'])
-        last_editor = User.objects.get(id=req_data['last_editor'])
-        event.title = req_data['title']
-        event.place = req_data['place']
-        event.date = req_data['date']
-        event.category = category
-        event.group = group
-        event.begin_time = req_data['begin_time']
-        event.end_time = req_data['end_time']
-        event.last_editor = last_editor
-        event.content = req_data['content']
-        event.tag.clear()
-        event.image.clear()
-        for t_id in tag_id_list:
-            tag = Tag.objects.get(id=t_id)
-            event.tag.add(tag)
-        for i_id in image_id_list:
-            image = Image.objects.get(id=i_id)
-            event.image.add(image)
+        if 'category' in req_data.keys():
+            category = Category.objects.get(id=req_data['category'])
+            event.category = category
+        if 'group' in req_data.keys():
+            group = Group.objects.get(id=req_data['group'])
+            event.group = group
+        if 'last_editor' in req_data.keys():
+            last_editor = User.objects.get(id=req_data['last_editor'])
+            event.last_editor = last_editor
+        if 'title' in req_data.keys():
+            event.title = req_data['title']
+        if 'place' in req_data.keys():
+            event.place = req_data['place']
+        if 'date' in req_data.keys():
+            event.date = req_data['date']
+        if 'begin_time' in req_data.keys():
+            event.begin_time = req_data['begin_time']
+        if 'end_time' in req_data.keys():
+            event.end_time = req_data['end_time']
+        if 'content' in req_data.keys():
+            event.content = req_data['content']
+        if 'tag' in req_data.keys():
+            tag_id_list = req_data['tag']
+            event.tag.clear()
+            for t_id in tag_id_list:
+                tag = Tag.objects.get(id=t_id)
+                event.tag.add(tag)
+        if 'image' in req_data.keys():
+            image_id_list = req_data['image']
+            event.image.clear()
+            for i_id in image_id_list:
+                image = Image.objects.get(id=i_id)
+                event.image.add(image)
         event.save()
         event_dict = {'id': event.id,
         'title': event.title,
-        'place': event.place, 'date': event.date,
+        'place': event.place, 'date': str(event.date),
         'category': event.category.id,
         'tag': [tag.id for tag in event.tag.all()],
         'group': event.group.id,
-        'begin_time': event.begin_time,
-        'end_time': event.end_time,
+        'begin_time': str(event.begin_time),
+        'end_time': str(event.end_time),
         'last_editor': event.last_editor.id,
         'image': [image.id for image in event.image.all()],
         'content': event.content}

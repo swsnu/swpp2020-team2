@@ -1178,6 +1178,15 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
         response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+            'title': 'Old Event Title'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Old Event Title', response.content.decode())
+        self.assertIn('Event Place', response.content.decode())
+        self.assertIn('Event Content', response.content.decode())
+
+        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
             'title': 'New Event Title',
             'category': self.category.id,
             'group': self.group.id,
