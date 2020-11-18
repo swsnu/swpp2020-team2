@@ -16,10 +16,13 @@ matrix:
     - yarn add coveralls
     - gem install coveralls-lcov
     script:
-    - "./node_modules/.bin/eslint src/"
+    - ./node_modules/.bin/eslint src/
     - yarn test --coverage --watchAll=false
+    - cd ..
+    - sonar-scanner
     after_success:
-    - coveralls-locv -v -n coverage/lcov.info > coverage.json
+    - cd frontend
+    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - language: python
     python: '3.7'
     services: mysql
@@ -38,8 +41,13 @@ matrix:
     - mysql -e 'flush privileges;'
     script:
     - pylint **/*.py --rcfile=.pylintrc --load-plugins pylint_django
+    - python manage.py migrate
     - coverage run --source='.' manage.py test
     - coverage xml
+    - cd ..
+    - sonar-scanner
     after_success:
-    - coveralls --merge=../frontend/coverage.json
-    - cd .. && sonar-scanner
+    - cd backend
+    - coveralls
+    after_script:
+    - cd ..
