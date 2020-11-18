@@ -189,6 +189,9 @@ def get_user_signin_full(request):
         'join_requests': [group.id for group in user_preference.join_requests.all()],
         'likes_group': [group.id for group in user_preference.likes_group.all()],
         'gets_notification': [group.id for group in user_preference.gets_notification.all()],
+        'members': [group.id for group in user.member_group.all()],
+        'admins': [group.id for group in user.admin_group.all()],
+        'kings': [group.id for group in user.king_group.all()],
         }
         return JsonResponse(user_dict)
 
@@ -248,6 +251,9 @@ def get_user_full(request, user_id):
         'join_requests': [group.id for group in user_preference.join_requests.all()],
         'likes_group': [group.id for group in user_preference.likes_group.all()],
         'gets_notification': [group.id for group in user_preference.gets_notification.all()],
+        'members': [group.id for group in user.member_group.all()],
+        'admins': [group.id for group in user.admin_group.all()],
+        'kings': [group.id for group in user.king_group.all()],
         }
         return JsonResponse(user_dict)
 

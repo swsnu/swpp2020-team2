@@ -360,6 +360,9 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['join_requests'], [])
         self.assertEqual(response.json()['likes_group'], [])
         self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
 
     def test_user_get(self):
 
@@ -427,6 +430,9 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['join_requests'], [])
         self.assertEqual(response.json()['likes_group'], [])
         self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
 
         response = client.get('/api/user/{}/full/'.format(id2))
         self.assertEqual(response.json()['username'], 'taekop')
@@ -443,6 +449,9 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['join_requests'], [])
         self.assertEqual(response.json()['likes_group'], [])
         self.assertEqual(response.json()['gets_notification'], [])
+        self.assertEqual(response.json()['members'], [])
+        self.assertEqual(response.json()['admins'], [])
+        self.assertEqual(response.json()['kings'], [])
 
         response = client.get('/api/user/{}/full/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
@@ -1178,11 +1187,10 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
         response = client.put('/api/event/{}/'.format(id_event), json.dumps({
-            'title': 'Old Event Title'
         }),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Old Event Title', response.content.decode())
+        self.assertIn('Event Title', response.content.decode())
         self.assertIn('Event Place', response.content.decode())
         self.assertIn('Event Content', response.content.decode())
 
