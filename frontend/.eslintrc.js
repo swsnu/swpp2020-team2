@@ -47,6 +47,10 @@ module.exports = {
     "no-plusplus": 0,
     "block-scoped-var": 0,
     "radix": ["error", "as-needed"],
-    "react/jsx-one-expression-per-line": 0,
+    "no-nested-ternary": 0,
+    "react/button-has-type": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "max-len": 0,
+    "global-require": 0,
   },
 };

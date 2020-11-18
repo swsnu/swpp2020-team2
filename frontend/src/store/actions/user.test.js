@@ -4,7 +4,7 @@ import store from '../store';
 import * as actionCreators from './user';
 
 describe('actions', () => {
-  window.alert=jest.fn();
+  window.alert = jest.fn();
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -34,12 +34,12 @@ describe('actions', () => {
       .mockImplementation((url) => new Promise((resolve, reject) => {
         const result = {
           status: 401,
-          response:{status:401}
+          response: { status: 401 },
         };
         reject(result);
       }));
-    const spyOnAlert=jest.spyOn(window,'alert')
-    .mockImplementation();
+    const spyOnAlert = jest.spyOn(window, 'alert')
+      .mockImplementation();
 
     store.dispatch(actionCreators.signIn(stubUser)).then(() => {
       expect(spyOnAlert).toHaveBeenCalledTimes(1);
@@ -53,12 +53,12 @@ describe('actions', () => {
       .mockImplementation((url) => new Promise((resolve, reject) => {
         const result = {
           status: 400,
-          response:{status:400}
+          response: { status: 400 },
         };
         reject(result);
       }));
-    const spyOnAlert=jest.spyOn(window,'alert')
-    .mockImplementation();
+    const spyOnAlert = jest.spyOn(window, 'alert')
+      .mockImplementation();
 
     store.dispatch(actionCreators.signIn(stubUser)).then(() => {
       expect(spyOnAlert).toHaveBeenCalledTimes(0);

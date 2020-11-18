@@ -3,6 +3,7 @@ import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
+import { createBrowserHistory } from 'history';
 import EventModify from './EventModify';
 
 import getMockStore from '../../../test-utils/mocks';
@@ -10,39 +11,38 @@ import getMockStore from '../../../test-utils/mocks';
 import * as actionCreators from '../../../store/actions/articles';
 import * as actionCreators_user from '../../../store/actions/users';
 */
-import {createBrowserHistory} from 'history'; 
 
 const stubInitialState = [
-    
+
 ];
 
 const mockStore = getMockStore(stubInitialState);
 
 describe('<ArticleModify />', () => {
-    let eventModify;
+  let eventModify;
 
-    const history = createBrowserHistory();
+  const history = createBrowserHistory();
 
-    beforeEach(() => {
-        eventModify = (
-            <Provider store={mockStore}>
-                <BrowserRouter>
-                    <Switch>
-                        <Route path='/' exact component={EventModify} />
-                    </Switch>
-                </BrowserRouter>
-            </Provider>
-        );
-        history.push('/');
-    })
+  beforeEach(() => {
+    eventModify = (
+      <Provider store={mockStore}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact component={EventModify} />
+          </Switch>
+        </BrowserRouter>
+      </Provider>
+    );
+    history.push('/');
+  });
 
-    it('should render eventModify without errors', () => {
-        const component = mount(eventModify);
-        const wrapper = component.find('.EventModify');
-        expect(wrapper.length).toBe(1);
-    });
+  it('should render eventModify without errors', () => {
+    const component = mount(eventModify);
+    const wrapper = component.find('.EventModify');
+    expect(wrapper.length).toBe(1);
+  });
 
-    /*
+  /*
     it(`should set state properly on title input`, () => {
         const title = 'TEST_Modify_TITLE'
         const component = mount(articleModify);
@@ -71,7 +71,7 @@ describe('<ArticleModify />', () => {
 
         component.find('#article-title-input').simulate('change', { target: { value: 'TEST_Modify_TITLE' } });
         component.find('#article-content-input').simulate('change', { target: { value: 'TEST_Modify_CONTENT' } });
-        
+
         wrapper.simulate('click');
         expect(spyPostArticle).toHaveBeenCalledTimes(1);
         expect(component.find('h1').text()).toBe('ArticleDetail');
