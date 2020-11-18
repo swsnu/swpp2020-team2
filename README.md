@@ -82,7 +82,7 @@ mysql -u root -p
 In mysql, do followings in mysql (`mysql>` ):
 ```
 create database almanac_db;
-create user "altroot"@"localhost" identified by "";
+create user "altroot"@"localhost" identified by "1234qwerasdf";
 grant all privileges on * . * to "altroot"@"localhost";
 flush privileges;
 ```
