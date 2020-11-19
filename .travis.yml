@@ -8,6 +8,7 @@ matrix:
     cache:
     - yarn: true
     - pip: true
+    dist: bionic
     services: mysql
     language: node_js
     node_js: '12'
@@ -19,6 +20,7 @@ matrix:
     - gem install coveralls-lcov
     - cd ..
     - cd backend
+    - source ~/virtualenv/python3.7/bin/activate
     - pip install -r requirements.txt
     - pip install coveralls
     - cd ..
