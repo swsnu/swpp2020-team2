@@ -39,3 +39,10 @@ export const activate = (args) => (dispatch) => axios.get(`/api/signup/activate/
   .then((res) => {
     dispatch(activate_());
   });
+
+export const getUser_ = (user) => ({type: actionTypes.GET_USER, user });
+
+export const getUser = () => (dispatch) => axios.get('/api/user/signin/')
+  .then((res)=>{
+    dispatch(getUser_(res.data));
+  });
