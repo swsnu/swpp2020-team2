@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import TopBar from '../../../components/TopBar/TopBar';
+
 import * as actionCreators from '../../../store/actions/index';
 
 class GroupSearch extends Component {
   state={
-    searchKey:'',
+    searchQuery:'',
   }
 
   componentDidMount(){
-    this.setState({searchKey:this.props.match.params.searchKey});
-    this.props.getUser();
+    this.setState({searchQuery:this.props.match.params.searchQuery});
+    this.props.getUserFull();
   }
 
   componentDidUpdate(prevProps,prevState){
@@ -20,19 +22,23 @@ class GroupSearch extends Component {
   }
 
   onSearchHandler=()=>{
-    if(this.state.searchKey==='')this.props.history.push('/group/search');
-    else this.props.history.push(`/group/search/${this.state.searchKey}`);
+    if(this.state.searchQuery==='')this.props.history.push('/group/search');
+    else this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
   render(){
     let searchResult=null;
 
+    //searchResult=
     //make searchResult
 
     return (
       <div className="GroupSearch">
+        <div>
+          <TopBar />
+        </div>
+
         <h1>Group</h1>
-        <div className="topBar" />
 
         <input
           id="search-input"
@@ -51,11 +57,11 @@ class GroupSearch extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userInfo: state.ur.userInfo,
+  userFullInfo: state.ur.userFullInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUser: ()=>dispatch(actionCreators.getUser()),
+  getUserFull: ()=>dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearch);

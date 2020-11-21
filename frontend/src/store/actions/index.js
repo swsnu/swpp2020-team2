@@ -3,6 +3,7 @@ export {
   signUp,
   activate,
   getUser,
+  getUserFull,
 } from './user';
 
 export {

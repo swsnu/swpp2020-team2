@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import TopBar from '../../../components/TopBar/TopBar';
+
 import * as actionCreators from '../../../store/actions/index';
 
 class GroupMain extends Component {
@@ -12,13 +14,13 @@ class GroupMain extends Component {
   }
 
   componentDidMount(){
-    this.props.getUser();
+    this.props.getUserFull();
   }
 
   componentDidUpdate(prevProps,prevState){
     if(prevProps!==this.props){
       if(!this.props.signinedUser)this.props.history.replace('/Main');
-      else this.setState({joinedGroup:this.props.userInfo.members,noticedGroup:this.props.gets_notification,likedGroup:this.props.likes_group});
+      else this.setState({joinedGroup:this.props.userFullInfo.members,noticedGroup:this.props.userFullInfo.gets_notification,likedGroup:this.props.userFullInfo.likes_group});
     }
   }
 
@@ -32,15 +34,21 @@ class GroupMain extends Component {
     let noticedGroup=null;
     let likedGroup=null;
 
-    //make joinedGroup by this.state.joinedGroup with components/groupbox/groupbox
+    //please implement components/groupbox/Groupbox first
+    //make joinedGroup by this.state.joinedGroup with components/groupbox/Groupbox
     //make noticedGroup by this.state.noticedGroup
     //make likedGroup by this.state.likedGroup
 
     return (
       <div className="GroupMain">
-        <h1>Group</h1>
-        <div className="topBar" />
+        <div>
+          <TopBar />
+        </div>
 
+        <h1>Group</h1>
+
+        <div><button id="create-group-button" onClick={()=>this.props.history.push('/group/create')}>Create Group</button></div>
+        <br/>
         <input
           id="search-input"
           type="text"
@@ -48,6 +56,7 @@ class GroupMain extends Component {
           onChange={(event) => this.setState({ searchKey: event.target.value })}
         />
         <button id="search-button" onClick={()=>this.onSearchHandler()}>Search!</button>
+        <div>search with blank to see all groups</div>
         <h2>My Groups</h2>
         {joinedGroup}
         <h2>Noticing Groups</h2>
@@ -61,11 +70,11 @@ class GroupMain extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userInfo: state.ur.userInfo,
+  userFullInfo: state.ur.userFullInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUser: ()=>dispatch(actionCreators.getUser()),
+  getUserFull: ()=>dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMain);

@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   signinedUser: null,
   userInfo: null,
+  userFullInfo:null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -15,6 +16,8 @@ const userReducer = (state = initialState, action) => {
       return state;
     case actionTypes.GET_USER:
       return { ...state, signinedUser: action.user.id, userInfo: action.user };
+    case actionTypes.GET_USER_FULL:
+      return {...state,signinedUser:action.user.id,userFullInfo:action.user};
     default:
       break;
   }
