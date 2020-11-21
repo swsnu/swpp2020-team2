@@ -7,20 +7,20 @@ import * as actionCreators from '../../../store/actions/index';
 
 class GroupCreate extends Component {
   state={
-    groupName:'',
-    groupDescription:'',
+    groupName: '',
+    groupDescription: '',
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getUser();
   }
 
-  onCreateHandler=()=>{
+  onCreateHandler=() => {
 
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div className="GroupCreate">
         <div>
           <TopBar />
@@ -34,8 +34,8 @@ class GroupCreate extends Component {
             id="group-name-input"
             type="text"
             value={this.state.groupName}
-            onChange={(event)=>this.setState({groupName:event.target.value})}
-          ></input>
+            onChange={(event) => this.setState({ groupName: event.target.value })}
+          />
         </div>
         <div>
           Group Description:
@@ -44,10 +44,10 @@ class GroupCreate extends Component {
             type="text"
             rows="4"
             value={this.state.groupDescription}
-            onChange={(event)=>this.setState({groupDescription:event.target.value})}
-          ></textarea>
+            onChange={(event) => this.setState({ groupDescription: event.target.value })}
+          />
         </div>
-        <button id="create-group-button" onClick={()=>this.onCreateHandler()}>Create group!</button>
+        <button id="create-group-button" onClick={() => this.onCreateHandler()}>Create group!</button>
       </div>
     );
   }
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUser: ()=>dispatch(actionCreators.getUser()),
+  getUser: () => dispatch(actionCreators.getUser()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupCreate);

@@ -7,37 +7,35 @@ import * as actionCreators from '../../../store/actions/index';
 
 class GroupMain extends Component {
   state={
-    searchKey:'',
-    joinedGroup:[],
-    noticedGroup:[],
-    likedGroup:[],
+    searchKey: '',
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getUserFull();
   }
 
-  componentDidUpdate(prevProps,prevState){
-    if(prevProps!==this.props){
-      if(!this.props.signinedUser)this.props.history.replace('/Main');
-      else this.setState({joinedGroup:this.props.userFullInfo.members,noticedGroup:this.props.userFullInfo.gets_notification,likedGroup:this.props.userFullInfo.likes_group});
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      if (!this.props.signinedUser) this.props.history.replace('/Main');
     }
   }
 
-  onSearchHandler=()=>{
-    if(this.state.searchKey==='')this.props.history.push('/group/search');
+  onSearchHandler=() => {
+    if (this.state.searchKey === '') this.props.history.push('/group/search');
     else this.props.history.push(`/group/search/${this.state.searchKey}`);
   }
 
-  render(){
-    let joinedGroup=null;
-    let noticedGroup=null;
-    let likedGroup=null;
+  render() {
+    const joinedGroup = this.props.userFullInfo?.members;
+    const noticedGroup = this.props.userFullInfo?.gets_notification;
+    const likedGroup = this.props.userFullInfo?.likes_group;
+    const joinedGroupBoxes = null;
+    const noticedGroupBoxes = null;
+    const likedGroupBoxes = null;
 
-    //please implement components/groupbox/Groupbox first
-    //make joinedGroup by this.state.joinedGroup with components/groupbox/Groupbox
-    //make noticedGroup by this.state.noticedGroup
-    //make likedGroup by this.state.likedGroup
+    // please implement components/groupbox/Groupbox first
+    // joinedGroup will show groupboxes of joinedGroup
+    // same for noticeGroup, likedGroup.
 
     return (
       <div className="GroupMain">
@@ -47,22 +45,22 @@ class GroupMain extends Component {
 
         <h1>Group</h1>
 
-        <div><button id="create-group-button" onClick={()=>this.props.history.push('/group/create')}>Create Group</button></div>
-        <br/>
+        <div><button id="create-group-button" onClick={() => this.props.history.push('/group/create')}>Create Group</button></div>
+        <br />
         <input
           id="search-input"
           type="text"
           value={this.state.searchKey}
           onChange={(event) => this.setState({ searchKey: event.target.value })}
         />
-        <button id="search-button" onClick={()=>this.onSearchHandler()}>Search!</button>
+        <button id="search-button" onClick={() => this.onSearchHandler()}>Search!</button>
         <div>search with blank to see all groups</div>
         <h2>My Groups</h2>
-        {joinedGroup}
+        {joinedGroupBoxes}
         <h2>Noticing Groups</h2>
-        {noticedGroup}
+        {noticedGroupBoxes}
         <h2>Liked Groups</h2>
-        {likedGroup}
+        {likedGroupBoxes}
       </div>
     );
   }
@@ -74,7 +72,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserFull: ()=>dispatch(actionCreators.getUserFull()),
+  getUserFull: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMain);

@@ -7,30 +7,29 @@ import * as actionCreators from '../../../store/actions/index';
 
 class GroupSearch extends Component {
   state={
-    searchQuery:'',
+    searchQuery: '',
   }
 
-  componentDidMount(){
-    this.setState({searchQuery:this.props.match.params.searchQuery});
+  componentDidMount() {
+    this.setState({ searchQuery: this.props.match.params.searchQuery });
     this.props.getUserFull();
   }
 
-  componentDidUpdate(prevProps,prevState){
-    if(prevProps!==this.props){
-      if(!this.props.signinedUser)this.props.history.replace('/Main');
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      if (!this.props.signinedUser) this.props.history.replace('/Main');
     }
   }
 
-  onSearchHandler=()=>{
-    if(this.state.searchQuery==='')this.props.history.push('/group/search');
+  onSearchHandler=() => {
+    if (this.state.searchQuery === '') this.props.history.push('/group/search');
     else this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  render(){
-    let searchResult=null;
+  render() {
+    const searchResult = null;
 
-    //searchResult=
-    //make searchResult
+    // should implement searchResult, which will have searchboxes of search result.
 
     return (
       <div className="GroupSearch">
@@ -46,7 +45,7 @@ class GroupSearch extends Component {
           value={this.state.searchKey}
           onChange={(event) => this.setState({ searchKey: event.target.value })}
         />
-        <button id="search-button" onClick={()=>this.onSearchHandler()}>Search!</button>
+        <button id="search-button" onClick={() => this.onSearchHandler()}>Search!</button>
 
         <h2>Search Result</h2>
         {searchResult}
@@ -61,7 +60,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserFull: ()=>dispatch(actionCreators.getUserFull()),
+  getUserFull: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearch);

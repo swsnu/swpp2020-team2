@@ -1,9 +1,11 @@
 import React from 'react';
 
-const GroupBox=(props)=>{
+// please implement groupbox, which will show group name, description, (like, join request, notice and report) buttons.
+
+const GroupBox = (props) => (
   <div className="GroupBox">
-    
+    This is Group box!
   </div>
-};
+);
 
 export default GroupBox;

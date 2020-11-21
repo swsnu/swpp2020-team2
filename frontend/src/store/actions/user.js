@@ -40,16 +40,16 @@ export const activate = (args) => (dispatch) => axios.get(`/api/signup/activate/
     dispatch(activate_());
   });
 
-export const getUser_ = (user) => ({type: actionTypes.GET_USER, user });
+export const getUser_ = (user) => ({ type: actionTypes.GET_USER, user });
 
 export const getUser = () => (dispatch) => axios.get('/api/user/signin/')
-  .then((res)=>{
+  .then((res) => {
     dispatch(getUser_(res.data));
   });
 
-export const getUserFull_ = (user)=>(dispatch)=>({type:actionTypes.GET_USER_FULL,user});
+export const getUserFull_ = (user) => (dispatch) => ({ type: actionTypes.GET_USER_FULL, user });
 
-export const getUserFull=()=>(dispatch)=>axios.get('/api/user/signin/full/')
-  .then((res)=>{
+export const getUserFull = () => (dispatch) => axios.get('/api/user/signin/full/')
+  .then((res) => {
     dispatch(getUserFull_(res.data));
   });
