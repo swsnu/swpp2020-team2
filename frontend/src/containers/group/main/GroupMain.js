@@ -33,7 +33,7 @@ class GroupMain extends Component {
     const noticedGroupBoxes = null;
     const likedGroupBoxes = null;
 
-    // please implement components/groupbox/Groupbox first
+    // should implement components/groupbox/Groupbox first
     // joinedGroup will show groupboxes of joinedGroup
     // same for noticeGroup, likedGroup.
 
