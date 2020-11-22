@@ -5,8 +5,13 @@ import TopBar from '../../../components/TopBar/TopBar';
 
 import * as actionCreators from '../../../store/actions/index';
 
+import { ImSearch } from 'react-icons/im';
+import { MdGroupAdd } from 'react-icons/md';
+
+import './GroupSearch.css';
+
 class GroupSearch extends Component {
-  state={
+  state = {
     searchQuery: '',
   }
 
@@ -21,7 +26,7 @@ class GroupSearch extends Component {
     }
   }
 
-  onSearchHandler=() => {
+  onSearchHandler = () => {
     if (this.state.searchQuery === '') this.props.history.push('/group/search');
     else this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
@@ -33,22 +38,37 @@ class GroupSearch extends Component {
 
     return (
       <div className="GroupSearch">
-        <div>
-          <TopBar />
+        <div className="topBar">
+          <TopBar history={this.props.history} />
         </div>
 
-        <h1>Group</h1>
+        <div className="container">
+          <div className="header">
+            <div className="searchBox">
+              <input
+                className="search-group-input"
+                type="text"
+                value={this.state.searchKey}
+                onChange={(event) => this.setState({ searchKey: event.target.value })}
+                placeholder=" 그룹명 입력 "
+              />
+              <button className="search-button" onClick={() => this.onSearchHandler()}>
+                <ImSearch size="24" />
+              </button>
+            </div>
 
-        <input
-          id="search-input"
-          type="text"
-          value={this.state.searchKey}
-          onChange={(event) => this.setState({ searchKey: event.target.value })}
-        />
-        <button id="search-button" onClick={() => this.onSearchHandler()}>Search!</button>
+            <div className="createBox">
+              <button className="create-group-button" onClick={() => this.props.history.push('/group/create')}>
+                <MdGroupAdd size="24" />
+                <div className="text">Create Group</div>
+              </button>
+            </div>
+          </div>
 
-        <h2>Search Result</h2>
-        {searchResult}
+          <h2>Group Search Result</h2>
+          {searchResult}
+        </div>
+
       </div>
     );
   }

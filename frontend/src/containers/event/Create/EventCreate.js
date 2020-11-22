@@ -7,6 +7,8 @@ import { BiDownArrow } from 'react-icons/bi';
 import * as actionCreators from '../../../store/actions/index';
 import './EventCreate.css';
 
+import TopBar from '../../../components/TopBar/TopBar';
+
 class EventCreate extends Component {
   state = {
     title: '',
@@ -32,9 +34,12 @@ class EventCreate extends Component {
 
     return (
       <div className="EventCreate">
-        <h1>EventCreate</h1>
-        <div className="topBar" />
+        <div className="topBar" >
+          <TopBar history={this.props.history}/>
+        </div>
 
+        <h1>EventCreate</h1>
+        
         <div className="container">
 
           <div className="btnBox">

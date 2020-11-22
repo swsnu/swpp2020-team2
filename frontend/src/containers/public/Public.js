@@ -131,7 +131,7 @@ class Public extends Component {
     return (
       <div className="Public">
         <div>
-          <TopBar />
+          <TopBar history={this.props.history}/>
         </div>
         <Calendar
           events={events}

@@ -1,0 +1,97 @@
+.GroupMain{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.GroupMain .topBar{
+    width: 100%;
+}
+
+.GroupMain .container{
+    width: 80%;
+    margin-top: 60px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.GroupMain .container .header{
+    flex:1;
+    display: block;
+    flex-direction: row;
+    align-items: center;
+}
+
+.GroupMain .container .header .searchBox{
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.GroupMain .container .header .searchBox input{
+    margin: 10px;
+    width: 30%;
+    height: 30px;
+}
+
+.GroupMain .container .header .searchBox button{
+    background-color: #fff;
+    border: none;
+}
+
+.GroupMain .container .header .createBox{
+    float: right;
+    display: flex;
+}
+
+.GroupMain .container .header .createBox button{
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    color: blue;
+    background-color: #fff;
+    padding: 3px;
+}
+
+.GroupMain .container .header .createBox button .text{
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.GroupMain .container .sectionBox{
+    flex:5;
+    flex-direction: column;
+}
+
+.GroupMain .container .sectionBox .section{
+    flex:1;
+    flex-direction: row;
+    margin: 20px;
+    display: flex;
+}
+
+.GroupMain .container .sectionBox .section label{
+    font-size: 28px;
+    font-weight: bold;
+    
+    width: 30%;
+    border-bottom: solid;
+    border-bottom-color: black;
+}
+
+.GroupMain .container .sectionBox .section button{
+    font-size: 14px;
+    color: gray;
+    background-color: #fff;
+    border: none;
+
+    display: flex;
+    flex-direction: row;
+    margin-top: 12px;
+
+    border-bottom: solid;
+    border-bottom-color: black;
+}
