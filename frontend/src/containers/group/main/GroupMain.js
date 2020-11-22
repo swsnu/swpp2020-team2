@@ -46,7 +46,9 @@ class GroupMain extends Component {
     return (
       <div className="GroupMain">
         <div className="topBar">
-          <TopBar history={this.props.history} />
+          <TopBar 
+          tabNum={2}
+          history={this.props.history} />
         </div>
 
         <div className="container">

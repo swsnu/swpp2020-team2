@@ -72,7 +72,8 @@ class EventDetail extends Component {
       <div className="EventDetail">
         
         <div className="topBar" >
-          <TopBar history={this.props.history}/>
+          <TopBar 
+          history={this.props.history}/>
         </div>
 
         <h1>EventDetail</h1>

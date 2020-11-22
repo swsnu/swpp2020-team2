@@ -23,7 +23,9 @@ class GroupCreate extends Component {
     return (
       <div className="GroupCreate">
         <div className="topBar">
-          <TopBar history={this.props.history}/>
+          <TopBar 
+          tabNum={2}
+          history={this.props.history}/>
         </div>
 
         <h1>Create Group</h1>
