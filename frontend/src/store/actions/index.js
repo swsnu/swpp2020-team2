@@ -2,6 +2,8 @@ export {
   signIn,
   signUp,
   activate,
+  getUser,
+  getUserFull,
 } from './user';
 
 export {

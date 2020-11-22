@@ -11,6 +11,11 @@ import EventCreate from './containers/event/Create/EventCreate';
 import EventModify from './containers/event/Modify/EventModify';
 import EventDetail from './containers/event/Detail/EventDetail';
 
+import GroupMain from './containers/group/main/GroupMain';
+import GroupSearch from './containers/group/search/GroupSearch';
+import GroupSearchAll from './containers/group/search/GroupSearchAll';
+import GroupCreate from './containers/group/create/GroupCreate';
+
 function App({ history }) {
   return (
     <ConnectedRouter history={history}>
@@ -24,6 +29,10 @@ function App({ history }) {
           <Route path="/details/modify/:event_id/" exact component={EventModify} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/signup/activate/:uidb64/:token" exact component={Activate} />
+          <Route path="/group" exact component={GroupMain} />
+          <Route path="/group/search" exact component={GroupSearchAll} />
+          <Route path="/group/search/:searchQuery" exact component={GroupSearch} />
+          <Route path="/group/create" exact component={GroupCreate} />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>

@@ -11,7 +11,7 @@ describe('actions', () => {
   });
 
   it('signIn should operate correctly', (done) => {
-    const stubUser = { username: 'test_username', password: 'test_password' };
+    const stubUser = { id: 1, username: 'test_username', password: 'test_password' };
     const spyOnPost = jest.spyOn(axios, 'post')
       .mockImplementation((url) => new Promise((resolve, reject) => {
         const result = {
@@ -22,7 +22,7 @@ describe('actions', () => {
       }));
 
     store.dispatch(actionCreators.signIn(stubUser)).then(() => {
-      expect(store.getState().ur.signinedUser).toEqual(stubUser);
+      expect(store.getState().ur.signinedUser).toEqual(1);
       expect(spyOnPost).toHaveBeenCalledTimes(1);
       done();
     });
