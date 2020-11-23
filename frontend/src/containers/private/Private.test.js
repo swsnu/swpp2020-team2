@@ -9,7 +9,7 @@ import {
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
 import { history, middlewares } from '../../store/store';
-import Public from './Public';
+import Private from './Private';
 
 const sampleDate = new Date();
 const sampleDate2 = addDays(sampleDate, 25);
@@ -118,22 +118,22 @@ const getMockStore = (initialState) => {
 const mockStore = getMockStore(stubInitialState);
 
 describe('<Articles />', () => {
-  let publicComponent;
+  let PrivateComponent;
   beforeEach(() => {
-    publicComponent = (
+    PrivateComponent = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
-            <Route path="/" exact render={() => <Public history={history} />} />
+            <Route path="/" exact render={() => <Private history={history} />} />
           </Switch>
         </ConnectedRouter>
       </Provider>
     );
   });
 
-  it('should render Public Calendar', () => {
-    const component = mount(publicComponent);
-    const wrapper = component.find('.Public');
+  it('should render Private Calendar', () => {
+    const component = mount(PrivateComponent);
+    const wrapper = component.find('.Private');
     expect(wrapper.length).toBe(1);
   });
 
@@ -146,7 +146,7 @@ describe('<Articles />', () => {
     div2.setAttribute('id', 'tagOption');
     document.body.appendChild(div2);
 
-    const component = mount(publicComponent, { attachTo: document.getElementById('including') });
+    const component = mount(PrivateComponent, { attachTo: document.getElementById('including') });
 
     const viewOptionButton = component.find('.ViewOptionButton0');
     expect(viewOptionButton.length).toBe(1);

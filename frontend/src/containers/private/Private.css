@@ -1,0 +1,34 @@
+.Private{
+    /* no drag */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.Private .createEventButtonInCalendar{
+    position: absolute;
+    top : 150%;
+    right: 12%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    outline: none;
+}
+
+.Private .createEventButtonInCalendar .img{
+    display: block;
+    height: 40px;
+    width: 40px;
+}
+
+.Private .View{
+    float:right;
+}
+
+.Private .SideBar{
+    float:left;
+}

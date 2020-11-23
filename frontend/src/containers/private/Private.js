@@ -2,7 +2,7 @@ import React, { useState, Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/index';
 import TopBar from '../../components/TopBar/TopBar';
-import './Public.css';
+import './Private.css';
 import Calendar from '../../components/Calendar/Calendar';
 import { createEventIcon } from '../../images/index';
 import SideBar from '../../components/SideBar/SideBar';
@@ -12,7 +12,7 @@ function onClickEvent(evt) {
   // redirect to event detail
 }
 
-class Public extends Component {
+class Private extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -129,10 +129,10 @@ class Public extends Component {
     }
 
     return (
-      <div className="Public">
+      <div className="Private">
         <div>
           <TopBar
-            tabNum={0}
+            tabNum={1}
             history={this.props.history}
           />
         </div>
@@ -167,4 +167,4 @@ const mapDispatchToProps = (dispatch) => ({
   onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Public);
+export default connect(mapStateToProps, mapDispatchToProps)(Private);

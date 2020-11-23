@@ -10,14 +10,22 @@ const SideBar = ({
   setGroupOption,
   setEventOption,
   setSortOption,
+  selectedState,
 }) => {
   const ViewOption = () => (
     <div className="ViewOption">
       <div className="OptionName">View</div>
-      <div className="ViewOptionButtons">
-        <div className="ViewOptionButton" onClick={() => setViewOption('Calendar')}>Calendar</div>
-        <div className="ViewOptionButton" onClick={() => setViewOption('List')}>List</div>
-      </div>
+      {(selectedState.viewOption === 'Calendar') ? (
+        <div className="ViewOptionButtons">
+          <div className="ViewOptionButton0" onClick={() => setViewOption('Calendar')}>Calendar</div>
+          <div className="ViewOptionButton1" onClick={() => setViewOption('List')}>List</div>
+        </div>
+      ) : (
+        <div className="ViewOptionButtons">
+          <div className="ViewOptionButton1" onClick={() => setViewOption('Calendar')}>Calendar</div>
+          <div className="ViewOptionButton0" onClick={() => setViewOption('List')}>List</div>
+        </div>
+      )}
     </div>
   );
 
@@ -32,13 +40,30 @@ const SideBar = ({
   const categoryName = ['#공연', '#전시회', '#일일호프', '#축제', '#장터', '#세미나', '#대회', '#해당없음'];
   const FilterOption = () => {
     const categoryOptions = [];
+    const selectedCategory = [];
+    for (let i = 0; i < 8; i += 1) {
+      if (selectedState.categoryOption.has(i)) selectedCategory.push(1);
+      else selectedCategory.push(0);
+    }
     for (let i = 0; i < 8; i += 1) {
       categoryOptions.push(
-        <div key={i} className="CategoryOptionButton" src={categoryIcons[i]} label="categoryOption" type="button" onClick={() => setCategoryOption(i)}>
+        <div key={i} className={`CategoryOptionButton${selectedCategory[i]}${i}`} src={categoryIcons[i]} label="categoryOption" type="button" onClick={() => setCategoryOption(i)}>
           {categoryName[i]}
         </div>,
       );
     }
+
+    const selectedGroupOption = [];
+    if (selectedState.groupOption === 'like') selectedGroupOption.push(1);
+    else selectedGroupOption.push(0);
+    if (selectedState.groupOption === 'my') selectedGroupOption.push(1);
+    else selectedGroupOption.push(0);
+    if (selectedState.groupOption === 'notification') selectedGroupOption.push(1);
+    else selectedGroupOption.push(0);
+
+    const selectedEventOption = [];
+    if (selectedState.eventOption === 'like') selectedEventOption.push(1);
+    else selectedEventOption.push(0);
 
     return (
       <div className="FilterOption">
@@ -59,13 +84,13 @@ const SideBar = ({
         </div>
         <div>Group</div>
         <div className="GroupOption">
-          <div className="GroupOptionButton" label="groupOption" type="button" onClick={() => setGroupOption('like')}>like</div>
-          <div className="GroupOptionButton" label="groupOption" type="button" onClick={() => setGroupOption('my')}>my</div>
-          <div className="GroupOptionButton" label="groupOption" type="button" onClick={() => setGroupOption('notification')}>notification</div>
+          <div className={`GroupOptionButton${selectedGroupOption[0]}`} label="groupOption" type="button" onClick={() => setGroupOption('like')}>like</div>
+          <div className={`GroupOptionButton${selectedGroupOption[1]}`} label="groupOption" type="button" onClick={() => setGroupOption('my')}>my</div>
+          <div className={`GroupOptionButton${selectedGroupOption[2]}`} label="groupOption" type="button" onClick={() => setGroupOption('notification')}>notification</div>
         </div>
         <div>Event</div>
         <div className="EventOption">
-          <div className="EventOptionButton" label="eventOption" type="button" onClick={() => setEventOption('like')}>like</div>
+          <div className={`EventOptionButton${selectedEventOption[0]}`} label="eventOption" type="button" onClick={() => setEventOption('like')}>like</div>
         </div>
       </div>
     );
