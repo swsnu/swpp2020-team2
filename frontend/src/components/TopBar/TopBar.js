@@ -4,7 +4,7 @@ import { appLogo } from '../../images/index';
 
 const TopBar = (props) => (
   <div className="TopBar">
-    <img className="logo" src={appLogo} alt="topbar" />
+    <img className="logo" src={appLogo} alt="logo" />
     <button className="tab" onClick={() => props.history.push('/public')} style={{ fontWeight: props.tabNum === 0 ? 'bold' : 'none' }}>Public</button>
     <button className="tab" onClick={() => props.history.push('/public')} style={{ fontWeight: props.tabNum === 1 ? 'bold' : 'none' }}>Private</button>
     <button className="tab" onClick={() => props.history.push('/group')} style={{ fontWeight: props.tabNum === 2 ? 'bold' : 'none' }}>Group</button>
