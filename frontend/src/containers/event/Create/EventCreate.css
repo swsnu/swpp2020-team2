@@ -1,7 +1,12 @@
 .EventCreate{
+    flex:1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
+}
+.EventCreate .topBar{
+    width: 100%;
 }
 
 .EventCreate .container{

@@ -3,24 +3,21 @@
   height: 60px;
   display: flex;
   flex-direction: row;
+  align-items: center;
   background-color: aquamarine;
 }
 
-.TopBar .title{
-  margin-right:15px;
-  font-size:20px;
-  padding:10px ;
+.TopBar .logo{
+  height: 80%;
+  width: auto;
+  justify-content: center;
+  margin: 15px;
 }
 
-.TopBar .tab{
+.TopBar button{
   margin-right:15px;
   font-size:20px;
   padding:10px ;
-}
-
-.TopBar .activeTab{
-  margin-right:15px;
-  font-size:20px;
-  padding:10px ;
-  font-weight:bold;
+  background-color: aquamarine;
+  border: none;
 }

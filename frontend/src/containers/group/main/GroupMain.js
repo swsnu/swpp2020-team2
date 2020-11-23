@@ -5,8 +5,13 @@ import TopBar from '../../../components/TopBar/TopBar';
 
 import * as actionCreators from '../../../store/actions/index';
 
+import { ImSearch } from 'react-icons/im'
+import { GrFormAdd } from 'react-icons/gr'
+import { MdGroupAdd } from 'react-icons/md'
+import './GroupMain.css'
+
 class GroupMain extends Component {
-  state={
+  state = {
     searchKey: '',
   }
 
@@ -20,7 +25,7 @@ class GroupMain extends Component {
     }
   }
 
-  onSearchHandler=() => {
+  onSearchHandler = () => {
     if (this.state.searchKey === '') this.props.history.push('/group/search');
     else this.props.history.push(`/group/search/${this.state.searchKey}`);
   }
@@ -32,6 +37,7 @@ class GroupMain extends Component {
     const joinedGroupBoxes = null;
     const noticedGroupBoxes = null;
     const likedGroupBoxes = null;
+    const otherGroupBoxes = null;
 
     // should implement components/groupbox/Groupbox first
     // joinedGroup will show groupboxes of joinedGroup
@@ -39,28 +45,68 @@ class GroupMain extends Component {
 
     return (
       <div className="GroupMain">
-        <div>
-          <TopBar />
+        <div className="topBar">
+          <TopBar 
+          tabNum={2}
+          history={this.props.history} />
         </div>
 
-        <h1>Group</h1>
+        <div className="container">
 
-        <div><button id="create-group-button" onClick={() => this.props.history.push('/group/create')}>Create Group</button></div>
-        <br />
-        <input
-          id="search-input"
-          type="text"
-          value={this.state.searchKey}
-          onChange={(event) => this.setState({ searchKey: event.target.value })}
-        />
-        <button id="search-button" onClick={() => this.onSearchHandler()}>Search!</button>
-        <div>search with blank to see all groups</div>
-        <h2>My Groups</h2>
-        {joinedGroupBoxes}
-        <h2>Noticing Groups</h2>
-        {noticedGroupBoxes}
-        <h2>Liked Groups</h2>
-        {likedGroupBoxes}
+          <div className="header">
+            <div className="searchBox">
+              <input
+                className="search-group-input"
+                type="text"
+                value={this.state.searchKey}
+                onChange={(event) => this.setState({ searchKey: event.target.value })}
+                placeholder=" 그룹명 입력 "
+              />
+              <button className="search-button" onClick={() => this.onSearchHandler()}>
+                <ImSearch size="24" />
+              </button>
+            </div>
+
+            <div className="createBox">
+              <button className="create-group-button" onClick={() => this.props.history.push('/group/create')}>
+                <MdGroupAdd size="24" />
+                <div className="text">Create Group</div>
+              </button>
+            </div>
+          </div>
+
+
+          <div>search with blank to see all groups</div>
+
+          <div className="sectionBox">
+
+            <div className="section">
+              <label>My Groups</label>
+              {joinedGroupBoxes}
+            </div>
+
+            <div className="section">
+              <label>Noticing Groups</label>
+              {noticedGroupBoxes}
+            </div>
+
+            <div className="section">
+              <label>Liked Groups</label>
+              {likedGroupBoxes}
+            </div>
+
+            <div className="section">
+              <label>Others</label>
+              <button onClick={() => this.props.history.push('/group/search')}>
+                <GrFormAdd size="12" />
+                <div className="text">더보기</div>
+              </button>
+              {otherGroupBoxes}
+            </div>
+
+          </div>
+        </div>
+
       </div>
     );
   }

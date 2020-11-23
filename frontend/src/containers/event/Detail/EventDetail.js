@@ -8,6 +8,8 @@ import { GrLike } from 'react-icons/gr';
 import * as actionCreators from '../../../store/actions/index';
 import './EventDetail.css';
 
+import TopBar from '../../../components/TopBar/TopBar';
+
 class EventDetail extends Component {
   state = {
     event: {
@@ -68,8 +70,13 @@ class EventDetail extends Component {
 
     return (
       <div className="EventDetail">
+        
+        <div className="topBar" >
+          <TopBar 
+          history={this.props.history}/>
+        </div>
+
         <h1>EventDetail</h1>
-        <div className="topBar" />
 
         <div className="container">
 
