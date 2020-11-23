@@ -47,6 +47,22 @@ describe('actions', () => {
     });
   });
 
+  it('signIn should operate correctly', (done) => {
+    const spyOnGet = jest.spyOn(axios, 'get')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+        };
+        resolve(result);
+      }));
+
+    store.dispatch(actionCreators.signOut()).then(() => {
+      expect(store.getState().ur.signinedUser).toEqual(null);
+      expect(spyOnGet).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
   it('additional test for coverage', (done) => {
     const stubUser = { username: 'wrong_username', password: 'wrong_password' };
     const spyOnPost = jest.spyOn(axios, 'post')
@@ -100,6 +116,42 @@ describe('actions', () => {
       }));
 
     store.dispatch(actionCreators.activate({ uidb64: 1, token: 1 })).then(() => {
+      expect(spyOnGet).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it('getUser should operate correctly', (done) => {
+    const stubUser = { id: 1, username: 'test_username', password: 'test_password' };
+    const spyOnGet = jest.spyOn(axios, 'get')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: stubUser,
+        };
+        resolve(result);
+      }));
+
+    store.dispatch(actionCreators.getUser()).then(() => {
+      expect(store.getState().ur.userInfo).toEqual(stubUser);
+      expect(spyOnGet).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it('getUserFull should operate correctly', (done) => {
+    const stubUser = { id: 1, username: 'test_username', password: 'test_password' };
+    const spyOnGet = jest.spyOn(axios, 'get')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: stubUser,
+        };
+        resolve(result);
+      }));
+
+    store.dispatch(actionCreators.getUserFull()).then(() => {
+      expect(store.getState().ur.userFullInfo).toEqual(stubUser);
       expect(spyOnGet).toHaveBeenCalledTimes(1);
       done();
     });

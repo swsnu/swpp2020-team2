@@ -34,12 +34,12 @@ class EventCreate extends Component {
 
     return (
       <div className="EventCreate">
-        <div className="topBar" >
-          <TopBar history={this.props.history}/>
+        <div className="topBar">
+          <TopBar history={this.props.history} />
         </div>
 
         <h1>EventCreate</h1>
-        
+
         <div className="container">
 
           <div className="btnBox">

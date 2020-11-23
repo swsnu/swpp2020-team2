@@ -1,5 +1,6 @@
 export {
   signIn,
+  signOut,
   signUp,
   activate,
   getUser,
@@ -10,3 +11,9 @@ export {
   getAllEvent,
   getEvent,
 } from './events';
+
+export {
+  createGroup,
+  getAllGroup,
+  getGroup,
+} from './group';

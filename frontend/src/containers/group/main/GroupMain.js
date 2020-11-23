@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import TopBar from '../../../components/TopBar/TopBar';
-
+import { ImSearch } from 'react-icons/im';
+import { GrFormAdd } from 'react-icons/gr';
+import { MdGroupAdd } from 'react-icons/md';
 import * as actionCreators from '../../../store/actions/index';
-
-import { ImSearch } from 'react-icons/im'
-import { GrFormAdd } from 'react-icons/gr'
-import { MdGroupAdd } from 'react-icons/md'
-import './GroupMain.css'
+import TopBar from '../../../components/TopBar/TopBar';
+import './GroupMain.css';
 
 class GroupMain extends Component {
   state = {
-    searchKey: '',
+    searchQuery: '',
   }
 
   componentDidMount() {
@@ -20,20 +18,18 @@ class GroupMain extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      if (!this.props.signinedUser) this.props.history.replace('/Main');
-    }
+    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onSearchHandler = () => {
-    if (this.state.searchKey === '') this.props.history.push('/group/search');
-    else this.props.history.push(`/group/search/${this.state.searchKey}`);
+    if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
   render() {
     const joinedGroup = this.props.userFullInfo?.members;
     const noticedGroup = this.props.userFullInfo?.gets_notification;
     const likedGroup = this.props.userFullInfo?.likes_group;
+    const otherGroup = null;
     const joinedGroupBoxes = null;
     const noticedGroupBoxes = null;
     const likedGroupBoxes = null;
@@ -41,14 +37,15 @@ class GroupMain extends Component {
 
     // should implement components/groupbox/Groupbox first
     // joinedGroup will show groupboxes of joinedGroup
-    // same for noticeGroup, likedGroup.
+    // same for noticeGroup, likedGroup, otherGroup.
 
     return (
       <div className="GroupMain">
         <div className="topBar">
-          <TopBar 
-          tabNum={2}
-          history={this.props.history} />
+          <TopBar
+            tabNum={2}
+            history={this.props.history}
+          />
         </div>
 
         <div className="container">
@@ -59,7 +56,7 @@ class GroupMain extends Component {
                 className="search-group-input"
                 type="text"
                 value={this.state.searchKey}
-                onChange={(event) => this.setState({ searchKey: event.target.value })}
+                onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>
@@ -74,7 +71,6 @@ class GroupMain extends Component {
               </button>
             </div>
           </div>
-
 
           <div>search with blank to see all groups</div>
 
@@ -97,7 +93,7 @@ class GroupMain extends Component {
 
             <div className="section">
               <label>Others</label>
-              <button onClick={() => this.props.history.push('/group/search')}>
+              <button className="search-all-button" onClick={() => this.props.history.push('/group/search')}>
                 <GrFormAdd size="12" />
                 <div className="text">더보기</div>
               </button>

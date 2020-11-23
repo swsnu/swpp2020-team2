@@ -17,6 +17,13 @@ export const signIn = (args) => (dispatch) => axios.post('/api/signin/', {
     if (err.response.status === 401)alert('ID or password is wrong');
   });
 
+export const signOut_ = () => ({ type: actionTypes.SIGN_OUT });
+
+export const signOut = () => (dispatch) => axios.get('/api/signout/')
+  .then((res) => {
+    dispatch(signOut_());
+  });
+
 export const signUp_ = () => ({ type: actionTypes.SIGN_UP });
 
 export const signUp = (args) => (dispatch) => axios.post('/api/signup/', {
@@ -47,7 +54,7 @@ export const getUser = () => (dispatch) => axios.get('/api/user/signin/')
     dispatch(getUser_(res.data));
   });
 
-export const getUserFull_ = (user) => (dispatch) => ({ type: actionTypes.GET_USER_FULL, user });
+export const getUserFull_ = (user) => ({ type: actionTypes.GET_USER_FULL, user });
 
 export const getUserFull = () => (dispatch) => axios.get('/api/user/signin/full/')
   .then((res) => {
