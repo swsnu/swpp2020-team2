@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { ImSearch } from 'react-icons/im';
+import { MdGroupAdd } from 'react-icons/md';
 import TopBar from '../../../components/TopBar/TopBar';
 
 import * as actionCreators from '../../../store/actions/index';
-
-import { ImSearch } from 'react-icons/im';
-import { MdGroupAdd } from 'react-icons/md';
 
 import './GroupSearch.css';
 
@@ -21,14 +20,11 @@ class GroupSearch extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      if (!this.props.signinedUser) this.props.history.replace('/Main');
-    }
+    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onSearchHandler = () => {
-    if (this.state.searchQuery === '') this.props.history.push('/group/search');
-    else this.props.history.push(`/group/search/${this.state.searchQuery}`);
+    if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
   render() {
@@ -39,9 +35,10 @@ class GroupSearch extends Component {
     return (
       <div className="GroupSearch">
         <div className="topBar">
-          <TopBar 
-          tabNum={2}
-          history={this.props.history} />
+          <TopBar
+            tabNum={2}
+            history={this.props.history}
+          />
         </div>
 
         <div className="container">
@@ -51,7 +48,7 @@ class GroupSearch extends Component {
                 className="search-group-input"
                 type="text"
                 value={this.state.searchKey}
-                onChange={(event) => this.setState({ searchKey: event.target.value })}
+                onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>

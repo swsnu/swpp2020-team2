@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { ImSearch } from 'react-icons/im';
+import { MdGroupAdd } from 'react-icons/md';
 import TopBar from '../../../components/TopBar/TopBar';
 
 import * as actionCreators from '../../../store/actions/index';
-
-import { ImSearch } from 'react-icons/im';
-import { MdGroupAdd } from 'react-icons/md';
 
 import './GroupSearch.css';
 
@@ -17,31 +16,30 @@ class GroupSearchAll extends Component {
 
   componentDidMount() {
     this.props.getUserFull();
+    this.props.getAllGroup();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      if (!this.props.signinedUser) this.props.history.replace('/Main');
-    }
+    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onSearchHandler=() => {
-    if (this.state.searchQuery === '') this.props.history.push('/group/search');
-    else this.props.history.push(`/group/search/${this.state.searchQuery}`);
+    if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
   render() {
     const searchResult = null;
 
-    // should implement searchResult, which will have searchboxes of all groups.
-    // we can think about show like 10 groups in a page, and make several pages.
+    // should implement searchResult, which will have searchboxes of this.props.searchGroups.
+    // maybe we can think about show like 10 groups in a page, and make several pages.
 
     return (
       <div className="GroupSearch">
         <div className="topBar">
-          <TopBar 
-          tabNum={2}
-          history={this.props.history} />
+          <TopBar
+            tabNum={2}
+            history={this.props.history}
+          />
         </div>
 
         <div className="container">
@@ -51,7 +49,7 @@ class GroupSearchAll extends Component {
                 className="search-group-input"
                 type="text"
                 value={this.state.searchKey}
-                onChange={(event) => this.setState({ searchKey: event.target.value })}
+                onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>
@@ -67,8 +65,8 @@ class GroupSearchAll extends Component {
             </div>
           </div>
 
-        <h2>All Groups Result</h2>
-        {searchResult}
+          <h2>All Groups Result</h2>
+          {searchResult}
         </div>
       </div>
     );
@@ -78,10 +76,12 @@ class GroupSearchAll extends Component {
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
   userFullInfo: state.ur.userFullInfo,
+  searchGroups: state.gr.searchGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
+  getAllGroup: () => dispatch(actionCreators.getAllGroup()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearchAll);

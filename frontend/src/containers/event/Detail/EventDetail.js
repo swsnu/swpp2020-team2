@@ -70,10 +70,11 @@ class EventDetail extends Component {
 
     return (
       <div className="EventDetail">
-        
-        <div className="topBar" >
-          <TopBar 
-          history={this.props.history}/>
+
+        <div className="topBar">
+          <TopBar
+            history={this.props.history}
+          />
         </div>
 
         <h1>EventDetail</h1>

@@ -11,10 +11,8 @@ class Main extends Component {
     password: '',
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.signinedUser !== this.props.signinedUser) {
-      if (this.props.signinedUser) this.props.history.replace('/public');
-    }
+  componentDidUpdate() {
+    if (this.props.signinedUser) this.props.history.replace('/public');
   }
 
   signinHandler = () => {

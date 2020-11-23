@@ -53,7 +53,7 @@ describe('Main', () => {
 
   it('should redirect to /public page when logined', () => {
     const mockedState2 = {
-      signinedUser: { username: 'test_name' },
+      signinedUser: 1,
     };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
