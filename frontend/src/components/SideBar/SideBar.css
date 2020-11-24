@@ -24,12 +24,21 @@
     display:flex;
 }
 
-.SideBar .ViewOptionButton{
+.SideBar .ViewOptionButton0{
     padding:5px;
     margin: 5px;
     border-radius: 7px;
     border: 1px solid gray;
     cursor: pointer;
+}
+
+.SideBar .ViewOptionButton1{
+    padding:5px;
+    margin: 5px;
+    border-radius: 7px;
+    border: 2px solid gray;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .SideBar .FilterDiv{
@@ -78,28 +87,28 @@
     flex-wrap: wrap;
 }
 
-.SideBar .CategoryOptionButton{
-    width: wrap;
-    margin: 2px;
-    cursor: pointer;
-    border: 1px solid red;
-    border-radius: 10px;
-    padding: 3px;
-    
-}
-
 .SideBar .GroupOption{
     display: flex;
     flex-wrap: wrap;
 }
 
-.SideBar .GroupOptionButton{
+.SideBar .GroupOptionButton0{
     margin: 2px;
     padding: 5px;
     border-radius: 10px;
     border: 1px solid gray;
     background-color: rgb(240,240,240);
     cursor: pointer;
+}
+
+.SideBar .GroupOptionButton1{
+    margin: 2px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 2px solid gray;
+    background-color: rgb(240,240,240);
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .SideBar .EventOption{
@@ -107,13 +116,23 @@
     flex-wrap: wrap;
 }
 
-.SideBar .EventOptionButton{
+.SideBar .EventOptionButton0{
     margin: 2px;
     padding: 5px;
     border-radius: 10px;
     border: 1px solid gray;
     background-color: rgb(240,240,240);
     cursor: pointer;
+}
+
+.SideBar .EventOptionButton1{
+    margin: 2px;
+    padding: 5px;
+    border-radius: 10px;
+    border: 2px solid gray;
+    background-color: rgb(240,240,240);
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .SideBar .SortOption{
@@ -122,4 +141,172 @@
 
 .SideBar .SortOptionSelect{
     outline: none;
+}
+
+.SideBar .CategoryOptionButton00{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 3px;
+    color: red;
+}
+
+.SideBar .CategoryOptionButton10{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid red;
+    border-radius: 10px;
+    padding: 3px;
+    color: red;
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton01{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid orange;
+    border-radius: 10px;
+    padding: 3px;
+    color: orange;
+}
+
+.SideBar .CategoryOptionButton11{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid orange;
+    border-radius: 10px;
+    padding: 3px;
+    color: orange;
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton02{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid rgb(230, 230, 0);
+    border-radius: 10px;
+    padding: 3px;
+    color:  rgb(230,230,0);
+}
+
+.SideBar .CategoryOptionButton12{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid rgb(230, 230, 0);
+    border-radius: 10px;
+    padding: 3px;
+    color:  rgb(230,230,0);
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton03{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid green;
+    border-radius: 10px;
+    padding: 3px;
+    color: green;
+}
+
+.SideBar .CategoryOptionButton13{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid green;
+    border-radius: 10px;
+    padding: 3px;
+    color: green;
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton04{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid rgb(86, 173, 202);
+    border-radius: 10px;
+    padding: 3px;
+    color:   rgb(86, 173, 202);
+}
+
+.SideBar .CategoryOptionButton14{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid rgb(86, 173, 202);
+    border-radius: 10px;
+    padding: 3px;
+    color:   rgb(86, 173, 202);
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton05{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid darkblue;
+    border-radius: 10px;
+    padding: 3px;
+    color: darkblue;
+}
+
+.SideBar .CategoryOptionButton15{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid darkblue;
+    border-radius: 10px;
+    padding: 3px;
+    color: darkblue;
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton06{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid purple;
+    border-radius: 10px;
+    padding: 3px;
+    color:purple;
+}
+
+.SideBar .CategoryOptionButton16{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid purple;
+    border-radius: 10px;
+    padding: 3px;
+    color:purple;
+    font-weight: bold;
+}
+
+.SideBar .CategoryOptionButton07{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 3px;
+    color:  gray;
+}
+
+.SideBar .CategoryOptionButton17{
+    width: wrap;
+    margin: 2px;
+    cursor: pointer;
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 3px;
+    color:  gray;
+    font-weight: bold;
 }

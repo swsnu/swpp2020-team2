@@ -20,6 +20,7 @@ const sample = [
     end_time: '14:00',
     category: {
       id: 0,
+      name: '공연',
     },
     date: sampleDate,
   },
@@ -32,6 +33,7 @@ const sample = [
     end_time: '15:00',
     category: {
       id: 1,
+      name: '전시회',
     },
     date: sampleDate,
   },
@@ -44,6 +46,7 @@ const sample = [
     end_time: '15:00',
     category: {
       id: 0,
+      name: '공연',
     },
     date: sampleDate2,
   },
@@ -56,6 +59,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 1,
+      name: '전시회',
     },
     date: sampleDate2,
   },
@@ -68,6 +72,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 2,
+      name: '일일호프',
     },
     date: sampleDate2,
   },
@@ -80,6 +85,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 3,
+      name: '축제',
     },
     date: sampleDate2,
   },
@@ -92,6 +98,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 4,
+      name: '장터',
     },
     date: sampleDate2,
   },
@@ -104,6 +111,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 5,
+      name: '세미나',
     },
     date: sampleDate2,
   },
@@ -116,6 +124,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 6,
+      name: '대회',
     },
     date: sampleDate2,
   },
@@ -128,6 +137,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 7,
+      name: '해당없음',
     },
     date: sampleDate2,
   },
@@ -140,6 +150,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 3,
+      name: '축제',
     },
     date: sampleDate3,
   },
@@ -152,6 +163,7 @@ const sample = [
     end_time: 'end_time',
     category: {
       id: 6,
+      name: '대회',
     },
     date: sampleDate3,
   },
@@ -175,8 +187,12 @@ export const getEvent_ = (event) => ({
   target: event,
 });
 
+export const getEvent = (id) => (dispatch) => dispatch(getEvent_(sample[id - 1]));
+
+/*
 export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/`)
-  .then((res) => dispatch(getEvent_(res.data)));
+  .then((res) => dispatch(getEvent_(sample[0])));
+*/
 
 /*
 export const postEvent_=(event)=>{

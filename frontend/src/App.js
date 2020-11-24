@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import Main from './containers/main/Main';
 import Public from './containers/public/Public';
+import Private from './containers/private/Private';
 import Signup from './containers/signup/Signup';
 import Activate from './containers/signup/Activate';
 
@@ -25,6 +26,7 @@ function App({ history }) {
           <Route path="/main" exact component={Main} />
           <Redirect exact from="/" to="/main" />
           <Route path="/public" exact component={Public} />
+          <Route path="/private" exact component={Private} />
           <Route path="/details/create/" exact component={EventCreate} />
           <Route path="/details/:event_id/" exact component={EventDetail} />
           <Route path="/details/modify/:event_id/" exact component={EventModify} />

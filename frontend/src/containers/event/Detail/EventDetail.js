@@ -1,4 +1,5 @@
 import React, { Component, Text } from 'react';
+import format from 'date-fns/format';
 import { connect } from 'react-redux';
 
 import { GoDiffAdded, GoReport } from 'react-icons/go';
@@ -11,24 +12,9 @@ import './EventDetail.css';
 import TopBar from '../../../components/TopBar/TopBar';
 
 class EventDetail extends Component {
-  state = {
-    event: {
-      id: 1,
-      title: '',
-      category: '',
-      group: '',
-      place: '',
-      date: '',
-      begin_time: '해당없음',
-      end_time: '해당없음',
-      content: '내용',
-    },
+  componentDidMount() {
+    this.props.onGetEvent(parseInt(this.props.match.params.event_id));
   }
-  /*
-  componentDidMount(){
-    this.props.onGetEvent(parseInt(this.props.match.params.id));
-  }
-  */
 
   onClickBack = () => {
     this.props.history.goBack();
@@ -67,6 +53,19 @@ class EventDetail extends Component {
         </div>
       </div>
     );
+    let eventLoaded;
+    if (this.props.event === '' || this.props.event == null || this.props.event === undefined) eventLoaded = false;
+    else if (this.props.event != null && typeof this.props.event === 'object' && !Object.keys(this.props.event).length) eventLoaded = false;
+    else eventLoaded = true;
+
+    const eventTitle = (eventLoaded) ? this.props.event.title : '';
+    const eventGroup = (eventLoaded) ? this.props.event.group : '';
+    const eventPlace = (eventLoaded) ? this.props.event.place : '';
+    const formattedDate = (eventLoaded) ? format(this.props.event.date, 'yyyy. MM. dd') : '';
+    const categoryName = (eventLoaded) ? this.props.event.category.name : '';
+    const eventBeginTime = (eventLoaded) ? this.props.event.begin_time : '';
+    const eventEndTime = (eventLoaded) ? this.props.event.end_time : '';
+    const eventContent = (eventLoaded) ? this.props.event.content : '';
 
     return (
       <div className="EventDetail">
@@ -109,38 +108,38 @@ class EventDetail extends Component {
               <div className="box">
                 <div className="infoBox">
                   <div className="infoKey">제목</div>
-                  <div className="infoValue">{this.state.event.title}</div>
+                  <div className="infoValue">{eventTitle}</div>
                 </div>
                 <div className="infoBox">
                   <div className="infoKey">분류</div>
-                  <div className="infoValue">{this.state.event.category}</div>
+                  <div className="infoValue">{categoryName}</div>
                 </div>
               </div>
 
               <div className="box">
                 <div className="infoBox">
                   <div className="infoKey">단체</div>
-                  <div className="infoValue">{this.state.event.group}</div>
+                  <div className="infoValue">{eventGroup}</div>
                 </div>
                 <div className="infoBox">
                   <div className="infoKey">장소</div>
-                  <div className="infoValue">{this.state.event.space}</div>
+                  <div className="infoValue">{eventPlace}</div>
                 </div>
               </div>
 
               <div className="box">
                 <div className="infoBox">
                   <div className="infoKey">일시</div>
-                  <div className="infoValue">{this.state.event.date}</div>
+                  <div className="infoValue">{formattedDate}</div>
                 </div>
                 <div className="infoBox">
                   <div className="infoKey">시간</div>
                   <div className="infoValue">
-                    {this.state.event.begin_time}
+                    {eventBeginTime}
                     {' '}
                     ~
                     {' '}
-                    {this.state.event.end_time}
+                    {eventEndTime}
                   </div>
                 </div>
               </div>
@@ -149,7 +148,7 @@ class EventDetail extends Component {
 
             <div className="content">
               <div className="box">
-                {this.state.event.content}
+                {eventContent}
               </div>
               <div className="box">
                 이벤트 사진 업로드
@@ -176,11 +175,11 @@ class EventDetail extends Component {
 
 const mapStateToProps = (state) => ({
 //  signinedUser: state.ur.signinedUser,
-
+  event: state.evt.target,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-//  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+  onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetail);
