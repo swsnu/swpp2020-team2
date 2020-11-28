@@ -182,13 +182,13 @@ def get_user_signin_full(request):
         'background': user_preference.background_id,
         'language': user_preference.language_id,
         'likes': list(user_preference.likes.values_list('id', flat=True)),
-        'brings': [event.id for event in user_preference.brings.all()],
-        'join_requests': [group.id for group in user_preference.join_requests.all()],
-        'likes_group': [group.id for group in user_preference.likes_group.all()],
-        'gets_notification': [group.id for group in user_preference.gets_notification.all()],
-        'members': [group.id for group in user.member_group.all()],
-        'admins': [group.id for group in user.admin_group.all()],
-        'kings': [group.id for group in user.king_group.all()],
+        'brings': list(user_preference.brings.values_list('id', flat=True)),
+        'join_requests': list(user_preference.join_requests.values_list('id', flat=True)),
+        'likes_group': list(user_preference.likes_group.values_list('id', flat=True)),
+        'gets_notification': list(user_preference.gets_notification.values_list('id', flat=True)),
+        'members': list(user.member_group.values_list('id', flat=True)),
+        'admins': list(user.admin_group.values_list('id', flat=True)),
+        'kings': list(user.king_group.values_list('id', flat=True)),
         }
         return JsonResponse(user_dict)
 
