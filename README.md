@@ -87,7 +87,14 @@ grant all privileges on * . * to "altroot"@"localhost";
 flush privileges;
 ```
 
-Now we can use `altroot` with blank password for mysql. And do followings (this is not needed for unit test alone) also in mysql:
+Now we can use `altroot` with password `1234qwerasdf` for mysql. Run backend first to create adequate database (`almanac_db`). At root repository,
+```
+cd backend
+python manage.py migrate
+python manage.py runserver
+```
+
+It will not work well, since there are no elements in the database. Do followings (this is not needed for unit test alone) in mysql:
 ```
 use almanac_db;
 insert into almanac_university(id, name, domain) values(1, 'Seoul National University', 'snu.ac.kr');
