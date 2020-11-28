@@ -181,7 +181,7 @@ def get_user_signin_full(request):
         'profile': user_preference.profile_id,
         'background': user_preference.background_id,
         'language': user_preference.language_id,
-        'likes': [event.id for event in user_preference.likes.all()],
+        'likes': list(user_preference.likes.values_list('id', flat=True)),
         'brings': [event.id for event in user_preference.brings.all()],
         'join_requests': [group.id for group in user_preference.join_requests.all()],
         'likes_group': [group.id for group in user_preference.likes_group.all()],
@@ -929,7 +929,10 @@ def create_group(request):
         name = req_data['name']
         description = req_data['description']
         king_id = req_data['king']
-        group = Group.add_new_group(name=name, king_id=king_id, description=description) # privacy = 1
+        group = Group.add_new_group(
+            name=name, king_id=king_id,
+            description=description
+        ) # privacy = 1
         group_dict = {'id': group.id, 'name': group.name,
         'king': group.king_id,
         'description': group.description, 'privacy': group.privacy}
