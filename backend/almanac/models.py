@@ -22,7 +22,7 @@ class University(models.Model):
         return self.name
 
     @staticmethod
-    def get_default():
+    def get_default_id():
 
         '''
         a function docstring
@@ -30,7 +30,7 @@ class University(models.Model):
 
         obj, _ = University.objects.get_or_create(name='Seoul National University',
         domain='snu.ac.kr')
-        return obj
+        return obj.id
 
 class Department(models.Model):
 
@@ -44,14 +44,14 @@ class Department(models.Model):
         return self.name
 
     @staticmethod
-    def get_default():
+    def get_default_id():
 
         '''
         a function docstring
         '''
 
         obj, _ = Department.objects.get_or_create(name='Computer Science Engineering')
-        return obj
+        return obj.id
 
 class Image(models.Model):
 
@@ -73,14 +73,14 @@ class Background(models.Model):
         return self.name
 
     @staticmethod
-    def get_default():
+    def get_default_id():
 
         '''
         a function docstring
         '''
 
         obj, _ = Background.objects.get_or_create(name='green')
-        return obj
+        return obj.id
 
 class Language(models.Model):
 
@@ -94,14 +94,14 @@ class Language(models.Model):
         return self.name
 
     @staticmethod
-    def get_default():
+    def get_default_id():
 
         '''
         a function docstring
         '''
 
         obj, _ = Language.objects.get_or_create(name='English')
-        return obj
+        return obj.id
 
 class Category(models.Model):
 
@@ -148,7 +148,7 @@ class Group(models.Model):
     privacy = models.IntegerField(default=1)
 
     @staticmethod
-    def add_new_group(name, king, description):
+    def add_new_group(name, king_id, description):
 
         '''
         a function docstring
@@ -157,12 +157,12 @@ class Group(models.Model):
         image = Image.objects.create()
         group = Group.objects.create(
             name=name,
-            king=king,
+            king_id=king_id,
             description=description,
             profile=image
         )
-        group.member.add(king)
-        group.admin.add(king)
+        group.member.add(king_id)
+        group.admin.add(king_id)
         return group
 
 class Event(models.Model):
@@ -295,7 +295,7 @@ class UserPreference(models.Model):
     )
 
     @staticmethod
-    def add_new_preference(user, university, department):
+    def add_new_preference(user_id, university_id, department_id):
 
         '''
         a function docstring
@@ -303,10 +303,10 @@ class UserPreference(models.Model):
 
         image = Image.objects.create()
         user_preference = UserPreference.objects.create(
-            user=user,
-            university=university, department=department,
+            user_id=user_id,
+            university_id=university_id, department_id=department_id,
             profile=image,
-            background=Background.get_default(),
-            language=Language.get_default()
+            background_id=Background.get_default_id(),
+            language_id=Language.get_default_id()
         )
         return user_preference

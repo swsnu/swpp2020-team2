@@ -42,10 +42,8 @@ def signup(request):
             department_id = req_data['department']
             user = User.objects.create_user(is_active=False, username=username,
             first_name=first_name, last_name=last_name, password=password, email=email)
-            university = University.objects.get(id=university_id)
-            department = Department.objects.get(id=department_id)
-            UserPreference.add_new_preference(user=user,
-            university=university, department=department)
+            UserPreference.add_new_preference(user_id=user.id,
+            university_id=university_id, department_id=department_id)
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
@@ -108,8 +106,8 @@ def signin(request):
             user_dict = {'id': user.id, 'username': user.username,
             'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
             'email': user.email, 'is_active': user.is_active,
-            'university': user_preference.university.id,
-            'department': user_preference.department.id}
+            'university': user_preference.university_id,
+            'department': user_preference.department_id}
             return JsonResponse(user_dict)
         return HttpResponse(status=401)
 
@@ -153,8 +151,8 @@ def get_user_signin(request):
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university.id,
-        'department': user_preference.department.id}
+        'university': user_preference.university_id,
+        'department': user_preference.department_id}
         return JsonResponse(user_dict)
 
     return HttpResponseNotAllowed(['GET'])
@@ -178,11 +176,11 @@ def get_user_signin_full(request):
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university.id,
-        'department': user_preference.department.id,
-        'profile': user_preference.profile.id,
-        'background': user_preference.background.id,
-        'language': user_preference.language.id,
+        'university': user_preference.university_id,
+        'department': user_preference.department_id,
+        'profile': user_preference.profile_id,
+        'background': user_preference.background_id,
+        'language': user_preference.language_id,
         'likes': [event.id for event in user_preference.likes.all()],
         'brings': [event.id for event in user_preference.brings.all()],
         'join_requests': [group.id for group in user_preference.join_requests.all()],
@@ -215,8 +213,8 @@ def get_user(request, user_id):
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university.id,
-        'department': user_preference.department.id}
+        'university': user_preference.university_id,
+        'department': user_preference.department_id}
         return JsonResponse(user_dict)
 
     return HttpResponseNotAllowed(['GET'])
@@ -240,11 +238,11 @@ def get_user_full(request, user_id):
         user_dict = {'id': user.id, 'username': user.username,
         'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
         'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university.id,
-        'department': user_preference.department.id,
-        'profile': user_preference.profile.id,
-        'background': user_preference.background.id,
-        'language': user_preference.language.id,
+        'university': user_preference.university_id,
+        'department': user_preference.department_id,
+        'profile': user_preference.profile_id,
+        'background': user_preference.background_id,
+        'language': user_preference.language_id,
         'likes': [event.id for event in user_preference.likes.all()],
         'brings': [event.id for event in user_preference.brings.all()],
         'join_requests': [group.id for group in user_preference.join_requests.all()],
@@ -692,12 +690,12 @@ def get_event(request):
         events = [{'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
-        'category': event.category.id,
+        'category': event.category_id,
         'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group.id,
+        'group': event.group_id,
         'begin_time': str(event.begin_time),
         'end_time': str(event.end_time),
-        'last_editor': event.last_editor.id,
+        'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
         'content': event.content
         } for event in Event.objects.all().order_by('id')]
@@ -785,12 +783,12 @@ def create_event(request):
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
-        'category': event.category.id,
+        'category': event.category_id,
         'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group.id,
+        'group': event.group_id,
         'begin_time': str(event.begin_time),
         'end_time': str(event.end_time),
-        'last_editor': event.last_editor.id,
+        'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
         'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
@@ -814,12 +812,12 @@ def get_put_delete_event(request, event_id):
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': event.date,
-        'category': event.category.id,
+        'category': event.category_id,
         'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group.id,
+        'group': event.group_id,
         'begin_time': event.begin_time,
         'end_time': event.end_time,
-        'last_editor': event.last_editor.id,
+        'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
         'content': event.content}
         return JsonResponse(event_dict)
@@ -862,12 +860,12 @@ def get_put_delete_event(request, event_id):
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
-        'category': event.category.id,
+        'category': event.category_id,
         'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group.id,
+        'group': event.group_id,
         'begin_time': str(event.begin_time),
         'end_time': str(event.end_time),
-        'last_editor': event.last_editor.id,
+        'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
         'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
@@ -907,10 +905,11 @@ def get_group(request):
         groups = [{'id': group.id, 'name': group.name,
         'member': [user.id for user in group.member.all()],
         'admin': [user.id for user in group.admin.all()],
-        'king': group.king.id,
+        'king': group.king_id,
         'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
         'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
         'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+        'profile': group.profile_id,
         'description': group.description, 'privacy': group.privacy
         } for group in Group.objects.all().order_by('id')]
         return JsonResponse(groups, safe=False)
@@ -930,10 +929,9 @@ def create_group(request):
         name = req_data['name']
         description = req_data['description']
         king_id = req_data['king']
-        king = User.objects.get(id=king_id)
-        group = Group.add_new_group(name=name, king=king, description=description) # privacy = 1
+        group = Group.add_new_group(name=name, king_id=king_id, description=description) # privacy = 1
         group_dict = {'id': group.id, 'name': group.name,
-        'king': group.king.id,
+        'king': group.king_id,
         'description': group.description, 'privacy': group.privacy}
         return HttpResponse(content=json.dumps(group_dict), status=201)
     return HttpResponseNotAllowed(['POST'])

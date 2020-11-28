@@ -36,9 +36,9 @@ class AlmanacCsrfTestCase(TestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
 
     def test_csrf(self):
@@ -55,8 +55,8 @@ class AlmanacCsrfTestCase(TestCase):
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
@@ -66,8 +66,8 @@ class AlmanacCsrfTestCase(TestCase):
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json', HTTP_X_CSRFTOKEN=csrftoken)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -101,9 +101,9 @@ class AlmanacSignupTestCase(TransactionTestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
 
 
@@ -118,32 +118,32 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.put('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 405)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop2', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
@@ -158,8 +158,8 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -191,8 +191,8 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -240,8 +240,8 @@ class AlmanacSignupTestCase(TransactionTestCase):
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
-            'university': University.get_default().id,
-            'department': Department.get_default().id}),
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
             content_type='application/json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
@@ -283,9 +283,9 @@ class AlmanacUserTestCase(TransactionTestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
@@ -293,9 +293,9 @@ class AlmanacUserTestCase(TransactionTestCase):
             email='taekop@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
-            user=user2,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
 
     def test_user_get_signin(self):
@@ -323,8 +323,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
 
     def test_user_get_signin_full(self):
 
@@ -351,10 +351,11 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
-        self.assertEqual(response.json()['background'], Background.get_default().id)
-        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
+        self.assertEqual(response.json()['background'], Background.get_default_id())
+        self.assertEqual(response.json()['language'], Language.get_default_id())
+        self.assertIsInstance(response.json()['profile'], int)
         self.assertEqual(response.json()['likes'], [])
         self.assertEqual(response.json()['brings'], [])
         self.assertEqual(response.json()['join_requests'], [])
@@ -385,8 +386,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Lee')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
 
         response = client.get('/api/user/{}/'.format(id2))
         self.assertEqual(response.json()['username'], 'taekop')
@@ -394,8 +395,8 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
 
         response = client.get('/api/user/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
@@ -421,10 +422,11 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Lee')
         self.assertEqual(response.json()['email'], 'cbda117@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], False)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
-        self.assertEqual(response.json()['background'], Background.get_default().id)
-        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
+        self.assertEqual(response.json()['background'], Background.get_default_id())
+        self.assertEqual(response.json()['language'], Language.get_default_id())
+        self.assertIsInstance(response.json()['profile'], int)
         self.assertEqual(response.json()['likes'], [])
         self.assertEqual(response.json()['brings'], [])
         self.assertEqual(response.json()['join_requests'], [])
@@ -440,10 +442,10 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['last_name'], 'Oh')
         self.assertEqual(response.json()['email'], 'taekop@snu.ac.kr')
         self.assertEqual(response.json()['is_active'], True)
-        self.assertEqual(response.json()['university'], University.get_default().id)
-        self.assertEqual(response.json()['department'], Department.get_default().id)
-        self.assertEqual(response.json()['background'], Background.get_default().id)
-        self.assertEqual(response.json()['language'], Language.get_default().id)
+        self.assertEqual(response.json()['university'], University.get_default_id())
+        self.assertEqual(response.json()['department'], Department.get_default_id())
+        self.assertEqual(response.json()['background'], Background.get_default_id())
+        self.assertEqual(response.json()['language'], Language.get_default_id())
         self.assertEqual(response.json()['likes'], [])
         self.assertEqual(response.json()['brings'], [])
         self.assertEqual(response.json()['join_requests'], [])
@@ -474,9 +476,9 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
@@ -484,9 +486,9 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
             email='taekop@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
-            user=user2,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         Tag.objects.create(
             name='waffle'
@@ -505,9 +507,9 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
 
         snu_id = University.objects.get(name='Seoul National University').id
 
-        default_univ = University.get_default()
-        default_id = default_univ.id
-        self.assertEqual(default_id, snu_id)
+        default_univ_id = University.get_default_id()
+        default_univ = University.objects.get(id=default_univ_id)
+        self.assertEqual(default_univ_id, snu_id)
         self.assertEqual('Seoul National University', str(default_univ))
 
     def test_get_create_university(self):
@@ -589,9 +591,9 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
 
         cse_id = Department.objects.get(name='Computer Science Engineering').id
 
-        default_dept = Department.get_default()
-        default_id = default_dept.id
-        self.assertEqual(default_id, cse_id)
+        default_dept_id = Department.get_default_id()
+        default_dept = Department.objects.get(id=default_dept_id)
+        self.assertEqual(default_dept_id, cse_id)
         self.assertEqual('Computer Science Engineering', str(default_dept))
 
     def test_get_create_department(self):
@@ -810,9 +812,9 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
@@ -820,9 +822,9 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
             email='taekop@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
-            user=user2,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         Tag.objects.create(
             name='waffle'
@@ -841,9 +843,9 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
 
         green_id = Background.objects.get(name='green').id
 
-        default_back = Background.get_default()
-        default_id = default_back.id
-        self.assertEqual(default_id, green_id)
+        default_back_id = Background.get_default_id()
+        default_back = Background.objects.get(id=default_back_id)
+        self.assertEqual(default_back_id, green_id)
         self.assertEqual('green', str(default_back))
 
     def test_get_create_background(self):
@@ -900,9 +902,9 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
 
         english_id = Language.objects.get(name='English').id
 
-        default_lang = Language.get_default()
-        default_id = default_lang.id
-        self.assertEqual(default_id, english_id)
+        default_lang_id = Language.get_default_id()
+        default_lang = Language.objects.get(id=default_lang_id)
+        self.assertEqual(default_lang_id, english_id)
         self.assertEqual('English', str(default_lang))
 
     def test_get_create_language(self):
@@ -1015,9 +1017,9 @@ class AlmanacEventTag(TransactionTestCase):
             email='cbda117@snu.ac.kr', is_active=False
         )
         UserPreference.add_new_preference(
-            user=user1,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         self.user2 = User.objects.create_user(
             username='taekop', first_name='Seungtaek',
@@ -1025,9 +1027,9 @@ class AlmanacEventTag(TransactionTestCase):
             email='taekop@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
-            user=self.user2,
-            university=University.get_default(),
-            department=Department.get_default()
+            user_id=self.user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
         )
         self.tag1 = Tag.objects.create(
             name='waffle'
@@ -1042,21 +1044,21 @@ class AlmanacEventTag(TransactionTestCase):
         )
         self.group = Group.add_new_group(
             name='Group Name',
-            king=self.user2,
+            king_id=self.user2.id,
             description='Group Description'
         )
         self.group.member.add(self.user2)
         self.group.admin.add(self.user2)
         self.event = Event.objects.create(
             title='Event Title',
-            category=self.category,
-            group=self.group,
+            category_id=self.category.id,
+            group_id=self.group.id,
             place='Event Place',
             date='2020-11-05',
             begin_time='14:20:00',
             end_time='16:40:00',
             content='Event Content',
-            last_editor=self.user2
+            last_editor_id=self.user2.id
         )
         self.event.tag.add(self.tag1)
         self.event.tag.add(self.tag2)
