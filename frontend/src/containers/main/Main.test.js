@@ -74,8 +74,18 @@ describe('Main', () => {
       .mockImplementation();
 
     const component = mount(makeComponent(getMockStore(mockedState)));
-    const wrapper = component.find('span');
+    const wrapper = component.find('span').at(1);
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/signup');
+  });
+
+  it('should correctly toggle password visibility',()=>{
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    let instance = component.find(Main.WrappedComponent).instance();
+    const wrapper = component.find('span').at(0);
+
+    expect(instance.state.revealPassword).toBe(false);
+    wrapper.simulate('click');
+    expect(instance.state.revealPassword).toBe(true);
   });
 });

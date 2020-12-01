@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 import * as actionCreators from '../../store/actions/index';
 import './Main.css';
 import { appLogo } from '../../images/index';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 class Main extends Component {
   state = {
@@ -27,8 +27,8 @@ class Main extends Component {
     this.props.signin({ username: this.state.username, password: this.state.password });
   }
 
-  toggleRevealPassword=()=>{
-    this.setState({revealPassword:!this.state.revealPassword});
+  toggleRevealPassword=() => {
+    this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }));
   }
 
   render() {
@@ -59,16 +59,15 @@ class Main extends Component {
                 <label className="label">Password</label>
                 <input
                   id="password-input"
-                  type={this.state.revealPassword?"text":"password"}
+                  type={this.state.revealPassword ? 'text' : 'password'}
                   value={this.state.title}
                   onChange={(event) => this.setState({ password: event.target.value })}
                 />
                 <span onClick={this.toggleRevealPassword}>
                   <i>
-                    {this.state.revealPassword?
-                      <FontAwesomeIcon icon={faEyeSlash} /> :
-                      <FontAwesomeIcon icon={faEye} />
-                    }
+                    {this.state.revealPassword
+                      ? <FontAwesomeIcon icon={faEyeSlash} />
+                      : <FontAwesomeIcon icon={faEye} />}
                   </i>
                 </span>
               </div>

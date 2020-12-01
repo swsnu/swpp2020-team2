@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 import * as actionCreators from '../../store/actions/index';
 import './Signup.css';
 import { appLogo } from '../../images/index';
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 class Signup extends Component {
   state = {
@@ -81,11 +81,11 @@ class Signup extends Component {
     });
   }
 
-  toggleRevealPassword=()=>{
+  toggleRevealPassword=() => {
 
   }
 
-  toggleRevealConfirmPassword=()=>{
+  toggleRevealConfirmPassword=() => {
 
   }
 
@@ -123,7 +123,7 @@ class Signup extends Component {
                 <label className="label">Password</label>
                 <input
                   id="password-input"
-                  type={this.state.revealPassword?"text":"password"}
+                  type="text"
                   value={this.state.title}
                   onChange={(event) => this.setState({ password: event.target.value })}
                 />
@@ -134,7 +134,7 @@ class Signup extends Component {
                 <label className="label">Confirm Password</label>
                 <input
                   id="pwConfirm-input"
-                  type={this.state.revealConfirmPassword?"text":"password"}
+                  type="text"
                   value={this.state.title}
                   onChange={(event) => this.setState({ pwConfirm: event.target.value })}
                 />
