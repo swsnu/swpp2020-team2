@@ -5,6 +5,9 @@ import * as actionCreators from '../../store/actions/index';
 import './Signup.css';
 import { appLogo } from '../../images/index';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
 class Signup extends Component {
   state = {
     username: '',
@@ -15,6 +18,8 @@ class Signup extends Component {
     email: '',
     firstName: '',
     lastName: '',
+    revealPassword: false,
+    revealConfirmPassword: false,
   }
 
   componentDidUpdate(prevProps) {
@@ -76,6 +81,14 @@ class Signup extends Component {
     });
   }
 
+  toggleRevealPassword=()=>{
+
+  }
+
+  toggleRevealConfirmPassword=()=>{
+
+  }
+
   render() {
     return (
       <div className="SignUp">
@@ -110,7 +123,7 @@ class Signup extends Component {
                 <label className="label">Password</label>
                 <input
                   id="password-input"
-                  type="text"
+                  type={this.state.revealPassword?"text":"password"}
                   value={this.state.title}
                   onChange={(event) => this.setState({ password: event.target.value })}
                 />
@@ -121,7 +134,7 @@ class Signup extends Component {
                 <label className="label">Confirm Password</label>
                 <input
                   id="pwConfirm-input"
-                  type="text"
+                  type={this.state.revealConfirmPassword?"text":"password"}
                   value={this.state.title}
                   onChange={(event) => this.setState({ pwConfirm: event.target.value })}
                 />

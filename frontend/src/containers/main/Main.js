@@ -5,10 +5,14 @@ import * as actionCreators from '../../store/actions/index';
 import './Main.css';
 import { appLogo } from '../../images/index';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+
 class Main extends Component {
   state = {
     username: '',
     password: '',
+    revealPassword: false,
   }
 
   componentDidUpdate() {
@@ -21,6 +25,10 @@ class Main extends Component {
       return;
     }
     this.props.signin({ username: this.state.username, password: this.state.password });
+  }
+
+  toggleRevealPassword=()=>{
+    this.setState({revealPassword:!this.state.revealPassword});
   }
 
   render() {
@@ -51,10 +59,18 @@ class Main extends Component {
                 <label className="label">Password</label>
                 <input
                   id="password-input"
-                  type="text"
+                  type={this.state.revealPassword?"text":"password"}
                   value={this.state.title}
                   onChange={(event) => this.setState({ password: event.target.value })}
                 />
+                <span onClick={this.toggleRevealPassword}>
+                  <i>
+                    {this.state.revealPassword?
+                      <FontAwesomeIcon icon={faEyeSlash} /> :
+                      <FontAwesomeIcon icon={faEye} />
+                    }
+                  </i>
+                </span>
               </div>
             </div>
 
