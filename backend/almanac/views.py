@@ -41,11 +41,18 @@ def signup(request):
             email = req_data['email']
             university_id = req_data['university']
             department_id = req_data['department']
-            with transaction.atomic():
-                user = User.objects.create_user(is_active=False, username=username,
-                first_name=first_name, last_name=last_name, password=password, email=email)
-                UserPreference.add_new_preference(user_id=user.id,
-                university_id=university_id, department_id=department_id)
+            if not User.objects.filter(username=username).exists():
+                with transaction.atomic():
+                    user = User.objects.create_user(is_active=False, username=username,
+                    first_name=first_name, last_name=last_name, password=password, email=email)
+                    UserPreference.add_new_preference(user_id=user.id,
+                    university_id=university_id, department_id=department_id)
+            else:
+                user = User.objects.get(username=username)
+                if not user.check_password(password):
+                    return HttpResponse("Username Taken")
+                if user.is_active:
+                    return HttpResponse("Already Activated")
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
@@ -81,7 +88,7 @@ def activate(request, uidb64, token):
             user.is_active = True
             user.save()
             login(request, user)
-            return HttpResponse(content='Now your account is activated safely.', status=204)
+            return HttpResponse("Account Activated Safely")
         return HttpResponseNotFound()
     return HttpResponseNotAllowed(['GET'])
 

@@ -133,7 +133,24 @@ class AlmanacSignupTestCase(TransactionTestCase):
 
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password3', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), "Username Taken")
+
+        response = client.post('/api/signup/', json.dumps(
+            {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        response = client.post('/api/signup/', json.dumps(
+            {'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password3', 'email': 'taekop@snu.ac.kr',
             'university': University.get_default_id(),
             'department': Department.get_default_id()}),
             content_type='application/json')
@@ -176,9 +193,19 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 404)
 
         response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), "Account Activated Safely")
         user = User.objects.get(username='taekop')
         self.assertEqual(user.is_active, True)
+
+        response = client.post('/api/signup/', json.dumps(
+            {'username': 'taekop', 'first_name': 'Seungtaek',
+            'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
+            'university': University.get_default_id(),
+            'department': Department.get_default_id()}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), "Already Activated")
 
     def test_signin(self):
 
@@ -202,7 +229,8 @@ class AlmanacSignupTestCase(TransactionTestCase):
         token = regx.group(2)
 
         response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), "Account Activated Safely")
 
         response = client.put('/api/signin/', json.dumps(
             {'username': 'not_a_user', 'password': 'password3'}),
@@ -251,7 +279,8 @@ class AlmanacSignupTestCase(TransactionTestCase):
         token = regx.group(2)
 
         response = client.get('/api/signup/activate/{}/{}/'.format(uidb64, token))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode(), "Account Activated Safely")
 
         response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
