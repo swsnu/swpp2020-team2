@@ -728,15 +728,22 @@ def get_event_filtered(request):
         event_objects = Event.objects.all()
         # Filter(Dictionary)
         if 'tag' in filter_options_dict.keys():
-            tag_list = filter_options_dict['tag']
-            q_list = [Q(tag=Tag.objects.get(id=x)) for x in tag_list]
-            event_objects = event_objects.filter(reduce(operator.or_, q_list))
+            event_objects = event_objects.filter(tag_id__in=filter_options_dict['tag'])
+        if 'category' in filter_options_dict.keys():
+            event_objects = event_objects.filter(category_id__in=filter_options_dict['category'])
+        if 'including' in filter_options_dict.keys():
+            including_list = filter_options_dict['including']
+            q_list = [Q(content__contains=x) for x in including_list]
+            event_objects = event_objects.filter(reduce(operator.and_, q_list))
+        # group like my notification
+        # event like
         # Sort(List)
         for option in sort_options_list:
             if option == 'id':
                 event_objects = event_objects.order_by('id')
             if option == 'date':
                 event_objects = event_objects.order_by('date')
+        # like
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
             event_objects = event_objects[count_options_dict['from']:]
