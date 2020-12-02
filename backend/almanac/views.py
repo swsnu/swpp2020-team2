@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.encoding import force_bytes
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from almanac.models import User, UserPreference, \
     University, Department, Event, Group, Background, Language, Category, Tag, Image
@@ -720,6 +720,12 @@ def get_event_filtered(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
     if request.method == 'GET':
         req_data = json.loads(request.body.decode())
         filter_options_dict = req_data['filter_options']
@@ -735,6 +741,22 @@ def get_event_filtered(request):
             including_list = filter_options_dict['including']
             q_list = [Q(content__contains=x) for x in including_list]
             event_objects = event_objects.filter(reduce(operator.and_, q_list))
+        if 'group' in filter_options_dict.keys():
+            if 'like' in filter_options_dict['group']:
+                event_objects = event_objects.filter(group__in=user_preference.likes_group)
+            if 'my' in filter_options_dict['group']:
+                event_objects = event_objects.filter(group__in=user_preference.member_group)
+            if 'notification' in filter_options_dict['group']:
+                event_objects = event_objects.filter(group__in=user_preference.gets_notification)
+        if 'event' in filter_options_dict.keys():
+            if 'like' in filter_options_dict['event']:
+                event_objects = event_objects.filter(
+                    id__in=user_preference.likes.values_list('id', flat=True)
+                )
+        if 'date' in filter_options_dict.keys():
+            begin_date = filter_options_dict['event']['begin_date']
+            end_date = filter_options_dict['event']['end_date']
+            event_objects = event_objects.filter(date__range=(begin_date, end_date))
         # group like my notification
         # event like
         # Sort(List)
@@ -743,6 +765,14 @@ def get_event_filtered(request):
                 event_objects = event_objects.order_by('id')
             if option == 'date':
                 event_objects = event_objects.order_by('date')
+            if option == 'begin_time':
+                event_objects = event_objects.order_by('begin_time').order_by('date')
+            if option == 'end_time':
+                event_objects = event_objects.order_by('end_time').order_by('date')
+            if option == 'likes':
+                event_objects = event_objects.annotate(q_count=
+                Count('likes_userpreference')
+                ).order_by('-q_count').order_by('date')
         # like
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
