@@ -82,11 +82,11 @@ class Signup extends Component {
   }
 
   toggleRevealPassword=() => {
-
+    this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }));
   }
 
   toggleRevealConfirmPassword=() => {
-
+    this.setState((prevState) => ({ revealConfirmPassword: !prevState.revealConfirmPassword }));
   }
 
   render() {
@@ -121,23 +121,38 @@ class Signup extends Component {
               <div className="box">
 
                 <label className="label">Password</label>
-                <input
-                  id="password-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ password: event.target.value })}
-                />
+                <div className="inputbox">
+                  <input
+                    id="password-input"
+                    type={this.state.revealPassword ? 'text' : 'password'}
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ password: event.target.value })}
+                  />
+                  <div className="toggle" onClick={this.toggleRevealPassword}>
+                    {this.state.revealPassword
+                      ? <FontAwesomeIcon icon={faEyeSlash} />
+                      : <FontAwesomeIcon icon={faEye} />}
+                  </div>
+                </div>
+
               </div>
 
               <div className="box">
 
                 <label className="label">Confirm Password</label>
-                <input
-                  id="pwConfirm-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ pwConfirm: event.target.value })}
-                />
+                <div className="inputbox">
+                  <input
+                    id="pwConfirm-input"
+                    type={this.state.revealConfirmPassword ? 'text' : 'password'}
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ pwConfirm: event.target.value })}
+                  />
+                  <div className="toggle" onClick={this.toggleRevealConfirmPassword}>
+                    {this.state.revealConfirmPassword
+                      ? <FontAwesomeIcon icon={faEyeSlash} />
+                      : <FontAwesomeIcon icon={faEye} />}
+                  </div>
+                </div>
               </div>
 
               <div className="box">
