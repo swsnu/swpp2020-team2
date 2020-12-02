@@ -186,7 +186,7 @@ describe('<Articles />', () => {
     });
 
     const dayComponent = component.find('.abled');
-    expect(dayComponent.length).toBe(30);
+    expect(dayComponent.length).toBe(31);
     dayComponent.at(0).simulate('click');
 
     const close = component.find('.closeButton');

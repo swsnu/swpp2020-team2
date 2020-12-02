@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 import * as actionCreators from '../../store/actions/index';
 import './Signup.css';
 import { appLogo } from '../../images/index';
@@ -15,6 +18,8 @@ class Signup extends Component {
     email: '',
     firstName: '',
     lastName: '',
+    revealPassword: false,
+    revealConfirmPassword: false,
   }
 
   componentDidUpdate(prevProps) {
@@ -74,6 +79,14 @@ class Signup extends Component {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
     });
+  }
+
+  toggleRevealPassword=() => {
+
+  }
+
+  toggleRevealConfirmPassword=() => {
+
   }
 
   render() {

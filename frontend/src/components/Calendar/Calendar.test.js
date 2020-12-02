@@ -96,14 +96,14 @@ describe('<Calendar />', () => {
     const wrapperYearMonth = component.find('.year_month');
     expect(wrapperYearMonth.length).toBe(1);
 
-    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 11.');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
     wrapperArrow.at(0).simulate('click');
-    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 10.');
-    wrapperArrow.at(1).simulate('click');
     expect(wrapperYearMonth.at(0).text()).toEqual('2020. 11.');
+    wrapperArrow.at(1).simulate('click');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
 
     const dayComponent = component.find('.abled');
-    expect(dayComponent.length).toBe(30);
+    expect(dayComponent.length).toBe(31);
     dayComponent.at(0).simulate('click');
     dayComponent.at(0).simulate('keypress');
 
