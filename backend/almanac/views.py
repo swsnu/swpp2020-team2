@@ -6,6 +6,7 @@ import json
 import operator
 from functools import reduce
 from json import JSONDecodeError
+from django.db import transaction
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
     HttpResponseNotFound, JsonResponse
@@ -40,10 +41,18 @@ def signup(request):
             email = req_data['email']
             university_id = req_data['university']
             department_id = req_data['department']
-            user = User.objects.create_user(is_active=False, username=username,
-            first_name=first_name, last_name=last_name, password=password, email=email)
-            UserPreference.add_new_preference(user_id=user.id,
-            university_id=university_id, department_id=department_id)
+            if not User.objects.filter(username=username).exists():
+                with transaction.atomic():
+                    user = User.objects.create_user(is_active=False, username=username,
+                    first_name=first_name, last_name=last_name, password=password, email=email)
+                    UserPreference.add_new_preference(user_id=user.id,
+                    university_id=university_id, department_id=department_id)
+            else:
+                user = User.objects.get(username=username)
+                if not user.check_password(password):
+                    return HttpResponse("Username Taken")
+                if user.is_active:
+                    return HttpResponse("Already Activated")
             content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
             ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
             '\nEnjoy your calenars!').format(
@@ -79,7 +88,7 @@ def activate(request, uidb64, token):
             user.is_active = True
             user.save()
             login(request, user)
-            return HttpResponse(content='Now your account is activated safely.', status=204)
+            return HttpResponse("Account Activated Safely")
         return HttpResponseNotFound()
     return HttpResponseNotAllowed(['GET'])
 
@@ -182,13 +191,13 @@ def get_user_signin_full(request):
         'background': user_preference.background_id,
         'language': user_preference.language_id,
         'likes': list(user_preference.likes.values_list('id', flat=True)),
-        'brings': [event.id for event in user_preference.brings.all()],
-        'join_requests': [group.id for group in user_preference.join_requests.all()],
-        'likes_group': [group.id for group in user_preference.likes_group.all()],
-        'gets_notification': [group.id for group in user_preference.gets_notification.all()],
-        'members': [group.id for group in user.member_group.all()],
-        'admins': [group.id for group in user.admin_group.all()],
-        'kings': [group.id for group in user.king_group.all()],
+        'brings': list(user_preference.brings.values_list('id', flat=True)),
+        'join_requests': list(user_preference.join_requests.values_list('id', flat=True)),
+        'likes_group': list(user_preference.likes_group.values_list('id', flat=True)),
+        'gets_notification': list(user_preference.gets_notification.values_list('id', flat=True)),
+        'members': list(user.member_group.values_list('id', flat=True)),
+        'admins': list(user.admin_group.values_list('id', flat=True)),
+        'kings': list(user.king_group.values_list('id', flat=True)),
         }
         return JsonResponse(user_dict)
 
@@ -761,25 +770,24 @@ def create_event(request):
         req_data = json.loads(request.body.decode())
         tag_id_list = req_data['tag']
         image_id_list = req_data['image']
-        category = Category.objects.get(id=req_data['category'])
-        group = Group.objects.get(id=req_data['group'])
-        last_editor = User.objects.get(id=req_data['last_editor'])
+        category_id = req_data['category']
+        group_id = req_data['group']
+        last_editor_id = req_data['last_editor']
         event = Event(
             title=req_data['title'],
             place=req_data['place'], date=req_data['date'],
-            category=category, group=group,
+            category_id=category_id, group_id=group_id,
             begin_time=req_data['begin_time'], end_time=req_data['end_time'],
-            last_editor=last_editor,
+            last_editor_id=last_editor_id,
             content=req_data['content']
         )
-        event.save()
-        for t_id in tag_id_list:
-            tag = Tag.objects.get(id=t_id)
-            event.tag.add(tag)
-        for i_id in image_id_list:
-            image = Image.objects.get(id=i_id)
-            event.image.add(image)
-        event.save()
+        with transaction.atomic():
+            event.save()
+            for t_id in tag_id_list:
+                event.tag.add(t_id)
+            for i_id in image_id_list:
+                event.image.add(i_id)
+            event.save()
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
@@ -823,40 +831,36 @@ def get_put_delete_event(request, event_id):
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         req_data = json.loads(request.body.decode())
-        if 'category' in req_data.keys():
-            category = Category.objects.get(id=req_data['category'])
-            event.category = category
-        if 'group' in req_data.keys():
-            group = Group.objects.get(id=req_data['group'])
-            event.group = group
-        if 'last_editor' in req_data.keys():
-            last_editor = User.objects.get(id=req_data['last_editor'])
-            event.last_editor = last_editor
-        if 'title' in req_data.keys():
-            event.title = req_data['title']
-        if 'place' in req_data.keys():
-            event.place = req_data['place']
-        if 'date' in req_data.keys():
-            event.date = req_data['date']
-        if 'begin_time' in req_data.keys():
-            event.begin_time = req_data['begin_time']
-        if 'end_time' in req_data.keys():
-            event.end_time = req_data['end_time']
-        if 'content' in req_data.keys():
-            event.content = req_data['content']
-        if 'tag' in req_data.keys():
-            tag_id_list = req_data['tag']
-            event.tag.clear()
-            for t_id in tag_id_list:
-                tag = Tag.objects.get(id=t_id)
-                event.tag.add(tag)
-        if 'image' in req_data.keys():
-            image_id_list = req_data['image']
-            event.image.clear()
-            for i_id in image_id_list:
-                image = Image.objects.get(id=i_id)
-                event.image.add(image)
-        event.save()
+        with transaction.atomic():
+            if 'category' in req_data.keys():
+                event.category_id = req_data['category']
+            if 'group' in req_data.keys():
+                event.group_id = req_data['group']
+            if 'last_editor' in req_data.keys():
+                event.last_editor_id = req_data['last_editor']
+            if 'title' in req_data.keys():
+                event.title = req_data['title']
+            if 'place' in req_data.keys():
+                event.place = req_data['place']
+            if 'date' in req_data.keys():
+                event.date = req_data['date']
+            if 'begin_time' in req_data.keys():
+                event.begin_time = req_data['begin_time']
+            if 'end_time' in req_data.keys():
+                event.end_time = req_data['end_time']
+            if 'content' in req_data.keys():
+                event.content = req_data['content']
+            if 'tag' in req_data.keys():
+                tag_id_list = req_data['tag']
+                event.tag.clear()
+                for t_id in tag_id_list:
+                    event.tag.add(t_id)
+            if 'image' in req_data.keys():
+                image_id_list = req_data['image']
+                event.image.clear()
+                for i_id in image_id_list:
+                    event.image.add(i_id)
+            event.save()
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': str(event.date),
