@@ -68,6 +68,24 @@
     float: right;
 }
 
+.Signup .signUpBox .inputBox{
+    height: 24px;
+    margin: 10px;
+    float: right;
+    display: flex;
+    position: relative;
+}
+
+.Signup .signUpBox .inputBox .toggle{
+    position: absolute;
+    right: 5px;
+    top:3px;
+}
+.Signup .signUpBox .inputBox .toggle:hover{
+    color: #00fcb6;
+    cursor: pointer;
+}
+
 .SignUp .confirmBox{
     display: flex;
     flex-direction: column;

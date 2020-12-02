@@ -76,7 +76,7 @@
 .Main .signInBox .inputBox .toggle{
     position: absolute;
     right: 5px;
-    top:3px;
+    top: 1px;
 }
 .Main .signInBox .inputBox .toggle:hover{
     color: #00fcb6;
