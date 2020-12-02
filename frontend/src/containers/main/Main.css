@@ -65,10 +65,22 @@
     justify-content: space-between;
 }
 
-.Main .signInBox input{
+.Main .signInBox .inputBox{
     height: 24px;
     margin: 10px;
     float: right;
+    display: flex;
+    position: relative;
+}
+
+.Main .signInBox .inputBox .toggle{
+    position: absolute;
+    right: 5px;
+    top:3px;
+}
+.Main .signInBox .inputBox .toggle:hover{
+    color: #00fcb6;
+    cursor: pointer;
 }
 
 .Main .confirmBox{
@@ -89,12 +101,7 @@
     color: blue;    
 }
 
-i{
-    position: absolute;
-    top: 66.2%;
-    right: 31.8%;
-}
-i:hover {
-    color: #00fcb6;
+.Main .confirmBox .signUpBox:hover{
     cursor: pointer;
+    font-weight: bold;
 }

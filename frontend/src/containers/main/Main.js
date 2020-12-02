@@ -27,7 +27,7 @@ class Main extends Component {
     this.props.signin({ username: this.state.username, password: this.state.password });
   }
 
-  toggleRevealPassword=() => {
+  toggleRevealPassword = () => {
     this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }));
   }
 
@@ -46,30 +46,36 @@ class Main extends Component {
           <div className="container">
             <div className="signInBox">
               <h2>Sign In</h2>
+
               <div className="idBox">
                 <label className="label">ID</label>
-                <input
-                  id="username-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ username: event.target.value })}
-                />
+
+                <div className="inputBox">
+                  <input
+                    id="username-input"
+                    type="text"
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ username: event.target.value })}
+                  />
+                </div>
               </div>
+
               <div className="passwordBox">
                 <label className="label">Password</label>
-                <input
-                  id="password-input"
-                  type={this.state.revealPassword ? 'text' : 'password'}
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ password: event.target.value })}
-                />
-                <span onClick={this.toggleRevealPassword}>
-                  <i>
+
+                <div className="inputBox">
+                  <input
+                    id="password-input"
+                    type={this.state.revealPassword ? 'text' : 'password'}
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ password: event.target.value })}
+                  />
+                  <div className="toggle" onClick={this.toggleRevealPassword}>
                     {this.state.revealPassword
                       ? <FontAwesomeIcon icon={faEyeSlash} />
                       : <FontAwesomeIcon icon={faEye} />}
-                  </i>
-                </span>
+                  </div>
+                </div>
               </div>
             </div>
 
