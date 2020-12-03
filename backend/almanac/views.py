@@ -321,6 +321,75 @@ def like_group_user(request):
         user_preference.likes_group.remove(group_id)
     return HttpResponse(status=204)
 
+def get_notification_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.gets_notification.add(group_id)
+    else: # remove
+        user_preference.gets_notification.remove(group_id)
+    return HttpResponse(status=204)
+
+def join_request_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.join_requests.add(group_id)
+    else: # remove
+        user_preference.join_requests.remove(group_id)
+    return HttpResponse(status=204)
+
+def change_profile_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    image_id = req_data['profile']
+    user_preference.profile_id = image_id
+    user_preference.save()
+    return HttpResponse(status=204)
+
 # University
 
 def get_create_university(request):

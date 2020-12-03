@@ -348,6 +348,8 @@ class AlmanacUserTestCase(TransactionTestCase):
             content='Event Content',
             last_editor_id=self.user2.id
         )
+        self.sample_image = Image.objects.create(
+        )
 
     def test_user_get_signin(self):
 
@@ -631,6 +633,119 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/signin/full/')
         self.assertEqual(response.json()['likes_group'],
         [])
+
+    def test_get_notification_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/get_notification/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/get_notification/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/get_notification/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['gets_notification'],
+        [self.group1.id])
+
+        response = client.put('/api/user/signin/get_notification/', json.dumps(
+            {'group': self.group1.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['gets_notification'],
+        [])
+
+    def test_join_request_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/join_request/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/join_request/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/join_request/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['join_requests'],
+        [self.group1.id])
+
+        response = client.put('/api/user/signin/join_request/', json.dumps(
+            {'group': self.group1.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['join_requests'],
+        [])
+
+    def test_change_profile_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/change_profile/', json.dumps(
+            {'profile': self.sample_image.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/change_profile/', json.dumps(
+            {'profile': self.sample_image.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/change_profile/', json.dumps(
+            {'profile': self.sample_image.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['profile'], self.sample_image.id)
 
 class AlmanacUnivDeptCatTag(TransactionTestCase):
 
