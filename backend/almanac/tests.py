@@ -1098,30 +1098,22 @@ class AlmanacEvent(TransactionTestCase):
         self.category2 = Category.objects.create(
             name='ililhof'
         )
-        self.sample_image1 = Image.objects.create(
-        )
         self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
             description='Group Description'
         )
-        self.group1.member.add(self.user2)
-        self.group1.admin.add(self.user2)
         self.group2 = Group.add_new_group(
             name='Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
         )
-        self.group2.member.add(self.user3)
-        self.group2.admin.add(self.user3)
         self.group2.member.add(self.user2)
         self.group3 = Group.add_new_group(
             name='Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
-        self.group3.member.add(self.user3)
-        self.group3.admin.add(self.user4)
         self.group3.member.add(self.user4)
         self.event1 = Event.objects.create(
             title='Event Title',
@@ -1793,3 +1785,103 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(len(response.json()), 2)
         self.assertEqual(response.json()[0]['id'], self.event3.id)
         self.assertEqual(response.json()[1]['id'], self.event1.id)
+
+class AlmanacGroup(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create_user(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        self.userpreference2 = UserPreference.add_new_preference(
+            user_id=self.user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user3 = User.objects.create_user(
+            username='sdm1230', first_name='Dongmin',
+            last_name='Shin', password='password3',
+            email='sdm1230@snu.ac.kr', is_active=True
+        )
+        self.userpreference3 = UserPreference.add_new_preference(
+            user_id=self.user3.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user4 = User.objects.create_user(
+            username='sdm369', first_name='Dongmin',
+            last_name='Co', password='password4',
+            email='sdm369@snu.ac.kr', is_active=True
+        )
+        self.userpreference4 = UserPreference.add_new_preference(
+            user_id=self.user4.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.group1 = Group.add_new_group(
+            name='Group Name',
+            king_id=self.user2.id,
+            description='Group Description'
+        )
+        self.group2 = Group.add_new_group(
+            name='Group Name3',
+            king_id=self.user3.id,
+            description='Group Description3'
+        )
+        self.group2.member.add(self.user2)
+        self.group3 = Group.add_new_group(
+            name='Group Name4',
+            king_id=self.user3.id,
+            description='Group Description4'
+        )
+        self.group3.member.add(self.user4)
+        self.group4 = Group.add_new_group(
+            name='Group Name5',
+            king_id=self.user3.id,
+            description='Group Description5'
+        )
+        self.group4.member.add(self.user4)
+        self.group5 = Group.add_new_group(
+            name='Group Name6',
+            king_id=self.user2.id,
+            description='Group Description6'
+        )
+        self.group5.member.add(self.user4)
+        self.userpreference2.likes_group.add(self.group1)
+        self.userpreference2.gets_notification.add(self.group3)
+
+    def test_get_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[0]['name'], self.group1.name)
