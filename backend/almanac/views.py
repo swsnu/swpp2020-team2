@@ -769,9 +769,9 @@ def get_event_filtered(request):
                 event_objects = event_objects.annotate(q_count=
                 Count('likes_userpreference')
                 ).order_by('-q_count', 'date')
-            if option == 'joins':
+            if option == 'brings':
                 event_objects = event_objects.annotate(q_count=
-                Count('joins_userpreference')
+                Count('brings_userpreference')
                 ).order_by('-q_count', 'date')
         # like
         # Count(Dictionary)

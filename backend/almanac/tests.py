@@ -1055,7 +1055,7 @@ class AlmanacEvent(TransactionTestCase):
             last_name='Oh', password='password2',
             email='taekop@snu.ac.kr', is_active=True
         )
-        UserPreference.add_new_preference(
+        self.userpreference2 = UserPreference.add_new_preference(
             user_id=self.user2.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
@@ -1065,7 +1065,7 @@ class AlmanacEvent(TransactionTestCase):
             last_name='Shin', password='password3',
             email='sdm1230@snu.ac.kr', is_active=True
         )
-        UserPreference.add_new_preference(
+        self.userpreference3 = UserPreference.add_new_preference(
             user_id=self.user3.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
@@ -1075,7 +1075,7 @@ class AlmanacEvent(TransactionTestCase):
             last_name='Co', password='password4',
             email='sdm369@snu.ac.kr', is_active=True
         )
-        UserPreference.add_new_preference(
+        self.userpreference4 = UserPreference.add_new_preference(
             user_id=self.user4.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
@@ -1130,7 +1130,7 @@ class AlmanacEvent(TransactionTestCase):
             place='Event Place',
             date='2020-11-05',
             begin_time='14:20:00',
-            end_time='16:40:00',
+            end_time='16:52:00',
             content='Event Content',
             last_editor_id=self.user2.id
         )
@@ -1143,7 +1143,7 @@ class AlmanacEvent(TransactionTestCase):
             place='Event Place2',
             date='2020-11-05',
             begin_time='14:30:00',
-            end_time='16:50:00',
+            end_time='16:55:00',
             content='Event Content2',
             last_editor_id=self.user3.id
         )
@@ -1156,7 +1156,7 @@ class AlmanacEvent(TransactionTestCase):
             place='Event Place3',
             date='2020-11-05',
             begin_time='14:55:00',
-            end_time='16:35:00',
+            end_time='16:45:00',
             content='Event Content3',
             last_editor_id=self.user3.id
         )
@@ -1212,6 +1212,18 @@ class AlmanacEvent(TransactionTestCase):
         )
         self.event6.tag.add(self.tag3)
         self.event7.tag.add(self.tag4)
+        self.userpreference2.likes.add(self.event2)
+        self.userpreference2.likes.add(self.event4)
+        self.userpreference2.likes.add(self.event5)
+        self.userpreference2.likes.add(self.event7)
+        self.userpreference3.likes.add(self.event1)
+        self.userpreference3.likes.add(self.event2)
+        self.userpreference3.likes.add(self.event7)
+        self.userpreference4.likes.add(self.event5)
+        self.userpreference4.likes.add(self.event7)
+        self.userpreference2.brings.add(self.event6)
+        self.userpreference2.brings.add(self.event7)
+        self.userpreference4.brings.add(self.event6)
 
     def test_get_event_simple(self):
 
@@ -1517,6 +1529,51 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[4]['id'], self.event2.id)
         self.assertEqual(response.json()[5]['id'], self.event4.id)
         self.assertEqual(response.json()[6]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['end_time'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event3.id)
+        self.assertEqual(response.json()[5]['id'], self.event1.id)
+        self.assertEqual(response.json()[6]['id'], self.event2.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['likes'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event2.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event4.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['brings'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event6.id)
+        self.assertEqual(response.json()[1]['id'], self.event7.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event3.id)
+        self.assertEqual(response.json()[6]['id'], self.event4.id)
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
