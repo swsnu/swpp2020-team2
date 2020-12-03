@@ -91,5 +91,9 @@ urlpatterns = [
     views.get_create_image, name='create_image'),
     path('image/<int:image_id>/',
     views.get_delete_image, name='get_delete_image'),
+    path('event_report/',
+    views.get_create_event_report, name='create_event_report'),
+    path('group_report/',
+    views.get_create_group_report, name='create_group_report'),
     path('token/', views.get_token, name='token'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

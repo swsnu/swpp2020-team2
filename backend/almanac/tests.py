@@ -13,7 +13,7 @@ from django.conf import settings
 
 from .models import User, UserPreference, \
     University, Department, Background, Language, Tag, Category, Image, \
-    Group, Event
+    Group, Event, EventReport, GroupReport
 
 # Create your tests here.
 
@@ -2808,3 +2808,178 @@ class AlmanacGroup(TransactionTestCase):
 
         response = client.get('/api/group/{}/full/'.format(id_group))
         self.assertEqual(response.json()['privacy'], 2)
+
+class AlmanacEventReport(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create_user(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        self.userpreference2 = UserPreference.add_new_preference(
+            user_id=self.user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user3 = User.objects.create_user(
+            username='sdm1230', first_name='Dongmin',
+            last_name='Shin', password='password3',
+            email='sdm1230@snu.ac.kr', is_active=True
+        )
+        self.userpreference3 = UserPreference.add_new_preference(
+            user_id=self.user3.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user4 = User.objects.create_user(
+            username='sdm369', first_name='Dongmin',
+            last_name='Co', password='password4',
+            email='sdm369@snu.ac.kr', is_active=True
+        )
+        self.userpreference4 = UserPreference.add_new_preference(
+            user_id=self.user4.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.group1 = Group.add_new_group(
+            name='Group Name',
+            king_id=self.user2.id,
+            description='Group Description'
+        )
+        self.group2 = Group.add_new_group(
+            name='Cat Group Name3',
+            king_id=self.user3.id,
+            description='Group Description3'
+        )
+        self.group3 = Group.add_new_group(
+            name='Catholic Group Name4',
+            king_id=self.user3.id,
+            description='Group Description4'
+        )
+        self.category1 = Category.objects.create(
+            name='performance'
+        )
+        self.event1 = Event.objects.create(
+            title='Event Title',
+            category_id=self.category1.id,
+            group_id=self.group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='Event Content',
+            last_editor_id=self.user2.id
+        )
+        self.event2 = Event.objects.create(
+            title='Event Title2',
+            category_id=self.category1.id,
+            group_id=self.group2.id,
+            place='Event Place2',
+            date='2020-11-05',
+            begin_time='14:30:00',
+            end_time='16:55:00',
+            content='Event Content2',
+            last_editor_id=self.user3.id
+        )
+        self.event_report1 = EventReport.objects.create(
+            event_id=self.event1.id,
+            reporter_id=self.user2.id,
+            content='Event Report Content'
+        )
+        self.group_report1 = GroupReport.objects.create(
+            group_id=self.group1.id,
+            reporter_id=self.user2.id,
+            content='Group Report Content'
+        )
+
+    def test_get_create_event_report(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/event_report/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event_report/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['event'], self.event1.id)
+        self.assertEqual(response.json()[0]['reporter'], self.user2.id)
+        self.assertEqual(response.json()[0]['content'], 'Event Report Content')
+
+        response = client.post('/api/event_report/', json.dumps({
+            'event': self.event2.id,
+            'content': 'Another Event Report Content'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event_report/', json.dumps({
+            'event': self.event2.id,
+            'content': 'Another Event Report Content'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(str(self.event2.id), response.content.decode())
+        self.assertIn('Another Event Report Content', response.content.decode())
+
+    def test_get_create_group_report(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group_report/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group_report/')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['group'], self.group1.id)
+        self.assertEqual(response.json()[0]['reporter'], self.user2.id)
+        self.assertEqual(response.json()[0]['content'], 'Group Report Content')
+
+        response = client.post('/api/group_report/', json.dumps({
+            'group': self.group2.id,
+            'content': 'Another Group Report Content'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group_report/', json.dumps({
+            'group': self.group2.id,
+            'content': 'Another Group Report Content'}),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(str(self.group2.id), response.content.decode())
+        self.assertIn('Another Group Report Content', response.content.decode())

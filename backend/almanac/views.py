@@ -18,7 +18,8 @@ from django.utils.encoding import force_bytes
 from django.db.models import Q, Count
 
 from almanac.models import User, UserPreference, \
-    University, Department, Event, Group, Background, Language, Category, Tag, Image
+    University, Department, Event, Group, Background, Language, Category, Tag, \
+    Image, EventReport, GroupReport
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -1395,6 +1396,66 @@ def search_group(request, including):
     'profile': group.profile_id
     } for group in group_objects]
     return JsonResponse(groups, safe=False)
+
+def get_create_event_report(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        event_reports = [{
+            'id': event_report.id,
+            'event': event_report.event_id,
+            'reporter': event_report.reporter_id,
+            'content': event_report.content}
+            for event_report in EventReport.objects.all()]
+        return JsonResponse(event_reports, safe=False)
+    # POST
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    user = request.user
+    req_data = json.loads(request.body.decode())
+    event_id = req_data['event']
+    content = req_data['content']
+    event_report = EventReport(event_id=event_id, reporter_id=user.id, content=content)
+    event_report.save()
+    event_report_dict = {'id': event_report.id, 'event': event_report.event_id,
+    'reporter': event_report.reporter_id, 'content': event_report.content}
+    return HttpResponse(content=json.dumps(event_report_dict), status=201)
+
+def get_create_group_report(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        group_reports = [{
+            'id': group_report.id,
+            'group': group_report.group_id,
+            'reporter': group_report.reporter_id,
+            'content': group_report.content}
+            for group_report in GroupReport.objects.all()]
+        return JsonResponse(group_reports, safe=False)
+    # POST
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    user = request.user
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    content = req_data['content']
+    group_report = GroupReport(group_id=group_id, reporter_id=user.id, content=content)
+    group_report.save()
+    group_report_dict = {'id': group_report.id, 'group': group_report.group_id,
+    'reporter': group_report.reporter_id, 'content': group_report.content}
+    return HttpResponse(content=json.dumps(group_report_dict), status=201)
 
 # Others
 
