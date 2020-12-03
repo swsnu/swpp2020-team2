@@ -31,46 +31,47 @@ def signup(request):
     a function docstring
     '''
 
-    if request.method == 'POST':
-        try:
-            req_data = json.loads(request.body.decode())
-            username = req_data['username']
-            first_name = req_data['first_name']
-            last_name = req_data['last_name']
-            password = req_data['password']
-            email = req_data['email']
-            university_id = req_data['university']
-            department_id = req_data['department']
-            if not User.objects.filter(username=username).exists():
-                with transaction.atomic():
-                    user = User.objects.create_user(is_active=False, username=username,
-                    first_name=first_name, last_name=last_name, password=password, email=email)
-                    UserPreference.add_new_preference(user_id=user.id,
-                    university_id=university_id, department_id=department_id)
-            else:
-                user = User.objects.get(username=username)
-                if not user.check_password(password):
-                    return HttpResponse("Username Taken")
-                if user.is_active:
-                    return HttpResponse("Already Activated")
-            content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
-            ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
-            '\nEnjoy your calenars!').format(
-                username,
-                urlsafe_base64_encode(force_bytes(user.id)),
-                account_activation_token.make_token(user)
-            )
-            send_mail(
-                subject='Almanac Email Verification',
-                message=content,
-                from_email=None,
-                recipient_list=[email],
-                fail_silently=False
-            )
-        except (KeyError, ValueError, JSONDecodeError, IntegrityError):
-            return HttpResponseBadRequest()
-        return HttpResponse(status=201)
-    return HttpResponseNotAllowed(['POST'])
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    try:
+        req_data = json.loads(request.body.decode())
+        username = req_data['username']
+        first_name = req_data['first_name']
+        last_name = req_data['last_name']
+        password = req_data['password']
+        email = req_data['email']
+        university_id = req_data['university']
+        department_id = req_data['department']
+        if not User.objects.filter(username=username).exists():
+            with transaction.atomic():
+                user = User.objects.create_user(is_active=False, username=username,
+                first_name=first_name, last_name=last_name, password=password, email=email)
+                UserPreference.add_new_preference(user_id=user.id,
+                university_id=university_id, department_id=department_id)
+        else:
+            user = User.objects.get(username=username)
+            if not user.check_password(password):
+                return HttpResponse("Username Taken")
+            if user.is_active:
+                return HttpResponse("Already Activated")
+        content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
+        ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
+        '\nEnjoy your calenars!').format(
+            username,
+            urlsafe_base64_encode(force_bytes(user.id)),
+            account_activation_token.make_token(user)
+        )
+        send_mail(
+            subject='Almanac Email Verification',
+            message=content,
+            from_email=None,
+            recipient_list=[email],
+            fail_silently=False
+        )
+    except (KeyError, ValueError, JSONDecodeError, IntegrityError):
+        return HttpResponseBadRequest()
+    return HttpResponse(status=201)
 
 def activate(request, uidb64, token):
 
@@ -78,19 +79,20 @@ def activate(request, uidb64, token):
     a function docstring
     '''
 
-    if request.method == 'GET':
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(id=uid)
-        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        if user is not None and account_activation_token.check_token(user, token):
-            user.is_active = True
-            user.save()
-            login(request, user)
-            return HttpResponse("Account Activated Safely")
-        return HttpResponseNotFound()
-    return HttpResponseNotAllowed(['GET'])
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(id=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return HttpResponse("Account Activated Safely")
+    return HttpResponseNotFound()
 
 def signin(request):
 
@@ -101,26 +103,23 @@ def signin(request):
     if request.method not in ['POST']:
         return HttpResponseNotAllowed(['POST'])
 
-    if request.method == 'POST':
-        try:
-            req_data = json.loads(request.body.decode())
-            username = req_data['username']
-            password = req_data['password']
-        except (KeyError, ValueError, JSONDecodeError):
-            return HttpResponseBadRequest()
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            user_preference = UserPreference.objects.get(user=user.id)
-            user_dict = {'id': user.id, 'username': user.username,
-            'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-            'email': user.email, 'is_active': user.is_active,
-            'university': user_preference.university_id,
-            'department': user_preference.department_id}
-            return JsonResponse(user_dict)
-        return HttpResponse(status=401)
-
-    return HttpResponseNotAllowed(['POST'])
+    try:
+        req_data = json.loads(request.body.decode())
+        username = req_data['username']
+        password = req_data['password']
+    except (KeyError, ValueError, JSONDecodeError):
+        return HttpResponseBadRequest()
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        user_preference = UserPreference.objects.get(user=user.id)
+        user_dict = {'id': user.id, 'username': user.username,
+        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+        'email': user.email, 'is_active': user.is_active,
+        'university': user_preference.university_id,
+        'department': user_preference.department_id}
+        return JsonResponse(user_dict)
+    return HttpResponse(status=401)
 
 def signout(request):
 
@@ -131,13 +130,10 @@ def signout(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            logout(request)
-            return HttpResponse(status=204)
-        return HttpResponse(status=401)
-
-    return HttpResponseNotAllowed(['GET'])
+    if request.user.is_authenticated:
+        logout(request)
+        return HttpResponse(status=204)
+    return HttpResponse(status=401)
 
 # User (Non-sign)
 
@@ -156,15 +152,12 @@ def get_user_signin(request):
     user = request.user
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'GET':
-        user_dict = {'id': user.id, 'username': user.username,
-        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university_id,
-        'department': user_preference.department_id}
-        return JsonResponse(user_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    user_dict = {'id': user.id, 'username': user.username,
+    'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+    'email': user.email, 'is_active': user.is_active,
+    'university': user_preference.university_id,
+    'department': user_preference.department_id}
+    return JsonResponse(user_dict)
 
 def get_user_signin_full(request):
 
@@ -181,27 +174,24 @@ def get_user_signin_full(request):
     user = request.user
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'GET':
-        user_dict = {'id': user.id, 'username': user.username,
-        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university_id,
-        'department': user_preference.department_id,
-        'profile': user_preference.profile_id,
-        'background': user_preference.background_id,
-        'language': user_preference.language_id,
-        'likes': list(user_preference.likes.values_list('id', flat=True)),
-        'brings': list(user_preference.brings.values_list('id', flat=True)),
-        'join_requests': list(user_preference.join_requests.values_list('id', flat=True)),
-        'likes_group': list(user_preference.likes_group.values_list('id', flat=True)),
-        'gets_notification': list(user_preference.gets_notification.values_list('id', flat=True)),
-        'members': list(user.member_group.values_list('id', flat=True)),
-        'admins': list(user.admin_group.values_list('id', flat=True)),
-        'kings': list(user.king_group.values_list('id', flat=True)),
-        }
-        return JsonResponse(user_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    user_dict = {'id': user.id, 'username': user.username,
+    'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+    'email': user.email, 'is_active': user.is_active,
+    'university': user_preference.university_id,
+    'department': user_preference.department_id,
+    'profile': user_preference.profile_id,
+    'background': user_preference.background_id,
+    'language': user_preference.language_id,
+    'likes': list(user_preference.likes.values_list('id', flat=True)),
+    'brings': list(user_preference.brings.values_list('id', flat=True)),
+    'join_requests': list(user_preference.join_requests.values_list('id', flat=True)),
+    'likes_group': list(user_preference.likes_group.values_list('id', flat=True)),
+    'gets_notification': list(user_preference.gets_notification.values_list('id', flat=True)),
+    'members': list(user.member_group.values_list('id', flat=True)),
+    'admins': list(user.admin_group.values_list('id', flat=True)),
+    'kings': list(user.king_group.values_list('id', flat=True)),
+    }
+    return JsonResponse(user_dict)
 
 def get_user(request, user_id):
 
@@ -218,15 +208,12 @@ def get_user(request, user_id):
     user = User.objects.get(id=user_id)
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'GET':
-        user_dict = {'id': user.id, 'username': user.username,
-        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university_id,
-        'department': user_preference.department_id}
-        return JsonResponse(user_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    user_dict = {'id': user.id, 'username': user.username,
+    'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+    'email': user.email, 'is_active': user.is_active,
+    'university': user_preference.university_id,
+    'department': user_preference.department_id}
+    return JsonResponse(user_dict)
 
 def get_user_full(request, user_id):
 
@@ -243,27 +230,24 @@ def get_user_full(request, user_id):
     user = User.objects.get(id=user_id)
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'GET':
-        user_dict = {'id': user.id, 'username': user.username,
-        'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
-        'email': user.email, 'is_active': user.is_active,
-        'university': user_preference.university_id,
-        'department': user_preference.department_id,
-        'profile': user_preference.profile_id,
-        'background': user_preference.background_id,
-        'language': user_preference.language_id,
-        'likes': [event.id for event in user_preference.likes.all()],
-        'brings': [event.id for event in user_preference.brings.all()],
-        'join_requests': [group.id for group in user_preference.join_requests.all()],
-        'likes_group': [group.id for group in user_preference.likes_group.all()],
-        'gets_notification': [group.id for group in user_preference.gets_notification.all()],
-        'members': [group.id for group in user.member_group.all()],
-        'admins': [group.id for group in user.admin_group.all()],
-        'kings': [group.id for group in user.king_group.all()],
-        }
-        return JsonResponse(user_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    user_dict = {'id': user.id, 'username': user.username,
+    'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+    'email': user.email, 'is_active': user.is_active,
+    'university': user_preference.university_id,
+    'department': user_preference.department_id,
+    'profile': user_preference.profile_id,
+    'background': user_preference.background_id,
+    'language': user_preference.language_id,
+    'likes': [event.id for event in user_preference.likes.all()],
+    'brings': [event.id for event in user_preference.brings.all()],
+    'join_requests': [group.id for group in user_preference.join_requests.all()],
+    'likes_group': [group.id for group in user_preference.likes_group.all()],
+    'gets_notification': [group.id for group in user_preference.gets_notification.all()],
+    'members': [group.id for group in user.member_group.all()],
+    'admins': [group.id for group in user.admin_group.all()],
+    'kings': [group.id for group in user.king_group.all()],
+    }
+    return JsonResponse(user_dict)
 
 # University
 
@@ -329,12 +313,9 @@ def get_university_by_name(request, name):
 
     university = University.objects.get(name=name)
 
-    if request.method == 'GET':
-        university_dict = {'id': university.id, 'name': university.name,
-        'domain': university.domain}
-        return JsonResponse(university_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    university_dict = {'id': university.id, 'name': university.name,
+    'domain': university.domain}
+    return JsonResponse(university_dict)
 
 # Department
 
@@ -394,11 +375,8 @@ def get_department_by_name(request, name):
 
     department = Department.objects.get(name=name)
 
-    if request.method == 'GET':
-        department_dict = {'id': department.id, 'name': department.name}
-        return JsonResponse(department_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    department_dict = {'id': department.id, 'name': department.name}
+    return JsonResponse(department_dict)
 
 # Category
 
@@ -458,11 +436,8 @@ def get_category_by_name(request, name):
 
     category = Category.objects.get(name=name)
 
-    if request.method == 'GET':
-        category_dict = {'id': category.id, 'name': category.name}
-        return JsonResponse(category_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    category_dict = {'id': category.id, 'name': category.name}
+    return JsonResponse(category_dict)
 
 # Tag
 
@@ -522,11 +497,8 @@ def get_tag_by_name(request, name):
 
     tag = Tag.objects.get(name=name)
 
-    if request.method == 'GET':
-        tag_dict = {'id': tag.id, 'name': tag.name}
-        return JsonResponse(tag_dict)
-
-    return HttpResponseNotAllowed(['GET'])
+    tag_dict = {'id': tag.id, 'name': tag.name}
+    return JsonResponse(tag_dict)
 
 # Background
 
@@ -674,17 +646,15 @@ def get_event_simple(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if request.method == 'GET':
-        events = [{'id': event.id,
-        'title': event.title,
-        'date': str(event.date),
-        'category': event.category.id,
-        'group': event.group.id,
-        'begin_time': str(event.begin_time),
-        'end_time': str(event.end_time)
-        } for event in Event.objects.all().order_by('id')]
-        return JsonResponse(events, safe=False)
-    return HttpResponseNotAllowed(['GET'])
+    events = [{'id': event.id,
+    'title': event.title,
+    'date': str(event.date),
+    'category': event.category.id,
+    'group': event.group.id,
+    'begin_time': str(event.begin_time),
+    'end_time': str(event.end_time)
+    } for event in Event.objects.all().order_by('id')]
+    return JsonResponse(events, safe=False)
 
 def get_event(request):
 
@@ -695,21 +665,19 @@ def get_event(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if request.method == 'GET':
-        events = [{'id': event.id,
-        'title': event.title,
-        'place': event.place, 'date': str(event.date),
-        'category': event.category_id,
-        'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group_id,
-        'begin_time': str(event.begin_time),
-        'end_time': str(event.end_time),
-        'last_editor': event.last_editor_id,
-        'image': [image.id for image in event.image.all()],
-        'content': event.content
-        } for event in Event.objects.all().order_by('id')]
-        return JsonResponse(events, safe=False)
-    return HttpResponseNotAllowed(['GET'])
+    events = [{'id': event.id,
+    'title': event.title,
+    'place': event.place, 'date': str(event.date),
+    'category': event.category_id,
+    'tag': [tag.id for tag in event.tag.all()],
+    'group': event.group_id,
+    'begin_time': str(event.begin_time),
+    'end_time': str(event.end_time),
+    'last_editor': event.last_editor_id,
+    'image': [image.id for image in event.image.all()],
+    'content': event.content
+    } for event in Event.objects.all().order_by('id')]
+    return JsonResponse(events, safe=False)
 
 def get_event_filtered(request):
 
@@ -726,78 +694,76 @@ def get_event_filtered(request):
     user = request.user
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        filter_options_dict = req_data['filter_options']
-        sort_options_list = req_data['sort_options']
-        count_options_dict = req_data['count_options']
-        event_objects = Event.objects.all()
-        # Filter(Dictionary)
-        if 'tag' in filter_options_dict.keys():
-            event_objects = event_objects.filter(tag__id__in=filter_options_dict['tag'])
-        if 'category' in filter_options_dict.keys():
-            event_objects = event_objects.filter(category__id__in=filter_options_dict['category'])
-        if 'including' in filter_options_dict.keys():
-            including_list = filter_options_dict['including']
-            q_list = [(Q(title__contains=x) | Q(content__contains=x)) for x in including_list]
-            event_objects = event_objects.filter(reduce(operator.and_, q_list))
-        if 'group' in filter_options_dict.keys():
-            if 'like' in filter_options_dict['group']:
-                event_objects = event_objects.filter(group__in=user_preference.likes_group.all())
-            if 'my' in filter_options_dict['group']:
-                event_objects = event_objects.filter(group__in=user.member_group.all())
-            if 'notification' in filter_options_dict['group']:
-                event_objects = event_objects.filter(
-                    group__in=user_preference.gets_notification.all()
-                )
-        if 'event' in filter_options_dict.keys():
-            if 'like' in filter_options_dict['event']:
-                event_objects = event_objects.filter(
-                    id__in=user_preference.likes.values_list('id', flat=True)
-                )
-        if 'group_exact' in filter_options_dict.keys():
-            event_objects = event_objects.filter(group__id__in=filter_options_dict['group_exact'])
-        if 'date' in filter_options_dict.keys():
-            begin_date = filter_options_dict['date']['begin_date']
-            end_date = filter_options_dict['date']['end_date']
-            event_objects = event_objects.filter(date__range=(begin_date, end_date))
-        # Sort(List (length 1))
-        if sort_options_list == []:
-            event_objects = event_objects.order_by('id')
-        for option in sort_options_list:
-            if option == 'date':
-                event_objects = event_objects.order_by('date')
-            if option == 'begin_time':
-                event_objects = event_objects.order_by('date', 'begin_time')
-            if option == 'end_time':
-                event_objects = event_objects.order_by('date', 'end_time')
-            if option == 'likes':
-                event_objects = event_objects.annotate(q_count=
-                Count('likes_userpreference')
-                ).order_by('-q_count', 'date')
-            if option == 'brings':
-                event_objects = event_objects.annotate(q_count=
-                Count('brings_userpreference')
-                ).order_by('-q_count', 'date')
-        # Count(Dictionary)
-        if 'from' in count_options_dict.keys():
-            event_objects = event_objects[count_options_dict['from']:]
-        if 'num' in count_options_dict.keys():
-            event_objects = event_objects[:count_options_dict['num']]
-        events = [{'id': event.id,
-        'title': event.title,
-        'place': event.place, 'date': str(event.date),
-        'category': event.category.id,
-        'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group.id,
-        'begin_time': str(event.begin_time),
-        'end_time': str(event.end_time),
-        'last_editor': event.last_editor.id,
-        'image': [image.id for image in event.image.all()],
-        'content': event.content
-        } for event in event_objects]
-        return JsonResponse(events, safe=False)
-    return HttpResponseNotAllowed(['POST'])
+    req_data = json.loads(request.body.decode())
+    filter_options_dict = req_data['filter_options']
+    sort_options_list = req_data['sort_options']
+    count_options_dict = req_data['count_options']
+    event_objects = Event.objects.all()
+    # Filter(Dictionary)
+    if 'tag' in filter_options_dict.keys():
+        event_objects = event_objects.filter(tag__id__in=filter_options_dict['tag'])
+    if 'category' in filter_options_dict.keys():
+        event_objects = event_objects.filter(category__id__in=filter_options_dict['category'])
+    if 'including' in filter_options_dict.keys():
+        including_list = filter_options_dict['including']
+        q_list = [(Q(title__contains=x) | Q(content__contains=x)) for x in including_list]
+        event_objects = event_objects.filter(reduce(operator.and_, q_list))
+    if 'group' in filter_options_dict.keys():
+        if 'like' in filter_options_dict['group']:
+            event_objects = event_objects.filter(group__in=user_preference.likes_group.all())
+        if 'my' in filter_options_dict['group']:
+            event_objects = event_objects.filter(group__in=user.member_group.all())
+        if 'notification' in filter_options_dict['group']:
+            event_objects = event_objects.filter(
+                group__in=user_preference.gets_notification.all()
+            )
+    if 'event' in filter_options_dict.keys():
+        if 'like' in filter_options_dict['event']:
+            event_objects = event_objects.filter(
+                id__in=user_preference.likes.values_list('id', flat=True)
+            )
+    if 'group_exact' in filter_options_dict.keys():
+        event_objects = event_objects.filter(group__id__in=filter_options_dict['group_exact'])
+    if 'date' in filter_options_dict.keys():
+        begin_date = filter_options_dict['date']['begin_date']
+        end_date = filter_options_dict['date']['end_date']
+        event_objects = event_objects.filter(date__range=(begin_date, end_date))
+    # Sort(List (length 1))
+    if sort_options_list == []:
+        event_objects = event_objects.order_by('id')
+    for option in sort_options_list:
+        if option == 'date':
+            event_objects = event_objects.order_by('date')
+        if option == 'begin_time':
+            event_objects = event_objects.order_by('date', 'begin_time')
+        if option == 'end_time':
+            event_objects = event_objects.order_by('date', 'end_time')
+        if option == 'likes':
+            event_objects = event_objects.annotate(q_count=
+            Count('likes_userpreference')
+            ).order_by('-q_count', 'date')
+        if option == 'brings':
+            event_objects = event_objects.annotate(q_count=
+            Count('brings_userpreference')
+            ).order_by('-q_count', 'date')
+    # Count(Dictionary)
+    if 'from' in count_options_dict.keys():
+        event_objects = event_objects[count_options_dict['from']:]
+    if 'num' in count_options_dict.keys():
+        event_objects = event_objects[:count_options_dict['num']]
+    events = [{'id': event.id,
+    'title': event.title,
+    'place': event.place, 'date': str(event.date),
+    'category': event.category.id,
+    'tag': [tag.id for tag in event.tag.all()],
+    'group': event.group.id,
+    'begin_time': str(event.begin_time),
+    'end_time': str(event.end_time),
+    'last_editor': event.last_editor.id,
+    'image': [image.id for image in event.image.all()],
+    'content': event.content
+    } for event in event_objects]
+    return JsonResponse(events, safe=False)
 
 def create_event(request):
 
@@ -811,41 +777,39 @@ def create_event(request):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        tag_id_list = req_data['tag']
-        image_id_list = req_data['image']
-        category_id = req_data['category']
-        group_id = req_data['group']
-        last_editor_id = req_data['last_editor']
-        event = Event(
-            title=req_data['title'],
-            place=req_data['place'], date=req_data['date'],
-            category_id=category_id, group_id=group_id,
-            begin_time=req_data['begin_time'], end_time=req_data['end_time'],
-            last_editor_id=last_editor_id,
-            content=req_data['content']
-        )
-        with transaction.atomic():
-            event.save()
-            for t_id in tag_id_list:
-                event.tag.add(t_id)
-            for i_id in image_id_list:
-                event.image.add(i_id)
-            event.save()
-        event_dict = {'id': event.id,
-        'title': event.title,
-        'place': event.place, 'date': str(event.date),
-        'category': event.category_id,
-        'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group_id,
-        'begin_time': str(event.begin_time),
-        'end_time': str(event.end_time),
-        'last_editor': event.last_editor_id,
-        'image': [image.id for image in event.image.all()],
-        'content': event.content}
-        return HttpResponse(content=json.dumps(event_dict), status=201)
-    return HttpResponseNotAllowed(['POST'])
+    req_data = json.loads(request.body.decode())
+    tag_id_list = req_data['tag']
+    image_id_list = req_data['image']
+    category_id = req_data['category']
+    group_id = req_data['group']
+    last_editor_id = req_data['last_editor']
+    event = Event(
+        title=req_data['title'],
+        place=req_data['place'], date=req_data['date'],
+        category_id=category_id, group_id=group_id,
+        begin_time=req_data['begin_time'], end_time=req_data['end_time'],
+        last_editor_id=last_editor_id,
+        content=req_data['content']
+    )
+    with transaction.atomic():
+        event.save()
+        for t_id in tag_id_list:
+            event.tag.add(t_id)
+        for i_id in image_id_list:
+            event.image.add(i_id)
+        event.save()
+    event_dict = {'id': event.id,
+    'title': event.title,
+    'place': event.place, 'date': str(event.date),
+    'category': event.category_id,
+    'tag': [tag.id for tag in event.tag.all()],
+    'group': event.group_id,
+    'begin_time': str(event.begin_time),
+    'end_time': str(event.end_time),
+    'last_editor': event.last_editor_id,
+    'image': [image.id for image in event.image.all()],
+    'content': event.content}
+    return HttpResponse(content=json.dumps(event_dict), status=201)
 
 def get_put_delete_event(request, event_id):
 

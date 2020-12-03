@@ -52,6 +52,9 @@ class AlmanacCsrfTestCase(TestCase):
         response = client.head('/api/token/')
         self.assertEqual(response.status_code, 405)
 
+        response = client.head('/api/')
+        self.assertEqual(response.status_code, 200)
+
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
