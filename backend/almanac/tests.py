@@ -1500,6 +1500,34 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[5]['id'], self.event6.id)
         self.assertEqual(response.json()[6]['id'], self.event7.id)
 
+    def test_filtered_event2(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event5.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event7.id)
+
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {},
             'sort_options': ['date'],
@@ -1545,6 +1573,19 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[5]['id'], self.event1.id)
         self.assertEqual(response.json()[6]['id'], self.event2.id)
 
+    def test_filtered_event3(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {},
             'sort_options': ['likes'],
@@ -1574,6 +1615,19 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[4]['id'], self.event2.id)
         self.assertEqual(response.json()[5]['id'], self.event3.id)
         self.assertEqual(response.json()[6]['id'], self.event4.id)
+
+    def test_filtered_event4(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
