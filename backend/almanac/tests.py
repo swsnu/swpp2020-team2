@@ -2314,3 +2314,55 @@ class AlmanacGroup(TransactionTestCase):
         self.assertEqual(len(response.json()), 3)
         self.assertEqual(response.json()[0]['name'], 'Cat Group Name3')
         self.assertEqual(response.json()[0]['description'], 'Group Description3')
+
+    def test_change_privacy_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+20
+
+        response = client.post('/api/group/{}/change_privacy/'.format(id_group), json.dumps(
+            {'privacy': 2}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/group/{}/change_privacy/'.format(id_wrong), json.dumps(
+            {'privacy': 2}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        response = client.put('/api/group/{}/change_privacy/'.format(id_group), json.dumps(
+            {'privacy': 2}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'sdm000', 'password': 'password5'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/change_privacy/'.format(id_group), json.dumps(
+            {'privacy': 2}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/signout/')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/change_privacy/'.format(id_group), json.dumps(
+            {'privacy': 2}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['privacy'], 2)

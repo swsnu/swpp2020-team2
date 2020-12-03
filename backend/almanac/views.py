@@ -1113,6 +1113,32 @@ def king_modify_group(request, group_id):
     group.save()
     return HttpResponse(status=204)
 
+def change_privacy_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    privacy = req_data['privacy']
+    group.privacy = privacy
+    group.save()
+    return HttpResponse(status=204)
+
 def search_group(request, including):
 
     '''
