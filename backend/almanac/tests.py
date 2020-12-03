@@ -1224,6 +1224,8 @@ class AlmanacEvent(TransactionTestCase):
         self.userpreference2.brings.add(self.event6)
         self.userpreference2.brings.add(self.event7)
         self.userpreference4.brings.add(self.event6)
+        self.userpreference2.likes_group.add(self.group1)
+        self.userpreference2.gets_notification.add(self.group3)
 
     def test_get_event_simple(self):
 
@@ -1670,6 +1672,18 @@ class AlmanacEvent(TransactionTestCase):
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
+                'group': ['like']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
                 'group': ['my']
             },
             'sort_options': [],
@@ -1681,6 +1695,19 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[1]['id'], self.event2.id)
         self.assertEqual(response.json()[2]['id'], self.event3.id)
         self.assertEqual(response.json()[3]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['notification']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.event4.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event7.id)
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
