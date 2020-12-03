@@ -2136,6 +2136,18 @@ class AlmanacEvent(TransactionTestCase):
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
+                'event': ['bring']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event6.id)
+        self.assertEqual(response.json()[1]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
                 'date': {
                     'begin_date': '2020-11-03',
                     'end_date': '2020-11-04'

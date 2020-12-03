@@ -929,6 +929,10 @@ def get_event_filtered(request):
             event_objects = event_objects.filter(
                 id__in=user_preference.likes.values_list('id', flat=True)
             )
+        if 'bring' in filter_options_dict['event']:
+            event_objects = event_objects.filter(
+                id__in=user_preference.brings.values_list('id', flat=True)
+            )
     if 'group_exact' in filter_options_dict.keys():
         event_objects = event_objects.filter(group__id__in=filter_options_dict['group_exact'])
     if 'date' in filter_options_dict.keys():
