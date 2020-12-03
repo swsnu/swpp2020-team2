@@ -1047,6 +1047,9 @@ def member_modify_group(request, group_id):
 
     group = Group.objects.get(id=group_id)
 
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
     req_data = json.loads(request.body.decode())
     user_id = req_data['user']
     operation = req_data['operation']
@@ -1074,6 +1077,9 @@ def admin_modify_group(request, group_id):
         return HttpResponse(status=401)
 
     group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
 
     req_data = json.loads(request.body.decode())
     user_id = req_data['user']

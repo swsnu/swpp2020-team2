@@ -2159,6 +2159,19 @@ class AlmanacGroup(TransactionTestCase):
         self.assertEqual(response.status_code, 401)
 
         response = client.post('/api/signin/', json.dumps(
+            {'username': 'sdm000', 'password': 'password5'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/signout/')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -2215,6 +2228,19 @@ class AlmanacGroup(TransactionTestCase):
             {'user': self.user3.id, 'operation': 'remove'}),
             content_type='application/json')
         self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'sdm000', 'password': 'password5'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user3.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/signout/')
+        self.assertEqual(response.status_code, 204)
 
         response = client.post('/api/signin/', json.dumps(
             {'username': 'taekop', 'password': 'password2'}),
