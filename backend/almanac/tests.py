@@ -1938,13 +1938,13 @@ class AlmanacGroup(TransactionTestCase):
         self.group1.add_admin(self.user3.id)
         self.group1.add_member(self.user5.id)
         self.group2 = Group.add_new_group(
-            name='Group Name3',
+            name='Cat Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
         )
         self.group2.add_member(self.user2.id)
         self.group3 = Group.add_new_group(
-            name='Group Name4',
+            name='Catholic Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
@@ -1952,7 +1952,7 @@ class AlmanacGroup(TransactionTestCase):
         self.group4 = Group.add_new_group(
             name='Group Name5',
             king_id=self.user3.id,
-            description='Group Description5'
+            description='DevCat Group Description5'
         )
         self.group4.add_member(self.user4.id)
         self.group5 = Group.add_new_group(
@@ -2298,3 +2298,19 @@ class AlmanacGroup(TransactionTestCase):
 
         response = client.get('/api/group/{}/full/'.format(id_group))
         self.assertEqual(response.json()['king'], self.user3.id)
+
+    def test_search_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group/search/{}/'.format('Cat'))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/search/{}/'.format('Cat'))
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['name'], 'Cat Group Name3')
+        self.assertEqual(response.json()[0]['description'], 'Group Description3')

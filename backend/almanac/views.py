@@ -1113,6 +1113,25 @@ def king_modify_group(request, group_id):
     group.save()
     return HttpResponse(status=204)
 
+def search_group(request, including):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    group_objects = Group.objects.filter(
+        Q(name__contains=including) | Q(description__contains=including)
+    )
+    groups = [{'id': group.id,
+    'name': group.name,
+    'description': group.description,
+    'profile': group.profile_id
+    } for group in group_objects]
+    return JsonResponse(groups, safe=False)
+
 # Others
 
 def index(request):
