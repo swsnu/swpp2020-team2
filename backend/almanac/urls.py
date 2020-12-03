@@ -24,6 +24,8 @@ urlpatterns = [
     path('user/signin/get_notification/',
     views.get_notification_user, name='get_notification_user'),
     path('user/signin/join_request/', views.join_request_user, name='join_request_user'),
+    path('user/signin/change_password/', views.change_password_user,
+    name='change_password_user'),
     path('user/signin/change_profile/', views.change_profile_user,
     name='change_profile_user'),
     path('user/signin/change_background/', views.change_background_user,

@@ -369,6 +369,29 @@ def join_request_user(request):
         user_preference.join_requests.remove(group_id)
     return HttpResponse(status=204)
 
+def change_password_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+
+    req_data = json.loads(request.body.decode())
+    password = req_data['password']
+    user.set_password(password)
+    user.save()
+    new_user = authenticate(request, username=user.username, password=password)
+    if new_user is not None:
+        login(request, new_user)
+    return HttpResponse(status=204)
+
 def change_profile_user(request):
 
     '''

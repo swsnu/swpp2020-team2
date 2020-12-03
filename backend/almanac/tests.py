@@ -722,6 +722,43 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['join_requests'],
         [])
 
+    def test_change_password_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+        new_password = 'new_password'
+
+        response = client.post('/api/user/signin/change_password/', json.dumps(
+            {'password': new_password}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/change_password/', json.dumps(
+            {'password': new_password}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/change_password/', json.dumps(
+            {'password': new_password}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/signout/')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': new_password}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
     def test_change_profile_user(self):
 
         '''
