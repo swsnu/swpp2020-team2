@@ -350,6 +350,12 @@ class AlmanacUserTestCase(TransactionTestCase):
         )
         self.sample_image = Image.objects.create(
         )
+        self.background1 = Background.objects.create(
+            name='black'
+        )
+        self.language1 = Language.objects.create(
+            name='Spanish'
+        )
 
     def test_user_get_signin(self):
 
@@ -746,6 +752,68 @@ class AlmanacUserTestCase(TransactionTestCase):
 
         response = client.get('/api/user/signin/full/')
         self.assertEqual(response.json()['profile'], self.sample_image.id)
+
+    def test_change_background_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/change_background/', json.dumps(
+            {'background': self.background1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/change_background/', json.dumps(
+            {'background': self.background1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/change_background/', json.dumps(
+            {'background': self.background1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['background'], self.background1.id)
+
+    def test_change_language_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/change_language/', json.dumps(
+            {'language': self.language1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/change_language/', json.dumps(
+            {'language': self.language1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/change_language/', json.dumps(
+            {'language': self.language1.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['language'], self.language1.id)
 
 class AlmanacUnivDeptCatTag(TransactionTestCase):
 

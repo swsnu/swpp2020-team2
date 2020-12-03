@@ -390,6 +390,48 @@ def change_profile_user(request):
     user_preference.save()
     return HttpResponse(status=204)
 
+def change_background_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    background_id = req_data['background']
+    user_preference.background_id = background_id
+    user_preference.save()
+    return HttpResponse(status=204)
+
+def change_language_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    language_id = req_data['language']
+    user_preference.language_id = language_id
+    user_preference.save()
+    return HttpResponse(status=204)
+
 # University
 
 def get_create_university(request):
