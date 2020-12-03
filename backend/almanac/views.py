@@ -734,9 +734,9 @@ def get_event_filtered(request):
         event_objects = Event.objects.all()
         # Filter(Dictionary)
         if 'tag' in filter_options_dict.keys():
-            event_objects = event_objects.filter(tag_id__in=filter_options_dict['tag'])
+            event_objects = event_objects.filter(tag__id__in=filter_options_dict['tag'])
         if 'category' in filter_options_dict.keys():
-            event_objects = event_objects.filter(category_id__in=filter_options_dict['category'])
+            event_objects = event_objects.filter(category__id__in=filter_options_dict['category'])
         if 'including' in filter_options_dict.keys():
             including_list = filter_options_dict['including']
             q_list = [Q(content__contains=x) for x in including_list]

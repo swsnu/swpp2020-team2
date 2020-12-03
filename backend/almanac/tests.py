@@ -1072,7 +1072,7 @@ class AlmanacEvent(TransactionTestCase):
         )
         self.user4 = User.objects.create_user(
             username='sdm369', first_name='Dongmin',
-            last_name='Shin', password='password4',
+            last_name='Co', password='password4',
             email='sdm369@snu.ac.kr', is_active=True
         )
         UserPreference.add_new_preference(
@@ -1406,15 +1406,13 @@ class AlmanacEvent(TransactionTestCase):
         response = client.get('/api/event/')
         self.assertEqual(len(response.json()), 3)
 
-    def test_filtered_event(self):
+    def test_filtered_event1(self):
 
         '''
         a function docstring
         '''
 
         client = Client()
-
-        #id_event = self.event1.id
 
         response = client.put('/api/event/filtered/', json.dumps({
             'filter_options': {},
@@ -1444,3 +1442,18 @@ class AlmanacEvent(TransactionTestCase):
         }),
         content_type='application/json')
         self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'tag': [self.tag4.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.event4.id)
