@@ -1337,7 +1337,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertIn('New Event Place', response.content.decode())
         self.assertIn('New Event Content', response.content.decode())
 
-    def test_get_single_event(self):
+    def test_get_single_event_full(self):
 
         '''
         a function docstring
@@ -1348,10 +1348,10 @@ class AlmanacEvent(TransactionTestCase):
         id_event = self.event1.id
         id_wrong = id_event+10
 
-        response = client.head('/api/event/{}/'.format(id_event))
+        response = client.head('/api/event/{}/full/'.format(id_event))
         self.assertEqual(response.status_code, 405)
 
-        response = client.get('/api/event/{}/'.format(id_event))
+        response = client.get('/api/event/{}/full/'.format(id_event))
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'Event Title')
         self.assertEqual(response.json()['category'], self.event1.category_id)
@@ -1365,10 +1365,10 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()['image'], [])
         self.assertEqual(response.json()['last_editor'], self.event1.last_editor_id)
 
-        response = client.get('/api/event/{}/'.format(id_wrong))
+        response = client.get('/api/event/{}/full/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-    def test_edit_event(self):
+    def test_edit_event_full(self):
 
         '''
         a function docstring
@@ -1378,7 +1378,7 @@ class AlmanacEvent(TransactionTestCase):
 
         id_event = self.event1.id
 
-        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+        response = client.put('/api/event/{}/full/'.format(id_event), json.dumps({
         }),
         content_type='application/json')
         self.assertEqual(response.status_code, 401)
@@ -1388,7 +1388,7 @@ class AlmanacEvent(TransactionTestCase):
             content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
-        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+        response = client.put('/api/event/{}/full/'.format(id_event), json.dumps({
         }),
         content_type='application/json')
         self.assertEqual(response.status_code, 201)
@@ -1396,7 +1396,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertIn('Event Place', response.content.decode())
         self.assertIn('Event Content', response.content.decode())
 
-        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+        response = client.put('/api/event/{}/full/'.format(id_event), json.dumps({
             'title': 'New Event Title',
             'category': self.category1.id,
             'group': self.group1.id,
@@ -1415,7 +1415,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertIn('New Event Place', response.content.decode())
         self.assertIn('New Event Content', response.content.decode())
 
-        response = client.get('/api/event/{}/'.format(id_event)) #id_event??
+        response = client.get('/api/event/{}/full/'.format(id_event)) #id_event??
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'New Event Title')
         self.assertEqual(response.json()['category'], self.category1.id)
@@ -1429,7 +1429,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()['image'], [])
         self.assertEqual(response.json()['last_editor'], self.user2.id)
 
-    def test_delete_event(self):
+    def test_delete_event_full(self):
 
         '''
         a function docstring
@@ -1439,7 +1439,7 @@ class AlmanacEvent(TransactionTestCase):
 
         id_event = self.event1.id
 
-        response = client.delete('/api/event/{}/'.format(id_event))
+        response = client.delete('/api/event/{}/full/'.format(id_event))
         self.assertEqual(response.status_code, 401)
 
         response = client.post('/api/signin/', json.dumps(
@@ -1447,7 +1447,7 @@ class AlmanacEvent(TransactionTestCase):
             content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
-        response = client.delete('/api/event/{}/'.format(id_event))
+        response = client.delete('/api/event/{}/full/'.format(id_event))
         self.assertEqual(response.status_code, 200)
 
         response = client.get('/api/event/')

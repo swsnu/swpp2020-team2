@@ -811,7 +811,7 @@ def create_event(request):
     'content': event.content}
     return HttpResponse(content=json.dumps(event_dict), status=201)
 
-def get_put_delete_event(request, event_id):
+def get_put_delete_event_full(request, event_id):
 
     '''
     a function docstring
