@@ -9,7 +9,7 @@ from json import JSONDecodeError
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
-    HttpResponseNotFound, JsonResponse
+    HttpResponseNotFound, HttpResponseForbidden, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
@@ -1029,6 +1029,62 @@ def get_single_group(request, group_id):
     'description': group.description, 'privacy': group.privacy
     }
     return JsonResponse(group_dict)
+
+def member_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    operation = req_data['operation']
+    if operation == 'add':
+        group.add_member(user_id)
+    else: # remove
+        if user_id == group.king_id:
+            return HttpResponseForbidden()
+        group.remove_member(user_id)
+    return HttpResponse(status=204)
+
+def admin_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    operation = req_data['operation']
+    if operation == 'add':
+        group.add_admin(user_id)
+    else: # remove
+        if user_id == group.king_id:
+            return HttpResponseForbidden()
+        group.remove_admin(user_id)
+    return HttpResponse(status=204)
 
 # Others
 

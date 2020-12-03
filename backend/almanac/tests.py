@@ -1111,13 +1111,13 @@ class AlmanacEvent(TransactionTestCase):
             king_id=self.user3.id,
             description='Group Description3'
         )
-        self.group2.add_new_member(self.user2.id)
+        self.group2.add_member(self.user2.id)
         self.group3 = Group.add_new_group(
             name='Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
-        self.group3.add_new_member(self.user4.id)
+        self.group3.add_member(self.user4.id)
         self.event1 = Event.objects.create(
             title='Event Title',
             category_id=self.category1.id,
@@ -1935,33 +1935,33 @@ class AlmanacGroup(TransactionTestCase):
             king_id=self.user2.id,
             description='Group Description'
         )
-        self.group1.add_new_admin(self.user3.id)
-        self.group1.add_new_member(self.user5.id)
+        self.group1.add_admin(self.user3.id)
+        self.group1.add_member(self.user5.id)
         self.group2 = Group.add_new_group(
             name='Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
         )
-        self.group2.add_new_member(self.user2.id)
+        self.group2.add_member(self.user2.id)
         self.group3 = Group.add_new_group(
             name='Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
-        self.group3.add_new_member(self.user4.id)
+        self.group3.add_member(self.user4.id)
         self.group4 = Group.add_new_group(
             name='Group Name5',
             king_id=self.user3.id,
             description='Group Description5'
         )
-        self.group4.add_new_member(self.user4.id)
+        self.group4.add_member(self.user4.id)
         self.group5 = Group.add_new_group(
             name='Group Name6',
             king_id=self.user2.id,
             description='Group Description6'
         )
-        self.group5.add_new_member(self.user4.id)
-        self.group5.add_new_admin(self.user3.id)
+        self.group5.add_member(self.user4.id)
+        self.group5.add_admin(self.user3.id)
         self.userpreference2.likes_group.add(self.group1)
         self.userpreference6.likes_group.add(self.group1)
         self.userpreference6.likes_group.add(self.group2)
@@ -2062,7 +2062,7 @@ class AlmanacGroup(TransactionTestCase):
         client = Client()
 
         id_group = self.group1.id
-        id_wrong = id_group+10
+        id_wrong = id_group+20
 
         response = client.head('/api/group/{}/'.format(id_group))
         self.assertEqual(response.status_code, 405)
@@ -2085,7 +2085,7 @@ class AlmanacGroup(TransactionTestCase):
         client = Client()
 
         id_group = self.group1.id
-        id_wrong = id_group+10
+        id_wrong = id_group+20
 
         response = client.head('/api/group/{}/full/'.format(id_group))
         self.assertEqual(response.status_code, 405)
@@ -2129,3 +2129,123 @@ class AlmanacGroup(TransactionTestCase):
 
         response = client.get('/api/group/')
         self.assertEqual(len(response.json()), 4)
+
+    def test_member_modify_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+20
+
+        response = client.post('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/group/{}/member/'.format(id_wrong), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        response = client.put('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id])
+
+        response = client.put('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user2.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id])
+
+        response = client.put('/api/group/{}/member/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id, self.user5.id])
+
+    def test_admin_modify_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+20
+
+        response = client.post('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user3.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/group/{}/admin/'.format(id_wrong), json.dumps(
+            {'user': self.user3.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        response = client.put('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user3.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user3.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['admin'],
+        [self.user2.id])
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id, self.user5.id])
+
+        response = client.put('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user2.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['admin'],
+        [self.user2.id])
+
+        response = client.put('/api/group/{}/admin/'.format(id_group), json.dumps(
+            {'user': self.user3.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['admin'],
+        [self.user2.id, self.user3.id])
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id, self.user5.id])

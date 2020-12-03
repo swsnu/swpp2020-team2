@@ -166,7 +166,7 @@ class Group(models.Model):
         group.admin.add(king_id)
         return group
 
-    def add_new_admin(self, admin_id):
+    def add_admin(self, admin_id):
 
         '''
         a function docstring
@@ -175,13 +175,30 @@ class Group(models.Model):
         self.member.add(admin_id)
         self.admin.add(admin_id)
 
-    def add_new_member(self, member_id):
+    def remove_admin(self, admin_id):
+
+        '''
+        a function docstring
+        '''
+
+        self.admin.remove(admin_id)
+
+    def add_member(self, member_id):
 
         '''
         a function docstring
         '''
 
         self.member.add(member_id)
+
+    def remove_member(self, member_id):
+
+        '''
+        a function docstring
+        '''
+
+        self.member.remove(member_id)
+        self.admin.remove(member_id)
 
 class Event(models.Model):
 
