@@ -550,6 +550,88 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.json()['likes'],
         [])
 
+    def test_bring_event_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/bring_event/', json.dumps(
+            {'event': self.event1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/bring_event/', json.dumps(
+            {'event': self.event1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/bring_event/', json.dumps(
+            {'event': self.event1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['brings'],
+        [self.event1.id])
+
+        response = client.put('/api/user/signin/bring_event/', json.dumps(
+            {'event': self.event1.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['brings'],
+        [])
+
+    def test_like_group_user(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/user/signin/like_group/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/user/signin/like_group/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/user/signin/like_group/', json.dumps(
+            {'group': self.group1.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['likes_group'],
+        [self.group1.id])
+
+        response = client.put('/api/user/signin/like_group/', json.dumps(
+            {'group': self.group1.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/user/signin/full/')
+        self.assertEqual(response.json()['likes_group'],
+        [])
+
 class AlmanacUnivDeptCatTag(TransactionTestCase):
 
     '''

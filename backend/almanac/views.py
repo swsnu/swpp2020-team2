@@ -273,6 +273,54 @@ def like_event_user(request):
         user_preference.likes.remove(event_id)
     return HttpResponse(status=204)
 
+def bring_event_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    event_id = req_data['event']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.brings.add(event_id)
+    else: # remove
+        user_preference.brings.remove(event_id)
+    return HttpResponse(status=204)
+
+def like_group_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.likes_group.add(group_id)
+    else: # remove
+        user_preference.likes_group.remove(group_id)
+    return HttpResponse(status=204)
+
 # University
 
 def get_create_university(request):
