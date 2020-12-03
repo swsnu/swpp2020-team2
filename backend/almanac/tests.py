@@ -1028,7 +1028,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
         response = client.delete('/api/image/{}/'.format(id_im))
         self.assertEqual(response.status_code, 200)
 
-class AlmanacEventTag(TransactionTestCase):
+class AlmanacEvent(TransactionTestCase):
 
     '''
     a class docstring
@@ -1060,28 +1060,49 @@ class AlmanacEventTag(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
+        self.user3 = User.objects.create_user(
+            username='sdm1230', first_name='Dongmin',
+            last_name='Shin', password='password3',
+            email='sdm1230@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user_id=self.user3.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
         self.tag1 = Tag.objects.create(
             name='waffle'
         )
         self.tag2 = Tag.objects.create(
             name='winter'
         )
-        self.category = Category.objects.create(
+        self.tag3 = Tag.objects.create(
+            name='dance'
+        )
+        self.category1 = Category.objects.create(
             name='performance'
         )
-        self.sample_image = Image.objects.create(
+        self.category2 = Category.objects.create(
+            name='ililhof'
         )
-        self.group = Group.add_new_group(
+        self.sample_image1 = Image.objects.create(
+        )
+        self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
             description='Group Description'
         )
-        self.group.member.add(self.user2)
-        self.group.admin.add(self.user2)
-        self.event = Event.objects.create(
+        self.group1.member.add(self.user2)
+        self.group1.admin.add(self.user2)
+        self.group2 = Group.add_new_group(
+            name='Group Name3',
+            king_id=self.user3.id,
+            description='Group Description3'
+        )
+        self.event1 = Event.objects.create(
             title='Event Title',
-            category_id=self.category.id,
-            group_id=self.group.id,
+            category_id=self.category1.id,
+            group_id=self.group1.id,
             place='Event Place',
             date='2020-11-05',
             begin_time='14:20:00',
@@ -1089,8 +1110,8 @@ class AlmanacEventTag(TransactionTestCase):
             content='Event Content',
             last_editor_id=self.user2.id
         )
-        self.event.tag.add(self.tag1)
-        self.event.tag.add(self.tag2)
+        self.event1.tag.add(self.tag1)
+        self.event1.tag.add(self.tag2)
 
     def test_get_event_simple(self):
 
@@ -1100,7 +1121,7 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
+        id_event = self.event1.id
 
         response = client.head('/api/event/simple/')
         self.assertEqual(response.status_code, 405)
@@ -1109,11 +1130,11 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(len(response.json()), 1)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event.group.id)
-        self.assertEqual(response.json()[0]['date'], self.event.date)
-        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+        self.assertEqual(response.json()[0]['category'], self.event1.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group.id)
+        self.assertEqual(response.json()[0]['date'], self.event1.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
 
     def test_get_event(self):
 
@@ -1123,7 +1144,7 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
+        id_event = self.event1.id
 
         response = client.head('/api/event/')
         self.assertEqual(response.status_code, 405)
@@ -1132,16 +1153,16 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(len(response.json()), 1)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event.group.id)
+        self.assertEqual(response.json()[0]['category'], self.event1.category.id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group.id)
         self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
-        self.assertEqual(response.json()[0]['place'], self.event.place)
-        self.assertEqual(response.json()[0]['date'], self.event.date)
-        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
-        self.assertEqual(response.json()[0]['content'], self.event.content)
+        self.assertEqual(response.json()[0]['place'], self.event1.place)
+        self.assertEqual(response.json()[0]['date'], self.event1.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
+        self.assertEqual(response.json()[0]['content'], self.event1.content)
         self.assertEqual(response.json()[0]['image'], [])
-        self.assertEqual(response.json()[0]['last_editor'], self.event.last_editor.id)
+        self.assertEqual(response.json()[0]['last_editor'], self.event1.last_editor.id)
 
     def test_create_event(self):
 
@@ -1153,8 +1174,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.put('/api/event/create/', json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1169,8 +1190,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.post('/api/event/create/', json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1194,7 +1215,7 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
+        id_event = self.event1.id
         id_wrong = id_event+1
 
         response = client.head('/api/event/{}/'.format(id_event))
@@ -1203,16 +1224,16 @@ class AlmanacEventTag(TransactionTestCase):
         response = client.get('/api/event/{}/'.format(id_event))
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'Event Title')
-        self.assertEqual(response.json()['category'], self.event.category.id)
-        self.assertEqual(response.json()['group'], self.event.group.id)
+        self.assertEqual(response.json()['category'], self.event1.category.id)
+        self.assertEqual(response.json()['group'], self.event1.group.id)
         self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
-        self.assertEqual(response.json()['place'], self.event.place)
-        self.assertEqual(response.json()['date'], self.event.date)
-        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()['end_time'], self.event.end_time)
-        self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['place'], self.event1.place)
+        self.assertEqual(response.json()['date'], self.event1.date)
+        self.assertEqual(response.json()['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event1.end_time)
+        self.assertEqual(response.json()['content'], self.event1.content)
         self.assertEqual(response.json()['image'], [])
-        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
+        self.assertEqual(response.json()['last_editor'], self.event1.last_editor.id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
@@ -1227,8 +1248,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.put('/api/event/{}/'.format(id_event), json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1247,8 +1268,8 @@ class AlmanacEventTag(TransactionTestCase):
         response = client.get('/api/event/{}/'.format(id_event)) #id_event??
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'New Event Title')
-        self.assertEqual(response.json()['category'], self.category.id)
-        self.assertEqual(response.json()['group'], self.group.id)
+        self.assertEqual(response.json()['category'], self.category1.id)
+        self.assertEqual(response.json()['group'], self.group1.id)
         self.assertEqual(response.json()['tag'], [self.tag1.id])
         self.assertEqual(response.json()['place'], 'New Event Place')
         self.assertEqual(response.json()['date'], '2020-11-06')
