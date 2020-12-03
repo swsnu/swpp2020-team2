@@ -757,22 +757,24 @@ def get_event_filtered(request):
             begin_date = filter_options_dict['event']['begin_date']
             end_date = filter_options_dict['event']['end_date']
             event_objects = event_objects.filter(date__range=(begin_date, end_date))
-        # group like my notification
-        # event like
-        # Sort(List)
+        # Sort(List (length 1))
         for option in sort_options_list:
             if option == 'id':
                 event_objects = event_objects.order_by('id')
             if option == 'date':
                 event_objects = event_objects.order_by('date')
             if option == 'begin_time':
-                event_objects = event_objects.order_by('begin_time').order_by('date')
+                event_objects = event_objects.order_by('date', 'begin_time')
             if option == 'end_time':
-                event_objects = event_objects.order_by('end_time').order_by('date')
+                event_objects = event_objects.order_by('date', 'end_time')
             if option == 'likes':
                 event_objects = event_objects.annotate(q_count=
                 Count('likes_userpreference')
-                ).order_by('-q_count').order_by('date')
+                ).order_by('-q_count', 'date')
+            if option == 'joins':
+                event_objects = event_objects.annotate(q_count=
+                Count('joins_userpreference')
+                ).order_by('-q_count', 'date')
         # like
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
