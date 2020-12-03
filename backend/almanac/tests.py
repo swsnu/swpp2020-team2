@@ -1150,7 +1150,7 @@ class AlmanacEvent(TransactionTestCase):
         self.event2.tag.add(self.tag2)
         self.event2.tag.add(self.tag3)
         self.event3 = Event.objects.create(
-            title='Event Title3',
+            title='Categorize Event Title3',
             category_id=self.category2.id,
             group_id=self.group2.id,
             place='Event Place3',
@@ -1163,7 +1163,7 @@ class AlmanacEvent(TransactionTestCase):
         self.event3.tag.add(self.tag2)
         self.event3.tag.add(self.tag3)
         self.event4 = Event.objects.create(
-            title='Event Title4',
+            title='Cat Event Title4',
             category_id=self.category1.id,
             group_id=self.group3.id,
             place='Event Place4',
@@ -1182,20 +1182,20 @@ class AlmanacEvent(TransactionTestCase):
             date='2020-11-04',
             begin_time='14:55:00',
             end_time='16:35:00',
-            content='Event Content4',
+            content='Event Content5',
             last_editor_id=self.user3.id
         )
         self.event5.tag.add(self.tag4)
         self.event6 = Event.objects.create(
             title='Event Title6',
             category_id=self.category1.id,
-            group_id=self.group3.id,
+            group_id=self.group1.id,
             place='Event Place6',
             date='2020-11-03',
             begin_time='14:55:00',
             end_time='16:35:00',
-            content='Event Content4',
-            last_editor_id=self.user3.id
+            content='Cat Event Content6',
+            last_editor_id=self.user2.id
         )
         self.event6.tag.add(self.tag2)
         self.event6.tag.add(self.tag4)
@@ -1207,7 +1207,7 @@ class AlmanacEvent(TransactionTestCase):
             date='2020-11-02',
             begin_time='14:55:00',
             end_time='16:35:00',
-            content='Event Content4',
+            content='Event Content7',
             last_editor_id=self.user3.id
         )
         self.event6.tag.add(self.tag3)
@@ -1641,4 +1641,57 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[0]['id'], self.event4.id)
         self.assertEqual(response.json()[1]['id'], self.event5.id)
         self.assertEqual(response.json()[2]['id'], self.event6.id)
+        self.assertEqual(response.json()[3]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'category': [self.category2.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event2.id)
+        self.assertEqual(response.json()[1]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'including': ['Cat']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.event3.id)
+        self.assertEqual(response.json()[1]['id'], self.event4.id)
+        self.assertEqual(response.json()[2]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'event': ['like']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event2.id)
+        self.assertEqual(response.json()[1]['id'], self.event4.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
         self.assertEqual(response.json()[3]['id'], self.event7.id)

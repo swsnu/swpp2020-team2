@@ -739,15 +739,17 @@ def get_event_filtered(request):
             event_objects = event_objects.filter(category__id__in=filter_options_dict['category'])
         if 'including' in filter_options_dict.keys():
             including_list = filter_options_dict['including']
-            q_list = [Q(content__contains=x) for x in including_list]
+            q_list = [(Q(title__contains=x) | Q(content__contains=x)) for x in including_list]
             event_objects = event_objects.filter(reduce(operator.and_, q_list))
         if 'group' in filter_options_dict.keys():
             if 'like' in filter_options_dict['group']:
-                event_objects = event_objects.filter(group__in=user_preference.likes_group)
+                event_objects = event_objects.filter(group__in=user_preference.likes_group.all())
             if 'my' in filter_options_dict['group']:
-                event_objects = event_objects.filter(group__in=user_preference.member_group)
+                event_objects = event_objects.filter(group__in=user.member_group.all())
             if 'notification' in filter_options_dict['group']:
-                event_objects = event_objects.filter(group__in=user_preference.gets_notification)
+                event_objects = event_objects.filter(
+                    group__in=user_preference.gets_notification.all()
+                )
         if 'event' in filter_options_dict.keys():
             if 'like' in filter_options_dict['event']:
                 event_objects = event_objects.filter(
@@ -758,6 +760,8 @@ def get_event_filtered(request):
             end_date = filter_options_dict['event']['end_date']
             event_objects = event_objects.filter(date__range=(begin_date, end_date))
         # Sort(List (length 1))
+        if sort_options_list == []:
+            event_objects = event_objects.order_by('id')
         for option in sort_options_list:
             if option == 'date':
                 event_objects = event_objects.order_by('date')
