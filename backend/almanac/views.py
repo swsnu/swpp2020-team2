@@ -1086,6 +1086,33 @@ def admin_modify_group(request, group_id):
         group.remove_admin(user_id)
     return HttpResponse(status=204)
 
+def king_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not request.user.id == group.king_id:
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    group.pre_change_king(user_id)
+    group.king_id = user_id
+    group.save()
+    return HttpResponse(status=204)
+
 # Others
 
 def index(request):

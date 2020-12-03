@@ -34,6 +34,8 @@ urlpatterns = [
     name='member_modify_group'),
     path('group/<int:group_id>/admin/', views.admin_modify_group,
     name='admin_modify_group'),
+    path('group/<int:group_id>/king/', views.king_modify_group,
+    name='king_modify_group'),
     path('university/',
     views.get_create_university, name='create_university'),
     path('university/<int:university_id>/',

@@ -200,6 +200,15 @@ class Group(models.Model):
         self.member.remove(member_id)
         self.admin.remove(member_id)
 
+    def pre_change_king(self, king_id):
+
+        '''
+        a function docstring
+        '''
+
+        self.member.add(king_id)
+        self.admin.add(king_id)
+
 class Event(models.Model):
 
     '''

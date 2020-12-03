@@ -2249,3 +2249,52 @@ class AlmanacGroup(TransactionTestCase):
         [self.user2.id, self.user3.id])
         self.assertEqual(response.json()['member'],
         [self.user2.id, self.user3.id, self.user5.id])
+
+    def test_king_modify_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+20
+
+        response = client.post('/api/group/{}/king/'.format(id_group), json.dumps(
+            {'user': self.user3.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/group/{}/king/'.format(id_wrong), json.dumps(
+            {'user': self.user3.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        response = client.put('/api/group/{}/king/'.format(id_group), json.dumps(
+            {'user': self.user3.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/king/'.format(id_group), json.dumps(
+            {'user': self.user3.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['king'], self.user3.id)
+        self.assertEqual(response.json()['admin'],
+        [self.user2.id, self.user3.id])
+
+        response = client.put('/api/group/{}/king/'.format(id_group), json.dumps(
+            {'user': self.user2.id}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['king'], self.user3.id)
