@@ -1481,6 +1481,30 @@ def get_create_group_report(request):
     'reporter': group_report.reporter_id, 'content': group_report.content}
     return HttpResponse(content=json.dumps(group_report_dict), status=201)
 
+def get_delete_group_report(request, group_report_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not GroupReport.objects.filter(id=group_report_id).exists():
+        return HttpResponseNotFound()
+
+    group_report = GroupReport.objects.get(id=group_report_id)
+
+    if request.method == 'GET':
+        group_report_dict = {'id': group_report.id, 'group': group_report.group_id,
+        'reporter': group_report.reporter_id, 'content': group_report.content}
+        return JsonResponse(group_report_dict)
+    # DELETE
+    if not (request.user.is_authenticated and request.user.id == group_report.reporter_id):
+        return HttpResponse(status=401)
+    group_report.delete()
+    return HttpResponse(status=200)
+
 # Others
 
 def index(request):
