@@ -9,7 +9,7 @@ from json import JSONDecodeError
 from django.db import transaction
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest, \
-    HttpResponseNotFound, JsonResponse
+    HttpResponseNotFound, HttpResponseForbidden, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.core.mail import send_mail
@@ -811,7 +811,31 @@ def create_event(request):
     'content': event.content}
     return HttpResponse(content=json.dumps(event_dict), status=201)
 
-def get_put_delete_event(request, event_id):
+def get_single_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event = Event.objects.get(id=event_id)
+
+    event_dict = {'id': event.id,
+    'title': event.title,
+    'date': event.date,
+    'category': event.category.id,
+    'group': event.group.id,
+    'begin_time': event.begin_time,
+    'end_time': event.end_time
+    }
+    return JsonResponse(event_dict)
+
+def get_put_delete_event_full(request, event_id):
 
     '''
     a function docstring
@@ -954,6 +978,38 @@ def create_group(request):
     'description': group.description, 'privacy': group.privacy}
     return HttpResponse(content=json.dumps(group_dict), status=201)
 
+def get_delete_group_full(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    group = Group.objects.get(id=group_id)
+
+    if request.method == 'GET':
+        group_dict = {'id': group.id, 'name': group.name,
+        'member': [user.id for user in group.member.all()],
+        'admin': [user.id for user in group.admin.all()],
+        'king': group.king_id,
+        'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
+        'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
+        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+        'profile': group.profile_id,
+        'description': group.description, 'privacy': group.privacy
+        }
+        return JsonResponse(group_dict)
+    # DELETE
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    group.delete()
+    return HttpResponse(status=200)
+
 def get_single_group(request, group_id):
 
     '''
@@ -969,16 +1025,112 @@ def get_single_group(request, group_id):
     group = Group.objects.get(id=group_id)
 
     group_dict = {'id': group.id, 'name': group.name,
-    'member': [user.id for user in group.member.all()],
-    'admin': [user.id for user in group.admin.all()],
-    'king': group.king_id,
-    'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
-    'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
-    'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
-    'profile': group.profile_id,
+    'king': group.king.id,
     'description': group.description, 'privacy': group.privacy
     }
     return JsonResponse(group_dict)
+
+def member_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    operation = req_data['operation']
+    if operation == 'add':
+        group.add_member(user_id)
+    else: # remove
+        if user_id == group.king_id:
+            return HttpResponseForbidden()
+        group.remove_member(user_id)
+    return HttpResponse(status=204)
+
+def admin_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    operation = req_data['operation']
+    if operation == 'add':
+        group.add_admin(user_id)
+    else: # remove
+        if user_id == group.king_id:
+            return HttpResponseForbidden()
+        group.remove_admin(user_id)
+    return HttpResponse(status=204)
+
+def king_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not request.user.id == group.king_id:
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    group.pre_change_king(user_id)
+    group.king_id = user_id
+    group.save()
+    return HttpResponse(status=204)
+
+def search_group(request, including):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    group_objects = Group.objects.filter(
+        Q(name__contains=including) | Q(description__contains=including)
+    )
+    groups = [{'id': group.id,
+    'name': group.name,
+    'description': group.description,
+    'profile': group.profile_id
+    } for group in group_objects]
+    return JsonResponse(groups, safe=False)
 
 # Others
 
