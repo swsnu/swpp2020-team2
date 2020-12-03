@@ -2912,6 +2912,42 @@ class AlmanacEventReport(TransactionTestCase):
             content='Group Report Content'
         )
 
+    def test_get_delete_event_report(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event_report=self.event_report1.id
+        id_wrong = id_event_report+10
+
+        response = client.head('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.json()['event'], self.event1.id)
+        self.assertEqual(response.json()['reporter'], self.user2.id)
+        self.assertEqual(response.json()['content'], 'Event Report Content')
+
+        response = client.get('/api/event_report/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.delete('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/event_report/')
+        self.assertEqual(len(response.json()), 0)
+
     def test_get_create_event_report(self):
 
         '''
