@@ -759,8 +759,6 @@ def get_event_filtered(request):
             event_objects = event_objects.filter(date__range=(begin_date, end_date))
         # Sort(List (length 1))
         for option in sort_options_list:
-            if option == 'id':
-                event_objects = event_objects.order_by('id')
             if option == 'date':
                 event_objects = event_objects.order_by('date')
             if option == 'begin_time':

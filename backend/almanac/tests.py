@@ -1168,12 +1168,50 @@ class AlmanacEvent(TransactionTestCase):
             group_id=self.group3.id,
             place='Event Place4',
             date='2020-11-05',
-            begin_time='14:55:00',
+            begin_time='14:50:00',
             end_time='16:35:00',
             content='Event Content4',
             last_editor_id=self.user3.id
         )
         self.event4.tag.add(self.tag4)
+        self.event5 = Event.objects.create(
+            title='Event Title5',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place5',
+            date='2020-11-04',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Event Content4',
+            last_editor_id=self.user3.id
+        )
+        self.event5.tag.add(self.tag4)
+        self.event6 = Event.objects.create(
+            title='Event Title6',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place6',
+            date='2020-11-03',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Event Content4',
+            last_editor_id=self.user3.id
+        )
+        self.event6.tag.add(self.tag2)
+        self.event6.tag.add(self.tag4)
+        self.event7 = Event.objects.create(
+            title='Event Title7',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place7',
+            date='2020-11-02',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Event Content4',
+            last_editor_id=self.user3.id
+        )
+        self.event6.tag.add(self.tag3)
+        self.event7.tag.add(self.tag4)
 
     def test_get_event_simple(self):
 
@@ -1189,7 +1227,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/event/simple/')
-        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
         self.assertEqual(response.json()[0]['category'], self.event1.category.id)
@@ -1212,7 +1250,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/event/')
-        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
         self.assertEqual(response.json()[0]['category'], self.event1.category.id)
@@ -1404,7 +1442,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
 
         response = client.get('/api/event/')
-        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(len(response.json()), 6)
 
     def test_filtered_event1(self):
 
@@ -1441,11 +1479,44 @@ class AlmanacEvent(TransactionTestCase):
             'count_options': {}
         }),
         content_type='application/json')
-        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], self.event1.id)
         self.assertEqual(response.json()[1]['id'], self.event2.id)
         self.assertEqual(response.json()[2]['id'], self.event3.id)
         self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event5.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['date'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event3.id)
+        self.assertEqual(response.json()[6]['id'], self.event4.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['begin_time'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event4.id)
+        self.assertEqual(response.json()[6]['id'], self.event3.id)
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
@@ -1455,5 +1526,8 @@ class AlmanacEvent(TransactionTestCase):
             'count_options': {}
         }),
         content_type='application/json')
-        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()), 4)
         self.assertEqual(response.json()[0]['id'], self.event4.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event6.id)
+        self.assertEqual(response.json()[3]['id'], self.event7.id)
