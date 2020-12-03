@@ -805,6 +805,9 @@ def create_event(request):
     if request.method not in ['POST']:
         return HttpResponseNotAllowed(['POST'])
 
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         tag_id_list = req_data['tag']
@@ -869,6 +872,9 @@ def get_put_delete_event(request, event_id):
         'content': event.content}
         return JsonResponse(event_dict)
     if request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return HttpResponse(status=401)
+
         req_data = json.loads(request.body.decode())
         with transaction.atomic():
             if 'category' in req_data.keys():
@@ -913,6 +919,8 @@ def get_put_delete_event(request, event_id):
         'content': event.content}
         return HttpResponse(content=json.dumps(event_dict), status=201)
     # DELETE
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
     event.delete()
     return HttpResponse(status=200)
 
