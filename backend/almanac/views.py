@@ -18,7 +18,8 @@ from django.utils.encoding import force_bytes
 from django.db.models import Q, Count
 
 from almanac.models import User, UserPreference, \
-    University, Department, Event, Group, Background, Language, Category, Tag, Image
+    University, Department, Event, Group, Background, Language, Category, Tag, \
+    Image, EventReport, GroupReport
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -248,6 +249,212 @@ def get_user_full(request, user_id):
     'kings': [group.id for group in user.king_group.all()],
     }
     return JsonResponse(user_dict)
+
+def like_event_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    event_id = req_data['event']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.likes.add(event_id)
+    else: # remove
+        user_preference.likes.remove(event_id)
+    return HttpResponse(status=204)
+
+def bring_event_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    event_id = req_data['event']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.brings.add(event_id)
+    else: # remove
+        user_preference.brings.remove(event_id)
+    return HttpResponse(status=204)
+
+def like_group_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.likes_group.add(group_id)
+    else: # remove
+        user_preference.likes_group.remove(group_id)
+    return HttpResponse(status=204)
+
+def get_notification_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.gets_notification.add(group_id)
+    else: # remove
+        user_preference.gets_notification.remove(group_id)
+    return HttpResponse(status=204)
+
+def join_request_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.join_requests.add(group_id)
+    else: # remove
+        user_preference.join_requests.remove(group_id)
+    return HttpResponse(status=204)
+
+def change_password_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+
+    req_data = json.loads(request.body.decode())
+    password = req_data['password']
+    user.set_password(password)
+    user.save()
+    new_user = authenticate(request, username=user.username, password=password)
+    if new_user is not None:
+        login(request, new_user)
+    return HttpResponse(status=204)
+
+def change_profile_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    image_id = req_data['profile']
+    user_preference.profile_id = image_id
+    user_preference.save()
+    return HttpResponse(status=204)
+
+def change_background_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    background_id = req_data['background']
+    user_preference.background_id = background_id
+    user_preference.save()
+    return HttpResponse(status=204)
+
+def change_language_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    language_id = req_data['language']
+    user_preference.language_id = language_id
+    user_preference.save()
+    return HttpResponse(status=204)
 
 # University
 
@@ -1047,6 +1254,9 @@ def member_modify_group(request, group_id):
 
     group = Group.objects.get(id=group_id)
 
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
     req_data = json.loads(request.body.decode())
     user_id = req_data['user']
     operation = req_data['operation']
@@ -1074,6 +1284,9 @@ def admin_modify_group(request, group_id):
         return HttpResponse(status=401)
 
     group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
 
     req_data = json.loads(request.body.decode())
     user_id = req_data['user']
@@ -1183,6 +1396,66 @@ def search_group(request, including):
     'profile': group.profile_id
     } for group in group_objects]
     return JsonResponse(groups, safe=False)
+
+def get_create_event_report(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        event_reports = [{
+            'id': event_report.id,
+            'event': event_report.event_id,
+            'reporter': event_report.reporter_id,
+            'content': event_report.content}
+            for event_report in EventReport.objects.all()]
+        return JsonResponse(event_reports, safe=False)
+    # POST
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    user = request.user
+    req_data = json.loads(request.body.decode())
+    event_id = req_data['event']
+    content = req_data['content']
+    event_report = EventReport(event_id=event_id, reporter_id=user.id, content=content)
+    event_report.save()
+    event_report_dict = {'id': event_report.id, 'event': event_report.event_id,
+    'reporter': event_report.reporter_id, 'content': event_report.content}
+    return HttpResponse(content=json.dumps(event_report_dict), status=201)
+
+def get_create_group_report(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'POST']:
+        return HttpResponseNotAllowed(['GET', 'POST'])
+
+    if request.method == 'GET':
+        group_reports = [{
+            'id': group_report.id,
+            'group': group_report.group_id,
+            'reporter': group_report.reporter_id,
+            'content': group_report.content}
+            for group_report in GroupReport.objects.all()]
+        return JsonResponse(group_reports, safe=False)
+    # POST
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    user = request.user
+    req_data = json.loads(request.body.decode())
+    group_id = req_data['group']
+    content = req_data['content']
+    group_report = GroupReport(group_id=group_id, reporter_id=user.id, content=content)
+    group_report.save()
+    group_report_dict = {'id': group_report.id, 'group': group_report.group_id,
+    'reporter': group_report.reporter_id, 'content': group_report.content}
+    return HttpResponse(content=json.dumps(group_report_dict), status=201)
 
 # Others
 
