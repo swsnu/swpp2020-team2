@@ -95,6 +95,8 @@ urlpatterns = [
     views.get_create_event_report, name='get_create_event_report'),
     path('event_report/<int:event_report_id>/',
     views.get_delete_event_report, name='get_delete_event_report'),
+    path('event_report/event/<int:event_id>/',
+    views.get_event_report_by_event, name='get_event_report_by_event'),
     path('group_report/',
     views.get_create_group_report, name='get_create_group_report'),
     path('group_report/<int:group_report_id>/',

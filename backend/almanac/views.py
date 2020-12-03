@@ -1451,6 +1451,26 @@ def get_delete_event_report(request, event_report_id):
     event_report.delete()
     return HttpResponse(status=200)
 
+def get_event_report_by_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event_reports = [{
+        'id': event_report.id,
+        'event': event_report.event_id,
+        'reporter': event_report.reporter_id,
+        'content': event_report.content}
+        for event_report in EventReport.objects.filter(event_id=event_id)]
+    return JsonResponse(event_reports, safe=False)
+
 def get_create_group_report(request):
 
     '''

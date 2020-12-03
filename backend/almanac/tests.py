@@ -2851,16 +2851,6 @@ class AlmanacEventReport(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
-        self.user4 = User.objects.create_user(
-            username='sdm369', first_name='Dongmin',
-            last_name='Co', password='password4',
-            email='sdm369@snu.ac.kr', is_active=True
-        )
-        self.userpreference4 = UserPreference.add_new_preference(
-            user_id=self.user4.id,
-            university_id=University.get_default_id(),
-            department_id=Department.get_default_id()
-        )
         self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
@@ -2870,11 +2860,6 @@ class AlmanacEventReport(TransactionTestCase):
             name='Cat Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
-        )
-        self.group3 = Group.add_new_group(
-            name='Catholic Group Name4',
-            king_id=self.user3.id,
-            description='Group Description4'
         )
         self.category1 = Category.objects.create(
             name='performance'
