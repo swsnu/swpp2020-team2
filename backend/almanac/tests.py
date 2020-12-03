@@ -2026,3 +2026,56 @@ class AlmanacGroup(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('New Group Name', response.content.decode())
         self.assertIn('New Group Description', response.content.decode())
+
+    def test_get_single_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+10
+
+        response = client.head('/api/group/{}/'.format(id_group))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/{}/'.format(id_group))
+        self.assertEqual(response.json()['id'], self.group1.id)
+        self.assertEqual(response.json()['name'], self.group1.name)
+        self.assertEqual(response.json()['king'], self.group1.king_id)
+        self.assertEqual(response.json()['description'], self.group1.description)
+
+        response = client.get('/api/group/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_single_group_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+10
+
+        response = client.head('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['id'], self.group1.id)
+        self.assertEqual(response.json()['name'], self.group1.name)
+        self.assertEqual(response.json()['king'], self.group1.king_id)
+        self.assertEqual(response.json()['admin'], [self.user2.id, self.user3.id])
+        self.assertEqual(response.json()['member'],
+        [self.user2.id, self.user3.id, self.user5.id])
+        self.assertEqual(response.json()['likes_group'], [self.user2.id, self.user6.id])
+        self.assertEqual(response.json()['gets_notification'], [self.user4.id, self.user5.id])
+        self.assertEqual(response.json()['join_requests'], [self.user4.id])
+        self.assertEqual(response.json()['description'], self.group1.description)
+        self.assertEqual(response.json()['privacy'], Group.privacy_default)
+
+        response = client.get('/api/group/{}/full/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)

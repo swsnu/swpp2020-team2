@@ -954,7 +954,7 @@ def create_group(request):
     'description': group.description, 'privacy': group.privacy}
     return HttpResponse(content=json.dumps(group_dict), status=201)
 
-def get_single_group(request, group_id):
+def get_single_group_full(request, group_id):
 
     '''
     a function docstring
@@ -976,6 +976,26 @@ def get_single_group(request, group_id):
     'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
     'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
     'profile': group.profile_id,
+    'description': group.description, 'privacy': group.privacy
+    }
+    return JsonResponse(group_dict)
+
+def get_single_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    group = Group.objects.get(id=group_id)
+
+    group_dict = {'id': group.id, 'name': group.name,
+    'king': group.king.id,
     'description': group.description, 'privacy': group.privacy
     }
     return JsonResponse(group_dict)
