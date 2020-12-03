@@ -1108,13 +1108,13 @@ class AlmanacEvent(TransactionTestCase):
             king_id=self.user3.id,
             description='Group Description3'
         )
-        self.group2.member.add(self.user2)
+        self.group2.add_new_member(self.user2.id)
         self.group3 = Group.add_new_group(
             name='Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
-        self.group3.member.add(self.user4)
+        self.group3.add_new_member(self.user4.id)
         self.event1 = Event.objects.create(
             title='Event Title',
             category_id=self.category1.id,
@@ -1236,8 +1236,8 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event1.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event1.group.id)
+        self.assertEqual(response.json()[0]['category'], self.event1.category_id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group_id)
         self.assertEqual(response.json()[0]['date'], self.event1.date)
         self.assertEqual(response.json()[0]['begin_time'], self.event1.begin_time)
         self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
@@ -1259,8 +1259,8 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event1.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event1.group.id)
+        self.assertEqual(response.json()[0]['category'], self.event1.category_id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group_id)
         self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
         self.assertEqual(response.json()[0]['place'], self.event1.place)
         self.assertEqual(response.json()[0]['date'], self.event1.date)
@@ -1268,7 +1268,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
         self.assertEqual(response.json()[0]['content'], self.event1.content)
         self.assertEqual(response.json()[0]['image'], [])
-        self.assertEqual(response.json()[0]['last_editor'], self.event1.last_editor.id)
+        self.assertEqual(response.json()[0]['last_editor'], self.event1.last_editor_id)
 
     def test_create_event(self):
 
@@ -1351,8 +1351,8 @@ class AlmanacEvent(TransactionTestCase):
         response = client.get('/api/event/{}/'.format(id_event))
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'Event Title')
-        self.assertEqual(response.json()['category'], self.event1.category.id)
-        self.assertEqual(response.json()['group'], self.event1.group.id)
+        self.assertEqual(response.json()['category'], self.event1.category_id)
+        self.assertEqual(response.json()['group'], self.event1.group_id)
         self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
         self.assertEqual(response.json()['place'], self.event1.place)
         self.assertEqual(response.json()['date'], self.event1.date)
@@ -1360,7 +1360,7 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()['end_time'], self.event1.end_time)
         self.assertEqual(response.json()['content'], self.event1.content)
         self.assertEqual(response.json()['image'], [])
-        self.assertEqual(response.json()['last_editor'], self.event1.last_editor.id)
+        self.assertEqual(response.json()['last_editor'], self.event1.last_editor_id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
@@ -1838,37 +1838,65 @@ class AlmanacGroup(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
+        self.user5 = User.objects.create_user(
+            username='sdm000', first_name='Dongmin',
+            last_name='Coco', password='password5',
+            email='sdm000@snu.ac.kr', is_active=True
+        )
+        self.userpreference5 = UserPreference.add_new_preference(
+            user_id=self.user5.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user6 = User.objects.create_user(
+            username='sdm0000', first_name='Dongmin',
+            last_name='Cococo', password='password6',
+            email='sdm0000@snu.ac.kr', is_active=True
+        )
+        self.userpreference6 = UserPreference.add_new_preference(
+            user_id=self.user6.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
         self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
             description='Group Description'
         )
+        self.group1.add_new_admin(self.user3.id)
+        self.group1.add_new_member(self.user5.id)
         self.group2 = Group.add_new_group(
             name='Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
         )
-        self.group2.member.add(self.user2)
+        self.group2.add_new_member(self.user2.id)
         self.group3 = Group.add_new_group(
             name='Group Name4',
             king_id=self.user3.id,
             description='Group Description4'
         )
-        self.group3.member.add(self.user4)
+        self.group3.add_new_member(self.user4.id)
         self.group4 = Group.add_new_group(
             name='Group Name5',
             king_id=self.user3.id,
             description='Group Description5'
         )
-        self.group4.member.add(self.user4)
+        self.group4.add_new_member(self.user4.id)
         self.group5 = Group.add_new_group(
             name='Group Name6',
             king_id=self.user2.id,
             description='Group Description6'
         )
-        self.group5.member.add(self.user4)
+        self.group5.add_new_member(self.user4.id)
+        self.group5.add_new_admin(self.user3.id)
         self.userpreference2.likes_group.add(self.group1)
+        self.userpreference6.likes_group.add(self.group1)
+        self.userpreference6.likes_group.add(self.group2)
+        self.userpreference4.join_requests.add(self.group1)
         self.userpreference2.gets_notification.add(self.group3)
+        self.userpreference4.gets_notification.add(self.group1)
+        self.userpreference5.gets_notification.add(self.group1)
 
     def test_get_group(self):
 
@@ -1885,3 +1913,70 @@ class AlmanacGroup(TransactionTestCase):
         self.assertEqual(len(response.json()), 5)
         self.assertEqual(response.json()[0]['id'], self.group1.id)
         self.assertEqual(response.json()[0]['name'], self.group1.name)
+        self.assertEqual(response.json()[0]['king'], self.group1.king_id)
+        self.assertEqual(response.json()[0]['admin'], [self.user2.id, self.user3.id])
+        self.assertEqual(response.json()[0]['member'],
+        [self.user2.id, self.user3.id, self.user5.id])
+        self.assertEqual(response.json()[0]['likes_group'], [self.user2.id, self.user6.id])
+        self.assertEqual(response.json()[0]['gets_notification'], [self.user4.id, self.user5.id])
+        self.assertEqual(response.json()[0]['join_requests'], [self.user4.id])
+        self.assertEqual(response.json()[0]['description'], self.group1.description)
+        self.assertEqual(response.json()[0]['privacy'], Group.privacy_default)
+
+    def test_get_group_simple(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group/simple/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/simple/')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[0]['name'], self.group1.name)
+        self.assertEqual(response.json()[0]['king'], self.group1.king_id)
+        self.assertEqual(response.json()[0]['description'], self.group1.description)
+        self.assertEqual(response.json()[0]['privacy'], Group.privacy_default)
+
+    def test_create_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('New Group Name', response.content.decode())
+        self.assertIn('New Group Description', response.content.decode())

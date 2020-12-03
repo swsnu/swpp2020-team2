@@ -977,6 +977,9 @@ def create_group(request):
     if request.method not in ['POST']:
         return HttpResponseNotAllowed(['POST'])
 
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         name = req_data['name']
