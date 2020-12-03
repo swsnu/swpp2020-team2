@@ -755,9 +755,11 @@ def get_event_filtered(request):
                 event_objects = event_objects.filter(
                     id__in=user_preference.likes.values_list('id', flat=True)
                 )
+        if 'group_exact' in filter_options_dict.keys():
+            event_objects = event_objects.filter(group__id__in=filter_options_dict['group_exact'])
         if 'date' in filter_options_dict.keys():
-            begin_date = filter_options_dict['event']['begin_date']
-            end_date = filter_options_dict['event']['end_date']
+            begin_date = filter_options_dict['date']['begin_date']
+            end_date = filter_options_dict['date']['end_date']
             event_objects = event_objects.filter(date__range=(begin_date, end_date))
         # Sort(List (length 1))
         if sort_options_list == []:
@@ -777,7 +779,6 @@ def get_event_filtered(request):
                 event_objects = event_objects.annotate(q_count=
                 Count('brings_userpreference')
                 ).order_by('-q_count', 'date')
-        # like
         # Count(Dictionary)
         if 'from' in count_options_dict.keys():
             event_objects = event_objects[count_options_dict['from']:]
@@ -937,13 +938,11 @@ def get_group_simple(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if request.method == 'GET':
-        groups = [{'id': group.id, 'name': group.name,
-        'king': group.king.id,
-        'description': group.description, 'privacy': group.privacy
-        } for group in Group.objects.all().order_by('id')]
-        return JsonResponse(groups, safe=False)
-    return HttpResponseNotAllowed(['GET'])
+    groups = [{'id': group.id, 'name': group.name,
+    'king': group.king.id,
+    'description': group.description, 'privacy': group.privacy
+    } for group in Group.objects.all().order_by('id')]
+    return JsonResponse(groups, safe=False)
 
 def get_group(request):
 
@@ -954,19 +953,17 @@ def get_group(request):
     if request.method not in ['GET']:
         return HttpResponseNotAllowed(['GET'])
 
-    if request.method == 'GET':
-        groups = [{'id': group.id, 'name': group.name,
-        'member': [user.id for user in group.member.all()],
-        'admin': [user.id for user in group.admin.all()],
-        'king': group.king_id,
-        'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
-        'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
-        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
-        'profile': group.profile_id,
-        'description': group.description, 'privacy': group.privacy
-        } for group in Group.objects.all().order_by('id')]
-        return JsonResponse(groups, safe=False)
-    return HttpResponseNotAllowed(['GET'])
+    groups = [{'id': group.id, 'name': group.name,
+    'member': [user.id for user in group.member.all()],
+    'admin': [user.id for user in group.admin.all()],
+    'king': group.king_id,
+    'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
+    'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
+    'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+    'profile': group.profile_id,
+    'description': group.description, 'privacy': group.privacy
+    } for group in Group.objects.all().order_by('id')]
+    return JsonResponse(groups, safe=False)
 
 def create_group(request):
 
@@ -980,20 +977,44 @@ def create_group(request):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        name = req_data['name']
-        description = req_data['description']
-        king_id = req_data['king']
-        group = Group.add_new_group(
-            name=name, king_id=king_id,
-            description=description
-        ) # privacy = 1
-        group_dict = {'id': group.id, 'name': group.name,
-        'king': group.king_id,
-        'description': group.description, 'privacy': group.privacy}
-        return HttpResponse(content=json.dumps(group_dict), status=201)
-    return HttpResponseNotAllowed(['POST'])
+    req_data = json.loads(request.body.decode())
+    name = req_data['name']
+    description = req_data['description']
+    king_id = req_data['king']
+    group = Group.add_new_group(
+        name=name, king_id=king_id,
+        description=description
+    ) # privacy = 1
+    group_dict = {'id': group.id, 'name': group.name,
+    'king': group.king_id,
+    'description': group.description, 'privacy': group.privacy}
+    return HttpResponse(content=json.dumps(group_dict), status=201)
+
+def get_single_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    group = Group.objects.get(id=group_id)
+
+    group_dict = {'id': group.id, 'name': group.name,
+    'member': [user.id for user in group.member.all()],
+    'admin': [user.id for user in group.admin.all()],
+    'king': group.king_id,
+    'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
+    'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
+    'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+    'profile': group.profile_id,
+    'description': group.description, 'privacy': group.privacy
+    }
+    return JsonResponse(group_dict)
 
 # Others
 
