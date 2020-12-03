@@ -101,5 +101,7 @@ urlpatterns = [
     views.get_create_group_report, name='get_create_group_report'),
     path('group_report/<int:group_report_id>/',
     views.get_delete_group_report, name='get_delete_group_report'),
+    path('group_report/group/<int:group_id>/',
+    views.get_group_report_by_group, name='get_group_report_by_group'),
     path('token/', views.get_token, name='token'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1525,6 +1525,26 @@ def get_delete_group_report(request, group_report_id):
     group_report.delete()
     return HttpResponse(status=200)
 
+def get_group_report_by_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    group_reports = [{
+        'id': group_report.id,
+        'group': group_report.group_id,
+        'reporter': group_report.reporter_id,
+        'content': group_report.content}
+        for group_report in GroupReport.objects.filter(group_id=group_id)]
+    return JsonResponse(group_reports, safe=False)
+
 # Others
 
 def index(request):
