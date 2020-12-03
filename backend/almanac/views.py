@@ -978,31 +978,37 @@ def create_group(request):
     'description': group.description, 'privacy': group.privacy}
     return HttpResponse(content=json.dumps(group_dict), status=201)
 
-def get_single_group_full(request, group_id):
+def get_delete_group_full(request, group_id):
 
     '''
     a function docstring
     '''
 
-    if request.method not in ['GET']:
-        return HttpResponseNotAllowed(['GET'])
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
 
     if not Group.objects.filter(id=group_id).exists():
         return HttpResponseNotFound()
 
     group = Group.objects.get(id=group_id)
 
-    group_dict = {'id': group.id, 'name': group.name,
-    'member': [user.id for user in group.member.all()],
-    'admin': [user.id for user in group.admin.all()],
-    'king': group.king_id,
-    'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
-    'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
-    'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
-    'profile': group.profile_id,
-    'description': group.description, 'privacy': group.privacy
-    }
-    return JsonResponse(group_dict)
+    if request.method == 'GET':
+        group_dict = {'id': group.id, 'name': group.name,
+        'member': [user.id for user in group.member.all()],
+        'admin': [user.id for user in group.admin.all()],
+        'king': group.king_id,
+        'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
+        'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
+        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+        'profile': group.profile_id,
+        'description': group.description, 'privacy': group.privacy
+        }
+        return JsonResponse(group_dict)
+    # DELETE
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    group.delete()
+    return HttpResponse(status=200)
 
 def get_single_group(request, group_id):
 

@@ -2105,3 +2105,27 @@ class AlmanacGroup(TransactionTestCase):
 
         response = client.get('/api/group/{}/full/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+    def test_delete_group_full(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+
+        response = client.delete('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.delete('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/group/')
+        self.assertEqual(len(response.json()), 4)
