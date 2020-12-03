@@ -125,6 +125,7 @@ class Group(models.Model):
     a class docstring
     '''
 
+    privacy_default = 1
     name = models.CharField(null=False, blank=False, max_length=30)
     member = models.ManyToManyField(
         User,
@@ -145,7 +146,7 @@ class Group(models.Model):
         on_delete=models.CASCADE,
         related_name='profile_group'
     )
-    privacy = models.IntegerField(default=1)
+    privacy = models.IntegerField(default=privacy_default)
 
     @staticmethod
     def add_new_group(name, king_id, description):
@@ -164,6 +165,23 @@ class Group(models.Model):
         group.member.add(king_id)
         group.admin.add(king_id)
         return group
+
+    def add_new_admin(self, admin_id):
+
+        '''
+        a function docstring
+        '''
+
+        self.member.add(admin_id)
+        self.admin.add(admin_id)
+
+    def add_new_member(self, member_id):
+
+        '''
+        a function docstring
+        '''
+
+        self.member.add(member_id)
 
 class Event(models.Model):
 

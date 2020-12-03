@@ -52,6 +52,9 @@ class AlmanacCsrfTestCase(TestCase):
         response = client.head('/api/token/')
         self.assertEqual(response.status_code, 405)
 
+        response = client.head('/api/')
+        self.assertEqual(response.status_code, 200)
+
         response = client.post('/api/signup/', json.dumps(
             {'username': 'taekop', 'first_name': 'Seungtaek',
             'last_name': 'Oh', 'password': 'password2', 'email': 'taekop@snu.ac.kr',
@@ -1028,7 +1031,7 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
         response = client.delete('/api/image/{}/'.format(id_im))
         self.assertEqual(response.status_code, 200)
 
-class AlmanacEventTag(TransactionTestCase):
+class AlmanacEvent(TransactionTestCase):
 
     '''
     a class docstring
@@ -1055,8 +1058,28 @@ class AlmanacEventTag(TransactionTestCase):
             last_name='Oh', password='password2',
             email='taekop@snu.ac.kr', is_active=True
         )
-        UserPreference.add_new_preference(
+        self.userpreference2 = UserPreference.add_new_preference(
             user_id=self.user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user3 = User.objects.create_user(
+            username='sdm1230', first_name='Dongmin',
+            last_name='Shin', password='password3',
+            email='sdm1230@snu.ac.kr', is_active=True
+        )
+        self.userpreference3 = UserPreference.add_new_preference(
+            user_id=self.user3.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user4 = User.objects.create_user(
+            username='sdm369', first_name='Dongmin',
+            last_name='Co', password='password4',
+            email='sdm369@snu.ac.kr', is_active=True
+        )
+        self.userpreference4 = UserPreference.add_new_preference(
+            user_id=self.user4.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
@@ -1066,31 +1089,138 @@ class AlmanacEventTag(TransactionTestCase):
         self.tag2 = Tag.objects.create(
             name='winter'
         )
-        self.category = Category.objects.create(
+        self.tag3 = Tag.objects.create(
+            name='dance'
+        )
+        self.tag4 = Tag.objects.create(
+            name='flower'
+        )
+        self.category1 = Category.objects.create(
             name='performance'
         )
-        self.sample_image = Image.objects.create(
+        self.category2 = Category.objects.create(
+            name='ililhof'
         )
-        self.group = Group.add_new_group(
+        self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
             description='Group Description'
         )
-        self.group.member.add(self.user2)
-        self.group.admin.add(self.user2)
-        self.event = Event.objects.create(
+        self.group2 = Group.add_new_group(
+            name='Group Name3',
+            king_id=self.user3.id,
+            description='Group Description3'
+        )
+        self.group2.add_new_member(self.user2.id)
+        self.group3 = Group.add_new_group(
+            name='Group Name4',
+            king_id=self.user3.id,
+            description='Group Description4'
+        )
+        self.group3.add_new_member(self.user4.id)
+        self.event1 = Event.objects.create(
             title='Event Title',
-            category_id=self.category.id,
-            group_id=self.group.id,
+            category_id=self.category1.id,
+            group_id=self.group1.id,
             place='Event Place',
             date='2020-11-05',
             begin_time='14:20:00',
-            end_time='16:40:00',
+            end_time='16:52:00',
             content='Event Content',
             last_editor_id=self.user2.id
         )
-        self.event.tag.add(self.tag1)
-        self.event.tag.add(self.tag2)
+        self.event1.tag.add(self.tag1)
+        self.event1.tag.add(self.tag2)
+        self.event2 = Event.objects.create(
+            title='Event Title2',
+            category_id=self.category2.id,
+            group_id=self.group2.id,
+            place='Event Place2',
+            date='2020-11-05',
+            begin_time='14:30:00',
+            end_time='16:55:00',
+            content='Event Content2',
+            last_editor_id=self.user3.id
+        )
+        self.event2.tag.add(self.tag2)
+        self.event2.tag.add(self.tag3)
+        self.event3 = Event.objects.create(
+            title='Categorize Event Title3',
+            category_id=self.category2.id,
+            group_id=self.group2.id,
+            place='Event Place3',
+            date='2020-11-05',
+            begin_time='14:55:00',
+            end_time='16:45:00',
+            content='Event Content3',
+            last_editor_id=self.user3.id
+        )
+        self.event3.tag.add(self.tag2)
+        self.event3.tag.add(self.tag3)
+        self.event4 = Event.objects.create(
+            title='Cat Event Title4',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place4',
+            date='2020-11-05',
+            begin_time='14:50:00',
+            end_time='16:35:00',
+            content='Event Content4',
+            last_editor_id=self.user3.id
+        )
+        self.event4.tag.add(self.tag4)
+        self.event5 = Event.objects.create(
+            title='Event Title5',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place5',
+            date='2020-11-04',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Event Content5',
+            last_editor_id=self.user3.id
+        )
+        self.event5.tag.add(self.tag4)
+        self.event6 = Event.objects.create(
+            title='Event Title6',
+            category_id=self.category1.id,
+            group_id=self.group1.id,
+            place='Event Place6',
+            date='2020-11-03',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Cat Event Content6',
+            last_editor_id=self.user2.id
+        )
+        self.event6.tag.add(self.tag2)
+        self.event6.tag.add(self.tag4)
+        self.event7 = Event.objects.create(
+            title='Event Title7',
+            category_id=self.category1.id,
+            group_id=self.group3.id,
+            place='Event Place7',
+            date='2020-11-02',
+            begin_time='14:55:00',
+            end_time='16:35:00',
+            content='Event Content7',
+            last_editor_id=self.user3.id
+        )
+        self.event6.tag.add(self.tag3)
+        self.event7.tag.add(self.tag4)
+        self.userpreference2.likes.add(self.event2)
+        self.userpreference2.likes.add(self.event4)
+        self.userpreference2.likes.add(self.event5)
+        self.userpreference2.likes.add(self.event7)
+        self.userpreference3.likes.add(self.event1)
+        self.userpreference3.likes.add(self.event2)
+        self.userpreference3.likes.add(self.event7)
+        self.userpreference4.likes.add(self.event5)
+        self.userpreference4.likes.add(self.event7)
+        self.userpreference2.brings.add(self.event6)
+        self.userpreference2.brings.add(self.event7)
+        self.userpreference4.brings.add(self.event6)
+        self.userpreference2.likes_group.add(self.group1)
+        self.userpreference2.gets_notification.add(self.group3)
 
     def test_get_event_simple(self):
 
@@ -1100,20 +1230,20 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
+        id_event = self.event1.id
 
         response = client.head('/api/event/simple/')
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/event/simple/')
-        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event.group.id)
-        self.assertEqual(response.json()[0]['date'], self.event.date)
-        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
+        self.assertEqual(response.json()[0]['category'], self.event1.category_id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group_id)
+        self.assertEqual(response.json()[0]['date'], self.event1.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
 
     def test_get_event(self):
 
@@ -1123,25 +1253,25 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
+        id_event = self.event1.id
 
         response = client.head('/api/event/')
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/event/')
-        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(len(response.json()), 7)
         self.assertEqual(response.json()[0]['id'], id_event)
         self.assertEqual(response.json()[0]['title'], 'Event Title')
-        self.assertEqual(response.json()[0]['category'], self.event.category.id)
-        self.assertEqual(response.json()[0]['group'], self.event.group.id)
+        self.assertEqual(response.json()[0]['category'], self.event1.category_id)
+        self.assertEqual(response.json()[0]['group'], self.event1.group_id)
         self.assertEqual(response.json()[0]['tag'], [self.tag1.id, self.tag2.id])
-        self.assertEqual(response.json()[0]['place'], self.event.place)
-        self.assertEqual(response.json()[0]['date'], self.event.date)
-        self.assertEqual(response.json()[0]['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()[0]['end_time'], self.event.end_time)
-        self.assertEqual(response.json()[0]['content'], self.event.content)
+        self.assertEqual(response.json()[0]['place'], self.event1.place)
+        self.assertEqual(response.json()[0]['date'], self.event1.date)
+        self.assertEqual(response.json()[0]['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()[0]['end_time'], self.event1.end_time)
+        self.assertEqual(response.json()[0]['content'], self.event1.content)
         self.assertEqual(response.json()[0]['image'], [])
-        self.assertEqual(response.json()[0]['last_editor'], self.event.last_editor.id)
+        self.assertEqual(response.json()[0]['last_editor'], self.event1.last_editor_id)
 
     def test_create_event(self):
 
@@ -1153,8 +1283,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.put('/api/event/create/', json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1169,8 +1299,29 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.post('/api/event/create/', json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
+            'place': 'New Event Place',
+            'date': '2020-11-06',
+            'begin_time': '08:20:00',
+            'end_time': '13:40:00',
+            'content': 'New Event Content',
+            'last_editor': self.user2.id,
+            'image': [],
+            'tag': [self.tag1.id]
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/create/', json.dumps({
+            'title': 'New Event Title',
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1186,7 +1337,7 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertIn('New Event Place', response.content.decode())
         self.assertIn('New Event Content', response.content.decode())
 
-    def test_get_edit_delete_event(self):
+    def test_get_single_event(self):
 
         '''
         a function docstring
@@ -1194,8 +1345,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         client = Client()
 
-        id_event = self.event.id
-        id_wrong = id_event+1
+        id_event = self.event1.id
+        id_wrong = id_event+10
 
         response = client.head('/api/event/{}/'.format(id_event))
         self.assertEqual(response.status_code, 405)
@@ -1203,19 +1354,39 @@ class AlmanacEventTag(TransactionTestCase):
         response = client.get('/api/event/{}/'.format(id_event))
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'Event Title')
-        self.assertEqual(response.json()['category'], self.event.category.id)
-        self.assertEqual(response.json()['group'], self.event.group.id)
+        self.assertEqual(response.json()['category'], self.event1.category_id)
+        self.assertEqual(response.json()['group'], self.event1.group_id)
         self.assertEqual(response.json()['tag'], [self.tag1.id, self.tag2.id])
-        self.assertEqual(response.json()['place'], self.event.place)
-        self.assertEqual(response.json()['date'], self.event.date)
-        self.assertEqual(response.json()['begin_time'], self.event.begin_time)
-        self.assertEqual(response.json()['end_time'], self.event.end_time)
-        self.assertEqual(response.json()['content'], self.event.content)
+        self.assertEqual(response.json()['place'], self.event1.place)
+        self.assertEqual(response.json()['date'], self.event1.date)
+        self.assertEqual(response.json()['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event1.end_time)
+        self.assertEqual(response.json()['content'], self.event1.content)
         self.assertEqual(response.json()['image'], [])
-        self.assertEqual(response.json()['last_editor'], self.event.last_editor.id)
+        self.assertEqual(response.json()['last_editor'], self.event1.last_editor_id)
 
         response = client.get('/api/event/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
+
+    def test_edit_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event1.id
+
+        response = client.put('/api/event/{}/'.format(id_event), json.dumps({
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         response = client.put('/api/event/{}/'.format(id_event), json.dumps({
         }),
@@ -1227,8 +1398,8 @@ class AlmanacEventTag(TransactionTestCase):
 
         response = client.put('/api/event/{}/'.format(id_event), json.dumps({
             'title': 'New Event Title',
-            'category': self.category.id,
-            'group': self.group.id,
+            'category': self.category1.id,
+            'group': self.group1.id,
             'place': 'New Event Place',
             'date': '2020-11-06',
             'begin_time': '08:20:00',
@@ -1247,8 +1418,8 @@ class AlmanacEventTag(TransactionTestCase):
         response = client.get('/api/event/{}/'.format(id_event)) #id_event??
         self.assertEqual(response.json()['id'], id_event)
         self.assertEqual(response.json()['title'], 'New Event Title')
-        self.assertEqual(response.json()['category'], self.category.id)
-        self.assertEqual(response.json()['group'], self.group.id)
+        self.assertEqual(response.json()['category'], self.category1.id)
+        self.assertEqual(response.json()['group'], self.group1.id)
         self.assertEqual(response.json()['tag'], [self.tag1.id])
         self.assertEqual(response.json()['place'], 'New Event Place')
         self.assertEqual(response.json()['date'], '2020-11-06')
@@ -1258,8 +1429,600 @@ class AlmanacEventTag(TransactionTestCase):
         self.assertEqual(response.json()['image'], [])
         self.assertEqual(response.json()['last_editor'], self.user2.id)
 
+    def test_delete_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event1.id
+
+        response = client.delete('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
         response = client.delete('/api/event/{}/'.format(id_event))
         self.assertEqual(response.status_code, 200)
 
         response = client.get('/api/event/')
-        self.assertEqual(len(response.json()), 0)
+        self.assertEqual(len(response.json()), 6)
+
+    def test_filtered_event1(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event5.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event7.id)
+
+    def test_filtered_event2(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event5.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['date'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event3.id)
+        self.assertEqual(response.json()[6]['id'], self.event4.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['begin_time'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event4.id)
+        self.assertEqual(response.json()[6]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['end_time'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+        self.assertEqual(response.json()[4]['id'], self.event3.id)
+        self.assertEqual(response.json()[5]['id'], self.event1.id)
+        self.assertEqual(response.json()[6]['id'], self.event2.id)
+
+    def test_filtered_event3(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['likes'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event7.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event2.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event4.id)
+        self.assertEqual(response.json()[5]['id'], self.event6.id)
+        self.assertEqual(response.json()[6]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['brings'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 7)
+        self.assertEqual(response.json()[0]['id'], self.event6.id)
+        self.assertEqual(response.json()[1]['id'], self.event7.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event1.id)
+        self.assertEqual(response.json()[4]['id'], self.event2.id)
+        self.assertEqual(response.json()[5]['id'], self.event3.id)
+        self.assertEqual(response.json()[6]['id'], self.event4.id)
+
+    def test_filtered_event4(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'tag': [self.tag4.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event4.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event6.id)
+        self.assertEqual(response.json()[3]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'category': [self.category2.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event2.id)
+        self.assertEqual(response.json()[1]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'including': ['Cat']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.event3.id)
+        self.assertEqual(response.json()[1]['id'], self.event4.id)
+        self.assertEqual(response.json()[2]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['like']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event6.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['notification']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.event4.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group_exact': [self.group1.id, self.group3.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event4.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event6.id)
+        self.assertEqual(response.json()[4]['id'], self.event7.id)
+
+    def test_filtered_event5(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'event': ['like']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event2.id)
+        self.assertEqual(response.json()[1]['id'], self.event4.id)
+        self.assertEqual(response.json()[2]['id'], self.event5.id)
+        self.assertEqual(response.json()[3]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'date': {
+                    'begin_date': '2020-11-03',
+                    'end_date': '2020-11-04'
+                }
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event5.id)
+        self.assertEqual(response.json()[1]['id'], self.event6.id)
+
+    def test_filtered_event6(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {
+                'from': 3
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event4.id)
+        self.assertEqual(response.json()[1]['id'], self.event5.id)
+        self.assertEqual(response.json()[2]['id'], self.event6.id)
+        self.assertEqual(response.json()[3]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {
+                'num': 4
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event2.id)
+        self.assertEqual(response.json()[2]['id'], self.event3.id)
+        self.assertEqual(response.json()[3]['id'], self.event4.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': [],
+            'count_options': {
+                'from': 1,
+                'num': 2
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event2.id)
+        self.assertEqual(response.json()[1]['id'], self.event3.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': ['end_time'],
+            'count_options': {
+                'from': 1,
+                'num': 2
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event3.id)
+        self.assertEqual(response.json()[1]['id'], self.event1.id)
+
+class AlmanacGroup(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create_user(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        self.userpreference2 = UserPreference.add_new_preference(
+            user_id=self.user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user3 = User.objects.create_user(
+            username='sdm1230', first_name='Dongmin',
+            last_name='Shin', password='password3',
+            email='sdm1230@snu.ac.kr', is_active=True
+        )
+        self.userpreference3 = UserPreference.add_new_preference(
+            user_id=self.user3.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user4 = User.objects.create_user(
+            username='sdm369', first_name='Dongmin',
+            last_name='Co', password='password4',
+            email='sdm369@snu.ac.kr', is_active=True
+        )
+        self.userpreference4 = UserPreference.add_new_preference(
+            user_id=self.user4.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user5 = User.objects.create_user(
+            username='sdm000', first_name='Dongmin',
+            last_name='Coco', password='password5',
+            email='sdm000@snu.ac.kr', is_active=True
+        )
+        self.userpreference5 = UserPreference.add_new_preference(
+            user_id=self.user5.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.user6 = User.objects.create_user(
+            username='sdm0000', first_name='Dongmin',
+            last_name='Cococo', password='password6',
+            email='sdm0000@snu.ac.kr', is_active=True
+        )
+        self.userpreference6 = UserPreference.add_new_preference(
+            user_id=self.user6.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        self.group1 = Group.add_new_group(
+            name='Group Name',
+            king_id=self.user2.id,
+            description='Group Description'
+        )
+        self.group1.add_new_admin(self.user3.id)
+        self.group1.add_new_member(self.user5.id)
+        self.group2 = Group.add_new_group(
+            name='Group Name3',
+            king_id=self.user3.id,
+            description='Group Description3'
+        )
+        self.group2.add_new_member(self.user2.id)
+        self.group3 = Group.add_new_group(
+            name='Group Name4',
+            king_id=self.user3.id,
+            description='Group Description4'
+        )
+        self.group3.add_new_member(self.user4.id)
+        self.group4 = Group.add_new_group(
+            name='Group Name5',
+            king_id=self.user3.id,
+            description='Group Description5'
+        )
+        self.group4.add_new_member(self.user4.id)
+        self.group5 = Group.add_new_group(
+            name='Group Name6',
+            king_id=self.user2.id,
+            description='Group Description6'
+        )
+        self.group5.add_new_member(self.user4.id)
+        self.group5.add_new_admin(self.user3.id)
+        self.userpreference2.likes_group.add(self.group1)
+        self.userpreference6.likes_group.add(self.group1)
+        self.userpreference6.likes_group.add(self.group2)
+        self.userpreference4.join_requests.add(self.group1)
+        self.userpreference2.gets_notification.add(self.group3)
+        self.userpreference4.gets_notification.add(self.group1)
+        self.userpreference5.gets_notification.add(self.group1)
+
+    def test_get_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[0]['name'], self.group1.name)
+        self.assertEqual(response.json()[0]['king'], self.group1.king_id)
+        self.assertEqual(response.json()[0]['admin'], [self.user2.id, self.user3.id])
+        self.assertEqual(response.json()[0]['member'],
+        [self.user2.id, self.user3.id, self.user5.id])
+        self.assertEqual(response.json()[0]['likes_group'], [self.user2.id, self.user6.id])
+        self.assertEqual(response.json()[0]['gets_notification'], [self.user4.id, self.user5.id])
+        self.assertEqual(response.json()[0]['join_requests'], [self.user4.id])
+        self.assertEqual(response.json()[0]['description'], self.group1.description)
+        self.assertEqual(response.json()[0]['privacy'], Group.privacy_default)
+
+    def test_get_group_simple(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.head('/api/group/simple/')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group/simple/')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[0]['name'], self.group1.name)
+        self.assertEqual(response.json()[0]['king'], self.group1.king_id)
+        self.assertEqual(response.json()[0]['description'], self.group1.description)
+        self.assertEqual(response.json()[0]['privacy'], Group.privacy_default)
+
+    def test_create_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/create/', json.dumps({
+            'name': 'New Group Name',
+            'king': self.user2.id,
+            'description': 'New Group Description'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('New Group Name', response.content.decode())
+        self.assertIn('New Group Description', response.content.decode())
