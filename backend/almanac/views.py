@@ -811,6 +811,30 @@ def create_event(request):
     'content': event.content}
     return HttpResponse(content=json.dumps(event_dict), status=201)
 
+def get_single_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event = Event.objects.get(id=event_id)
+
+    event_dict = {'id': event.id,
+    'title': event.title,
+    'date': event.date,
+    'category': event.category.id,
+    'group': event.group.id,
+    'begin_time': event.begin_time,
+    'end_time': event.end_time
+    }
+    return JsonResponse(event_dict)
+
 def get_put_delete_event_full(request, event_id):
 
     '''

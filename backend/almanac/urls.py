@@ -22,6 +22,7 @@ urlpatterns = [
     path('event/simple/', views.get_event_simple, name='get_event_simple'),
     path('event/filtered/', views.get_event_filtered, name='get_event_filtered'),
     path('event/create/', views.create_event, name='create_event'),
+    path('event/<int:event_id>/', views.get_single_event, name='get_single_event'),
     path('event/<int:event_id>/full/', views.get_put_delete_event_full,
     name='get_edit_delete_event_full'),
     path('group/', views.get_group, name='get_group'),

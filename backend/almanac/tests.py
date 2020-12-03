@@ -1337,6 +1337,32 @@ class AlmanacEvent(TransactionTestCase):
         self.assertIn('New Event Place', response.content.decode())
         self.assertIn('New Event Content', response.content.decode())
 
+    def test_get_single_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event1.id
+        id_wrong = id_event+10
+
+        response = client.head('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event/{}/'.format(id_event))
+        self.assertEqual(response.json()['id'], id_event)
+        self.assertEqual(response.json()['title'], 'Event Title')
+        self.assertEqual(response.json()['category'], self.event1.category_id)
+        self.assertEqual(response.json()['group'], self.event1.group_id)
+        self.assertEqual(response.json()['date'], self.event1.date)
+        self.assertEqual(response.json()['begin_time'], self.event1.begin_time)
+        self.assertEqual(response.json()['end_time'], self.event1.end_time)
+
+        response = client.get('/api/event/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
     def test_get_single_event_full(self):
 
         '''
