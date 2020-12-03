@@ -1427,6 +1427,50 @@ def get_create_event_report(request):
     'reporter': event_report.reporter_id, 'content': event_report.content}
     return HttpResponse(content=json.dumps(event_report_dict), status=201)
 
+def get_delete_event_report(request, event_report_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not EventReport.objects.filter(id=event_report_id).exists():
+        return HttpResponseNotFound()
+
+    event_report = EventReport.objects.get(id=event_report_id)
+
+    if request.method == 'GET':
+        event_report_dict = {'id': event_report.id, 'event': event_report.event_id,
+        'reporter': event_report.reporter_id, 'content': event_report.content}
+        return JsonResponse(event_report_dict)
+    # DELETE
+    if not (request.user.is_authenticated and request.user.id == event_report.reporter_id):
+        return HttpResponse(status=401)
+    event_report.delete()
+    return HttpResponse(status=200)
+
+def get_event_report_by_event(request, event_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Event.objects.filter(id=event_id).exists():
+        return HttpResponseNotFound()
+
+    event_reports = [{
+        'id': event_report.id,
+        'event': event_report.event_id,
+        'reporter': event_report.reporter_id,
+        'content': event_report.content}
+        for event_report in EventReport.objects.filter(event_id=event_id)]
+    return JsonResponse(event_reports, safe=False)
+
 def get_create_group_report(request):
 
     '''
@@ -1456,6 +1500,50 @@ def get_create_group_report(request):
     group_report_dict = {'id': group_report.id, 'group': group_report.group_id,
     'reporter': group_report.reporter_id, 'content': group_report.content}
     return HttpResponse(content=json.dumps(group_report_dict), status=201)
+
+def get_delete_group_report(request, group_report_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET', 'DELETE']:
+        return HttpResponseNotAllowed(['GET', 'DELETE'])
+
+    if not GroupReport.objects.filter(id=group_report_id).exists():
+        return HttpResponseNotFound()
+
+    group_report = GroupReport.objects.get(id=group_report_id)
+
+    if request.method == 'GET':
+        group_report_dict = {'id': group_report.id, 'group': group_report.group_id,
+        'reporter': group_report.reporter_id, 'content': group_report.content}
+        return JsonResponse(group_report_dict)
+    # DELETE
+    if not (request.user.is_authenticated and request.user.id == group_report.reporter_id):
+        return HttpResponse(status=401)
+    group_report.delete()
+    return HttpResponse(status=200)
+
+def get_group_report_by_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['GET']:
+        return HttpResponseNotAllowed(['GET'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    group_reports = [{
+        'id': group_report.id,
+        'group': group_report.group_id,
+        'reporter': group_report.reporter_id,
+        'content': group_report.content}
+        for group_report in GroupReport.objects.filter(group_id=group_id)]
+    return JsonResponse(group_reports, safe=False)
 
 # Others
 

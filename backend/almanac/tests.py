@@ -2851,16 +2851,6 @@ class AlmanacEventReport(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
-        self.user4 = User.objects.create_user(
-            username='sdm369', first_name='Dongmin',
-            last_name='Co', password='password4',
-            email='sdm369@snu.ac.kr', is_active=True
-        )
-        self.userpreference4 = UserPreference.add_new_preference(
-            user_id=self.user4.id,
-            university_id=University.get_default_id(),
-            department_id=Department.get_default_id()
-        )
         self.group1 = Group.add_new_group(
             name='Group Name',
             king_id=self.user2.id,
@@ -2870,11 +2860,6 @@ class AlmanacEventReport(TransactionTestCase):
             name='Cat Group Name3',
             king_id=self.user3.id,
             description='Group Description3'
-        )
-        self.group3 = Group.add_new_group(
-            name='Catholic Group Name4',
-            king_id=self.user3.id,
-            description='Group Description4'
         )
         self.category1 = Category.objects.create(
             name='performance'
@@ -2948,6 +2933,66 @@ class AlmanacEventReport(TransactionTestCase):
         self.assertIn(str(self.event2.id), response.content.decode())
         self.assertIn('Another Event Report Content', response.content.decode())
 
+    def test_get_delete_event_report(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event_report=self.event_report1.id
+        id_wrong = id_event_report+10
+
+        response = client.head('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.json()['event'], self.event1.id)
+        self.assertEqual(response.json()['reporter'], self.user2.id)
+        self.assertEqual(response.json()['content'], 'Event Report Content')
+
+        response = client.get('/api/event_report/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.delete('/api/event_report/{}/'.format(id_event_report))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/event_report/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_event_report_by_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_event = self.event1.id
+        id_wrong = id_event+10
+
+        response = client.head('/api/event_report/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/event_report/event/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/event_report/event/{}/'.format(id_event))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['event'], self.event1.id)
+        self.assertEqual(response.json()[0]['reporter'], self.user2.id)
+        self.assertEqual(response.json()[0]['content'], 'Event Report Content')
+
     def test_get_create_group_report(self):
 
         '''
@@ -2983,3 +3028,63 @@ class AlmanacEventReport(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn(str(self.group2.id), response.content.decode())
         self.assertIn('Another Group Report Content', response.content.decode())
+
+    def test_get_delete_group_report(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group_report=self.group_report1.id
+        id_wrong = id_group_report+10
+
+        response = client.head('/api/group_report/{}/'.format(id_group_report))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group_report/{}/'.format(id_group_report))
+        self.assertEqual(response.json()['group'], self.group1.id)
+        self.assertEqual(response.json()['reporter'], self.user2.id)
+        self.assertEqual(response.json()['content'], 'Group Report Content')
+
+        response = client.get('/api/group_report/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.delete('/api/group_report/{}/'.format(id_group_report))
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.delete('/api/group_report/{}/'.format(id_group_report))
+        self.assertEqual(response.status_code, 200)
+
+        response = client.get('/api/group_report/')
+        self.assertEqual(len(response.json()), 0)
+
+    def test_get_group_report_by_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+10
+
+        response = client.head('/api/group_report/group/{}/'.format(id_group))
+        self.assertEqual(response.status_code, 405)
+
+        response = client.get('/api/group_report/group/{}/'.format(id_wrong))
+        self.assertEqual(response.status_code, 404)
+
+        response = client.get('/api/group_report/group/{}/'.format(id_group))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['group'], self.group1.id)
+        self.assertEqual(response.json()[0]['reporter'], self.user2.id)
+        self.assertEqual(response.json()[0]['content'], 'Group Report Content')
