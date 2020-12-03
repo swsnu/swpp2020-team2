@@ -717,8 +717,8 @@ def get_event_filtered(request):
     a function docstring
     '''
 
-    if request.method not in ['GET']:
-        return HttpResponseNotAllowed(['GET'])
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
 
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -726,7 +726,7 @@ def get_event_filtered(request):
     user = request.user
     user_preference = UserPreference.objects.get(user=user.id)
 
-    if request.method == 'GET':
+    if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         filter_options_dict = req_data['filter_options']
         sort_options_list = req_data['sort_options']
@@ -794,7 +794,7 @@ def get_event_filtered(request):
         'content': event.content
         } for event in event_objects]
         return JsonResponse(events, safe=False)
-    return HttpResponseNotAllowed(['GET'])
+    return HttpResponseNotAllowed(['POST'])
 
 def create_event(request):
 

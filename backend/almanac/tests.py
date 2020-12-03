@@ -1405,3 +1405,42 @@ class AlmanacEvent(TransactionTestCase):
 
         response = client.get('/api/event/')
         self.assertEqual(len(response.json()), 3)
+
+    def test_filtered_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        #id_event = self.event1.id
+
+        response = client.put('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
