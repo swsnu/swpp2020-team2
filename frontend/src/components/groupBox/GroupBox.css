@@ -42,5 +42,9 @@
 
     border: solid;
     border-width: 1px;
+}
 
+.GroupBox .btnBox .btn:hover{
+    cursor: pointer;
+    color: aqua;
 }

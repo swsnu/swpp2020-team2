@@ -16,7 +16,7 @@ const GroupBox = (props) => (
     <div className="description">{props.description}</div>
     <div className = "btnBox">
       <div className = "btn" onClick = {props.like}>
-        <GrLike color={"white"}/>
+        <GrLike color={"black"}/>
       </div>
       <div className = "btn" onClick = {props.notice}>
         <BiBellPlus color = {"black"}/>
