@@ -16,6 +16,11 @@ clf_ovr = Pipeline([('vect', CountVectorizer(stop_words='english',max_features=7
                 ('clf', OneVsRestClassifier(SVC(kernel='linear')))])
 
 def recommend_tag(content, num=3):
+
+    '''
+    a function docstring
+    '''
+
     events = [{
         'name': b.name, 'tag': b.tag.values_list('id', flat=True)
         } for b in Event.objects.prefetch_related('tag')]
