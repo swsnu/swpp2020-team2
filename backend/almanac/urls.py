@@ -41,6 +41,7 @@ urlpatterns = [
     name='get_edit_delete_event_full'),
     path('group/', views.get_group, name='get_group'),
     path('group/simple/', views.get_group_simple, name='get_group_simple'),
+    path('group/filtered/', views.get_group_filtered, name='get_group_filtered'),
     path('group/create/', views.create_group, name='create_group'),
     path('group/<int:group_id>/', views.get_single_group, name='get_single_group'),
     path('group/<int:group_id>/full/', views.get_delete_group_full, name='get_delete_group_full'),

@@ -1900,21 +1900,6 @@ class AlmanacEvent(TransactionTestCase):
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {},
-            'sort_options': [],
-            'count_options': {}
-        }),
-        content_type='application/json')
-        self.assertEqual(len(response.json()), 7)
-        self.assertEqual(response.json()[0]['id'], self.event1.id)
-        self.assertEqual(response.json()[1]['id'], self.event2.id)
-        self.assertEqual(response.json()[2]['id'], self.event3.id)
-        self.assertEqual(response.json()[3]['id'], self.event4.id)
-        self.assertEqual(response.json()[4]['id'], self.event5.id)
-        self.assertEqual(response.json()[5]['id'], self.event6.id)
-        self.assertEqual(response.json()[6]['id'], self.event7.id)
-
-        response = client.post('/api/event/filtered/', json.dumps({
-            'filter_options': {},
             'sort_options': ['date'],
             'count_options': {}
         }),
@@ -2133,6 +2118,18 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[1]['id'], self.event4.id)
         self.assertEqual(response.json()[2]['id'], self.event5.id)
         self.assertEqual(response.json()[3]['id'], self.event7.id)
+
+        response = client.post('/api/event/filtered/', json.dumps({
+            'filter_options': {
+                'event': ['bring']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event6.id)
+        self.assertEqual(response.json()[1]['id'], self.event7.id)
 
         response = client.post('/api/event/filtered/', json.dumps({
             'filter_options': {
@@ -2416,6 +2413,266 @@ class AlmanacGroup(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('New Group Name', response.content.decode())
         self.assertIn('New Group Description', response.content.decode())
+
+    def test_filtered_group1(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group2.id)
+        self.assertEqual(response.json()[2]['id'], self.group3.id)
+        self.assertEqual(response.json()[3]['id'], self.group4.id)
+        self.assertEqual(response.json()[4]['id'], self.group5.id)
+
+    def test_filtered_group2(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['likes'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group2.id)
+        self.assertEqual(response.json()[2]['id'], self.group3.id)
+        self.assertEqual(response.json()[3]['id'], self.group4.id)
+        self.assertEqual(response.json()[4]['id'], self.group5.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['join_requests'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group2.id)
+        self.assertEqual(response.json()[2]['id'], self.group3.id)
+        self.assertEqual(response.json()[3]['id'], self.group4.id)
+        self.assertEqual(response.json()[4]['id'], self.group5.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['notifications'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group3.id)
+        self.assertEqual(response.json()[2]['id'], self.group2.id)
+        self.assertEqual(response.json()[3]['id'], self.group4.id)
+        self.assertEqual(response.json()[4]['id'], self.group5.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['members'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group5.id)
+        self.assertEqual(response.json()[2]['id'], self.group2.id)
+        self.assertEqual(response.json()[3]['id'], self.group3.id)
+        self.assertEqual(response.json()[4]['id'], self.group4.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': ['admins'],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group5.id)
+        self.assertEqual(response.json()[2]['id'], self.group2.id)
+        self.assertEqual(response.json()[3]['id'], self.group3.id)
+        self.assertEqual(response.json()[4]['id'], self.group4.id)
+
+    def test_filtered_group3(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'including': ['Cat']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.group2.id)
+        self.assertEqual(response.json()[1]['id'], self.group3.id)
+        self.assertEqual(response.json()[2]['id'], self.group4.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['like']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group2.id)
+        self.assertEqual(response.json()[2]['id'], self.group5.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['notification']
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.group3.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group_exact': [self.group1.id, self.group3.id]
+            },
+            'sort_options': [],
+            'count_options': {}
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group3.id)
+
+    def test_filtered_group4(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {
+                'from': 3
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.group4.id)
+        self.assertEqual(response.json()[1]['id'], self.group5.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {},
+            'sort_options': [],
+            'count_options': {
+                'num': 4
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 4)
+        self.assertEqual(response.json()[0]['id'], self.group1.id)
+        self.assertEqual(response.json()[1]['id'], self.group2.id)
+        self.assertEqual(response.json()[2]['id'], self.group3.id)
+        self.assertEqual(response.json()[3]['id'], self.group4.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': [],
+            'count_options': {
+                'from': 1,
+                'num': 1
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.group2.id)
+
+        response = client.post('/api/group/filtered/', json.dumps({
+            'filter_options': {
+                'group': ['my']
+            },
+            'sort_options': ['like'],
+            'count_options': {
+                'from': 1,
+                'num': 1
+            }
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.group2.id)
 
     def test_get_single_group(self):
 
