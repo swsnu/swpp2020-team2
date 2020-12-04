@@ -8,6 +8,11 @@ import * as actionCreators from '../../../store/actions/index';
 import TopBar from '../../../components/TopBar/TopBar';
 import './GroupMain.css';
 
+import GroupBox from '../../../components/groupBox/GroupBox';
+
+import {appLogo} from '../../../images/index';
+
+
 class GroupMain extends Component {
   state = {
     searchQuery: '',
@@ -77,27 +82,55 @@ class GroupMain extends Component {
           <div className="sectionBox">
 
             <div className="section">
-              <label>My Groups</label>
-              {joinedGroupBoxes}
+              <div className="labelBox">
+                <label>My Groups</label>
+              </div>
+
+              <div className="containerBox">
+                <GroupBox 
+                  image={appLogo} 
+                  name={"group"} 
+                  description={"description"} 
+                  like = {()=>{}}
+                  notice = {()=>{}}
+                  report = {()=>{}}
+                  />
+                {joinedGroupBoxes}
+              </div>
             </div>
 
             <div className="section">
-              <label>Noticing Groups</label>
-              {noticedGroupBoxes}
+              <div className="labelBox">
+                <label>Noticing Groups</label>
+              </div>
+
+              <div className="containerBox">
+                {noticedGroupBoxes}
+              </div>
             </div>
 
             <div className="section">
-              <label>Liked Groups</label>
-              {likedGroupBoxes}
+              <div className="labelBox">
+                <label>Liked Groups</label>
+              </div>
+
+              <div className="containerBox">
+                {likedGroupBoxes}
+              </div>
             </div>
 
             <div className="section">
-              <label>Others</label>
-              <button className="search-all-button" onClick={() => this.props.history.push('/group/search')}>
-                <GrFormAdd size="12" />
-                <div className="text">더보기</div>
-              </button>
-              {otherGroupBoxes}
+              <div className="labelBox">
+                <label>Others</label>
+                <button className="search-all-button" onClick={() => this.props.history.push('/group/search')}>
+                  <GrFormAdd size="12" />
+                  <div className="text">더보기</div>
+                </button>
+              </div>
+
+              <div className="containerBox">
+                {otherGroupBoxes}
+              </div>
             </div>
 
           </div>
