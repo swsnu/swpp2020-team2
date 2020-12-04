@@ -717,6 +717,9 @@ def get_recommendation_tag(request):
     if request.method not in ['POST']:
         return HttpResponseNotAllowed(['POST'])
 
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
     req_data = json.loads(request.body.decode())
     content = req_data['content']
     recommendation = recommend_tag(content)

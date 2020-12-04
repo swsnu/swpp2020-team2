@@ -1321,6 +1321,51 @@ class AlmanacTag(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_technology)
         self.assertEqual(response.json()['name'], 'technology')
 
+    def test_get_recommendation_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_technology=(Tag.objects.get(name='technology').id)
+        id_economy=(Tag.objects.get(name='economy').id)
+        id_food=(Tag.objects.get(name='food').id)
+
+        response = client.put('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], id_food)
+        self.assertEqual(response.json()[1]['id'], id_technology)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'For the high-techonology computing powers, we need better computers with efficient computer chips. It is critical to have good architectures for CPUs.'
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], id_technology)
+        self.assertEqual(response.json()[1]['id'], id_economy)
+
 class AlmanacBackLangImTestCase(TransactionTestCase):
 
     '''
