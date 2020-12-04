@@ -74,6 +74,8 @@ urlpatterns = [
     views.get_delete_tag, name='get_delete_tag'),
     path('tag/name/<name>/',
     views.get_tag_by_name, name='get_tag_by_name'),
+    path('tag/recommend/',
+    views.get_recommendation_tag, name='get_recommendation_tag'),
     path('category/',
     views.get_create_category, name='get_create_category'),
     path('category/<int:category_id>/',

@@ -852,7 +852,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/signin/full/')
         self.assertEqual(response.json()['language'], self.language1.id)
 
-class AlmanacUnivDeptCatTag(TransactionTestCase):
+class AlmanacUnivDeptCat(TransactionTestCase):
 
     '''
     a class docstring
@@ -884,13 +884,8 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
-        Tag.objects.create(
-            name='waffle'
-        )
         Category.objects.create(
             name='performance'
-        )
-        self.sample_image = Image.objects.create(
         )
 
     def test_university_general(self):
@@ -1122,6 +1117,149 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_performance)
         self.assertEqual(response.json()['name'], 'performance')
 
+class AlmanacTag(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        group1 = Group.add_new_group(
+            name='Group Name',
+            king_id=user2.id,
+            description='Group Description'
+        )
+        tag1 = Tag.objects.create(
+            name='technology'
+        )
+        tag2 = Tag.objects.create(
+            name='economy'
+        )
+        tag3 = Tag.objects.create(
+            name='food'
+        )
+        category1 = Category.objects.create(
+            name='performance'
+        )
+        self.event1 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='AMD CPU is better than Intel`s. Even Apple discards Intel`s x86 Core and '
+            'uses its own computer chips, M1. M1 chips are a lot faster than Intel`s CPUs.',
+            last_editor_id=user2.id
+        )
+        self.event1.tag.add(tag1)
+        self.event2 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='An apple is very delicious. It has more nutrients than orange, lemon, '
+            'pineapples, grapes. Eat more apples and then you will be one step further from doctors.',
+            last_editor_id=user2.id
+        )
+        self.event2.tag.add(tag3)
+        self.event3 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='AMD and Intel fights to have more market share in CPU market. They both use '
+            'x86 (AMD 64) architecture for their cores. The both companies earn a lot of money.',
+            last_editor_id=user2.id
+        )
+        self.event3.tag.add(tag1)
+        self.event3.tag.add(tag2)
+        self.event4 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='Free market is very important element in capitalism. It makes the companies '
+            'and workers more efficient and make more money.',
+            last_editor_id=user2.id
+        )
+        self.event4.tag.add(tag2)
+        self.event5 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='Orange is more delicious than lime, lemon, pineapple or apple and it is '
+            'cheaper than the other vegetables or fruits. Eat more oranges.',
+            last_editor_id=user2.id
+        )
+        self.event5.tag.add(tag3)
+        self.event6 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='Intel`s CPU is more appropriate for gaming computers. It is the reason that '
+            'still many computers use Intel`s Core CPU. x86 CPUs also have more compatibility.',
+            last_editor_id=user2.id
+        )
+        self.event6.tag.add(tag1)
+        self.event7 = Event.objects.create(
+            title='Event Title',
+            category_id=category1.id,
+            group_id=group1.id,
+            place='Event Place',
+            date='2020-11-05',
+            begin_time='14:20:00',
+            end_time='16:52:00',
+            content='Since there was a hurricane this year, under the law of capitalism, the value '
+            'of apples rose higher than oranges or limes. We need more money to buy oranges.',
+            last_editor_id=user2.id
+        )
+        self.event7.tag.add(tag2)
+        self.event7.tag.add(tag3)
+
     def test_get_create_tag(self):
 
         '''
@@ -1134,8 +1272,10 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
         self.assertEqual(response.status_code, 405)
 
         response = client.get('/api/tag/')
-        self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['name'], 'waffle')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['name'], 'economy')
+        self.assertEqual(response.json()[1]['name'], 'food')
+        self.assertEqual(response.json()[2]['name'], 'technology')
 
         response = client.post('/api/tag/', json.dumps({'name': 'salad'}),
         content_type='application/json')
@@ -1150,23 +1290,23 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
 
         client = Client()
 
-        id_waffle=(Tag.objects.get(name='waffle').id)
-        id_wrong = id_waffle+1
+        id_technology=(Tag.objects.get(name='technology').id)
+        id_wrong = id_technology+10
 
-        response = client.head('/api/tag/{}/'.format(id_waffle))
+        response = client.head('/api/tag/{}/'.format(id_technology))
         self.assertEqual(response.status_code, 405)
 
-        response = client.get('/api/tag/{}/'.format(id_waffle))
-        self.assertEqual(response.json()['name'], 'waffle')
+        response = client.get('/api/tag/{}/'.format(id_technology))
+        self.assertEqual(response.json()['name'], 'technology')
 
         response = client.get('/api/tag/{}/'.format(id_wrong))
         self.assertEqual(response.status_code, 404)
 
-        response = client.delete('/api/tag/{}/'.format(id_waffle))
+        response = client.delete('/api/tag/{}/'.format(id_technology))
         self.assertEqual(response.status_code, 200)
 
         response = client.get('/api/tag/')
-        self.assertEqual(len(response.json()), 0)
+        self.assertEqual(len(response.json()), 2)
 
     def test_get_tag_by_name(self):
 
@@ -1176,7 +1316,7 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
 
         client = Client()
 
-        id_waffle=(Tag.objects.get(name='waffle').id)
+        id_technology=(Tag.objects.get(name='technology').id)
 
         response = client.head('/api/tag/name/{}/'.format('salad'))
         self.assertEqual(response.status_code, 405)
@@ -1184,9 +1324,58 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
         response = client.get('/api/tag/name/{}/'.format('salad'))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/tag/name/{}/'.format('waffle'))
-        self.assertEqual(response.json()['id'], id_waffle)
-        self.assertEqual(response.json()['name'], 'waffle')
+        response = client.get('/api/tag/name/{}/'.format('technology'))
+        self.assertEqual(response.json()['id'], id_technology)
+        self.assertEqual(response.json()['name'], 'technology')
+
+    def test_get_recommendation_tag(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_technology=(Tag.objects.get(name='technology').id)
+        id_economy=(Tag.objects.get(name='economy').id)
+        id_food=(Tag.objects.get(name='food').id)
+
+        response = client.put('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple '
+            'or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple '
+            'or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple '
+            'or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], id_food)
+        self.assertEqual(response.json()[1]['id'], id_technology)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'For the high-techonology computing powers, we need better computers with '
+            'efficient computer chips. It is critical to have good architectures for CPUs.'
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], id_technology)
+        self.assertEqual(response.json()[1]['id'], id_economy)
 
 class AlmanacBackLangImTestCase(TransactionTestCase):
 
@@ -1219,12 +1408,6 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
             user_id=user2.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
-        )
-        Tag.objects.create(
-            name='waffle'
-        )
-        Category.objects.create(
-            name='performance'
         )
         self.sample_image = Image.objects.create(
         ) # final image (last id assumed)
