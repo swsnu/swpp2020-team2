@@ -20,6 +20,7 @@ from django.db.models import Q, Count
 from almanac.models import User, UserPreference, \
     University, Department, Event, Group, Background, Language, Category, Tag, \
     Image, EventReport, GroupReport
+from .recommendations import recommend_tag
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -706,6 +707,23 @@ def get_tag_by_name(request, name):
 
     tag_dict = {'id': tag.id, 'name': tag.name}
     return JsonResponse(tag_dict)
+
+def get_recommendation_tag(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    req_data = json.loads(request.body.decode())
+    content = req_data['content']
+    recommendation = recommend_tag(content)
+
+    tags = [{'id': tag_id,
+    } for tag_id in recommendation]
+    return JsonResponse(tags, safe=False)
 
 # Background
 

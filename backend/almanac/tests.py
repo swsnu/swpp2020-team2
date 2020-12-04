@@ -852,7 +852,7 @@ class AlmanacUserTestCase(TransactionTestCase):
         response = client.get('/api/user/signin/full/')
         self.assertEqual(response.json()['language'], self.language1.id)
 
-class AlmanacUnivDeptCatTag(TransactionTestCase):
+class AlmanacUnivDeptCat(TransactionTestCase):
 
     '''
     a class docstring
@@ -884,13 +884,8 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
         )
-        Tag.objects.create(
-            name='waffle'
-        )
         Category.objects.create(
             name='performance'
-        )
-        self.sample_image = Image.objects.create(
         )
 
     def test_university_general(self):
@@ -1122,6 +1117,45 @@ class AlmanacUnivDeptCatTag(TransactionTestCase):
         self.assertEqual(response.json()['id'], id_performance)
         self.assertEqual(response.json()['name'], 'performance')
 
+class AlmanacTag(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        Tag.objects.create(
+            name='waffle'
+        )
+        Category.objects.create(
+            name='performance'
+        )
+
     def test_get_create_tag(self):
 
         '''
@@ -1219,12 +1253,6 @@ class AlmanacBackLangImTestCase(TransactionTestCase):
             user_id=user2.id,
             university_id=University.get_default_id(),
             department_id=Department.get_default_id()
-        )
-        Tag.objects.create(
-            name='waffle'
-        )
-        Category.objects.create(
-            name='performance'
         )
         self.sample_image = Image.objects.create(
         ) # final image (last id assumed)
