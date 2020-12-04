@@ -22,4 +22,5 @@ const createEventIcon_ = require('./event_icons/createEvent.png');
 
 export const createEventIcon = createEventIcon_;
 
-export const appLogo = require('./logo.png');
+export const appLogo = require('./appLogo.png');
+export const uniLogo = require('./uniLogo.png');

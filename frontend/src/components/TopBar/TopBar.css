@@ -3,21 +3,54 @@
   height: 60px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   background-color: aquamarine;
 }
 
-.TopBar .logo{
+.TopBar .left{
+  flex:1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.TopBar .left button{
+  margin-right:15px;
+  font-size:20px;
+  padding:10px ;
+  background-color: aquamarine;
+  border: none;
+  cursor: pointer;
+}
+
+.TopBar .right{
+  flex:1;
+  display: flex;
+  flex-direction: row;
+  
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.TopBar .right div{
+  height: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.TopBar img{
   height: 80%;
   width: auto;
   justify-content: center;
   margin: 15px;
 }
 
-.TopBar button{
-  margin-right:15px;
-  font-size:20px;
-  padding:10px ;
-  background-color: aquamarine;
-  border: none;
+.TopBar .right img{
+  border: solid;
+  border-color: white;
+  border-radius: 100px;
+}
+
+.TopBar .right .notice:hover{
+  color:yellow;
 }
