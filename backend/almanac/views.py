@@ -1164,6 +1164,81 @@ def get_group(request):
     } for group in Group.objects.all().order_by('id')]
     return JsonResponse(groups, safe=False)
 
+def get_group_filtered(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    filter_options_dict = req_data['filter_options']
+    sort_options_list = req_data['sort_options']
+    count_options_dict = req_data['count_options']
+    group_objects = Group.objects.all()
+    # Filter(Dictionary)
+    if 'including' in filter_options_dict.keys():
+        including_list = filter_options_dict['including']
+        q_list = [(Q(name__contains=x) | Q(description__contains=x)) for x in including_list]
+        group_objects = group_objects.filter(reduce(operator.and_, q_list))
+    if 'group' in filter_options_dict.keys():
+        if 'like' in filter_options_dict['group']:
+            group_objects = group_objects.filter(
+                id__in=user_preference.likes_group.values_list('id', flat=True)
+            )
+        if 'my' in filter_options_dict['group']:
+            group_objects = group_objects.filter(
+                id__in=user.member_group.values_list('id', flat=True)
+            )
+        if 'notification' in filter_options_dict['group']:
+            group_objects = group_objects.filter(
+                id__in=user_preference.gets_notification.values_list('id', flat=True)
+            )
+    if 'group_exact' in filter_options_dict.keys():
+        group_objects = group_objects.filter(id__in=filter_options_dict['group_exact'])
+    # Sort(List (length 1))
+    if sort_options_list == []:
+        group_objects = group_objects.order_by('id')
+    for option in sort_options_list:
+        if option == 'likes':
+            group_objects = group_objects.annotate(q_count=
+            Count('likes_group_userpreference')
+            ).order_by('-q_count')
+        if option == 'join_requests':
+            group_objects = group_objects.annotate(q_count=
+            Count('join_requests_userpreference')
+            ).order_by('-q_count')
+        if option == 'notifications':
+            group_objects = group_objects.annotate(q_count=
+            Count('gets_notification_userpreference')
+            ).order_by('-q_count')
+        if option == 'members':
+            group_objects = group_objects.annotate(q_count=
+            Count('member')
+            ).order_by('-q_count')
+        if option == 'admins':
+            group_objects = group_objects.annotate(q_count=
+            Count('admin')
+            ).order_by('-q_count')
+    # Count(Dictionary)
+    if 'from' in count_options_dict.keys():
+        group_objects = group_objects[count_options_dict['from']:]
+    if 'num' in count_options_dict.keys():
+        group_objects = group_objects[:count_options_dict['num']]
+    groups = [{'id': group.id, 'name': group.name,
+    'king': group.king_id,
+    'description': group.description, 'privacy': group.privacy
+    } for group in group_objects]
+    return JsonResponse(groups, safe=False)
+
 def create_group(request):
 
     '''
