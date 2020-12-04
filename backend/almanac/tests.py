@@ -2664,7 +2664,7 @@ class AlmanacGroup(TransactionTestCase):
             'filter_options': {
                 'group': ['my']
             },
-            'sort_options': ['like'],
+            'sort_options': ['admins'],
             'count_options': {
                 'from': 1,
                 'num': 1
@@ -2672,7 +2672,7 @@ class AlmanacGroup(TransactionTestCase):
         }),
         content_type='application/json')
         self.assertEqual(len(response.json()), 1)
-        self.assertEqual(response.json()[0]['id'], self.group2.id)
+        self.assertEqual(response.json()[0]['id'], self.group5.id)
 
     def test_get_single_group(self):
 
