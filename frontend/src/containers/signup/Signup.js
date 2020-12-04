@@ -81,11 +81,11 @@ class Signup extends Component {
     });
   }
 
-  toggleRevealPassword=() => {
+  toggleRevealPassword = () => {
     this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }));
   }
 
-  toggleRevealConfirmPassword=() => {
+  toggleRevealConfirmPassword = () => {
     this.setState((prevState) => ({ revealConfirmPassword: !prevState.revealConfirmPassword }));
   }
 
@@ -110,18 +110,20 @@ class Signup extends Component {
             <div className="signUpBox">
               <div className="box">
                 <label className="label">ID</label>
-                <input
-                  id="username-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ username: event.target.value })}
-                />
+                <div className="inputBox">
+                  <input
+                    id="username-input"
+                    type="text"
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ username: event.target.value })}
+                  />
+                </div>
               </div>
 
               <div className="box">
 
                 <label className="label">Password</label>
-                <div className="inputbox">
+                <div className="inputBox">
                   <input
                     id="password-input"
                     type={this.state.revealPassword ? 'text' : 'password'}
@@ -140,7 +142,7 @@ class Signup extends Component {
               <div className="box">
 
                 <label className="label">Confirm Password</label>
-                <div className="inputbox">
+                <div className="inputBox">
                   <input
                     id="pwConfirm-input"
                     type={this.state.revealConfirmPassword ? 'text' : 'password'}
@@ -177,34 +179,40 @@ class Signup extends Component {
               <div className="box">
 
                 <label className="label">Email</label>
-                <input
-                  id="email-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ email: event.target.value })}
-                />
+                <div className="inputBox">
+                  <input
+                    id="email-input"
+                    type="text"
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ email: event.target.value })}
+                  />
+                </div>
               </div>
 
               <div className="box">
 
                 <label className="label">First Name</label>
-                <input
-                  id="firstName-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ firstName: event.target.value })}
-                />
+                <div className="inputBox">
+                  <input
+                    id="firstName-input"
+                    type="text"
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ firstName: event.target.value })}
+                  />
+                </div>
               </div>
 
               <div className="box">
 
                 <label className="label">Last Name</label>
-                <input
-                  id="lastName-input"
-                  type="text"
-                  value={this.state.title}
-                  onChange={(event) => this.setState({ lastName: event.target.value })}
-                />
+                <div className="inputBox">
+                  <input
+                    id="lastName-input"
+                    type="text"
+                    value={this.state.title}
+                    onChange={(event) => this.setState({ lastName: event.target.value })}
+                  />
+                </div>
               </div>
               <div className="confirmBox">
                 <button id="signup-button" onClick={() => this.signupHandler()}>

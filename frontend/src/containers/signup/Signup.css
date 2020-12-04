@@ -46,29 +46,18 @@
     flex:2;
 }
 
-.SignUp .signUpBox{
+.SignUp .container .content .signUpBox{
     display: flex;
     flex-direction: column;
 }
-.SignUp .signUpBox .box{
+.SignUp .container .content .signUpBox .box{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }
 
-.SignUp .signUpBox input{
-    height: 24px;
-    margin: 10px;
-    float: right;
-}
-.SignUp .signUpBox select{
-    height: 24px;
-    margin: 10px;
-    float: right;
-}
-
-.Signup .signUpBox .inputBox{
+.SignUp .container .content .signUpBox .box .inputBox{
     height: 24px;
     margin: 10px;
     float: right;
@@ -76,23 +65,29 @@
     position: relative;
 }
 
-.Signup .signUpBox .inputBox .toggle{
+.SignUp .container .content .signUpBox .box select{
+    height: 24px;
+    margin: 10px;
+    float: right;
+}
+
+.SignUp .container .content .signUpBox .box .inputBox .toggle{
     position: absolute;
     right: 5px;
     top:3px;
 }
-.Signup .signUpBox .inputBox .toggle:hover{
+.SignUp .container .content .signUpBox .box .inputBox .toggle:hover{
     color: #00fcb6;
     cursor: pointer;
 }
 
-.SignUp .confirmBox{
+.SignUp .container .content .signUpBox .confirmBox{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.SignUp .confirmBox button{
+.SignUp .container .content .signUpBox .confirmBox button{
     width: 80px;
     font-weight: bold;
     margin: 10px;
