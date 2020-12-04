@@ -1,0 +1,46 @@
+.GroupBox{
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    width: 150px;
+    align-items: center;
+
+    border: solid;
+    border-width: 1px;
+    border-color: gray;
+    border-radius: 5px;
+
+    margin: 20px;
+}
+
+.GroupBox img{
+    margin: 5px;
+    width: 50%;
+    
+    flex:3;
+}
+.GroupBox .name{
+    flex:1;
+}
+.GroupBox .description{
+    flex:2;
+}
+
+.GroupBox .btnBox{
+    width: 100%;
+    flex:1;
+    display: flex;
+    flex-direction: row;
+}
+
+.GroupBox .btnBox .btn{
+    flex:1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: solid;
+    border-width: 1px;
+
+}
