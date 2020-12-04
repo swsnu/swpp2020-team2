@@ -882,7 +882,9 @@ def get_event(request):
     'end_time': str(event.end_time),
     'last_editor': event.last_editor_id,
     'image': [image.id for image in event.image.all()],
-    'content': event.content
+    'content': event.content,
+    'likes': [up.user.id for up in event.likes_userpreference.all()],
+    'brings': [up.user.id for up in event.brings_userpreference.all()]
     } for event in Event.objects.all().order_by('id')]
     return JsonResponse(events, safe=False)
 
@@ -972,7 +974,9 @@ def get_event_filtered(request):
     'end_time': str(event.end_time),
     'last_editor': event.last_editor.id,
     'image': [image.id for image in event.image.all()],
-    'content': event.content
+    'content': event.content,
+    'likes': [up.user.id for up in event.likes_userpreference.all()],
+    'brings': [up.user.id for up in event.brings_userpreference.all()]
     } for event in event_objects]
     return JsonResponse(events, safe=False)
 
@@ -1019,7 +1023,9 @@ def create_event(request):
     'end_time': str(event.end_time),
     'last_editor': event.last_editor_id,
     'image': [image.id for image in event.image.all()],
-    'content': event.content}
+    'content': event.content,
+    'likes': [up.user.id for up in event.likes_userpreference.all()],
+    'brings': [up.user.id for up in event.brings_userpreference.all()]}
     return HttpResponse(content=json.dumps(event_dict), status=201)
 
 def get_single_event(request, event_id):
@@ -1071,7 +1077,9 @@ def get_put_delete_event_full(request, event_id):
         'end_time': event.end_time,
         'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
-        'content': event.content}
+        'content': event.content,
+        'likes': [up.user.id for up in event.likes_userpreference.all()],
+        'brings': [up.user.id for up in event.brings_userpreference.all()]}
         return JsonResponse(event_dict)
     if request.method == 'PUT':
         if not request.user.is_authenticated:
@@ -1118,7 +1126,9 @@ def get_put_delete_event_full(request, event_id):
         'end_time': str(event.end_time),
         'last_editor': event.last_editor_id,
         'image': [image.id for image in event.image.all()],
-        'content': event.content}
+        'content': event.content,
+        'likes': [up.user.id for up in event.likes_userpreference.all()],
+        'brings': [up.user.id for up in event.brings_userpreference.all()]}
         return HttpResponse(content=json.dumps(event_dict), status=201)
     # DELETE
     if not request.user.is_authenticated:
