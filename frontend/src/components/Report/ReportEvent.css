@@ -1,11 +1,76 @@
 .ReportEvent {
-    display: flex;
     position: absolute;
-    margin-top: 30px;
     width: 60%;
-    height: 600px;
-    transform: translate(-50%, 0%);
+    height: 480px;
+    transform: translate(0%, 20%);
+
+    display: flex;
     flex-direction: column;
+
     background-color: rgb(240,240,240);
     border-radius: 60px;
+}
+
+.ReportEvent .header{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: 30px;
+    width: auto;
+    height: 10%;
+    justify-content: center;
+    align-items: center;
+}
+
+.ReportEvent .header .closeBtn{
+    position: absolute;
+    right: 5px;
+}
+
+.ReportEvent .header label{
+    font-size: 36px;
+    font-weight: bold;
+    color: red;
+}
+
+.ReportEvent .description{
+    margin-left: 30px;
+}
+
+.ReportEvent .description label{
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+}
+
+.ReportEvent .description .text{
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.ReportEvent .content{
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+}
+
+.ReportEvent .content label{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: red;
+}
+
+.ReportEvent .reportBtn{
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ReportEvent .reportBtn button{
+    font-size: 20px;
+    background-color: red;
+    cursor: pointer;
+    color: white;
 }

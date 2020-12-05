@@ -1,34 +1,40 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 
 import './ReportEvent.css'
 import { connect } from 'react-redux';
 
 import * as actionCreators from '../../store/actions/index';
 
+import {BiBadgeCheck} from 'react-icons/bi' 
+
 class ReportEvent extends Component {
 
-    state={
-        content:''
+    state = {
+        content: ''
     }
 
     onClickReport() {
-        this.props.onReportEvent(this.props.event.id,this.state.content);
+        if(this.state.content){
+            this.props.onReportEvent(this.props.event.id, this.state.content);
+            this.props.onClickCloseModal()
+        } 
+        else alert("신고 내역을 입력하세요")
     }
 
     render() {
         return (
             <div className="ReportEvent">
 
-                <h1>행사 신고</h1>
-
-                <div className="title">
-                    <label>행사 이름 : </label>
-                    {this.props.event.title}
+                <div className="header">
+                    <label>행사 신고</label>
+                    <button className="closeBtn" onClick={() => this.props.onClickCloseModal()}>X</button>
                 </div>
 
                 <div className="description">
-                    <div className="text">신고결과는 2일내로 반영됩니다.</div>
-                    <div className="text">신고결과는 개인 알림으로 확인할 수 있습니다.</div>
+                    <label>행사 이름  </label>
+                    {this.props.event.title} 
+                    <div className="text"><BiBadgeCheck style={{margin:'3px'}}/>신고결과는 2일내로 반영됩니다.</div>
+                    <div className="text"><BiBadgeCheck style={{margin:'3px'}}/>신고결과는 개인 알림으로 확인할 수 있습니다.</div>
                 </div>
 
                 <div className="content">
@@ -44,7 +50,7 @@ class ReportEvent extends Component {
                 </div>
 
                 <div className="reportBtn">
-                    <button onClick={this.onClickReport()} disabled={!this.state.content}>신고하기</button>
+                    <button onClick={() => this.onClickReport()}>신고하기</button>
                 </div>
 
             </div>
@@ -53,9 +59,9 @@ class ReportEvent extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return{
-        onReportEvent: (id,content)=>
-            dispatch(actionCreators.reportEvent(id,content))
+    return {
+        onReportEvent: (id, content) =>
+            dispatch(actionCreators.reportEvent(id, content))
     }
 };
 

@@ -1,4 +1,4 @@
-import React, { Component, Text } from 'react';
+import React, { Component} from 'react';
 import format from 'date-fns/format';
 import { connect } from 'react-redux';
 
@@ -10,7 +10,6 @@ import * as actionCreators from '../../../store/actions/index';
 import './EventDetail.css';
 
 import TopBar from '../../../components/TopBar/TopBar';
-import reportEvent from '../../../components/Report/ReportEvent'
 import ReportEvent from '../../../components/Report/ReportEvent';
 
 class EventDetail extends Component {
@@ -55,6 +54,7 @@ class EventDetail extends Component {
       modal = (
         <ReportEvent
           event = {this.props.event}
+          onClickCloseModal = {()=>this.setState({modalBool:false})}
         />
       );
     }
