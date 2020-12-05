@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -136,3 +138,13 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEIDA_URL = '/media/'
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    'https://google.com',
+    'https://localhost:3000',
+    'https://127.0.0.1:3000',
+    'https://localhost:8000',
+    'https://127.0.0.1:8000',
+]
+CORS_ALLOW_CREDENTIALS = True
