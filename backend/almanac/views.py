@@ -1161,6 +1161,51 @@ def get_put_delete_event_full(request, event_id):
     event.delete()
     return HttpResponse(status=200)
 
+def get_recommendation_event(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['POST']:
+        return HttpResponseNotAllowed(['POST'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    event_candidates = Event.objects.exclude(
+        id__in=user_preference.likes.values_list('id', flat=True)
+    ).exclude(
+        id__in=user_preference.brings.values_list('id', flat=True)
+    )
+
+    event_base = user_preference.likes.values_list('id', flat=True)
+    tags = Tag.objects.annotate(q_count=
+        Count('tag_event', filter=Q(tag_event__id__in=event_base))
+    ).order_by(
+        '-q_count'
+    )
+
+    req_data = json.loads(request.body.decode())
+    if 'num' in req_data.keys():
+        num = req_data['num']
+    else:
+        num = 3
+
+    tags = tags[:3]
+    q_list = [Q(id__in=x.tag_event.values_list('id', flat=True)) for x in tags]
+    event_candidates = event_candidates.filter(reduce(operator.or_, q_list)).annotate(q_count=
+            Count('likes_userpreference')
+        ).order_by('-q_count', 'date')
+    event_candidates = event_candidates[:num]
+
+    events = [{'id': event.id,
+    } for event in event_candidates]
+    return JsonResponse(events, safe=False)
+
 # Group
 
 def get_group_simple(request):

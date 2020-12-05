@@ -223,7 +223,7 @@ class Event(models.Model):
     )
     tag = models.ManyToManyField(
         Tag,
-        related_name='tag_group',
+        related_name='tag_event',
     )
     group = models.ForeignKey(
         Group,
@@ -237,12 +237,12 @@ class Event(models.Model):
     content = models.TextField()
     image = models.ManyToManyField(
         Image,
-        related_name='image_group'
+        related_name='image_event'
     )
     last_editor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='last_editor_group',
+        related_name='last_editor_event',
     )
 
 class EventReport(models.Model):

@@ -2409,6 +2409,43 @@ class AlmanacEvent(TransactionTestCase):
         self.assertEqual(response.json()[0]['id'], self.event3.id)
         self.assertEqual(response.json()[1]['id'], self.event1.id)
 
+    def test_get_recommendation_event(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        response = client.put('/api/event/recommend/', json.dumps({
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.post('/api/event/recommend/', json.dumps({
+        }),
+        content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/event/recommend/', json.dumps({
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 2)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+        self.assertEqual(response.json()[1]['id'], self.event3.id)
+
+        response = client.post('/api/event/recommend/', json.dumps({
+            'num': 1
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], self.event1.id)
+
 class AlmanacGroup(TransactionTestCase):
 
     '''
