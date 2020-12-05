@@ -1,15 +1,16 @@
-import React, { Component, Text } from 'react';
+import React, { Component} from 'react';
 import format from 'date-fns/format';
 import { connect } from 'react-redux';
 
 import { GoDiffAdded, GoReport } from 'react-icons/go';
-
+import {BiEditAlt} from 'react-icons/bi'
 import { GrLike } from 'react-icons/gr';
 
 import * as actionCreators from '../../../store/actions/index';
 import './EventDetail.css';
 
 import TopBar from '../../../components/TopBar/TopBar';
+import ReportEvent from '../../../components/Report/ReportEvent';
 
 class EventDetail extends Component {
   componentDidMount() {
@@ -20,11 +21,11 @@ class EventDetail extends Component {
     this.props.history.goBack();
   }
 
-  /*
-  onClickEditEvent = () => {
-    this.props.history.push(`/details/modify/${this.state.event.id}/`);
+  onClickModifyEvent = () => {
+    this.props.history.push(`/details/modify/${this.props.event.id}/`);
   }
 
+  /*
   onClickBringEvent = () => {
 
   }
@@ -32,17 +33,32 @@ class EventDetail extends Component {
   onClickLikeEvent = () => {
 
   }
-
-  onClickReportEvent = () => {
-
-  }
-
   onClickDeleteEvent = () => {
 
   }
   */
 
+  onClickReportEvent = () => {
+    this.setState({
+      modalBool: !this.state.modalBool,
+    })
+  }
+
+  state={
+    modalBool: false,
+  }
+
   render() {
+    let modal = null;
+    if (this.state.modalBool) {
+      modal = (
+        <ReportEvent
+          event = {this.props.event}
+          onClickCloseModal = {()=>this.setState({modalBool:false})}
+        />
+      );
+    }
+
     const lastEditor = (
       <div className="lastEditor">
         <div className="name">
@@ -76,7 +92,7 @@ class EventDetail extends Component {
           />
         </div>
 
-        <h1>EventDetail</h1>
+        <h1>{eventTitle}</h1>
 
         <div className="container">
 
@@ -89,13 +105,16 @@ class EventDetail extends Component {
 
             <div className="right">
               <div className="btns">
+                <button className="ModifyEvent" onClick={() => this.onClickModifyEvent()}>
+                  <BiEditAlt size="100%" color="black" />
+                </button>
                 <button className="bringEvent" onClick={() => {}}>
                   <GoDiffAdded size="100%" color="black" />
                 </button>
                 <button className="likeEvent" onClick={() => {}}>
                   <GrLike size="100%" color="#fff" />
                 </button>
-                <button className="reportEvent" onClick={() => {}}>
+                <button className="reportEvent" onClick={() => this.onClickReportEvent()}>
                   <GoReport size="100%" color="red" />
                 </button>
               </div>
@@ -168,6 +187,7 @@ class EventDetail extends Component {
             </div>
           </div>
         </div>
+        {modal}
       </div>
     );
   }

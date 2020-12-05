@@ -209,3 +209,13 @@ export const postEvent=(args)=>{
     }
 }
 */
+
+export const reportEvent = (id, content) =>{
+  return dispatch => {
+    return axios.post('/api/event_report/',{event: id,content: content})
+      .then(res => {
+        if(res.status==201) alert("신고가 접수되었습니다.")
+        else alert("예상치 못한 오류로 신고접수가 실패하였습니다. 잠시 뒤에 재시도해주세요")
+      })
+  }
+}

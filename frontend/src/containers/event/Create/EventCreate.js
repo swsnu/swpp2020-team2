@@ -1,8 +1,7 @@
-import React, { Component, Text } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { ImCalendar } from 'react-icons/im';
-import { BiDownArrow } from 'react-icons/bi';
 
 import * as actionCreators from '../../../store/actions/index';
 import './EventCreate.css';
@@ -18,6 +17,7 @@ class EventCreate extends Component {
     date: '',
     begin_time: '',
     end_time: '',
+    content:'',
   }
 
   componentDidMount() {
