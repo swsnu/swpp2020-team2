@@ -15,13 +15,13 @@ const GroupBox = (props) => (
     <div className="name">{props.name}</div>
     <div className="description">{props.description}</div>
     <div className="btnBox">
-      <div className="btn" onClick={props.like}>
+      <div className="btn" onClick={() => props.like()}>
         <GrLike color="black" />
       </div>
-      <div className="btn" onClick={props.notice}>
+      <div className="btn" onClick={() => props.notice()}>
         <BiBellPlus color="black" />
       </div>
-      <div className="btn" onClick={props.report}>
+      <div className="btn" onClick={() => props.report()}>
         <RiAlarmWarningFill color="red" />
       </div>
     </div>

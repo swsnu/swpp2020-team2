@@ -16,6 +16,7 @@ describe('GroupSearch', () => {
 
   const mockedState = {
     signinedUser: null,
+    searchGroups: [],
   };
 
   beforeEach(() => {
@@ -31,6 +32,7 @@ describe('GroupSearch', () => {
   it('should redirect to main page when sign outed', () => {
     const mockedState2 = {
       signinedUser: 1,
+      searchGroups: [],
     };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();

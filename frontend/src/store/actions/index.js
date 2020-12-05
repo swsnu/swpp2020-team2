@@ -17,6 +17,7 @@ export {
   createGroup,
   getAllGroup,
   getGroup,
+  searchGroup,
 } from './group';
 
 export {

@@ -60,3 +60,8 @@ export const getUserFull = () => (dispatch) => axios.get('/api/user/signin/full/
   .then((res) => {
     dispatch(getUserFull_(res.data));
   });
+
+export const likeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/like_group/', {
+  group: id,
+  operation: op,
+});

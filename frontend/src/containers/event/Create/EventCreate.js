@@ -14,18 +14,35 @@ class EventCreate extends Component {
     category: null,
     group: null,
     place: '',
-    date: '',
+    date: null,
     begin_time: '',
     end_time: '',
-    content:'',
+    content: '',
   }
 
   componentDidMount() {
+    this.props.getUserFull();
     this.props.getCategories();
   }
 
-  postEventHandler = () => {
+  componentDidUpdate(prevProps) {
+    if (!this.props.signinedUser) this.props.history.replace('/main');
+  }
 
+  createEventHandler = () => {
+    this.props.createEvent({
+      title: this.state.title,
+      place: this.state.place,
+      date: this.state.date,
+      category: this.state.category,
+      // tag:args.tag,
+      group: this.state.group,
+      begin_time: this.state.begin_time,
+      end_time: this.state.end_time,
+      last_editor: this.state.signinedUser,
+      // image:args.image,
+      content: this.state.content,
+    });
   }
 
   onClickBack = () => {
@@ -33,10 +50,10 @@ class EventCreate extends Component {
   }
 
   render() {
-    const disablebtn = true;//! (this.state.title && this.state.category && this.state.group && this.state.date);
+    const disablebtn = this.state.title === '' || !this.state.category || !this.state.group || !this.state.date;
 
-    var makeItem = function (X) {
-      return <option value={X.id}>{X.name}</option>;
+    var makeCategoryOption = function (cat) {
+      return <option value={cat.id}>{cat.name}</option>;
     };
 
     return (
@@ -76,7 +93,7 @@ class EventCreate extends Component {
                   <label className="infoKey">분류</label>
                   <select className="event-category-input" onChange={(event) => this.setState({ category: event.target.value })}>
                     <option value={null}>--select category--</option>
-                    {this.props.categories.map(makeItem)}
+                    {this.props.categories.map(makeCategoryOption)}
                   </select>
                 </div>
               </div>
@@ -160,7 +177,7 @@ class EventCreate extends Component {
           <div className="confirmBox">
             <button
               className="confirm-create-event-button"
-              onClick={() => this.postEventHandler()}
+              onClick={() => this.createEventHandler()}
               disabled={disablebtn}
             >
               Create
@@ -178,7 +195,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getUserFull: () => dispatch(actionCreators.getUserFull()),
   getCategories: () => dispatch(actionCreators.getCategories()),
+  createEvent: (args) => dispatch(actionCreators.createEvent(args)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);
