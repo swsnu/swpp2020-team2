@@ -8,12 +8,14 @@ import { createBrowserHistory } from 'history';
 import userReducer from './reducers/userReducer';
 import eventReducer from './reducers/eventReducer';
 import groupReducer from './reducers/groupReducer';
+import otherReducer from './reducers/otherReducer';
 
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   ur: userReducer,
   evt: eventReducer,
   gr: groupReducer,
+  or: otherReducer,
   router: connectRouter(history),
 });
 export const middlewares = [thunk, routerMiddleware(history)];

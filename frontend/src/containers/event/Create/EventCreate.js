@@ -12,18 +12,21 @@ import TopBar from '../../../components/TopBar/TopBar';
 class EventCreate extends Component {
   state = {
     title: '',
-    category: '',
-    group: '',
+    category: null,
+    group: null,
     place: '',
     date: '',
     begin_time: '',
     end_time: '',
   }
-  /*
+
+  componentDidMount() {
+    this.props.getCategories();
+  }
+
   postEventHandler = () => {
 
   }
-  */
 
   onClickBack = () => {
     this.props.history.goBack();
@@ -31,6 +34,10 @@ class EventCreate extends Component {
 
   render() {
     const disablebtn = true;//! (this.state.title && this.state.category && this.state.group && this.state.date);
+
+    var makeItem = function (X) {
+      return <option value={X.id}>{X.name}</option>;
+    };
 
     return (
       <div className="EventCreate">
@@ -67,16 +74,9 @@ class EventCreate extends Component {
 
                 <div className="infoBox">
                   <label className="infoKey">분류</label>
-                  <select className="event-category-input" onChange={() => {}}>
-                    <option>--카테고리를 선택하세요--</option>
-                    <option>공연</option>
-                    <option>전시회</option>
-                    <option>일일호프</option>
-                    <option>축제</option>
-                    <option>장터</option>
-                    <option>세미나</option>
-                    <option>대회</option>
-                    <option>해당없음</option>
+                  <select className="event-category-input" onChange={(event) => this.setState({ category: event.target.value })}>
+                    <option value={null}>--select category--</option>
+                    {this.props.categories.map(makeItem)}
                   </select>
                 </div>
               </div>
@@ -160,7 +160,7 @@ class EventCreate extends Component {
           <div className="confirmBox">
             <button
               className="confirm-create-event-button"
-              onClick={() => {}}// this.postEventHandler()}
+              onClick={() => this.postEventHandler()}
               disabled={disablebtn}
             >
               Create
@@ -173,12 +173,12 @@ class EventCreate extends Component {
 }
 
 const mapStateToProps = (state) => ({
-//  signinedUser: state.ur.signinedUser,
-
+  signinedUser: state.ur.signinedUser,
+  categories: state.or.categories,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-// onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+  getCategories: () => dispatch(actionCreators.getCategories()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);
