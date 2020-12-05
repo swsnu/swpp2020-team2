@@ -39,6 +39,8 @@ urlpatterns = [
     path('event/<int:event_id>/', views.get_single_event, name='get_single_event'),
     path('event/<int:event_id>/full/', views.get_put_delete_event_full,
     name='get_edit_delete_event_full'),
+    path('event/recommend/',
+    views.get_recommendation_event, name='get_recommendation_event'),
     path('group/', views.get_group, name='get_group'),
     path('group/simple/', views.get_group_simple, name='get_group_simple'),
     path('group/filtered/', views.get_group_filtered, name='get_group_filtered'),
