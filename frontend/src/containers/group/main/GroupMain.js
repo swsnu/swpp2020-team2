@@ -10,8 +10,7 @@ import './GroupMain.css';
 
 import GroupBox from '../../../components/groupBox/GroupBox';
 
-import {appLogo} from '../../../images/index';
-
+import { appLogo } from '../../../images/index';
 
 class GroupMain extends Component {
   state = {
@@ -87,14 +86,14 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                <GroupBox 
-                  image={appLogo} 
-                  name={"group"} 
-                  description={"description"} 
-                  like = {()=>{}}
-                  notice = {()=>{}}
-                  report = {()=>{}}
-                  />
+                <GroupBox
+                  image={appLogo}
+                  name="group"
+                  description="description"
+                  like={() => {}}
+                  notice={() => {}}
+                  report={() => {}}
+                />
                 {joinedGroupBoxes}
               </div>
             </div>

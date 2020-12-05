@@ -19,11 +19,14 @@ class EventCreate extends Component {
     begin_time: '',
     end_time: '',
   }
-  /*
+
+  componentDidMount() {
+    this.props.getCategories();
+  }
+
   postEventHandler = () => {
 
   }
-  */
 
   onClickBack = () => {
     this.props.history.goBack();
@@ -32,8 +35,8 @@ class EventCreate extends Component {
   render() {
     const disablebtn = true;//! (this.state.title && this.state.category && this.state.group && this.state.date);
 
-    var makeItem=function(X){
-    return <option value={X.id}>{X.name}</option>
+    var makeItem = function (X) {
+      return <option value={X.id}>{X.name}</option>;
     };
 
     return (
@@ -157,7 +160,7 @@ class EventCreate extends Component {
           <div className="confirmBox">
             <button
               className="confirm-create-event-button"
-              onClick={() => {}}// this.postEventHandler()}
+              onClick={() => this.postEventHandler()}
               disabled={disablebtn}
             >
               Create
@@ -175,7 +178,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-// onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+  getCategories: () => dispatch(actionCreators.getCategories()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);

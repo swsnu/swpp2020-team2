@@ -1,30 +1,32 @@
 import React from 'react';
 import './TopBar.css';
-import { appLogo,uniLogo } from '../../images/index';
-
-import {BiBell} from 'react-icons/bi';
+import { BiBell } from 'react-icons/bi';
+import { appLogo, uniLogo } from '../../images/index';
 
 const TopBar = (props) => (
   <div className="TopBar">
     <div className="left">
       <img className="logo" src={appLogo} alt="logo" />
       <button className="tab" onClick={() => props.history.push('/public')} style={{ fontWeight: props.tabNum === 0 ? 'bold' : 'none' }}>
-        Public</button>
+        Public
+      </button>
       <button className="tab" onClick={() => props.history.push('/private')} style={{ fontWeight: props.tabNum === 1 ? 'bold' : 'none' }}>
-        Private</button>
+        Private
+      </button>
       <button className="tab" onClick={() => props.history.push('/group')} style={{ fontWeight: props.tabNum === 2 ? 'bold' : 'none' }}>
-        Group</button>
+        Group
+      </button>
     </div>
 
     <div className="right">
-      <div className="logo" >
-        <img src={uniLogo} />
+      <div className="logo">
+        <img src={uniLogo} alt="university logo" />
       </div>
       <div className="notice">
-        <BiBell size='30px'/>
+        <BiBell size="30px" />
       </div>
-      <div className="profile" onClick={()=>{}}>
-        <img src={appLogo} />
+      <div className="profile" onClick={() => {}}>
+        <img src={appLogo} alt="app logo" />
       </div>
     </div>
   </div>

@@ -17,3 +17,7 @@ export {
   getAllGroup,
   getGroup,
 } from './group';
+
+export {
+  getCategories,
+} from './other';
