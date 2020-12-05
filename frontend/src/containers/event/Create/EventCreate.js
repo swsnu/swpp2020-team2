@@ -18,6 +18,7 @@ class EventCreate extends Component {
     date: '',
     begin_time: '',
     end_time: '',
+    content:'',
   }
 
   componentDidMount() {

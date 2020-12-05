@@ -10,6 +10,7 @@ export const GET_USER_FULL = 'GET_USER_FULL';
 export const GET_ALL_EVENT = 'GET_ALL_EVENT';
 export const GET_EVENT = 'GET_EVENT';
 
+
 /* group */
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const GET_ALL_GROUP = 'GET_ALL_GROUP';

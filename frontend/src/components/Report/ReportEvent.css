@@ -1,0 +1,11 @@
+.ReportEvent {
+    display: flex;
+    position: absolute;
+    margin-top: 30px;
+    width: 60%;
+    height: 600px;
+    transform: translate(-50%, 0%);
+    flex-direction: column;
+    background-color: rgb(240,240,240);
+    border-radius: 60px;
+}

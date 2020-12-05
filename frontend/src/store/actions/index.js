@@ -10,6 +10,7 @@ export {
 export {
   getAllEvent,
   getEvent,
+  reportEvent,
 } from './events';
 
 export {
