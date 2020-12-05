@@ -14,3 +14,6 @@ export const GET_EVENT = 'GET_EVENT';
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const GET_ALL_GROUP = 'GET_ALL_GROUP';
 export const GET_GROUP = 'GET_GROUP';
+
+/* other */
+export const GET_CATEGORIES = 'GET_CATEGORIES';
