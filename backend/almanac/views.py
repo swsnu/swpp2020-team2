@@ -722,7 +722,11 @@ def get_recommendation_tag(request):
 
     req_data = json.loads(request.body.decode())
     content = req_data['content']
-    recommendation = recommend_tag(content)
+    if 'num' in req_data.keys():
+        num = req_data['num']
+        recommendation = recommend_tag(content, num)
+    else:
+        recommendation = recommend_tag(content)
 
     tags = [{'id': tag_id,
     } for tag_id in recommendation]

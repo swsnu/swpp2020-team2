@@ -1377,6 +1377,15 @@ class AlmanacTag(TransactionTestCase):
         self.assertEqual(response.json()[0]['id'], id_technology)
         self.assertEqual(response.json()[1]['id'], id_economy)
 
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'For the high-techonology computing powers, we need better computers with '
+            'efficient computer chips. It is critical to have good architectures for CPUs.',
+            'num': 1
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_technology)
+
 class AlmanacBackLangImTestCase(TransactionTestCase):
 
     '''
