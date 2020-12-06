@@ -36,8 +36,12 @@ export const signUp = (args) => (dispatch) => axios.post('/api/signup/', {
   last_name: args.lastName,
 })
   .then((res) => {
-    dispatch(signUp_());
-    alert('verification link is sent to your mail!');
+    if(res.content==='Username Taken')alert('Username is already taken!');
+    else if(res.content==='Already Activated')alert('This account is already activated!');
+    else{
+      dispatch(signUp_());
+      alert('verification link is sent to your mail!');
+    }
   });
 
 export const activate_ = () => ({ type: actionTypes.ACTIVATE });
