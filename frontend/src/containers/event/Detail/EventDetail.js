@@ -1,9 +1,9 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import format from 'date-fns/format';
 import { connect } from 'react-redux';
 
 import { GoDiffAdded, GoReport } from 'react-icons/go';
-import {BiEditAlt} from 'react-icons/bi'
+import { BiEditAlt } from 'react-icons/bi';
 import { GrLike } from 'react-icons/gr';
 
 import * as actionCreators from '../../../store/actions/index';
@@ -13,6 +13,10 @@ import TopBar from '../../../components/TopBar/TopBar';
 import ReportEvent from '../../../components/Report/ReportEvent';
 
 class EventDetail extends Component {
+  state={
+    modalBool: false,
+  }
+
   componentDidMount() {
     this.props.onGetEvent(parseInt(this.props.match.params.event_id));
   }
@@ -39,13 +43,7 @@ class EventDetail extends Component {
   */
 
   onClickReportEvent = () => {
-    this.setState({
-      modalBool: !this.state.modalBool,
-    })
-  }
-
-  state={
-    modalBool: false,
+    this.setState((prevState) => ({ modalBool: !prevState.modalBool }));
   }
 
   render() {
@@ -53,8 +51,8 @@ class EventDetail extends Component {
     if (this.state.modalBool) {
       modal = (
         <ReportEvent
-          event = {this.props.event}
-          onClickCloseModal = {()=>this.setState({modalBool:false})}
+          event={this.props.event}
+          onClickCloseModal={() => this.setState({ modalBool: false })}
         />
       );
     }

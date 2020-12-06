@@ -42,6 +42,17 @@ const mockStore2 = getMockStore(stubInitialState2);
 const mockStore3 = getMockStore(stubInitialState3);
 
 describe('<eventDetail />', () => {
+  function makeComponent(store) {
+    return (
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact render={() => <EventDetail history={history} match={{ params: { event_id: 1 } }} />} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+  }
   let eventDetail;
 
   beforeEach(() => {
@@ -50,41 +61,17 @@ describe('<eventDetail />', () => {
   });
 
   it('should render eventDetail without error', () => {
-    eventDetail = (
-      <Provider store={mockStore}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route path="/" exact render={() => <EventDetail history={history} match={{ params: { event_id: 1 } }} />} />
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
-    );
+    eventDetail = makeComponent(mockStore);
     const component = mount(eventDetail);
     const wrapper = component.find('.EventDetail');
     expect(wrapper.length).toBe(1);
 
-    eventDetail = (
-      <Provider store={mockStore2}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route path="/" exact render={() => <EventDetail history={history} match={{ params: { event_id: 1 } }} />} />
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
-    );
+    eventDetail = makeComponent(mockStore2);
     const component2 = mount(eventDetail);
     const wrapper2 = component2.find('.EventDetail');
     expect(wrapper2.length).toBe(1);
 
-    eventDetail = (
-      <Provider store={mockStore3}>
-        <ConnectedRouter history={history}>
-          <Switch>
-            <Route path="/" exact render={() => <EventDetail history={history} match={{ params: { event_id: 1 } }} />} />
-          </Switch>
-        </ConnectedRouter>
-      </Provider>
-    );
+    eventDetail = makeComponent(mockStore3);
     const component3 = mount(eventDetail);
     const wrapper3 = component3.find('.EventDetail');
     expect(wrapper3.length).toBe(1);
@@ -105,6 +92,7 @@ describe('<eventDetail />', () => {
   it('should back to page after click back button', () => {
     const spyHistoryPush = jest.spyOn(history, 'goBack').mockImplementation((path) => {});
 
+    eventDetail = makeComponent(mockStore);
     const component = mount(eventDetail);
     const wrapper = component.find('.back');
 

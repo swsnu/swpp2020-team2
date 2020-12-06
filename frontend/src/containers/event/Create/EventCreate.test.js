@@ -12,9 +12,9 @@ import * as actionCreators from '../../../store/actions/Events';
 import * as actionCreators_user from '../../../store/actions/users';
 */
 
-const stubInitialState = [
-
-];
+const stubInitialState = {
+  categories: [],
+};
 
 const mockStore = getMockStore(stubInitialState);
 
@@ -84,8 +84,8 @@ describe('<EventCreate />', () => {
     const content = 'TEST_NEW_CONTENT';
     const component = mount(eventCreate);
     const wrapper = component.find('.event-content-input');
-    wrapper.simulate('change', { target: { value: content } });
     const EventCreateInstance = component.find(EventCreate.WrappedComponent).instance();
+    wrapper.simulate('change', { target: { value: content } });
     expect(EventCreateInstance.state.content).toEqual(content);
   });
 

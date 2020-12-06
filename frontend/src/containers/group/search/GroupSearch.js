@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { ImSearch } from 'react-icons/im';
 import { MdGroupAdd } from 'react-icons/md';
 import TopBar from '../../../components/TopBar/TopBar';
+import groupBox from '../../../components/groupBox/GroupBox';
 
 import * as actionCreators from '../../../store/actions/index';
 
@@ -21,16 +22,33 @@ class GroupSearch extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.signinedUser) this.props.history.replace('/main');
+    if (this.state.searchQuery) this.props.searchGroup(this.state.searchQuery);
   }
 
   onSearchHandler = () => {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  render() {
-    const searchResult = null;
+  onLikeHandler=(id) => {
+    // see if group id is in user's liked group list. select operation and call likeGroup in user.
+  }
 
-    // should implement searchResult, which will have searchboxes of search result.
+  onNoticeHandler=(id) => {
+
+  }
+
+  render() {
+    var makeGroupBox = function (group) {
+      return (
+        <groupBox
+          name={group.name}
+          description={group.description}
+          like={(id) => this.onLikeHandler(id)}
+          notice={(id) => this.onNoticeHandler(id)}
+          report={() => {}}
+        />
+      );
+    };
 
     return (
       <div className="GroupSearch">
@@ -65,7 +83,7 @@ class GroupSearch extends Component {
           </div>
 
           <h2>Group Search Result</h2>
-          {searchResult}
+          {this.props.searchGroups.map(makeGroupBox)}
         </div>
 
       </div>
@@ -76,10 +94,12 @@ class GroupSearch extends Component {
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
   userFullInfo: state.ur.userFullInfo,
+  searchGroups: state.gr.searchGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
+  searchGroup: (query) => dispatch(actionCreators.searchGroup(query)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearch);

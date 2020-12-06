@@ -194,28 +194,27 @@ export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/`)
   .then((res) => dispatch(getEvent_(sample[0])));
 */
 
-/*
-export const postEvent_=(event)=>{
-    return{
-        type:actionTypes.POST_EVENT,
-        target:event
-    }
-}
+export const createEvent_ = (event) => ({ type: actionTypes.POST_EVENT, target: event });
 
-export const postEvent=(args)=>{
-    return dispatch=>{
-        return axios.post('/api/event/upload/')
-        .then(res=>dispatch(postEvent_(res.data)));
-    }
-}
-*/
+export const createEvent = (args) => (dispatch) => axios.post('/api/event/create/', {
+  title: args.title,
+  place: args.place,
+  date: args.date,
+  category: args.category,
+  tag: args.tag,
+  group: args.group,
+  begin_time: args.begin_time,
+  end_time: args.end_time,
+  last_editor: args.last_editor,
+  image: args.image,
+  content: args.content,
+})
+  .then((res) => {
+    dispatch(createEvent_(res.data));
+  });
 
-export const reportEvent = (id, content) =>{
-  return dispatch => {
-    return axios.post('/api/event_report/',{event: id,content: content})
-      .then(res => {
-        if(res.status==201) alert("신고가 접수되었습니다.")
-        else alert("예상치 못한 오류로 신고접수가 실패하였습니다. 잠시 뒤에 재시도해주세요")
-      })
-  }
-}
+export const reportEvent = (id, content) => (dispatch) => axios.post('/api/event_report/', { event: id, content })
+  .then((res) => {
+    if (res.status === 201) alert('신고가 접수되었습니다.');
+    else alert('예상치 못한 오류로 신고접수가 실패하였습니다. 잠시 뒤에 재시도해주세요');
+  });
