@@ -18,4 +18,6 @@ export const GET_GROUP = 'GET_GROUP';
 export const SEARCH_GROUP = 'SEARCH_GROUP';
 
 /* other */
+export const GET_UNIVERSITIES = 'GET_UNIVERSITIES';
+export const GET_DEPARTMENTS = 'GET_DEPARTMENTS';
 export const GET_CATEGORIES = 'GET_CATEGORIES';

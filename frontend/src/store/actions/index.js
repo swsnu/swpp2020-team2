@@ -21,5 +21,7 @@ export {
 } from './group';
 
 export {
+  getUniversities,
+  getDepartments,
   getCategories,
 } from './other';

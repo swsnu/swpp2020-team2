@@ -22,6 +22,11 @@ class Signup extends Component {
     revealConfirmPassword: false,
   }
 
+  componentDidMount(){
+    this.props.getUniversities();
+    this.props.getDepartments();
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.signinedUser !== prevProps.signinedUser) {
       if (this.props.signinedUser) this.props.history.replace('/public');
@@ -90,6 +95,10 @@ class Signup extends Component {
   }
 
   render() {
+    var makeOption = function (X) {
+      return <option value={X.id}>{X.name}</option>;
+    };
+
     return (
       <div className="SignUp">
         <div className="top">
@@ -162,7 +171,7 @@ class Signup extends Component {
                 <label className="label">University</label>
                 <select id="university-input" onChange={(event) => this.setState({ university: event.target.value })}>
                   <option value="">--choose your university--</option>
-                  <option value={1}>Seoul National University</option>
+                  {this.props.universities.map(makeOption)}
                 </select>
               </div>
 
@@ -171,8 +180,7 @@ class Signup extends Component {
                 <label className="label">Department</label>
                 <select id="department-input" onChange={(event) => this.setState({ department: event.target.value })}>
                   <option value="">--choose your department--</option>
-                  <option value={1}>Computer Science and Engineering</option>
-                  <option value={2}>Electrical and Computer Engineering</option>
+                  {this.props.departments.map(makeOption)}
                 </select>
               </div>
 
@@ -229,10 +237,14 @@ class Signup extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
+  universities: state.or.universities,
+  departments: state.or.departments,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   signup: (args) => dispatch(actionCreators.signUp(args)),
+  getUniversities: () => dispatch(actionCreators.getUniversities()),
+  getDepartments: () => dispatch(actionCreators.getDepartments()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);
