@@ -194,7 +194,7 @@ export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/`)
   .then((res) => dispatch(getEvent_(sample[0])));
 */
 
-export const createEvent_ = (event) => ({ type: actionTypes.POST_EVENT, target: event });
+export const createEvent_ = (event) => ({ type: actionTypes.CREATE_EVENT, target: event });
 
 export const createEvent = (args) => (dispatch) => axios.post('/api/event/create/', {
   title: args.title,
