@@ -1187,8 +1187,9 @@ class AlmanacTag(TransactionTestCase):
             date='2020-11-05',
             begin_time='14:20:00',
             end_time='16:52:00',
-            content='An apple is very delicious. It has more nutrients than orange, lemon, '
-            'pineapples, grapes. Eat more apples and then you will be one step further from doctors.',
+            content='An apple is very delicious. It has more nutrients than orange, '
+            'lemon, pineapples, grapes. Eat more apples and then you will be one step '
+            'further from doctors.',
             last_editor_id=user2.id
         )
         self.event2.tag.add(tag3)
