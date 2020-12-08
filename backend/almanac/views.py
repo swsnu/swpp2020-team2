@@ -27,6 +27,7 @@ from .forms import ImageForm
 # Create your views here.
 # User (Sign)
 
+@ensure_csrf_cookie
 def signup(request):
 
     '''
@@ -75,6 +76,7 @@ def signup(request):
         return HttpResponseBadRequest()
     return HttpResponse(status=201)
 
+@ensure_csrf_cookie
 def activate(request, uidb64, token):
 
     '''
@@ -96,6 +98,7 @@ def activate(request, uidb64, token):
         return HttpResponse("Account Activated Safely")
     return HttpResponseNotFound()
 
+@ensure_csrf_cookie
 def signin(request):
 
     '''
@@ -123,6 +126,7 @@ def signin(request):
         return JsonResponse(user_dict)
     return HttpResponse(status=401)
 
+@ensure_csrf_cookie
 def signout(request):
 
     '''
@@ -139,6 +143,7 @@ def signout(request):
 
 # User (Non-sign)
 
+@ensure_csrf_cookie
 def get_user_signin(request):
 
     '''
@@ -161,6 +166,7 @@ def get_user_signin(request):
     'department': user_preference.department_id}
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user_signin_full(request):
 
     '''
@@ -195,6 +201,7 @@ def get_user_signin_full(request):
     }
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user(request, user_id):
 
     '''
@@ -217,6 +224,7 @@ def get_user(request, user_id):
     'department': user_preference.department_id}
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user_full(request, user_id):
 
     '''
@@ -251,6 +259,7 @@ def get_user_full(request, user_id):
     }
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def like_event_user(request):
 
     '''
@@ -275,6 +284,7 @@ def like_event_user(request):
         user_preference.likes.remove(event_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def bring_event_user(request):
 
     '''
@@ -299,6 +309,7 @@ def bring_event_user(request):
         user_preference.brings.remove(event_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def like_group_user(request):
 
     '''
@@ -323,6 +334,7 @@ def like_group_user(request):
         user_preference.likes_group.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def get_notification_user(request):
 
     '''
@@ -347,6 +359,7 @@ def get_notification_user(request):
         user_preference.gets_notification.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def join_request_user(request):
 
     '''
@@ -371,6 +384,7 @@ def join_request_user(request):
         user_preference.join_requests.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_password_user(request):
 
     '''
@@ -394,6 +408,7 @@ def change_password_user(request):
         login(request, new_user)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_profile_user(request):
 
     '''
@@ -415,6 +430,7 @@ def change_profile_user(request):
     user_preference.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_background_user(request):
 
     '''
@@ -436,6 +452,7 @@ def change_background_user(request):
     user_preference.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_language_user(request):
 
     '''
