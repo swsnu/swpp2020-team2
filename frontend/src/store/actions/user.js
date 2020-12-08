@@ -69,3 +69,13 @@ export const likeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/l
   group: id,
   operation: op,
 });
+
+export const noticeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/get_notification/', {
+  group: id,
+  operation: op,
+});
+
+export const joinGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/join_request/', {
+  group: id,
+  operation: op,
+});

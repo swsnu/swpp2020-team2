@@ -5,6 +5,9 @@ export {
   activate,
   getUser,
   getUserFull,
+  likeGroup,
+  noticeGroup,
+  joinGroup,
 } from './user';
 
 export {
@@ -18,6 +21,9 @@ export {
   createGroup,
   getAllGroup,
   getGroup,
+  getLikeGroup,
+  getNoticeGroup,
+  getMyGroup,
   searchGroup,
 } from './group';
 

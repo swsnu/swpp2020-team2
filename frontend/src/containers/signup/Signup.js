@@ -22,7 +22,7 @@ class Signup extends Component {
     revealConfirmPassword: false,
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.getUniversities();
     this.props.getDepartments();
   }
@@ -95,7 +95,7 @@ class Signup extends Component {
   }
 
   render() {
-    var makeOption = function (X) {
+    var makeOption = function func(X) {
       return <option value={X.id}>{X.name}</option>;
     };
 
