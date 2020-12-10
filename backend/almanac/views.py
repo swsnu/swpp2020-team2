@@ -1282,6 +1282,14 @@ def get_group_filtered(request):
             group_objects = group_objects.filter(
                 id__in=user_preference.gets_notification.values_list('id', flat=True)
             )
+        if 'nothing' in filter_options_dict['group']:
+            group_objects = group_objects.exclude(
+                id__in=user_preference.likes_group.values_list('id', flat=True)
+            ).exclude(
+                id__in=user_preference.gets_notification.values_list('id', flat=True)
+            ).exclude(
+                id__in=user_preference.gets_notification.values_list('id', flat=True)
+            )
     if 'group_exact' in filter_options_dict.keys():
         group_objects = group_objects.filter(id__in=filter_options_dict['group_exact'])
     # Sort(List (length 1))
