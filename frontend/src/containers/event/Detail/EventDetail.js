@@ -13,12 +13,13 @@ import TopBar from '../../../components/TopBar/TopBar';
 import ReportEvent from '../../../components/Report/ReportEvent';
 
 class EventDetail extends Component {
-  state={
+  state = {
     modalBool: false,
   }
 
   componentDidMount() {
     this.props.onGetEvent(parseInt(this.props.match.params.event_id));
+
   }
 
   onClickBack = () => {
@@ -57,35 +58,38 @@ class EventDetail extends Component {
       );
     }
 
+    let eventLoaded;
+    if (!(this.props.event.title?.length > 0)) eventLoaded = false;
+    else eventLoaded = true;
+
+    const eventTitle = (eventLoaded) ? this.props.event.title : '해당없음';
+    const eventGroupName = (this.props.event.group?.name?.length>0) ? this.props.event.group.name : '해당없음';
+    const eventPlace = (this.props.event.place?.length>0) ? this.props.event.place : '해당없음';
+    const formattedDate = (eventLoaded) ? this.props.event.date : '해당없음';
+    const categoryName = (this.props.event.category?.name?.length>0) ? this.props.event.category.name : '해당없음';
+    const eventBeginTime = (eventLoaded) ? this.props.event.begin_time : '해당없음';
+    const eventEndTime = (eventLoaded) ? this.props.event.end_time : '해당없음';
+    const eventContent = (this.props.event.content?.length>0) ? this.props.event.content : '해당없음';
+    const lastEditorName = (this.props.event.last_editor?.name?.length>0) ? this.props.event.last_editor.name : '해당없음';
+    const lastEditorDepartment = (eventLoaded) ? this.props.event.last_editor.department : '해당없음';
+
     const lastEditor = (
       <div className="lastEditor">
         <div className="name">
-          래건
+          {lastEditorName}
         </div>
         <div className="major">
-          컴퓨터공학부
+          {lastEditorDepartment}
         </div>
       </div>
     );
-    let eventLoaded;
-    if (this.props.event === '' || this.props.event == null || this.props.event === undefined) eventLoaded = false;
-    else if (this.props.event != null && typeof this.props.event === 'object' && !Object.keys(this.props.event).length) eventLoaded = false;
-    else eventLoaded = true;
-
-    const eventTitle = (eventLoaded) ? this.props.event.title : '';
-    const eventGroup = (eventLoaded) ? this.props.event.group : '';
-    const eventPlace = (eventLoaded) ? this.props.event.place : '';
-    const formattedDate = (eventLoaded) ? format(this.props.event.date, 'yyyy. MM. dd') : '';
-    const categoryName = (eventLoaded) ? this.props.event.category.name : '';
-    const eventBeginTime = (eventLoaded) ? this.props.event.begin_time : '';
-    const eventEndTime = (eventLoaded) ? this.props.event.end_time : '';
-    const eventContent = (eventLoaded) ? this.props.event.content : '';
 
     return (
       <div className="EventDetail">
 
         <div className="topBar">
           <TopBar
+            tabNum = {0}
             history={this.props.history}
           />
         </div>
@@ -106,10 +110,10 @@ class EventDetail extends Component {
                 <button className="ModifyEvent" onClick={() => this.onClickModifyEvent()}>
                   <BiEditAlt size="100%" color="black" />
                 </button>
-                <button className="bringEvent" onClick={() => {}}>
+                <button className="bringEvent" onClick={() => { }}>
                   <GoDiffAdded size="100%" color="black" />
                 </button>
-                <button className="likeEvent" onClick={() => {}}>
+                <button className="likeEvent" onClick={() => { }}>
                   <GrLike size="100%" color="#fff" />
                 </button>
                 <button className="reportEvent" onClick={() => this.onClickReportEvent()}>
@@ -136,7 +140,7 @@ class EventDetail extends Component {
               <div className="box">
                 <div className="infoBox">
                   <div className="infoKey">단체</div>
-                  <div className="infoValue">{eventGroup}</div>
+                  <div className="infoValue">{eventGroupName}</div>
                 </div>
                 <div className="infoBox">
                   <div className="infoKey">장소</div>
@@ -192,7 +196,7 @@ class EventDetail extends Component {
 }
 
 const mapStateToProps = (state) => ({
-//  signinedUser: state.ur.signinedUser,
+  //  signinedUser: state.ur.signinedUser,
   event: state.evt.target,
 });
 
