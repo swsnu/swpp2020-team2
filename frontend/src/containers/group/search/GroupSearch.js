@@ -17,12 +17,14 @@ class GroupSearch extends Component {
 
   componentDidMount() {
     this.setState({ searchQuery: this.props.match.params.searchQuery });
+    this.props.searchGroup(this.props.match.params.searchQuery);
     this.props.getUserFull();
+    this.props.getLikeGroup();
+    this.props.getNoticeGroup();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.signinedUser) this.props.history.replace('/main');
-    if (this.state.searchQuery) this.props.searchGroup(this.state.searchQuery);
   }
 
   onSearchHandler = () => {
@@ -54,8 +56,6 @@ class GroupSearch extends Component {
       if (this.props.likeGroups.find(haveThisGroup))liked = true;
       var noticed = false;
       if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
-      var joined = false;
-      if (this.props.MyGroups.find(haveThisGroup))joined = true;
       return (
         <groupBox
           name={group.name}
@@ -116,7 +116,6 @@ const mapStateToProps = (state) => ({
   searchGroups: state.gr.searchGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
-  myGroups: state.gr.myGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -124,7 +123,6 @@ const mapDispatchToProps = (dispatch) => ({
   searchGroup: (query) => dispatch(actionCreators.searchGroup(query)),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
-  getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
   joinGroup: (id, op) => dispatch(actionCreators.joinGroup(id, op)),
