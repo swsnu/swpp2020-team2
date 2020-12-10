@@ -73,12 +73,12 @@ export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/',
 
 export const searchGroup_ = (data) => ({ type: actionTypes.SEARCH_GROUP, data });
 
-export const searchGroup = (query) => (dispatch) => axios.get(`/api/group/search/${query}`)
+export const searchGroup = (query) => (dispatch) => axios.get(`/api/group/search/${query}/`)
   .then((res) => {
     dispatch(searchGroup_(res.data));
   });
 
-export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group_report', {
+export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group_report/', {
   group: id,
   content,
 });

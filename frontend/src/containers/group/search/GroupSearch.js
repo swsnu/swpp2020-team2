@@ -64,8 +64,6 @@ class GroupSearch extends Component {
           like={() => this.onLikeHandler(group.id, !liked)}
           noticed={noticed}
           notice={() => this.onNoticeHandler(group.id, !noticed)}
-          joined={joined}
-          join={() => this.onJoinHandler(group.id, !joined)}
           report={() => {}}
         />
       );
