@@ -59,7 +59,7 @@ def signup(request):
             if user.is_active:
                 return HttpResponse("Already Activated")
         content = ('Hello, {}. Welcome to the Almanac Service. You can activate your account'
-        ' via the link \nhttp://localhost:3000/signup/activate/{}/{}'
+        ' via the link \nhttp://almanac2.shop/signup/activate/{}/{}'
         '\nEnjoy your calenars!').format(
             username,
             urlsafe_base64_encode(force_bytes(user.id)),
