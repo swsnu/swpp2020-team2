@@ -52,7 +52,8 @@ class GroupMain extends Component {
     var noticed = false;
     if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
     return (
-      <groupBox
+      <GroupBox
+        key={group.id}
         name={group.name}
         description={group.description}
         liked={liked}
