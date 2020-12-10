@@ -35,6 +35,8 @@ export const getLikeGroup = () => (dispatch) => axios.post('/api/group/filtered/
   filter_options: {
     group: ['like'],
   },
+  sort_options: [],
+  count_options: {},
 })
   .then((res) => {
     dispatch(getLikeGroup_(res.data));
@@ -46,6 +48,8 @@ export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtere
   filter_options: {
     group: ['notification'],
   },
+  sort_options: [],
+  count_options: {},
 })
   .then((res) => {
     dispatch(getNoticeGroup_(res.data));
@@ -57,6 +61,8 @@ export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/',
   filter_options: {
     group: ['my'],
   },
+  sort_options: [],
+  count_options: {},
 })
   .then((res) => {
     dispatch(getMyGroup_(res.data));

@@ -19,6 +19,9 @@ class GroupMain extends Component {
 
   componentDidMount() {
     this.props.getUserFull();
+    this.props.getMyGroup();
+    this.props.getLikeGroup();
+    this.props.getNoticeGroup();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,19 +32,40 @@ class GroupMain extends Component {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  render() {
-    const joinedGroup = this.props.userFullInfo?.members;
-    const noticedGroup = this.props.userFullInfo?.gets_notification;
-    const likedGroup = this.props.userFullInfo?.likes_group;
-    const otherGroup = null;
-    const joinedGroupBoxes = null;
-    const noticedGroupBoxes = null;
-    const likedGroupBoxes = null;
-    const otherGroupBoxes = null;
+  onLikeHandler=(id, op) => {
+    const oper = op ? 'add' : 'remove';
+    this.props.likeGroup(id, oper);
+  }
 
-    // should implement components/groupbox/Groupbox first
-    // joinedGroup will show groupboxes of joinedGroup
-    // same for noticeGroup, likedGroup, otherGroup.
+  onNoticeHandler=(id, op) => {
+    const oper = op ? 'add' : 'remove';
+    this.props.likeGroup(id, oper);
+  }
+
+  render() {
+    const otherGroupBoxes = null;// this var will not actually be used later
+
+    var makeGroupBox = function func(group) {
+      function haveThisGroup(element) {
+        if (element.id === group.id) return true;
+        return false;
+      }
+      var liked = false;
+      if (this.props.likeGroups.find(haveThisGroup))liked = true;
+      var noticed = false;
+      if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+      return (
+        <groupBox
+          name={group.name}
+          description={group.description}
+          liked={liked}
+          like={() => this.onLikeHandler(group.id, !liked)}
+          noticed={noticed}
+          notice={() => this.onNoticeHandler(group.id, !noticed)}
+          report={() => {}}
+        />
+      );
+    };
 
     return (
       <div className="GroupMain">
@@ -86,15 +110,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                <GroupBox
-                  image={appLogo}
-                  name="group"
-                  description="description"
-                  like={() => {}}
-                  notice={() => {}}
-                  report={() => {}}
-                />
-                {joinedGroupBoxes}
+                {this.props.myGroups.map(makeGroupBox)}
               </div>
             </div>
 
@@ -104,7 +120,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {noticedGroupBoxes}
+                {this.props.noticeGroups.map(makeGroupBox)}
               </div>
             </div>
 
@@ -114,7 +130,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {likedGroupBoxes}
+                {this.props.likeGroups.map(makeGroupBox)}
               </div>
             </div>
 
@@ -143,10 +159,16 @@ class GroupMain extends Component {
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
   userFullInfo: state.ur.userFullInfo,
+  myGroups: state.gr.myGroups,
+  likeGroups: state.gr.likeGroups,
+  noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
+  getMyGroup: () => dispatch(actionCreators.getMyGroup()),
+  getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
+  getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMain);
