@@ -8,7 +8,7 @@ export const createGroup_ = (data) => ({ type: actionTypes.CREATE_GROUP, data })
 
 export const createGroup = (args) => (dispatch) => axios.post('/api/group/create/', {
   name: args.name,
-  king: args.user,
+  king: args.king,
   description: args.description,
 })
   .then((res) => {
