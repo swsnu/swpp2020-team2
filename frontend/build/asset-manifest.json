@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8f9b28e2.chunk.css",
+    "main.js": "/static/js/main.61a3e5ea.chunk.js",
+    "main.js.map": "/static/js/main.61a3e5ea.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c8a21426.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c8a21426.js.map",
+    "static/js/2.ea8afd63.chunk.js": "/static/js/2.ea8afd63.chunk.js",
+    "static/js/2.ea8afd63.chunk.js.map": "/static/js/2.ea8afd63.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.a8a16f9fcc446a32232e2316d7f350e1.js": "/precache-manifest.a8a16f9fcc446a32232e2316d7f350e1.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.8f9b28e2.chunk.css.map": "/static/css/main.8f9b28e2.chunk.css.map",
+    "static/js/2.ea8afd63.chunk.js.LICENSE.txt": "/static/js/2.ea8afd63.chunk.js.LICENSE.txt",
+    "static/media/0.png": "/static/media/0.46088d2b.png",
+    "static/media/1.png": "/static/media/1.2902391a.png",
+    "static/media/3.png": "/static/media/3.9ee90a21.png",
+    "static/media/4.png": "/static/media/4.fa4b7284.png",
+    "static/media/5.png": "/static/media/5.b98096a4.png",
+    "static/media/6.png": "/static/media/6.d4fbc82f.png",
+    "static/media/7.png": "/static/media/7.6f896b48.png",
+    "static/media/appLogo.png": "/static/media/appLogo.522ae55e.png",
+    "static/media/createEvent.png": "/static/media/createEvent.694369d4.png",
+    "static/media/uniLogo.png": "/static/media/uniLogo.bee0e04e.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c8a21426.js",
+    "static/js/2.ea8afd63.chunk.js",
+    "static/css/main.8f9b28e2.chunk.css",
+    "static/js/main.61a3e5ea.chunk.js"
+  ]
+}

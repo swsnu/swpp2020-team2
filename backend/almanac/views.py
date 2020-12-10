@@ -27,6 +27,7 @@ from .forms import ImageForm
 # Create your views here.
 # User (Sign)
 
+@ensure_csrf_cookie
 def signup(request):
 
     '''
@@ -75,6 +76,7 @@ def signup(request):
         return HttpResponseBadRequest()
     return HttpResponse(status=201)
 
+@ensure_csrf_cookie
 def activate(request, uidb64, token):
 
     '''
@@ -96,6 +98,7 @@ def activate(request, uidb64, token):
         return HttpResponse("Account Activated Safely")
     return HttpResponseNotFound()
 
+@ensure_csrf_cookie
 def signin(request):
 
     '''
@@ -123,6 +126,7 @@ def signin(request):
         return JsonResponse(user_dict)
     return HttpResponse(status=401)
 
+@ensure_csrf_cookie
 def signout(request):
 
     '''
@@ -139,6 +143,7 @@ def signout(request):
 
 # User (Non-sign)
 
+@ensure_csrf_cookie
 def get_user_signin(request):
 
     '''
@@ -161,6 +166,7 @@ def get_user_signin(request):
     'department': user_preference.department_id}
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user_signin_full(request):
 
     '''
@@ -195,6 +201,7 @@ def get_user_signin_full(request):
     }
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user(request, user_id):
 
     '''
@@ -217,6 +224,7 @@ def get_user(request, user_id):
     'department': user_preference.department_id}
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def get_user_full(request, user_id):
 
     '''
@@ -251,6 +259,7 @@ def get_user_full(request, user_id):
     }
     return JsonResponse(user_dict)
 
+@ensure_csrf_cookie
 def like_event_user(request):
 
     '''
@@ -275,6 +284,7 @@ def like_event_user(request):
         user_preference.likes.remove(event_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def bring_event_user(request):
 
     '''
@@ -299,6 +309,7 @@ def bring_event_user(request):
         user_preference.brings.remove(event_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def like_group_user(request):
 
     '''
@@ -323,6 +334,7 @@ def like_group_user(request):
         user_preference.likes_group.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def get_notification_user(request):
 
     '''
@@ -347,6 +359,7 @@ def get_notification_user(request):
         user_preference.gets_notification.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def join_request_user(request):
 
     '''
@@ -371,6 +384,7 @@ def join_request_user(request):
         user_preference.join_requests.remove(group_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_password_user(request):
 
     '''
@@ -394,6 +408,7 @@ def change_password_user(request):
         login(request, new_user)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_profile_user(request):
 
     '''
@@ -415,6 +430,7 @@ def change_profile_user(request):
     user_preference.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_background_user(request):
 
     '''
@@ -436,6 +452,7 @@ def change_background_user(request):
     user_preference.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_language_user(request):
 
     '''
@@ -458,7 +475,7 @@ def change_language_user(request):
     return HttpResponse(status=204)
 
 # University
-
+@ensure_csrf_cookie
 def get_create_university(request):
 
     '''
@@ -485,6 +502,7 @@ def get_create_university(request):
     'domain': university.domain}
     return HttpResponse(content=json.dumps(university_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_university(request, university_id):
 
     '''
@@ -507,6 +525,7 @@ def get_delete_university(request, university_id):
     university.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_university_by_name(request, name):
 
     '''
@@ -526,7 +545,7 @@ def get_university_by_name(request, name):
     return JsonResponse(university_dict)
 
 # Department
-
+@ensure_csrf_cookie
 def get_create_department(request):
 
     '''
@@ -548,6 +567,7 @@ def get_create_department(request):
     department_dict = {'id': department.id, 'name': department.name}
     return HttpResponse(content=json.dumps(department_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_department(request, department_id):
 
     '''
@@ -569,6 +589,7 @@ def get_delete_department(request, department_id):
     department.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_department_by_name(request, name):
 
     '''
@@ -587,7 +608,7 @@ def get_department_by_name(request, name):
     return JsonResponse(department_dict)
 
 # Category
-
+@ensure_csrf_cookie
 def get_create_category(request):
 
     '''
@@ -609,6 +630,7 @@ def get_create_category(request):
     category_dict = {'id': category.id, 'name': category.name}
     return HttpResponse(content=json.dumps(category_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_category(request, category_id):
 
     '''
@@ -630,6 +652,7 @@ def get_delete_category(request, category_id):
     category.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_category_by_name(request, name):
 
     '''
@@ -648,7 +671,7 @@ def get_category_by_name(request, name):
     return JsonResponse(category_dict)
 
 # Tag
-
+@ensure_csrf_cookie
 def get_create_tag(request):
 
     '''
@@ -670,6 +693,7 @@ def get_create_tag(request):
     tag_dict = {'id': tag.id, 'name': tag.name}
     return HttpResponse(content=json.dumps(tag_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_tag(request, tag_id):
 
     '''
@@ -691,6 +715,7 @@ def get_delete_tag(request, tag_id):
     tag.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_tag_by_name(request, name):
 
     '''
@@ -708,6 +733,7 @@ def get_tag_by_name(request, name):
     tag_dict = {'id': tag.id, 'name': tag.name}
     return JsonResponse(tag_dict)
 
+@ensure_csrf_cookie
 def get_recommendation_tag(request):
 
     '''
@@ -733,7 +759,7 @@ def get_recommendation_tag(request):
     return JsonResponse(tags, safe=False)
 
 # Background
-
+@ensure_csrf_cookie
 def get_create_background(request):
 
     '''
@@ -755,6 +781,7 @@ def get_create_background(request):
     background_dict = {'id': background.id, 'name': background.name}
     return HttpResponse(content=json.dumps(background_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_background(request, background_id):
 
     '''
@@ -777,7 +804,7 @@ def get_delete_background(request, background_id):
     return HttpResponse(status=200)
 
 # Language
-
+@ensure_csrf_cookie
 def get_create_language(request):
 
     '''
@@ -799,6 +826,7 @@ def get_create_language(request):
     language_dict = {'id': language.id, 'name': language.name}
     return HttpResponse(content=json.dumps(language_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_language(request, language_id):
 
     '''
@@ -821,7 +849,7 @@ def get_delete_language(request, language_id):
     return HttpResponse(status=200)
 
 # Image
-
+@ensure_csrf_cookie
 def get_create_image(request):
 
     '''
@@ -846,6 +874,7 @@ def get_create_image(request):
         return HttpResponse(content=json.dumps(image_dict), status=201)
     return HttpResponse(content='Bad Image', status=401)
 
+@ensure_csrf_cookie
 def get_delete_image(request, image_id):
 
     '''
@@ -868,7 +897,7 @@ def get_delete_image(request, image_id):
     return HttpResponse(status=200)
 
 # Event
-
+@ensure_csrf_cookie
 def get_event_simple(request):
 
     '''
@@ -888,6 +917,7 @@ def get_event_simple(request):
     } for event in Event.objects.all().order_by('id')]
     return JsonResponse(events, safe=False)
 
+@ensure_csrf_cookie
 def get_event(request):
 
     '''
@@ -913,6 +943,7 @@ def get_event(request):
     } for event in Event.objects.all().order_by('id')]
     return JsonResponse(events, safe=False)
 
+@ensure_csrf_cookie
 def get_event_filtered(request):
 
     '''
@@ -1005,6 +1036,7 @@ def get_event_filtered(request):
     } for event in event_objects]
     return JsonResponse(events, safe=False)
 
+@ensure_csrf_cookie
 def create_event(request):
 
     '''
@@ -1053,6 +1085,7 @@ def create_event(request):
     'brings': [up.user.id for up in event.brings_userpreference.all()]}
     return HttpResponse(content=json.dumps(event_dict), status=201)
 
+@ensure_csrf_cookie
 def get_single_event(request, event_id):
 
     '''
@@ -1077,6 +1110,7 @@ def get_single_event(request, event_id):
     }
     return JsonResponse(event_dict)
 
+@ensure_csrf_cookie
 def get_put_delete_event_full(request, event_id):
 
     '''
@@ -1161,6 +1195,7 @@ def get_put_delete_event_full(request, event_id):
     event.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_recommendation_event(request):
 
     '''
@@ -1207,7 +1242,7 @@ def get_recommendation_event(request):
     return JsonResponse(events, safe=False)
 
 # Group
-
+@ensure_csrf_cookie
 def get_group_simple(request):
 
     '''
@@ -1223,6 +1258,7 @@ def get_group_simple(request):
     } for group in Group.objects.all().order_by('id')]
     return JsonResponse(groups, safe=False)
 
+@ensure_csrf_cookie
 def get_group(request):
 
     '''
@@ -1244,6 +1280,7 @@ def get_group(request):
     } for group in Group.objects.all().order_by('id')]
     return JsonResponse(groups, safe=False)
 
+@ensure_csrf_cookie
 def get_group_filtered(request):
 
     '''
@@ -1327,6 +1364,7 @@ def get_group_filtered(request):
     } for group in group_objects]
     return JsonResponse(groups, safe=False)
 
+@ensure_csrf_cookie
 def create_group(request):
 
     '''
@@ -1352,6 +1390,7 @@ def create_group(request):
     'description': group.description, 'privacy': group.privacy}
     return HttpResponse(content=json.dumps(group_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_group_full(request, group_id):
 
     '''
@@ -1384,6 +1423,7 @@ def get_delete_group_full(request, group_id):
     group.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_single_group(request, group_id):
 
     '''
@@ -1404,6 +1444,7 @@ def get_single_group(request, group_id):
     }
     return JsonResponse(group_dict)
 
+@ensure_csrf_cookie
 def member_modify_group(request, group_id):
 
     '''
@@ -1435,6 +1476,7 @@ def member_modify_group(request, group_id):
         group.remove_member(user_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def admin_modify_group(request, group_id):
 
     '''
@@ -1466,6 +1508,7 @@ def admin_modify_group(request, group_id):
         group.remove_admin(user_id)
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def king_modify_group(request, group_id):
 
     '''
@@ -1493,6 +1536,7 @@ def king_modify_group(request, group_id):
     group.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_profile_group(request, group_id):
 
     '''
@@ -1519,6 +1563,7 @@ def change_profile_group(request, group_id):
     group.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def change_privacy_group(request, group_id):
 
     '''
@@ -1545,6 +1590,7 @@ def change_privacy_group(request, group_id):
     group.save()
     return HttpResponse(status=204)
 
+@ensure_csrf_cookie
 def search_group(request, including):
 
     '''
@@ -1564,6 +1610,7 @@ def search_group(request, including):
     } for group in group_objects]
     return JsonResponse(groups, safe=False)
 
+@ensure_csrf_cookie
 def get_create_event_report(request):
 
     '''
@@ -1594,6 +1641,7 @@ def get_create_event_report(request):
     'reporter': event_report.reporter_id, 'content': event_report.content}
     return HttpResponse(content=json.dumps(event_report_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_event_report(request, event_report_id):
 
     '''
@@ -1618,6 +1666,7 @@ def get_delete_event_report(request, event_report_id):
     event_report.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_event_report_by_event(request, event_id):
 
     '''
@@ -1638,6 +1687,7 @@ def get_event_report_by_event(request, event_id):
         for event_report in EventReport.objects.filter(event_id=event_id)]
     return JsonResponse(event_reports, safe=False)
 
+@ensure_csrf_cookie
 def get_create_group_report(request):
 
     '''
@@ -1668,6 +1718,7 @@ def get_create_group_report(request):
     'reporter': group_report.reporter_id, 'content': group_report.content}
     return HttpResponse(content=json.dumps(group_report_dict), status=201)
 
+@ensure_csrf_cookie
 def get_delete_group_report(request, group_report_id):
 
     '''
@@ -1692,6 +1743,7 @@ def get_delete_group_report(request, group_report_id):
     group_report.delete()
     return HttpResponse(status=200)
 
+@ensure_csrf_cookie
 def get_group_report_by_group(request, group_id):
 
     '''
@@ -1713,7 +1765,7 @@ def get_group_report_by_group(request, group_id):
     return JsonResponse(group_reports, safe=False)
 
 # Others
-
+@ensure_csrf_cookie
 def index(request):
 
     '''
