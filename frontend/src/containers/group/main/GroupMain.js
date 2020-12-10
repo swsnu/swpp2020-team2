@@ -42,30 +42,30 @@ class GroupMain extends Component {
     this.props.likeGroup(id, oper);
   }
 
+  makeGroupBox = (group) => {
+    function haveThisGroup(element) {
+      if (element.id === group.id) return true;
+      return false;
+    }
+    var liked = false;
+    if (this.props.likeGroups.find(haveThisGroup))liked = true;
+    var noticed = false;
+    if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+    return (
+      <groupBox
+        name={group.name}
+        description={group.description}
+        liked={liked}
+        like={() => this.onLikeHandler(group.id, !liked)}
+        noticed={noticed}
+        notice={() => this.onNoticeHandler(group.id, !noticed)}
+        report={() => {}}
+      />
+    );
+  };
+
   render() {
     const otherGroupBoxes = null;// this var will not actually be used later
-
-    var makeGroupBox = function func(group) {
-      function haveThisGroup(element) {
-        if (element.id === group.id) return true;
-        return false;
-      }
-      var liked = false;
-      if (this.props.likeGroups.find(haveThisGroup))liked = true;
-      var noticed = false;
-      if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
-      return (
-        <groupBox
-          name={group.name}
-          description={group.description}
-          liked={liked}
-          like={() => this.onLikeHandler(group.id, !liked)}
-          noticed={noticed}
-          notice={() => this.onNoticeHandler(group.id, !noticed)}
-          report={() => {}}
-        />
-      );
-    };
 
     return (
       <div className="GroupMain">
@@ -110,7 +110,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {this.props.myGroups.map(makeGroupBox)}
+                {this.props.myGroups.map(this.makeGroupBox)}
               </div>
             </div>
 
@@ -120,7 +120,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {this.props.noticeGroups.map(makeGroupBox)}
+                {this.props.noticeGroups.map(this.makeGroupBox)}
               </div>
             </div>
 
@@ -130,7 +130,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {this.props.likeGroups.map(makeGroupBox)}
+                {this.props.likeGroups.map(this.makeGroupBox)}
               </div>
             </div>
 
