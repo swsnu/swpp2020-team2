@@ -23,6 +23,7 @@ class EventCreate extends Component {
   componentDidMount() {
     this.props.getUserFull();
     this.props.getCategories();
+    this.props.getMyGroup();
   }
 
   componentDidUpdate(prevProps) {
@@ -52,8 +53,8 @@ class EventCreate extends Component {
   render() {
     const disablebtn = this.state.title === '' || !this.state.category || !this.state.group || !this.state.date;
 
-    var makeCategoryOption = function (cat) {
-      return <option value={cat.id}>{cat.name}</option>;
+    var makeOption = function func(X) {
+      return <option value={X.id}>{X.name}</option>;
     };
 
     return (
@@ -93,7 +94,7 @@ class EventCreate extends Component {
                   <label className="infoKey">분류</label>
                   <select className="event-category-input" onChange={(event) => this.setState({ category: event.target.value })}>
                     <option value={null}>--select category--</option>
-                    {this.props.categories.map(makeCategoryOption)}
+                    {this.props.categories.map(makeOption)}
                   </select>
                 </div>
               </div>
@@ -102,10 +103,8 @@ class EventCreate extends Component {
                 <div className="infoBox">
                   <label className="infoKey">단체</label>
                   <select className="event-group-input" onChange={() => {}}>
-                    <option>--단체를 선택하세요--</option>
-                    <option>단풍</option>
-                    <option>UPnL</option>
-                    <option>Zero</option>
+                    <option>--select group--</option>
+                    {this.props.myGroups.map(makeOption)}
                   </select>
                 </div>
                 <div className="infoBox">
@@ -192,12 +191,14 @@ class EventCreate extends Component {
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
   categories: state.or.categories,
+  myGroups: state.gr.myGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
   getCategories: () => dispatch(actionCreators.getCategories()),
   createEvent: (args) => dispatch(actionCreators.createEvent(args)),
+  getMyGroup: () => dispatch(actionCreators.getMyGroup()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);

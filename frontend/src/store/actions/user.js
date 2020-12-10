@@ -36,9 +36,9 @@ export const signUp = (args) => (dispatch) => axios.post('/api/signup/', {
   last_name: args.lastName,
 })
   .then((res) => {
-    if(res.data==='Username Taken')alert('Username is already taken!');
-    else if(res.data==='Already Activated')alert('This account is already activated!');
-    else{
+    if (res.data === 'Username Taken')alert('Username is already taken!');
+    else if (res.data === 'Already Activated')alert('This account is already activated!');
+    else {
       dispatch(signUp_());
       alert('verification link is sent to your mail!');
     }
@@ -66,6 +66,16 @@ export const getUserFull = () => (dispatch) => axios.get('/api/user/signin/full/
   });
 
 export const likeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/like_group/', {
+  group: id,
+  operation: op,
+});
+
+export const noticeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/get_notification/', {
+  group: id,
+  operation: op,
+});
+
+export const joinGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/join_request/', {
   group: id,
   operation: op,
 });

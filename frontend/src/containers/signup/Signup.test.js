@@ -15,6 +15,8 @@ describe('Signup', () => {
 
   const mockedState = {
     signinedUser: null,
+    universities: [],
+    departments: [],
   };
 
   it('should render without error', () => {
@@ -79,6 +81,8 @@ describe('Signup', () => {
       .mockImplementation();
     const mockedState2 = {
       signinedUser: { username: 'test' },
+      universities: [],
+      departments: [],
     };
 
     let component = mount(makeComponent(getMockStore(mockedState)));

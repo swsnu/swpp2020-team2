@@ -15,6 +15,9 @@ export const CREATE_EVENT = 'CREATE_EVENT';
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const GET_ALL_GROUP = 'GET_ALL_GROUP';
 export const GET_GROUP = 'GET_GROUP';
+export const GET_LIKE_GROUP = 'GET_LIKE_GROUP';
+export const GET_NOTICE_GROUP = 'GET_NOTICE_GROUP';
+export const GET_MY_GROUP = 'GET_MY_GROUP';
 export const SEARCH_GROUP = 'SEARCH_GROUP';
 
 /* other */

@@ -14,6 +14,7 @@ import * as actionCreators_user from '../../../store/actions/users';
 
 const stubInitialState = {
   categories: [],
+  myGroups: [],
 };
 
 const mockStore = getMockStore(stubInitialState);
