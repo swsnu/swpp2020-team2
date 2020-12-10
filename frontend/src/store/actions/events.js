@@ -169,30 +169,34 @@ const sample = [
   },
 ];
 
-export const getAllEvent_ = (events_) => ({
-  type: actionTypes.GET_ALL_EVENT,
-  events: events_,
-});
-
-export const getAllEvent = () => {
-  const res = axios.get('/api/event/');
+export const getAllEvent_ = (events) => {
   return {
     type: actionTypes.GET_ALL_EVENT,
-    events: sample,
+    events: events,
+  };
+}
+
+export const getAllEvent = () => {
+  return dispatch => {
+    return axios.get('/api/event/')
+      .then(res => dispatch(getAllEvent_(res.data)))
   };
 };
 
-export const getEvent_ = (event) => ({
-  type: actionTypes.GET_EVENT,
-  target: event,
-});
+export const getEvent_ = (event) => {
+  return {
+    type: actionTypes.GET_EVENT,
+    target: event,
+  }
+};
 
-export const getEvent = (id) => (dispatch) => dispatch(getEvent_(sample[id - 1]));
+export const getEvent = (id) => {
+  return dispatch => {
+    return axios.get(`/api/event/${id}/full/`)
+      .then((res) => dispatch(getEvent_(res.data)));
+  }
+}
 
-/*
-export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/`)
-  .then((res) => dispatch(getEvent_(sample[0])));
-*/
 
 export const createEvent_ = (event) => ({ type: actionTypes.CREATE_EVENT, target: event });
 

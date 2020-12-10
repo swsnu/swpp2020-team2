@@ -22,7 +22,7 @@ const EventBox = (props) => (
     <div className="left">
       <div className="top">
         <div className="group">
-          {props.event?.group}
+          {props.event?.group?.name}
         </div>
       </div>
 
