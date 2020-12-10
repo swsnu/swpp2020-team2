@@ -18,7 +18,7 @@ class GroupSearch extends Component {
   componentDidMount() {
     this.setState({ searchQuery: this.props.match.params.searchQuery });
     this.props.searchGroup(this.props.match.params.searchQuery);
-    this.props.getUserFull();
+    this.props.getUser();
     this.props.getLikeGroup();
     this.props.getNoticeGroup();
   }
@@ -107,14 +107,13 @@ class GroupSearch extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userFullInfo: state.ur.userFullInfo,
   searchGroups: state.gr.searchGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserFull: () => dispatch(actionCreators.getUserFull()),
+  getUser: () => dispatch(actionCreators.getUser()),
   searchGroup: (query) => dispatch(actionCreators.searchGroup(query)),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),

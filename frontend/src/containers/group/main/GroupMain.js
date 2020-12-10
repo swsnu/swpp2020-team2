@@ -18,7 +18,7 @@ class GroupMain extends Component {
   }
 
   componentDidMount() {
-    this.props.getUserFull();
+    this.props.getUser();
     this.props.getMyGroup();
     this.props.getLikeGroup();
     this.props.getNoticeGroup();
@@ -158,14 +158,13 @@ class GroupMain extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userFullInfo: state.ur.userFullInfo,
   myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserFull: () => dispatch(actionCreators.getUserFull()),
+  getUser: () => dispatch(actionCreators.getUser()),
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
