@@ -78,4 +78,18 @@ describe('GroupSearch', () => {
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/group/create');
   });
+
+  it('should show GroupBoxes', () => {
+    const mockedState2 = {
+      signinedUser: null,
+      searchGroups: [
+        { id: 1, name: 'test_group_name', description: 'test_group_description' },
+      ],
+      likeGroups: [],
+      noticeGroups: [],
+    };
+    const component = mount(makeComponent(getMockStore(mockedState2)));
+
+    expect(component.find('GroupBox').length).toBe(1);
+  });
 });

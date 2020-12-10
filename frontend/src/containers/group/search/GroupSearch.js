@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ImSearch } from 'react-icons/im';
 import { MdGroupAdd } from 'react-icons/md';
 import TopBar from '../../../components/TopBar/TopBar';
-import groupBox from '../../../components/groupBox/GroupBox';
+import GroupBox from '../../../components/groupBox/GroupBox';
 
 import * as actionCreators from '../../../store/actions/index';
 
@@ -41,29 +41,30 @@ class GroupSearch extends Component {
     this.props.likeGroup(id, oper);
   }
 
-  render() {
-    var makeGroupBox = function func(group) {
-      function haveThisGroup(element) {
-        if (element.id === group.id) return true;
-        return false;
-      }
-      var liked = false;
-      if (this.props.likeGroups.find(haveThisGroup))liked = true;
-      var noticed = false;
-      if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
-      return (
-        <groupBox
-          name={group.name}
-          description={group.description}
-          liked={liked}
-          like={() => this.onLikeHandler(group.id, !liked)}
-          noticed={noticed}
-          notice={() => this.onNoticeHandler(group.id, !noticed)}
-          report={() => {}}
-        />
-      );
-    };
+  makeGroupBox = (group) => {
+    function haveThisGroup(element) {
+      if (element.id === group.id) return true;
+      return false;
+    }
+    var liked = false;
+    if (this.props.likeGroups.find(haveThisGroup))liked = true;
+    var noticed = false;
+    if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+    return (
+      <GroupBox
+        key={group.id}
+        name={group.name}
+        description={group.description}
+        liked={liked}
+        like={() => this.onLikeHandler(group.id, !liked)}
+        noticed={noticed}
+        notice={() => this.onNoticeHandler(group.id, !noticed)}
+        report={() => {}}
+      />
+    );
+  };
 
+  render() {
     return (
       <div className="GroupSearch">
         <div className="topBar">
@@ -97,7 +98,7 @@ class GroupSearch extends Component {
           </div>
 
           <h2>Group Search Result</h2>
-          {this.props.searchGroups.map(makeGroupBox)}
+          {this.props.searchGroups.map(this.makeGroupBox)}
         </div>
 
       </div>
