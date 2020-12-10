@@ -928,19 +928,18 @@ def get_event(request):
         return HttpResponseNotAllowed(['GET'])
 
     events = [{'id': event.id,
-    'title': event.title,
-    'place': event.place, 'date': str(event.date),
-    'category': event.category_id,
-    'tag': [tag.id for tag in event.tag.all()],
-    'group': event.group_id,
-    'begin_time': str(event.begin_time),
-    'end_time': str(event.end_time),
-    'last_editor': event.last_editor_id,
-    'image': [image.id for image in event.image.all()],
-    'content': event.content,
-    'likes': [up.user.id for up in event.likes_userpreference.all()],
-    'brings': [up.user.id for up in event.brings_userpreference.all()]
-    } for event in Event.objects.all().order_by('id')]
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': {'id': event.category_id, 'name': Category.objects.get(id=event.category_id).name},
+        'tag': [tag.id for tag in event.tag.all()],
+        'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(id=event.last_editor_id).department.name},
+        'image': [image.id for image in event.image.all()],
+        'content': event.content,
+        'likes': [up.user.id for up in event.likes_userpreference.all()],
+        'brings': [up.user.id for up in event.brings_userpreference.all()]} for event in Event.objects.all().order_by('id')]
     return JsonResponse(events, safe=False)
 
 @ensure_csrf_cookie
