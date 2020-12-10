@@ -1090,17 +1090,21 @@ def get_put_delete_event_full(request, event_id):
         return HttpResponseNotFound()
 
     event = Event.objects.get(id=event_id)
+    group = Group.objects.get(id=event.group_id)
+    category = Category.objects.get(id=event.category_id)
+    last_editor = User.objects.get(id=event.last_editor_id)
+    up = UserPreference.objects.get(id=event.last_editor_id)
 
     if request.method == 'GET':
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': event.date,
-        'category': event.category_id,
+        'category': {'id': event.category_id, 'name': category.name},
         'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group_id,
+        'group': {'id': event.group_id, 'name': group.name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
-        'last_editor': event.last_editor_id,
+        'last_editor': {'id': event.last_editor_id, 'name': last_editor.username, 'department': up.department.name},
         'image': [image.id for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
