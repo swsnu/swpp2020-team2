@@ -41,11 +41,6 @@ class GroupSearch extends Component {
     this.props.likeGroup(id, oper);
   }
 
-  onJoinHandler=(id, op) => {
-    const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
-  }
-
   render() {
     var makeGroupBox = function func(group) {
       function haveThisGroup(element) {

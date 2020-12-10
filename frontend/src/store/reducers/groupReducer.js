@@ -3,9 +3,9 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   searchGroups: [],
   currGroup: null,
-  myGroups: [],
   likeGroups: [],
   noticeGroups: [],
+  myGroups: [],
 };
 
 const groupReducer = (state = initialState, action) => {
