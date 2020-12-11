@@ -24,6 +24,8 @@ const userReducer = (state = initialState, action) => {
     case actionTypes.GET_USER:
       return { ...state, signinedUser: action.user.id, userInfo: action.user };
     case actionTypes.GET_USER_FULL:
+      state.likeEvents = action.user.likes;
+      state.bringEvents = action.user.brings;
       return { ...state, signinedUser: action.user.id, userFullInfo: action.user };
 
     case actionTypes.LIKE_EVENT:
@@ -40,7 +42,7 @@ const userReducer = (state = initialState, action) => {
       else if (action.oper == 'add')
         newBringEvents = [...state.bringEvents, action.event_id]
       return { ...state, bringEvents: newBringEvents };
-      
+
     default:
       break;
   }

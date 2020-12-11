@@ -45,11 +45,6 @@ class Public extends Component {
 
     if (localStorage.getItem('isLogin') != 'true') this.props.history.replace('/')
     else this.props.onGetUser()
-
-    if(this.props.loggedUser?.id >0){
-      this.props.loggedUser.likes.forEach((id) => this.props.onLikeEvent(id,'add'))
-      this.props.loggedUser.brings.forEach((id) => this.props.onBringEvent(id,'add'))
-    }
   }
 
   onClickCreateEvent() {
@@ -212,10 +207,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
-
+  onGetUser: () => dispatch(actionCreators.getUserFull()),
   onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
   onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
-  onGetUser: () => dispatch(actionCreators.getUserFull())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);
