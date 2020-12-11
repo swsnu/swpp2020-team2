@@ -9,91 +9,101 @@ import * as actionCreators from '../../store/actions/index';
 import Event from '../eventBox/EventBox';
 
 class EventListModal extends Component {
-    state = {
-      NumEvents: 0,
-      date: '',
-      dayEventList: [],
+  state = {
+    NumEvents: 0,
+    date: '',
+    dayEventList: [],
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('isLogin') === 'false') this.props.history.replace('/')
+    else this.props.onGetUser()
+
+    if(this.props.loggedUser?.id >0){
+      this.props.loggedUser.likes.forEach((id) => this.props.onLikeEvent(id,'add'))
+      this.props.loggedUser.brings.forEach((id) => this.props.onBringEvent(id,'add'))
     }
 
-    componentDidMount() {
-      const dateFormat = 'yyyy. MM. d. EEE';
-      const formattedDate = format(this.props.day, dateFormat);
-      this.setState({
-        date: formattedDate,
-        NumEvents: this.props.dayEventList.length,
-        dayEventList: this.props.dayEventList,
-      });
-    }
-    /*
-    onClickBringEvent = (id) => {
+    const dateFormat = 'yyyy. MM. d. EEE';
+    const formattedDate = format(this.props.day, dateFormat);
+    this.setState({
+      date: formattedDate,
+      NumEvents: this.props.dayEventList.length,
+      dayEventList: this.props.dayEventList,
+    });
+  }
 
-    }
+  onClickBringEvent = (id) => {
+    if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
+    else this.props.onBringEvent(id, 'add');
+  }
 
-    onClickLikeEvent = (id) => {
+  onClickLikeEvent = (id) => {
+    if (this.props.likeEventIDs?.includes(id)) this.props.onLikeEvent(id, 'remove');
+    else this.props.onLikeEvent(id, 'add');
+  }
 
-    }
+  onClickDetailEvent = (id) => {
+    this.props.history.push(`/details/${id}`);
+  }
 
-    onClickReportEvent = (id) => {
+  render() {
+    const events = this.state.dayEventList?.map((event) => (
+      <Event
+        event={event}
+        bringEvent={() => this.onClickBringEvent(event.id)}
+        likeEvent={() => this.onClickLikeEvent(event.id)}
+        detailEvent={() => this.onClickDetailEvent(event.id)}
+        likeBool={this.props.likeEventIDs?.includes(event.id) ? true : false}
+        bringBool={this.props.bringEventIDs?.includes(event.id) ? true : false}
+      />
+    ));
+    return (
 
-    }
-    */
-
-    onClickDetailEvent = (id) => {
-      this.props.history.push(`/details/${id}`);
-    }
-
-    render() {
-      const events = this.state.dayEventList?.map((event) => (
-        <Event
-          event={event}
-          bringEvent={() => {}}// this.onClickBringEvent(event.id)}
-          likeEvent={() => {}}// this.onClickLikeEvent(event.id)}
-          reportEvent={() => {}}// this.onClickReportEvent(event.id)}
-          detailEvent={() => this.onClickDetailEvent(event.id)}
-        />
-      ));
-      return (
-
-        <div className="EventListModal">
-          <div className="top">
-            <div className="left">
-              {this.state.date}
-            </div>
-
-            <div className="right">
-              <div className="NumEvents">
-                {this.state.NumEvents}
-                {' '}
-                events
-              </div>
-
-              <div className="createEvent">
-                <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
-                  <GrTableAdd size="100%" />
-                </button>
-              </div>
-              <div className="rightCorner">
-                <button className="closeButton" type="button" onClick={() => this.props.onClickCloseModal()}>X</button>
-              </div>
-            </div>
+      <div className="EventListModal">
+        <div className="top">
+          <div className="left">
+            {this.state.date}
           </div>
 
-          <div className="eventList">
-            <nav className="nav">
-              {events}
-            </nav>
+          <div className="right">
+            <div className="NumEvents">
+              {this.state.NumEvents}
+              {' '}
+              events
+              </div>
+
+            <div className="createEvent">
+              <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
+                <GrTableAdd size="100%" />
+              </button>
+            </div>
+            <div className="rightCorner">
+              <button className="closeButton" type="button" onClick={() => this.props.onClickCloseModal()}>X</button>
+            </div>
           </div>
         </div>
-      );
-    }
-}
-/*
-const mapStateToProps = (state) => ({
 
+        <div className="eventList">
+          <nav className="nav">
+            {events}
+          </nav>
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  likeEventIDs : state.ur.likeEvents,
+  bringEventIDs : state.ur.bringEvents,
+  loggedUser: state.ur.userFullInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-
+  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  onGetUser: () => dispatch(actionCreators.getUserFull())
 });
-*/
-export default EventListModal;
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventListModal);
