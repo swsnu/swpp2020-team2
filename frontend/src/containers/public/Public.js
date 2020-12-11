@@ -42,9 +42,11 @@ class Public extends Component {
 
   componentDidMount() {
     this.props.onGetAllEvent();
+    this.props.onGetUser();
+  }
 
-    if (localStorage.getItem('isLogin') != 'true') this.props.history.replace('/')
-    else this.props.onGetUser()
+  componentDidUpdate() {
+    if (this.props.signinedUser==null) this.props.history.replace('/');
   }
 
   onClickCreateEvent() {
@@ -202,7 +204,8 @@ class Public extends Component {
 
 const mapStateToProps = (state) => ({
   events: state.evt.events,
-  loggedUser : state.ur.userFullInfo,
+  loggedUser: state.ur.userFullInfo,
+  signinedUser:state.ur.signinedUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({

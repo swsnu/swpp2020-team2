@@ -23,6 +23,7 @@ export const signOut_ = () => ({ type: actionTypes.SIGN_OUT });
 export const signOut = () => (dispatch) => axios.get('/api/signout/')
   .then((res) => {
     dispatch(signOut_());
+    localStorage.removeItem('isLogin');
   });
 
 export const signUp_ = () => ({ type: actionTypes.SIGN_UP });
