@@ -1,0 +1,73 @@
+.ListView {
+    display: flex;
+    position: absolute;
+    margin-top: 30px;
+    width: 70%;
+    height: 600px;
+    left: 60%;
+    transform: translate(-50%, 0%);
+    flex-direction: column;
+    background-color: rgb(240,240,240);
+    border-radius: 60px;
+}
+
+.ListView .top{
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    width: 100%;
+}
+
+.ListView .top .left{
+    display: flex;
+    flex:1;
+    flex-direction: row;
+    float: left;
+    align-items: center;
+    margin-left: 120px;
+}
+
+.ListView .top .right{
+    display: flex;
+    margin-left: auto;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 150px;
+}
+
+.ListView .top .right .createEvent{
+    margin: 10px;
+    height: 36px;
+    width:36px;
+}
+
+.ListView .createEventButton{
+    cursor: pointer;    
+}
+
+.ListView .top .rightCorner{
+    position:absolute;
+    top: 4%;
+    right: 4%;
+}
+
+.ListView .top .closeButton{
+    font-size: 150%;
+    border: none;
+    color: gray;
+    outline: none;
+    cursor: pointer;
+}
+
+.ListView .eventList{
+    flex:1;
+    margin-left: 100px;
+    margin-right: 100px;
+    display: block;
+}
+
+.ListView .nav{
+    height: 450px;
+    width: 100%;
+    overflow-y: scroll;
+}

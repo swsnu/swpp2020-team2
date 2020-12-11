@@ -117,7 +117,7 @@ const getMockStore = (initialState) => {
 
 const mockStore = getMockStore(stubInitialState);
 
-describe('<Articles />', () => {
+describe('<Public />', () => {
   let publicComponent;
   beforeEach(() => {
     publicComponent = (
@@ -147,6 +147,18 @@ describe('<Articles />', () => {
     document.body.appendChild(div2);
 
     const component = mount(publicComponent, { attachTo: document.getElementById('including') });
+
+    const wrapperArrow = component.find('.arrow');
+    expect(wrapperArrow.length).toBe(2);
+
+    const wrapperYearMonth = component.find('.year_month');
+    expect(wrapperYearMonth.length).toBe(1);
+
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
+    wrapperArrow.at(0).simulate('click');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 11.');
+    wrapperArrow.at(1).simulate('click');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
 
     const viewOptionButton = component.find('.ViewOptionButton0');
     expect(viewOptionButton.length).toBe(1);
@@ -192,9 +204,5 @@ describe('<Articles />', () => {
     const close = component.find('.closeButton');
     expect(close.length).toBe(1);
     close.simulate('click');
-
-    const createEventButtonInCalendar = component.find('.createEventButtonInCalendar');
-    expect(createEventButtonInCalendar.length).toBe(1);
-    createEventButtonInCalendar.simulate('click');
   });
 });

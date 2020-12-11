@@ -24,7 +24,7 @@
     display:flex;
 }
 
-.SideBar .ViewOptionButton0{
+.SideBar .ViewOptionButton1{
     padding:5px;
     margin: 5px;
     border-radius: 7px;
@@ -32,7 +32,7 @@
     cursor: pointer;
 }
 
-.SideBar .ViewOptionButton1{
+.SideBar .ViewOptionButton0{
     padding:5px;
     margin: 5px;
     border-radius: 7px;
