@@ -7,6 +7,7 @@ const initialState = {
 
   likeEvents: [],
   bringEvents: [],
+
 };
 
 const userReducer = (state = initialState, action) => {
@@ -15,7 +16,7 @@ const userReducer = (state = initialState, action) => {
       return { ...state, signinedUser: action.user.id, userInfo: action.user };
     case actionTypes.SIGN_OUT:
       return {
-        ...state, signinedUser: null, userInfo: null, userFullInfo: null,
+        ...state, signinedUser: null, userInfo: null, userFullInfo: null
       };
     case actionTypes.SIGN_UP:
       return state;
