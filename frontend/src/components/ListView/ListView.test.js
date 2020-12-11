@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
-import Calendar from './Calendar';
+import ListView from './ListView';
 
 const sampleDate = new Date();
 const sampleDate2 = addDays(sampleDate, 25);
@@ -82,21 +82,21 @@ const sample = [
   },
 ];
 
-const mockOnClickDate = jest.fn();
+const mockOnClickCreateEvent = jest.fn();
 
-describe('<Calendar />', () => {
-  it('should render Calendar', () => {
-    const component = mount(<Calendar events={sample} onClickDay={mockOnClickDate} />);
-    const wrapper = component.find('.Calendar');
+describe('<ListView />', () => {
+  it('should render Listview', () => {
+    const history = [];
+    const component = mount(<ListView history={history} day={new Date()} monthEventList={sample} onClickCreateEvent={mockOnClickCreateEvent} />);
+    const wrapper = component.find('.ListView');
     expect(wrapper.length).toBe(1);
 
-    const dayComponent = component.find('.abled');
-    expect(dayComponent.length).toBe(31);
-    dayComponent.at(0).simulate('click');
-    dayComponent.at(0).simulate('keypress');
+    const button = component.find('.createEventButton');
+    expect(button.length).toBe(1);
+    button.simulate('click');
 
-    const component2 = mount(<Calendar onClickDate={mockOnClickDate} />);
-    const wrapper2 = component2.find('.Calendar');
-    expect(wrapper2.length).toBe(1);
+    const detail = component.find('.title');
+    expect(detail.length).toBe(12);
+    detail.at(0).simulate('click');
   });
 });

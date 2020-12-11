@@ -1,21 +1,22 @@
 import React, { useState, Component } from 'react';
 import { connect } from 'react-redux';
+import format from 'date-fns/format';
+import addMonths from 'date-fns/addMonths';
+import subMonths from 'date-fns/subMonths';
 import * as actionCreators from '../../store/actions/index';
 import TopBar from '../../components/TopBar/TopBar';
 import './Public.css';
 import Calendar from '../../components/Calendar/Calendar';
+import ListView from '../../components/ListView/ListView';
 import { createEventIcon } from '../../images/index';
 import SideBar from '../../components/SideBar/SideBar';
 import EventListModal from '../../components/eventListModal/EventListModal';
-
-function onClickEvent(evt) {
-  // redirect to event detail
-}
 
 class Public extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentDate: new Date(),
       modalBool: false,
       modalEvents: [],
       modalDay: null,
@@ -112,8 +113,51 @@ class Public extends Component {
     });
   }
 
+  nextMonth() {
+    this.setState((prevState) => ({ currentDate: addMonths(prevState.currentDate, 1) }));
+  }
+
+  prevMonth() {
+    this.setState((prevState) => ({ currentDate: subMonths(prevState.currentDate, 1) }));
+  }
+
   render() {
     const { events } = this.props;
+
+    const dateFormat = 'yyyy. MM.';
+    const header = (
+      <div className="header">
+        <div className="arrow" onClick={() => this.prevMonth()} onKeyPress={() => this.prevMonth()} role="button" tabIndex="-1">
+          {'<'}
+        </div>
+        <div className="year_month">
+          <span>{format(this.state.currentDate, dateFormat)}</span>
+        </div>
+        <div className="arrow" onClick={() => this.nextMonth()} onKeyPress={() => this.nextMonth()} role="button" tabIndex="-1">
+          {'>'}
+        </div>
+      </div>
+    );
+
+    let view = null;
+    if (this.state.viewOption === 'Calendar') {
+      view = (
+        <Calendar
+          currentDate={this.state.currentDate}
+          events={events}
+          onClickDay={this.onClickDay}
+        />
+      );
+    } else {
+      view = (
+        <ListView
+          day={this.state.currentDate}
+          history={this.props.history}
+          monthEventList={events}
+          onClickCreateEvent={this.onClickCreateEvent}
+        />
+      );
+    }
 
     let modal = null;
     if (this.state.modalBool) {
@@ -136,13 +180,8 @@ class Public extends Component {
             history={this.props.history}
           />
         </div>
-        <Calendar
-          events={events}
-          onClickDay={this.onClickDay}
-        />
-        <button className="createEventButtonInCalendar" src={createEventIcon} label="createEvent" type="button" onClick={() => this.onClickCreateEvent()}>
-          <img className="img" src={createEventIcon} alt="+" />
-        </button>
+        {header}
+        {view}
         <SideBar
           setViewOption={this.setViewOption}
           setIncluding={this.setIncluding}
