@@ -41,8 +41,10 @@ class Public extends Component {
   }
 
   componentDidMount() {
-    const { onGetAllEvent } = this.props;
-    onGetAllEvent();
+    this.props.onGetAllEvent();
+
+    if (localStorage.getItem('isLogin') != 'true') this.props.history.replace('/')
+    else this.props.onGetUser()
   }
 
   onClickCreateEvent() {
@@ -200,10 +202,14 @@ class Public extends Component {
 
 const mapStateToProps = (state) => ({
   events: state.evt.events,
+  loggedUser : state.ur.userFullInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
+  onGetUser: () => dispatch(actionCreators.getUserFull()),
+  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);

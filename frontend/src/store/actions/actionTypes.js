@@ -5,6 +5,8 @@ export const SIGN_UP = 'SIGN_UP';
 export const ACTIVATE = 'ACTIVATE';
 export const GET_USER = 'GET_USER';
 export const GET_USER_FULL = 'GET_USER_FULL';
+export const LIKE_EVENT = 'LIKE_EVENT';
+export const BRING_EVENT = 'BRING_EVENT';
 
 /* event */
 export const GET_ALL_EVENT = 'GET_ALL_EVENT';

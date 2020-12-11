@@ -14,9 +14,13 @@ class Main extends Component {
     password: '',
     revealPassword: false,
   }
-
+  /*
   componentDidUpdate() {
     if (this.props.signinedUser) this.props.history.replace('/public');
+  }
+  */
+  componentDidMount(){
+    if(localStorage.getItem('isLogin')==='true') this.props.history.replace('/public');
   }
 
   signinHandler = () => {
