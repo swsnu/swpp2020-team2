@@ -44,7 +44,6 @@ describe('<TopBar />', () => {
     const wrapper = component.find('.profile');
 
     wrapper.simulate('click');
-    wrapper.simulate('click');
     expect(component.find('ProfileModal').length).toBe(1);
   });
 });

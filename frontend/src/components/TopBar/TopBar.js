@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TopBar.css';
 import { BiBell } from 'react-icons/bi';
 import { appLogo, uniLogo } from '../../images/index';
@@ -9,11 +9,10 @@ const TopBar = (props) => {
   const [profileModalBool, SetProfileModalBool] = useState(false);
   const [modal, SetModal] = useState(null);
 
-  const onClickProfile = () => {
-    SetProfileModalBool(!profileModalBool);
+  useEffect(() => {
     if (profileModalBool) SetModal(<ProfileModal history={props.history} />);
     else SetModal(null);
-  };
+  }, [profileModalBool]);
 
   return (
     <div className="TopBar">
@@ -37,7 +36,7 @@ const TopBar = (props) => {
         <div className="notice">
           <BiBell size="30px" />
         </div>
-        <div className="profile" onClick={() => onClickProfile()}>
+        <div className="profile" onClick={() => SetProfileModalBool(!profileModalBool)}>
           <img src={appLogo} alt="app logo" />
           {modal}
         </div>
