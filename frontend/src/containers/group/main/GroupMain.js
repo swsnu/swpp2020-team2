@@ -101,8 +101,6 @@ class GroupMain extends Component {
             </div>
           </div>
 
-          <div>search with blank to see all groups</div>
-
           <div className="sectionBox">
 
             <div className="section">

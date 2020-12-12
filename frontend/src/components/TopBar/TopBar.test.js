@@ -1,12 +1,15 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
 import TopBar from './TopBar';
 
+import getMockStore from '../../test-utils/mocks';
 import { history } from '../../store/store';
 
 describe('<TopBar />', () => {
   function makeComponent(tabNum) {
-    return <TopBar history={history} tabNum={tabNum} />;
+    const mockedState = {};
+    return <Provider store={getMockStore(mockedState)}><TopBar history={history} tabNum={tabNum} /></Provider>;
   }
 
   it('should render Top Bar', () => {
@@ -34,5 +37,13 @@ describe('<TopBar />', () => {
 
     wrappers.at(2).simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/group');
+  });
+
+  it('should show/hide profileModal', () => {
+    const component = mount(makeComponent(0));
+    const wrapper = component.find('.profile');
+
+    wrapper.simulate('click');
+    expect(component.find('ProfileModal').length).toBe(1);
   });
 });

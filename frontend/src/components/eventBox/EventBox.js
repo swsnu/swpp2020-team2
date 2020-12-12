@@ -1,8 +1,7 @@
 import React from 'react';
 import { MdRemoveShoppingCart, MdAddShoppingCart } from 'react-icons/md';
 
-import { FcLike } from 'react-icons/fc';
-import {FcLikePlaceholder} from 'react-icons/fc'
+import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 
 import './EventBox.css';
 
@@ -49,10 +48,10 @@ const EventBox = (props) => (
     <div className="right">
       <div className="btns">
         <button className="bringEvent" onClick={props.bringEvent}>
-        {props.bringBool? <MdRemoveShoppingCart size="100%"/> : <MdAddShoppingCart size="100%"/>}
+          {props.bringBool ? <MdRemoveShoppingCart size="100%" /> : <MdAddShoppingCart size="100%" />}
         </button>
         <button className="likeEvent" onClick={props.likeEvent}>
-          {props.likeBool? <FcLike size="100%"/> : <FcLikePlaceholder size="100%"/>}
+          {props.likeBool ? <FcLike size="100%" /> : <FcLikePlaceholder size="100%" />}
         </button>
       </div>
 

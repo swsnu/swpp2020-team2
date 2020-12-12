@@ -81,8 +81,8 @@ describe('Signup', () => {
       .mockImplementation();
     const mockedState2 = {
       signinedUser: { username: 'test' },
-      universities: [],
-      departments: [],
+      universities: [{ id: 1, name: 'test_univ' }],
+      departments: [{ id: 1, name: 'test_dept' }],
     };
 
     let component = mount(makeComponent(getMockStore(mockedState)));
@@ -104,5 +104,16 @@ describe('Signup', () => {
     const wrapper = component.find('.title');
     wrapper.simulate('click');
     expect(spyOnBack).toHaveBeenCalledTimes(1);
+  });
+
+  it('should toggle password visibility', () => {
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    const instance = component.find(Signup.WrappedComponent).instance();
+    const wrappers = component.find('.toggle');
+
+    wrappers.at(0).simulate('click');
+    expect(instance.state.revealPassword).toBe(true);
+    wrappers.at(1).simulate('click');
+    expect(instance.state.revealConfirmPassword).toBe(true);
   });
 });

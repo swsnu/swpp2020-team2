@@ -18,7 +18,7 @@ export {
   getEvent,
   createEvent,
   reportEvent,
-  
+
 } from './events';
 
 export {

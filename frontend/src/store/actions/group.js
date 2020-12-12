@@ -42,7 +42,7 @@ export const getLikeGroup = () => (dispatch) => axios.post('/api/group/filtered/
     dispatch(getLikeGroup_(res.data));
   });
 
-export const getNoticeGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
+export const getNoticeGroup_ = (data) => ({ type: actionTypes.GET_NOTICE_GROUP, data });
 
 export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
   filter_options: {
@@ -55,7 +55,7 @@ export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtere
     dispatch(getNoticeGroup_(res.data));
   });
 
-export const getMyGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
+export const getMyGroup_ = (data) => ({ type: actionTypes.GET_MY_GROUP, data });
 
 export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
   filter_options: {

@@ -8,7 +8,7 @@ import Private from './containers/private/Private';
 import Signup from './containers/signup/Signup';
 import Activate from './containers/signup/Activate';
 
-import Mypage from './containers/mypage/mypage/Mypage';
+import MyPage from './containers/mypage/mypage/MyPage';
 
 import EventCreate from './containers/event/Create/EventCreate';
 import EventModify from './containers/event/Modify/EventModify';
@@ -34,7 +34,7 @@ function App({ history }) {
           <Route path="/details/modify/:event_id/" exact component={EventModify} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/signup/activate/:uidb64/:token" exact component={Activate} />
-          <Route path="/mypage" exact component={Mypage} />
+          <Route path="/mypage" exact component={MyPage} />
           <Route path="/group" exact component={GroupMain} />
           <Route path="/group/search" exact component={GroupSearchAll} />
           <Route path="/group/search/:searchQuery" exact component={GroupSearch} />

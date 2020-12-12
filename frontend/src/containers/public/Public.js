@@ -254,7 +254,7 @@ class Public extends Component {
 const mapStateToProps = (state) => ({
   events: state.evt.events,
   loggedUser: state.ur.userFullInfo,
-  signinedUser:state.ur.signinedUser,
+  signinedUser: state.ur.signinedUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
