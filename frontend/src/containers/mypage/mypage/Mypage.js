@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Mypage extends Component {
+class MyPage extends Component {
   render() {
     return (
-      <div className="Mypage">
+      <div className="MyPage">
         My Page
       </div>
     );
@@ -19,4 +19,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mypage);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);

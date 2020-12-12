@@ -170,35 +170,21 @@ const sample = [
   },
 ];
 
-export const getAllEvent_ = (events) => {
-  return {
-    type: actionTypes.GET_ALL_EVENT,
-    events: events,
-  };
-}
+export const getAllEvent_ = (events) => ({
+  type: actionTypes.GET_ALL_EVENT,
+  events,
+});
 
-export const getAllEvent = () => {
-  return dispatch => {
-    return axios.get('/api/event/')
-      .then(res => dispatch(getAllEvent_(res.data)))
-  };
-};
+export const getAllEvent = () => (dispatch) => axios.get('/api/event/')
+  .then((res) => dispatch(getAllEvent_(res.data)));
 
+export const getEvent_ = (event) => ({
+  type: actionTypes.GET_EVENT,
+  target: event,
+});
 
-export const getEvent_ = (event) => {
-  return {
-    type: actionTypes.GET_EVENT,
-    target: event,
-  }
-};
-
-export const getEvent = (id) => {
-  return dispatch => {
-    return axios.get(`/api/event/${id}/full/`)
-      .then((res) => dispatch(getEvent_(res.data)));
-  }
-}
-
+export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/full/`)
+  .then((res) => dispatch(getEvent_(res.data)));
 
 export const createEvent_ = (event) => ({ type: actionTypes.CREATE_EVENT, target: event });
 
@@ -218,9 +204,6 @@ export const createEvent = (args) => (dispatch) => axios.post('/api/event/create
   .then((res) => {
     dispatch(createEvent_(res.data));
   });
-
-
-
 
 export const reportEvent = (id, content) => (dispatch) => axios.post('/api/event_report/', { event: id, content })
   .then((res) => {

@@ -16,7 +16,7 @@ const userReducer = (state = initialState, action) => {
       return { ...state, signinedUser: action.user.id, userInfo: action.user };
     case actionTypes.SIGN_OUT:
       return {
-        ...state, signinedUser: null, userInfo: null, userFullInfo: null
+        ...state, signinedUser: null, userInfo: null, userFullInfo: null,
       };
     case actionTypes.SIGN_UP:
       return state;
@@ -29,20 +29,18 @@ const userReducer = (state = initialState, action) => {
       state.bringEvents = action.user.brings;
       return { ...state, signinedUser: action.user.id, userFullInfo: action.user };
 
-    case actionTypes.LIKE_EVENT:
+    case actionTypes.LIKE_EVENT: {
       let newLikeEvents = state.likeEvents;
-      if (action.oper == 'remove')
-        newLikeEvents = state.likeEvents.filter((evtId) => (evtId != action.event_id));
-      else if (action.oper == 'add')
-        newLikeEvents = [...state.likeEvents, action.event_id]
+      if (action.oper === 'remove') newLikeEvents = state.likeEvents.filter((evtId) => (evtId !== action.event_id));
+      else if (action.oper === 'add') newLikeEvents = [...state.likeEvents, action.event_id];
       return { ...state, likeEvents: newLikeEvents };
-    case actionTypes.BRING_EVENT:
+    }
+    case actionTypes.BRING_EVENT: {
       let newBringEvents = state.bringEvents;
-      if (action.oper == 'remove')
-        newBringEvents = state.bringEvents.filter((evtId) => (evtId != action.event_id));
-      else if (action.oper == 'add')
-        newBringEvents = [...state.bringEvents, action.event_id]
+      if (action.oper === 'remove') newBringEvents = state.bringEvents.filter((evtId) => (evtId !== action.event_id));
+      else if (action.oper === 'add') newBringEvents = [...state.bringEvents, action.event_id];
       return { ...state, bringEvents: newBringEvents };
+    }
 
     default:
       break;

@@ -8,7 +8,9 @@ import * as actionCreators from '../../store/actions/index';
 
 import Event from '../eventBox/EventBox';
 
-const ListView = ({ day, monthEventList, history, onClickCreateEvent }) => {
+const ListView = ({
+  day, monthEventList, history, onClickCreateEvent,
+}) => {
   const NumEvents = (monthEventList === undefined) ? 0 : monthEventList.length;
   const dateFormat = 'yyyy. MM.';
   const date = format(day, dateFormat);

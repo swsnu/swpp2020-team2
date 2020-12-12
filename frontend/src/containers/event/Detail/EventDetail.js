@@ -19,7 +19,6 @@ class EventDetail extends Component {
 
   componentDidMount() {
     this.props.onGetEvent(parseInt(this.props.match.params.event_id));
-
   }
 
   onClickBack = () => {
@@ -63,14 +62,14 @@ class EventDetail extends Component {
     else eventLoaded = true;
 
     const eventTitle = (eventLoaded) ? this.props.event.title : '해당없음';
-    const eventGroupName = (this.props.event.group?.name?.length>0) ? this.props.event.group.name : '해당없음';
-    const eventPlace = (this.props.event.place?.length>0) ? this.props.event.place : '해당없음';
+    const eventGroupName = (this.props.event.group?.name?.length > 0) ? this.props.event.group.name : '해당없음';
+    const eventPlace = (this.props.event.place?.length > 0) ? this.props.event.place : '해당없음';
     const formattedDate = (eventLoaded) ? this.props.event.date : '해당없음';
-    const categoryName = (this.props.event.category?.name?.length>0) ? this.props.event.category.name : '해당없음';
+    const categoryName = (this.props.event.category?.name?.length > 0) ? this.props.event.category.name : '해당없음';
     const eventBeginTime = (eventLoaded) ? this.props.event.begin_time : '해당없음';
     const eventEndTime = (eventLoaded) ? this.props.event.end_time : '해당없음';
-    const eventContent = (this.props.event.content?.length>0) ? this.props.event.content : '해당없음';
-    const lastEditorName = (this.props.event.last_editor?.name?.length>0) ? this.props.event.last_editor.name : '해당없음';
+    const eventContent = (this.props.event.content?.length > 0) ? this.props.event.content : '해당없음';
+    const lastEditorName = (this.props.event.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
     const lastEditorDepartment = (eventLoaded) ? this.props.event.last_editor.department : '해당없음';
 
     const lastEditor = (
@@ -89,7 +88,7 @@ class EventDetail extends Component {
 
         <div className="topBar">
           <TopBar
-            tabNum = {0}
+            tabNum={0}
             history={this.props.history}
           />
         </div>

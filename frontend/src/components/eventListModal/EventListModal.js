@@ -16,7 +16,7 @@ class EventListModal extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('isLogin') === 'false') this.props.history.replace('/')
+    if (localStorage.getItem('isLogin') === 'false') this.props.history.replace('/');
 
     const dateFormat = 'yyyy. MM. d. EEE';
     const formattedDate = format(this.props.day, dateFormat);
@@ -25,8 +25,6 @@ class EventListModal extends Component {
       NumEvents: this.props.dayEventList.length,
       dayEventList: this.props.dayEventList,
     });
-
-    
   }
 
   onClickBringEvent = (id) => {
@@ -50,8 +48,8 @@ class EventListModal extends Component {
         bringEvent={() => this.onClickBringEvent(event.id)}
         likeEvent={() => this.onClickLikeEvent(event.id)}
         detailEvent={() => this.onClickDetailEvent(event.id)}
-        likeBool={this.props.likeEventIDs?.includes(event.id) ? true : false}
-        bringBool={this.props.bringEventIDs?.includes(event.id) ? true : false}
+        likeBool={!!this.props.likeEventIDs?.includes(event.id)}
+        bringBool={!!this.props.bringEventIDs?.includes(event.id)}
       />
     ));
     return (
@@ -67,7 +65,7 @@ class EventListModal extends Component {
               {this.state.NumEvents}
               {' '}
               events
-              </div>
+            </div>
 
             <div className="createEvent">
               <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
@@ -91,9 +89,9 @@ class EventListModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  likeEventIDs : state.ur.likeEvents,
-  bringEventIDs : state.ur.bringEvents,
-  loggedUser : state.ur.userFullInfo,
+  likeEventIDs: state.ur.likeEvents,
+  bringEventIDs: state.ur.bringEvents,
+  loggedUser: state.ur.userFullInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({

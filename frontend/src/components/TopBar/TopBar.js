@@ -3,18 +3,17 @@ import './TopBar.css';
 import { BiBell } from 'react-icons/bi';
 import { appLogo, uniLogo } from '../../images/index';
 
-import ProfileModal from '../profileModal/ProfileModal'
+import ProfileModal from '../profileModal/ProfileModal';
 
 const TopBar = (props) => {
+  const [profileModalBool, SetProfileModalBool] = useState(false);
+  const [modal, SetModal] = useState(null);
 
-  const [profileModalBool,SetProfileModalBool] = useState(false)
-  const [modal,SetModal] = useState(null)
-
-  const onClickProfile=()=>{
-    SetProfileModalBool(!profileModalBool)
-    if(profileModalBool) SetModal(<ProfileModal history={props.history}/>)
-    else SetModal(null)
-  }
+  const onClickProfile = () => {
+    SetProfileModalBool(!profileModalBool);
+    if (profileModalBool) SetModal(<ProfileModal history={props.history} />);
+    else SetModal(null);
+  };
 
   return (
     <div className="TopBar">
@@ -22,13 +21,13 @@ const TopBar = (props) => {
         <img className="logo" src={appLogo} alt="logo" />
         <button className="tab" onClick={() => props.history.push('/public')} style={{ fontWeight: props.tabNum === 0 ? 'bold' : 'none' }}>
           Public
-      </button>
+        </button>
         <button className="tab" onClick={() => props.history.push('/private')} style={{ fontWeight: props.tabNum === 1 ? 'bold' : 'none' }}>
           Private
-      </button>
+        </button>
         <button className="tab" onClick={() => props.history.push('/group')} style={{ fontWeight: props.tabNum === 2 ? 'bold' : 'none' }}>
           Group
-      </button>
+        </button>
       </div>
 
       <div className="right">
@@ -39,12 +38,12 @@ const TopBar = (props) => {
           <BiBell size="30px" />
         </div>
         <div className="profile" onClick={() => onClickProfile()}>
-          <img src={appLogo} alt="app logo"  />
+          <img src={appLogo} alt="app logo" />
           {modal}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default TopBar;
