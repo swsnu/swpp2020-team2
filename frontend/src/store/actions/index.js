@@ -8,6 +8,9 @@ export {
   likeGroup,
   noticeGroup,
   joinGroup,
+
+  bringEvent,
+  likeEvent,
 } from './user';
 
 export {
@@ -15,6 +18,7 @@ export {
   getEvent,
   createEvent,
   reportEvent,
+  
 } from './events';
 
 export {

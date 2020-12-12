@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   events: [],
   target: {},
+  
 };
 
 const eventReducer = (state = initialState, action) => {
@@ -11,6 +12,7 @@ const eventReducer = (state = initialState, action) => {
       return { ...state, events: action.events };
     case actionTypes.GET_EVENT:
       return { ...state, target: action.target };
+    
     default:
       break;
   }
