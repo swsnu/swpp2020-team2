@@ -81,7 +81,7 @@ class Public extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.signinedUser==null) this.props.history.replace('/');
+    if (this.props.signinedUser === null) this.props.history.replace('/');
   }
 
   onClickCreateEvent() {
