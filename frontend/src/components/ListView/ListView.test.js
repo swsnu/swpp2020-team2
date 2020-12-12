@@ -95,6 +95,17 @@ describe('<ListView />', () => {
     expect(button.length).toBe(1);
     button.simulate('click');
 
+    const component2 = mount(<ListView history={history} day={new Date()} onClickCreateEvent={mockOnClickCreateEvent} />);
+    const wrapper2 = component2.find('.ListView');
+    expect(wrapper2.length).toBe(1);
+  });
+
+  it('should render Listview2', () => {
+    const history = [];
+    const component = mount(<ListView history={history} day={new Date()} monthEventList={sample} onClickCreateEvent={mockOnClickCreateEvent} />);
+    const wrapper = component.find('.ListView');
+    expect(wrapper.length).toBe(1);
+
     const detail = component.find('.title');
     expect(detail.length).toBe(12);
     detail.at(0).simulate('click');

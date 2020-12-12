@@ -107,6 +107,7 @@ const getMockStore = (initialState) => {
   const mockReducer = getMockReducer(initialState);
   const rootReducer = combineReducers({
     evt: mockReducer,
+    ur: mockReducer,
     router: connectRouter(history),
   });
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -120,11 +121,13 @@ const mockStore = getMockStore(stubInitialState);
 describe('<Public />', () => {
   let publicComponent;
   beforeEach(() => {
+    const mockStore_ = mockStore;
+    const history_ = history;
     publicComponent = (
-      <Provider store={mockStore}>
-        <ConnectedRouter history={history}>
+      <Provider store={mockStore_}>
+        <ConnectedRouter history={history_}>
           <Switch>
-            <Route path="/" exact render={() => <Public history={history} />} />
+            <Route path="/" exact render={() => <Public history={history_} />} />
           </Switch>
         </ConnectedRouter>
       </Provider>
@@ -160,9 +163,13 @@ describe('<Public />', () => {
     wrapperArrow.at(1).simulate('click');
     expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
 
-    const viewOptionButton = component.find('.ViewOptionButton0');
+    const viewOptionButton = component.find('.ViewOptionButton1');
     expect(viewOptionButton.length).toBe(1);
     viewOptionButton.at(0).simulate('click');
+
+    const viewOptionButton2 = component.find('.ViewOptionButton1');
+    expect(viewOptionButton2.length).toBe(1);
+    viewOptionButton2.at(0).simulate('click');
 
     const includingSubmit = component.find('.IncludingSubmit');
     expect(includingSubmit.length).toBe(1);
@@ -197,6 +204,8 @@ describe('<Public />', () => {
       },
     });
 
+    console.log(component.debug());
+
     const dayComponent = component.find('.abled');
     expect(dayComponent.length).toBe(31);
     dayComponent.at(0).simulate('click');
@@ -204,5 +213,10 @@ describe('<Public />', () => {
     const close = component.find('.closeButton');
     expect(close.length).toBe(1);
     close.simulate('click');
+
+    dayComponent.at(0).simulate('click');
+    const createButton = component.find('.createEventButton');
+    expect(createButton.length).toBe(1);
+    createButton.simulate('click');
   });
 });
