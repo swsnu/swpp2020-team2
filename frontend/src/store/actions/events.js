@@ -179,17 +179,11 @@ export const getAllEvent_ = (events) => {
 
 export const getAllEvent = () => {
   return dispatch => {
-    return dispatch(getAllEvent_(sample))
-  };
-};
-/*
-export const getAllEvent = () => {
-  return dispatch => {
     return axios.get('/api/event/')
       .then(res => dispatch(getAllEvent_(res.data)))
   };
 };
-*/
+
 
 export const getEvent_ = (event) => {
   return {
