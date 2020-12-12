@@ -1,8 +1,11 @@
 import React, { useState, Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import format from 'date-fns/format';
 import addMonths from 'date-fns/addMonths';
 import subMonths from 'date-fns/subMonths';
+import startOfMonth from 'date-fns/startOfMonth';
+import endOfMonth from 'date-fns/endOfMonth';
 import * as actionCreators from '../../store/actions/index';
 import TopBar from '../../components/TopBar/TopBar';
 import './Public.css';
@@ -16,6 +19,9 @@ class Public extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      events: [],
+      monthBegin: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
+      monthEnd: format(endOfMonth(new Date()), 'yyyy-MM-dd'),
       currentDate: new Date(),
       modalBool: false,
       modalEvents: [],
@@ -38,11 +44,41 @@ class Public extends Component {
     this.setGroupOption = this.setGroupOption.bind(this);
     this.setEventOption = this.setEventOption.bind(this);
     this.setSortOption = this.setSortOption.bind(this);
+
+    this.getFilteredEvents = async (including, tagOption, categoryOption, groupOption, eventOption, sortOption, dateBegin, dateEnd) => {
+      const _categoryOption = Array.from(categoryOption);
+      try {
+        return await axios.get('/api/event/filtered', {
+          filter_options: {
+            including,
+            tag: tagOption,
+            category: _categoryOption,
+            group: groupOption,
+            event: eventOption,
+            date: {
+              begin_date: dateBegin,
+              end_date: dateEnd,
+            },
+          },
+          sort_options: [sortOption],
+        });
+      } catch (error) {
+        return console.error(error);
+      }
+    };
+
+    this.filterEvents = async () => {
+      const prevState = this.state;
+      const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption);
+      this.setState({
+        events: _events,
+      });
+    };
   }
 
   componentDidMount() {
-    const { onGetAllEvent } = this.props;
-    onGetAllEvent();
+    // const { onGetAllEvent } = this.props;
+    // onGetAllEvent();
   }
 
   onClickCreateEvent() {
@@ -74,12 +110,14 @@ class Public extends Component {
     this.setState({
       including: str,
     });
+    this.filterEvents();
   }
 
   setTagOption(str) {
     this.setState({
       tagOption: str,
     });
+    this.filterEvents();
   }
 
   setCategoryOption(id) {
@@ -91,6 +129,7 @@ class Public extends Component {
         categoryOption: categoryOption_,
       };
     });
+    this.filterEvents();
   }
 
   setGroupOption(str) {
@@ -98,6 +137,7 @@ class Public extends Component {
       if (str === state.groupOption) return { groupOption: '' };
       return { groupOption: str };
     });
+    this.filterEvents();
   }
 
   setEventOption(str) {
@@ -105,25 +145,35 @@ class Public extends Component {
       if (str === state.eventOption) return { eventOption: '' };
       return { eventOption: str };
     });
+    this.filterEvents();
   }
 
   setSortOption(str) {
     this.setState({
       sortOption: str,
     });
+    this.filterEvents();
   }
 
   nextMonth() {
-    this.setState((prevState) => ({ currentDate: addMonths(prevState.currentDate, 1) }));
+    this.setState((prevState) => ({
+      monthBegin: format(startOfMonth(addMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
+      monthEnd: format(endOfMonth(addMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
+      currentDate: addMonths(prevState.currentDate, 1),
+    }));
+    this.filterEvents();
   }
 
   prevMonth() {
-    this.setState((prevState) => ({ currentDate: subMonths(prevState.currentDate, 1) }));
+    this.setState((prevState) => ({
+      monthBegin: format(startOfMonth(subMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
+      monthEnd: format(endOfMonth(subMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
+      currentDate: subMonths(prevState.currentDate, 1),
+    }));
+    this.filterEvents();
   }
 
   render() {
-    const { events } = this.props;
-
     const dateFormat = 'yyyy. MM.';
     const header = (
       <div className="header">
@@ -144,7 +194,7 @@ class Public extends Component {
       view = (
         <Calendar
           currentDate={this.state.currentDate}
-          events={events}
+          events={this.state.events}
           onClickDay={this.onClickDay}
         />
       );
@@ -153,7 +203,7 @@ class Public extends Component {
         <ListView
           day={this.state.currentDate}
           history={this.props.history}
-          monthEventList={events}
+          monthEventList={this.state.events}
           onClickCreateEvent={this.onClickCreateEvent}
         />
       );
@@ -199,11 +249,12 @@ class Public extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  events: state.evt.events,
+  // events: state.evt.events,
+  signinedUser: state.ur.signinedUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
+  // onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);

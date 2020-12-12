@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import format from 'date-fns/format';
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
 import * as actionTypes from './actionTypes';
@@ -7,9 +8,9 @@ import * as actionTypes from './actionTypes';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-const sampleDate = new Date();
-const sampleDate2 = addDays(sampleDate, 15);
-const sampleDate3 = addMonths(sampleDate, 1);
+const sampleDate = format(new Date(), 'yyyy-MM-dd');
+const sampleDate2 = format(addDays(new Date(), 15), 'yyyy-MM-dd');
+const sampleDate3 = format(addDays(new Date(), 11), 'yyyy-MM-dd');
 const sample = [
   {
     id: 1,
@@ -178,10 +179,17 @@ export const getAllEvent_ = (events) => {
 
 export const getAllEvent = () => {
   return dispatch => {
+    return dispatch(getAllEvent_(sample))
+  };
+};
+/*
+export const getAllEvent = () => {
+  return dispatch => {
     return axios.get('/api/event/')
       .then(res => dispatch(getAllEvent_(res.data)))
   };
 };
+*/
 
 export const getEvent_ = (event) => {
   return {
