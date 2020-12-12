@@ -12,6 +12,7 @@ export const signIn = (args) => (dispatch) => axios.post('/api/signin/', {
 })
   .then((res) => {
     dispatch(signIn_(res.data));
+    localStorage.setItem('isLogin','true');
   })
   .catch((err) => {
     if (err.response.status === 401)alert('ID or password is wrong');
@@ -22,6 +23,7 @@ export const signOut_ = () => ({ type: actionTypes.SIGN_OUT });
 export const signOut = () => (dispatch) => axios.get('/api/signout/')
   .then((res) => {
     dispatch(signOut_());
+    localStorage.removeItem('isLogin');
   });
 
 export const signUp_ = () => ({ type: actionTypes.SIGN_UP });
@@ -79,3 +81,45 @@ export const joinGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/j
   group: id,
   operation: op,
 });
+
+// like / bring events for loggedUser
+
+export const likeEvent_ = (id, oper) => {
+  return {
+    type: actionTypes.LIKE_EVENT,
+    event_id: id,
+    oper: oper
+  }
+};
+export const likeEvent = (id, oper) => {
+  return dispatch => {
+    return axios.put(`/api/user/signin/like_event/`, { event: id, operation: oper })
+      .then((res) => {
+        if (res.status != 204) alert("알 수 없는 문제가 발생하였습니다 !")
+        else {
+          dispatch(likeEvent_(id, oper));
+        }
+      }
+      );
+  }
+}
+
+export const bringEvent_ = (id, oper) => {
+  return {
+    type: actionTypes.BRING_EVENT,
+    event_id: id,
+    oper: oper
+  }
+};
+export const bringEvent = (id, oper) => {
+  return dispatch => {
+    return axios.put(`/api/user/signin/bring_event/`, { event: id, operation: oper })
+      .then((res) => {
+        if (res.status != 204) alert("알 수 없는 문제가 발생하였습니다 !")
+        else {
+          dispatch(bringEvent_(id, oper));
+        }
+      }
+      );
+  }
+}

@@ -77,8 +77,11 @@ class Public extends Component {
   }
 
   componentDidMount() {
-    // const { onGetAllEvent } = this.props;
-    // onGetAllEvent();
+    this.props.onGetUser();
+  }
+
+  componentDidUpdate() {
+    if (this.props.signinedUser==null) this.props.history.replace('/');
   }
 
   onClickCreateEvent() {
@@ -249,12 +252,15 @@ class Public extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  // events: state.evt.events,
-  signinedUser: state.ur.signinedUser,
+  events: state.evt.events,
+  loggedUser: state.ur.userFullInfo,
+  signinedUser:state.ur.signinedUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // onGetAllEvent: () => dispatch(actionCreators.getAllEvent()),
+  onGetUser: () => dispatch(actionCreators.getUserFull()),
+  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);

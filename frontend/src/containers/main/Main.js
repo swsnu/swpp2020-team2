@@ -14,7 +14,8 @@ class Main extends Component {
     password: '',
     revealPassword: false,
   }
-
+  
+  
   componentDidUpdate() {
     if (this.props.signinedUser) this.props.history.replace('/public');
   }
@@ -100,6 +101,7 @@ class Main extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
+  
 });
 
 const mapDispatchToProps = (dispatch) => ({

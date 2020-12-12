@@ -219,6 +219,9 @@ export const createEvent = (args) => (dispatch) => axios.post('/api/event/create
     dispatch(createEvent_(res.data));
   });
 
+
+
+
 export const reportEvent = (id, content) => (dispatch) => axios.post('/api/event_report/', { event: id, content })
   .then((res) => {
     if (res.status === 201) alert('신고가 접수되었습니다.');
