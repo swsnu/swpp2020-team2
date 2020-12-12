@@ -47,32 +47,35 @@ describe('<ReportEvent />', () => {
     expect(newTodoInstance.state.content).toEqual(content);
   });
 
-  it(`should alert with no content click 'reportEvent'`, () => {
-    window.alert = jest.fn();
-    const component = mount(reportEventModal);
-
-    const wrapper = component.find('button').at(1);
-    wrapper.simulate('click');
-
-    expect(window.alert).toHaveBeenCalledTimes(1);
-  });
-
   it('should close modal clicking close btn', () => {
     const component = mount(reportEventModal);
     const wrapper = component.find('button').at(0);
     wrapper.simulate('click');
     expect(spyOnCloseModal).toHaveBeenCalledTimes(1);
   });
+
+  it(`should alert with no content click 'reportEvent'`, () => {
+    const spyOnAlert = jest.spyOn(window, 'alert')
+      .mockImplementation();
+    const component = mount(reportEventModal);
+
+    const wrapper = component.find('button').at(1);
+    wrapper.simulate('click');
+
+    expect(spyOnAlert).toHaveBeenCalledTimes(1);
+  });
   /*
-    it(`should call 'reportEvent'`, () => {
-      const spyReportEvent = jest.spyOn(actionCreators, 'reportEvent')
-        .mockImplementation((id,content) => { return dispatch => {}; });
-      const component = mount(reportEventModal);
-      const wrapper = component.find('textarea');
-      wrapper.simulate('change', { target: { value: content } });
-      const wrapper2 = component.find('button').at(1);
-      wrapper2.simulate('click');
-      expect(spyReportEvent).toHaveBeenCalledTimes(1);
-    });
-    */
+  it(`should call 'reportEvent' successfully`, () => {
+    const spyReportEvent = jest.spyOn(actionCreators, 'reportEvent').mockImplementation((id, content) => (dispatch) => { });
+    const component = mount(reportEventModal);
+
+    const wrapper = component.find('textarea');
+    wrapper.simulate('change', { target: { value: "TEST_CONTENT" } });
+    const wrapper2 = component.find('button').at(1);
+    wrapper2.simulate('click');
+
+    expect(spyReportEvent).toHaveBeenCalledTimes(1);
+    expect(spyOnCloseModal).toHaveBeenCalledTimes(1);
+  });
+  */
 });
