@@ -4,6 +4,7 @@ const initialState = {
   universities: [],
   departments: [],
   categories: [],
+  languages: [],
 };
 
 const otherReducer = (state = initialState, action) => {
@@ -14,6 +15,8 @@ const otherReducer = (state = initialState, action) => {
       return { ...state, departments: action.data };
     case actionTypes.GET_CATEGORIES:
       return { ...state, categories: action.data };
+    case actionTypes.GET_LANGUAGES:
+      return { ...state, languages: action.data };
     default:
       break;
   }

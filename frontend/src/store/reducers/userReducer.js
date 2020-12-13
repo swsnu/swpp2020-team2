@@ -4,10 +4,8 @@ const initialState = {
   signinedUser: null,
   userInfo: null,
   userFullInfo: null,
-
   likeEvents: [],
   bringEvents: [],
-
 };
 
 const userReducer = (state = initialState, action) => {

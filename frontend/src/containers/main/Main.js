@@ -54,7 +54,7 @@ class Main extends Component {
                   <input
                     id="username-input"
                     type="text"
-                    value={this.state.title}
+                    value={this.state.username}
                     onChange={(event) => this.setState({ username: event.target.value })}
                   />
                 </div>
@@ -67,7 +67,7 @@ class Main extends Component {
                   <input
                     id="password-input"
                     type={this.state.revealPassword ? 'text' : 'password'}
-                    value={this.state.title}
+                    value={this.state.password}
                     onChange={(event) => this.setState({ password: event.target.value })}
                   />
                   <div className="toggle" onClick={this.toggleRevealPassword}>
@@ -100,7 +100,6 @@ class Main extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-
 });
 
 const mapDispatchToProps = (dispatch) => ({

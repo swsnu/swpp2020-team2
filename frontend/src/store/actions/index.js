@@ -35,4 +35,5 @@ export {
   getUniversities,
   getDepartments,
   getCategories,
+  getLanguages,
 } from './other';
