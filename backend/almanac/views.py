@@ -162,7 +162,7 @@ def get_user_signin(request):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': {'id': user_preference.category_id, 'name': user_preference.category.name},
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
     'department': {'id': user_preference.department_id, 'name': user_preference.department.name}}
     return JsonResponse(user_dict)
 
@@ -185,7 +185,7 @@ def get_user_signin_full(request):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': {'id': user_preference.category_id, 'name': user_preference.category.name},
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
     'department': {'id': user_preference.department_id, 'name': user_preference.department.name},
     'profile': user_preference.profile_id,
     'background': user_preference.background_id,
@@ -220,7 +220,7 @@ def get_user(request, user_id):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': {'id': user_preference.category_id, 'name': user_preference.category.name},
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
     'department': {'id': user_preference.department_id, 'name': user_preference.department.name}}
     return JsonResponse(user_dict)
 
@@ -243,7 +243,7 @@ def get_user_full(request, user_id):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': {'id': user_preference.category_id, 'name': user_preference.category.name},
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
     'department': {'id': user_preference.department_id, 'name': user_preference.department.name},
     'profile': user_preference.profile_id,
     'background': user_preference.background_id,
