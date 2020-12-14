@@ -2,15 +2,15 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 
+import { connectRouter, ConnectedRouter } from 'connected-react-router';
 import ReportEvent from './ReportEvent';
 import getMockStore from '../../test-utils/mocks';
 import { history } from '../../store/store';
-import { connectRouter, ConnectedRouter } from 'connected-react-router';
 
 import * as actionCreators from '../../store/actions/index';
 
 const stubEvent = { id: 1, title: 'test_event_title' };
-const mockStore = getMockStore({})
+const mockStore = getMockStore({});
 
 describe('<ReportEvent />', () => {
   let reportEventModal;
@@ -28,9 +28,9 @@ describe('<ReportEvent />', () => {
         </ConnectedRouter>
       </Provider>
     );
-  })
+  });
 
-  afterEach(() => { jest.clearAllMocks() });
+  afterEach(() => { jest.clearAllMocks(); });
 
   it('should render without error', () => {
     const component = mount(reportEventModal);
@@ -38,8 +38,8 @@ describe('<ReportEvent />', () => {
     expect(wrapper.length).toBe(1);
   });
 
-  it(`should set state properly on content input`, () => {
-    const content = 'TEST_CONTENT'
+  it('should set state properly on content input', () => {
+    const content = 'TEST_CONTENT';
     const component = mount(reportEventModal);
     const wrapper = component.find('textarea');
     wrapper.simulate('change', { target: { value: content } });
@@ -54,7 +54,7 @@ describe('<ReportEvent />', () => {
     expect(spyOnCloseModal).toHaveBeenCalledTimes(1);
   });
 
-  it(`should alert with no content click 'reportEvent'`, () => {
+  it('should alert with no content click \'reportEvent\'', () => {
     const spyOnAlert = jest.spyOn(window, 'alert')
       .mockImplementation();
     const component = mount(reportEventModal);

@@ -24,3 +24,10 @@ export const getCategories = () => (dispatch) => axios.get('/api/category/')
   .then((res) => {
     dispatch(getCategories_(res.data));
   });
+
+export const getLanguages_ = (data) => ({ type: actionTypes.GET_LANGUAGES, data });
+
+export const getLanguages = () => (dispatch) => axios.get('/api/language/')
+  .then((res) => {
+    dispatch(getLanguages_(res.data));
+  });
