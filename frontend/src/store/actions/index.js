@@ -23,6 +23,8 @@ export {
   uploadImage,
   createEvent,
   reportEvent,
+  
+  getTagRecommend,
 
 } from './events';
 
