@@ -217,6 +217,13 @@ export const createEvent = (event) => (dispatch) => axios.post('/api/event/creat
     }
   });
 
+export const getTagRecommend_ = (tagList) => ({ type: actionTypes.GET_TAG_RECOMMEND, target: tagList });
+
+export const getTagRecommend = (content) => (dispatch) => axios.post('/api/tag/recommend/', { 'content': content, 'num':2 })
+  .then((res) => {
+    dispatch(getTagRecommend_(res.data));
+  });
+
 export const reportEvent = (id, content) => (dispatch) => axios.post('/api/event_report/', { event: id, content })
   .then((res) => {
     if (res.status === 201) alert('신고가 접수되었습니다.');
