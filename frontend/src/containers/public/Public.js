@@ -96,7 +96,6 @@ class Public extends Component {
     this.filterEvents = async () => {
       const prevState = this.state;
       const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
-      // console.log(_events)
       this.setState({
         events: _events.data,
       });
@@ -107,9 +106,11 @@ class Public extends Component {
 
   componentDidMount() {
     this.props.onGetUser();
+    this.filterEvents();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    // this.filterEvents();
     return true;
   }
 
@@ -287,8 +288,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onGetUser: () => dispatch(actionCreators.getUserFull()),
-  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
-  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  // onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  // onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);

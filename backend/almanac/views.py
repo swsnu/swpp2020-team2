@@ -779,7 +779,7 @@ def get_recommendation_tag(request):
     else:
         recommendation = recommend_tag(content)
 
-    tags = [{'id': tag_id,
+    tags = [{'id': tag_id, 'name': Tag.objects.get(id=tag_id).name
     } for tag_id in recommendation]
     return JsonResponse(tags, safe=False)
 
@@ -960,7 +960,7 @@ def get_event(request):
         'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
-        'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(id=event.last_editor_id).department.name},
+        'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
         'image': [image.id for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
@@ -985,7 +985,9 @@ def get_event_filtered(request):
 
     req_data = json.loads(request.body.decode())
     filter_options_dict = req_data['filter_options']
+    print("filter : {}".format(filter_options_dict))
     sort_options_list = req_data['sort_options']
+    print("sort : {}".format(sort_options_list))
     count_options_dict = req_data['count_options']
     event_objects = Event.objects.all()
     # Filter(Dictionary)
@@ -1047,12 +1049,12 @@ def get_event_filtered(request):
     events = [{'id': event.id,
     'title': event.title,
     'place': event.place, 'date': str(event.date),
-    'category': event.category.id,
-    'tag': [tag.id for tag in event.tag.all()],
-    'group': event.group.id,
+    'category': {'id': event.category_id, 'name': Category.objects.get(id=event.category_id).name},
+    'tag': [{'id': tag.id, 'name': Tag.objects.get(id=tag.id).name} for tag in event.tag.all()],
+    'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
     'begin_time': str(event.begin_time),
     'end_time': str(event.end_time),
-    'last_editor': event.last_editor.id,
+    'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
     'image': [image.id for image in event.image.all()],
     'content': event.content,
     'likes': [up.user.id for up in event.likes_userpreference.all()],
@@ -1151,7 +1153,7 @@ def get_put_delete_event_full(request, event_id):
     group = Group.objects.get(id=event.group_id)
     category = Category.objects.get(id=event.category_id)
     last_editor = User.objects.get(id=event.last_editor_id)
-    up = UserPreference.objects.get(id=event.last_editor_id)
+    up = UserPreference.objects.get(user_id=event.last_editor_id)
 
     if request.method == 'GET':
         event_dict = {'id': event.id,
