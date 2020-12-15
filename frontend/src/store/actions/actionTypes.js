@@ -11,6 +11,7 @@ export const BRING_EVENT = 'BRING_EVENT';
 /* event */
 export const GET_ALL_EVENT = 'GET_ALL_EVENT';
 export const GET_EVENT = 'GET_EVENT';
+export const POST_IMAGE = 'POST_IMAGE';
 export const CREATE_EVENT = 'CREATE_EVENT';
 
 /* group */
@@ -27,3 +28,4 @@ export const GET_UNIVERSITIES = 'GET_UNIVERSITIES';
 export const GET_DEPARTMENTS = 'GET_DEPARTMENTS';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const GET_LANGUAGES = 'GET_LANGUAGES';
+

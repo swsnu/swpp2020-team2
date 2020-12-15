@@ -18,6 +18,8 @@ export {
 export {
   getAllEvent,
   getEvent,
+
+  uploadImage,
   createEvent,
   reportEvent,
 
@@ -38,4 +40,5 @@ export {
   getDepartments,
   getCategories,
   getLanguages,
+
 } from './other';

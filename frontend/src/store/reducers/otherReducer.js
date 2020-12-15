@@ -17,6 +17,7 @@ const otherReducer = (state = initialState, action) => {
       return { ...state, categories: action.data };
     case actionTypes.GET_LANGUAGES:
       return { ...state, languages: action.data };
+
     default:
       break;
   }

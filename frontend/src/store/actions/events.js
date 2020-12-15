@@ -186,23 +186,36 @@ export const getEvent_ = (event) => ({
 export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/full/`)
   .then((res) => dispatch(getEvent_(res.data)));
 
+
+export const uploadImage_ = (data) => ({ type: actionTypes.POST_IMAGE, data });
+
+export const uploadImage = (dictImg) => (dispatch) => axios.post('/api/image/', dictImg)
+  .then((res) => {
+    dispatch(uploadImage_(res.data));
+  });
+
 export const createEvent_ = (event) => ({ type: actionTypes.CREATE_EVENT, target: event });
 
-export const createEvent = (args) => (dispatch) => axios.post('/api/event/create/', {
-  title: args.title,
-  place: args.place,
-  date: args.date,
-  category: args.category,
-  tag: args.tag,
-  group: args.group,
-  begin_time: args.begin_time,
-  end_time: args.end_time,
-  last_editor: args.last_editor,
-  image: args.image,
-  content: args.content,
+export const createEvent = (event) => (dispatch) => axios.post('/api/event/create/', {
+  title: event.title,
+  place: event.place,
+  date: event.date,
+  category: event.category,
+  tag: event.tag,
+  group: event.group,
+  begin_time: event.begin_time,
+  end_time: event.end_time,
+  last_editor: event.last_editor,
+  image: event.image,
+  content: event.content,
 })
   .then((res) => {
-    dispatch(createEvent_(res.data));
+    if (res.status === 201) {
+      dispatch(createEvent_(res.data));
+      alert("이벤트를 성공적으로 등록하였습니다.")
+    } else {
+      alert("예상치 못한 오류로 이벤트 등록이 실패하였습니다.")
+    }
   });
 
 export const reportEvent = (id, content) => (dispatch) => axios.post('/api/event_report/', { event: id, content })
