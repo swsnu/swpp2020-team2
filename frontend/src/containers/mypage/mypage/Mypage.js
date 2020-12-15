@@ -30,11 +30,11 @@ class MyPage extends Component {
         </h2>
         <h2>
           University:
-          {this.props.userInfo?.university}
+          {this.props.userInfo?.university.name}
         </h2>
         <h2>
           Department:
-          {this.props.userInfo?.department}
+          {this.props.userInfo?.department.name}
         </h2>
         <h2>
           Email:

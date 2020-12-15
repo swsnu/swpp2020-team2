@@ -21,6 +21,12 @@ class SettingPassword extends Component {
     this.props.getUser();
   }
 
+  onConfirmHandler=() => {
+    // need currPassword check
+    if (this.state.newPassword !== this.state.confirmPassword)alert('Please confirm your password correctly');
+    else this.props.changePassword(this.state.newPassword);
+  }
+
   onRouteHandler=(url) => {
     // alert if there is unsaved content
     this.props.history.push(url);
@@ -84,6 +90,7 @@ class SettingPassword extends Component {
             </div>
           </div>
         </div>
+        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
         <button onClick={() => this.onRouteHandler('/mypage')}>back</button>
         <button onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</button>
@@ -100,6 +107,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(actionCreators.getUser()),
+  changePassword: (password) => dispatch(actionCreators.changePassword(password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingPassword);
