@@ -41,7 +41,7 @@ class SettingPassword extends Component {
         </div>
         <h1>Password Setting</h1>
         <div className="box">
-          <label className="label">Current Password</label>
+          <label className="label">Current Password:</label>
           <div className="inputBox">
             <input
               id="currPassword-input"
@@ -57,7 +57,7 @@ class SettingPassword extends Component {
           </div>
         </div>
         <div className="box">
-          <label className="label">New Password</label>
+          <label className="label">New Password:</label>
           <div className="inputBox">
             <input
               id="newPassword-input"
@@ -73,7 +73,7 @@ class SettingPassword extends Component {
           </div>
         </div>
         <div className="box">
-          <label className="label">Confirm New Password</label>
+          <label className="label">Confirm New Password:</label>
           <div className="inputBox">
             <input
               id="confirmPassword-input"

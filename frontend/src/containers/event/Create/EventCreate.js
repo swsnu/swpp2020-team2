@@ -98,6 +98,12 @@ class EventCreate extends Component {
     this.props.history.goBack();
   }
 
+  uploadImageHandler(e) {
+    const formData = new FormData();
+    formData.append('imagefile', e.target.files[0]);
+    this.props.onCraeteImage(formData);
+  }
+
   render() {
     var makeOption = function func(X) {
       return <option value={X.id}>{X.name}</option>;
