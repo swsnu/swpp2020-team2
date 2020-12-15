@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   events: [],
   target: {},
-  selectedImage: [],
+  selectedImage:[],
+  tagRecommend:[],
 };
 
 const eventReducer = (state = initialState, action) => {
@@ -17,7 +18,11 @@ const eventReducer = (state = initialState, action) => {
       // let newImages = [...state.selectedImage, action.data] 이거는 멀티 이미지 올릴 때
       return { ...state, selectedImage: action.data };
 
-    case actionTypes.CREATE_EVENT: {
+    case actionTypes.GET_TAG_RECOMMEND:
+      //let newImages = [...state.selectedImage, action.data] 이거는 멀티 이미지 올릴 때
+      return { ...state, tagRecommend: action.target };
+
+    case actionTypes.CREATE_EVENT:{
       const newEvents = [...state.events, action.event];
       return { ...state, events: newEvents, selectedImage: [] };
     }

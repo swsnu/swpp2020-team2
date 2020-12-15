@@ -16,16 +16,7 @@ class EventCreate extends Component {
     end_time: {},
     content: '',
     tags: [],
-  }
-
-  componentDidMount() {
-    this.props.getUserId();
-    this.props.getCategories();
-    this.props.getMyGroup();
-  }
-
-  componentDidUpdate(prevProps) {
-    //  if (!this.props.signinedUser) this.props.history.replace('/main');
+    selectTags: [],
   }
 
   timeRange = () => {
@@ -40,6 +31,42 @@ class EventCreate extends Component {
       }
     }
     return timeRange;
+  }
+
+  componentDidMount() {
+    this.props.getUserId();
+    this.props.getCategories();
+    this.props.getMyGroup();
+  }
+
+  componentDidUpdate(prevProps) {
+    //  if (!this.props.signinedUser) this.props.history.replace('/main');
+    if (this.props.tagRecommend !== prevProps.tagRecommend) {
+      this.setState({ tags: this.props.tagRecommend })
+    }
+  }
+
+  uploadImageHandler(e) {
+    const formData = new FormData();
+    formData.append('imagefile', e.target.files[0]);
+    this.props.onCraeteImage(formData);
+  }
+
+  onClickAddTag = () => {
+    if (this.state.content.length > 0) {
+      this.props.onGetTagRecommend(this.state.content); // content에 맞는 tag 추천
+    }
+    else alert("행사 내용을 입력하세요 !");
+  }
+
+  onClickTag = (id) => {
+    if (this.state.selectTags?.includes(id)) {
+      let removedTags = []
+      removedTags = this.state.selectTags?.filter(selectId => selectId !== id);
+      this.setState({ selectTags: removedTags })
+    } else {
+      this.setState({ selectTags: [...this.state.selectTags, id] })
+    }
   }
 
   createEventHandler = () => {
@@ -186,7 +213,15 @@ class EventCreate extends Component {
                 <input className="uploadImage" type="file" name="file" onChange={(e) => this.uploadImageHandler(e)} />
               </div>
               <div className="box">
-                <button className="addTag" onClick={() => { }}>#태그 추가</button>
+                <button className="addTag" onClick={() => this.onClickAddTag()}>#태그 추가</button>
+                {this.state.tags.map((tag) => {
+                  return (
+                    <div className={"tag " + this.state.selectTags.includes(tag.id) ? "UnSelected" : "Selected"}
+                      onClick={() => this.onClickTag(tag.id)}>
+                      {tag.name}
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -211,6 +246,7 @@ const mapStateToProps = (state) => ({
   myGroups: state.gr.myGroups,
 
   selectedImage: state.evt.selectedImage,
+  tagRecommend: state.evt.tagRecommend,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -219,6 +255,7 @@ const mapDispatchToProps = (dispatch) => ({
   onPostEvent: (event) => dispatch(actionCreators.createEvent(event)),
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   onCraeteImage: (dictImg) => dispatch(actionCreators.uploadImage(dictImg)),
+  onGetTagRecommend: (content) => dispatch(actionCreators.getTagRecommend(content)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventCreate);

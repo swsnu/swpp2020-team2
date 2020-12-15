@@ -13,6 +13,7 @@ export const GET_ALL_EVENT = 'GET_ALL_EVENT';
 export const GET_EVENT = 'GET_EVENT';
 export const POST_IMAGE = 'POST_IMAGE';
 export const CREATE_EVENT = 'CREATE_EVENT';
+export const GET_TAG_RECOMMEND = 'GET_TAG_RECOMMEND';
 
 /* group */
 export const CREATE_GROUP = 'CREATE_GROUP';
