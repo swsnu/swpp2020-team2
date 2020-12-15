@@ -84,8 +84,11 @@ class Public extends Component {
     if (this.props.signinedUser === null) this.props.history.replace('/');
   }
 
-  onClickCreateEvent() {
-    this.props.history.push('/details/create');
+  onClickCreateEvent(date) {
+    this.props.history.push({
+      pathname: `/details/create/`,
+      state: { date: date }
+    });
   }
 
   onClickDay(day, events) {

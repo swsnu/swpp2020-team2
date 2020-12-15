@@ -68,7 +68,7 @@ class EventListModal extends Component {
             </div>
 
             <div className="createEvent">
-              <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(this.props.day)}>
+              <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(format((this.props.day),'yyyy-MM-dd'))}>
                 <GrTableAdd size="100%" />
               </button>
             </div>
