@@ -31,7 +31,7 @@ class Public extends Component {
       tagOption: '',
       categoryOption: new Set(),
       groupOption: '',
-      eventOption: null,
+      eventOption: '',
       sortOption: 'recent',
     };
     this.onClickDay = this.onClickDay.bind(this);
@@ -48,19 +48,20 @@ class Public extends Component {
     this.getFilteredEvents = async (including, tagOption, categoryOption, groupOption, eventOption, sortOption, dateBegin, dateEnd) => {
       const _categoryOption = Array.from(categoryOption);
       try {
-        return await axios.get('/api/event/filtered', {
+        return await axios.post('/api/event/filtered/', {
           filter_options: {
-            including,
-            tag: tagOption,
+            including: including.split(' '),
+            tag: [],
             category: _categoryOption,
-            group: groupOption,
-            event: eventOption,
+            group: [groupOption],
+            event: [eventOption],
             date: {
               begin_date: dateBegin,
               end_date: dateEnd,
             },
           },
           sort_options: [sortOption],
+          count_options: {},
         });
       } catch (error) {
         return console.error(error);
@@ -74,6 +75,8 @@ class Public extends Component {
         events: _events,
       });
     };
+
+    this.filterEvents();
   }
 
   componentDidMount() {
