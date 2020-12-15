@@ -15,6 +15,7 @@ import { appLogo } from '../../../images/index';
 class GroupMain extends Component {
   state = {
     searchQuery: '',
+    key: 0,
   }
 
   componentDidMount() {
@@ -35,13 +36,13 @@ class GroupMain extends Component {
   onLikeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
-    this.setState((prevState) => (prevState));
+    this.setState((prevState) => ({ ...prevState, key: prevState.key + 1 }));
   }
 
   onNoticeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.noticeGroup(id, oper);
-    this.setState((prevState) => (prevState));
+    this.setState((prevState) => ({ ...prevState, key: prevState.key + 1 }));
   }
 
   makeGroupBox = (group) => {
