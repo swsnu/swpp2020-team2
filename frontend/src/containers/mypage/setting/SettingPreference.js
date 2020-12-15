@@ -24,6 +24,11 @@ class SettingPreference extends Component {
     return state;
   }
 
+  onConfirmHandler=() => {
+    this.props.changeLanguage(this.state.language);
+    alert('Setting has been applied');
+  }
+
   onRouteHandler=(url) => {
     // alert if there is unsaved content
     this.props.history.push(url);
@@ -47,6 +52,7 @@ class SettingPreference extends Component {
         <select id="department-input" onChange={(event) => this.setState({ language: event.target.value })}>
           {this.props.languages.map(makeOption)}
         </select>
+        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
         <button onClick={() => this.onRouteHandler('/mypage')}>back</button>
         <button onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</button>
@@ -65,6 +71,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
   getLanguages: () => dispatch(actionCreators.getLanguages()),
+  changeLanguage: (language) => dispatch(actionCreators.changeLanguage(language)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingPreference);

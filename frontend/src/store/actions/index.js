@@ -11,6 +11,8 @@ export {
 
   bringEvent,
   likeEvent,
+  changePassword,
+  changeLanguage,
 } from './user';
 
 export {

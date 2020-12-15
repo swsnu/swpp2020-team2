@@ -88,7 +88,7 @@ class Signup extends Component {
 
   render() {
     var makeOption = function func(X) {
-      return <option value={X.id}>{X.name}</option>;
+      return <option key={X.id} value={X.id}>{X.name}</option>;
     };
 
     return (
