@@ -14,20 +14,24 @@ class GroupProfile extends Component {
     this.props.getGroup(this.props.match.params.id);
   }
 
+  onConfirmHandler=() => {
+
+  }
+
   onRouteHandler=(url) => {
     this.props.history.push(url);
-  };
+  }
 
   render() {
     return (
-      <div className="SettingProfile">
+      <div className="GroupProfile">
         <div className="topBar">
           <TopBar
             tabNum={2}
             history={this.props.history}
           />
         </div>
-        <h1>Profile setting</h1>
+        <h1>Profile</h1>
         <div className="box">
           <label className="label">Group name:</label>
           <div className="inputBox">
@@ -47,6 +51,7 @@ class GroupProfile extends Component {
             />
           </div>
         </div>
+        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
         <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
         <button onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</button>

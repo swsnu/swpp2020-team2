@@ -24,6 +24,8 @@ import GroupCreate from './containers/group/create/GroupCreate';
 import GroupDetail from './containers/group/detail/GroupDetail';
 
 import GroupProfile from './containers/group/setting/GroupProfile';
+import GroupMembers from './containers/group/setting/GroupMembers';
+import GroupPrivacy from './containers/group/setting/GroupPrivacy';
 
 function App({ history }) {
   return (
@@ -49,6 +51,8 @@ function App({ history }) {
           <Route path="/group/create" exact component={GroupCreate} />
           <Route path="/group/details/:id" exact component={GroupDetail} />
           <Route path="/group/:id/setting/profile" exact component={GroupProfile} />
+          <Route path="/group/:id/setting/members" exact component={GroupMembers} />
+          <Route path="/group/:id/setting/privacy" exact component={GroupPrivacy} />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>

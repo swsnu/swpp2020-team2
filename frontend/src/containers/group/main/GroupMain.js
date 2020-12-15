@@ -35,11 +35,13 @@ class GroupMain extends Component {
   onLikeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
+    this.setState((prevState) => (prevState));
   }
 
   onNoticeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
+    this.props.noticeGroup(id, oper);
+    this.setState((prevState) => (prevState));
   }
 
   makeGroupBox = (group) => {

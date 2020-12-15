@@ -42,7 +42,7 @@ class EventCreate extends Component {
   componentDidUpdate(prevProps) {
     //  if (!this.props.signinedUser) this.props.history.replace('/main');
     if (this.props.tagRecommend !== prevProps.tagRecommend) {
-      this.setState({ tags: this.props.tagRecommend })
+      this.setState({ tags: this.props.tagRecommend });
     }
   }
 
@@ -55,17 +55,16 @@ class EventCreate extends Component {
   onClickAddTag = () => {
     if (this.state.content.length > 0) {
       this.props.onGetTagRecommend(this.state.content); // content에 맞는 tag 추천
-    }
-    else alert("행사 내용을 입력하세요 !");
+    } else alert('행사 내용을 입력하세요 !');
   }
 
   onClickTag = (id) => {
     if (this.state.selectTags?.includes(id)) {
-      let removedTags = []
-      removedTags = this.state.selectTags?.filter(selectId => selectId !== id);
-      this.setState({ selectTags: removedTags })
+      let removedTags = [];
+      removedTags = this.state.selectTags?.filter((selectId) => selectId !== id);
+      this.setState({ selectTags: removedTags });
     } else {
-      this.setState({ selectTags: [...this.state.selectTags, id] })
+      this.setState({ selectTags: [...this.state.selectTags, id] });
     }
   }
 
@@ -214,14 +213,14 @@ class EventCreate extends Component {
               </div>
               <div className="box">
                 <button className="addTag" onClick={() => this.onClickAddTag()}>#태그 추가</button>
-                {this.state.tags.map((tag) => {
-                  return (
-                    <div className={"tag " + this.state.selectTags.includes(tag.id) ? "UnSelected" : "Selected"}
-                      onClick={() => this.onClickTag(tag.id)}>
-                      {tag.name}
-                    </div>
-                  )
-                })}
+                {this.state.tags.map((tag) => (
+                  <div
+                    className={`tag ${this.state.selectTags.includes(tag.id)}` ? 'UnSelected' : 'Selected'}
+                    onClick={() => this.onClickTag(tag.id)}
+                  >
+                    {tag.name}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
