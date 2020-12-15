@@ -34,11 +34,13 @@ class GroupSearch extends Component {
   onLikeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
+    this.setState((prevState) => (prevState));
   }
 
   onNoticeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
+    this.props.noticeGroup(id, oper);
+    this.setState((prevState) => (prevState));
   }
 
   makeGroupBox = (group) => {
@@ -119,7 +121,6 @@ const mapDispatchToProps = (dispatch) => ({
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
-  joinGroup: (id, op) => dispatch(actionCreators.joinGroup(id, op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearch);

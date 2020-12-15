@@ -23,7 +23,7 @@ export {
   uploadImage,
   createEvent,
   reportEvent,
-  
+
   getTagRecommend,
 
 } from './events';
@@ -36,6 +36,7 @@ export {
   getNoticeGroup,
   getMyGroup,
   searchGroup,
+  changeGroupPrivacy,
 } from './group';
 
 export {

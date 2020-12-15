@@ -4,12 +4,26 @@ import { connect } from 'react-redux';
 import TopBar from '../../../components/TopBar/TopBar';
 import * as actionCreators from '../../../store/actions/index';
 
-class GroupMembers extends Component {
+class GroupPrivacy extends Component {
   state={
+    privacy: null,
   }
 
   componentDidMount() {
     this.props.getGroup(this.props.match.params.id);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.currGroup) {
+      return {
+        privacy: props.currGroup.privacy,
+      };
+    }
+    return state;
+  }
+
+  onConfirmHandler=() => {
+    this.props.changeGroupPrivacy(this.state.privacy);
   }
 
   onRouteHandler=(url) => {
@@ -18,14 +32,22 @@ class GroupMembers extends Component {
 
   render() {
     return (
-      <div className="GroupMembers">
+      <div className="GroupPrivacy">
         <div className="topBar">
           <TopBar
             tabNum={2}
             history={this.props.history}
           />
         </div>
-        <h1>Manage members</h1>
+        <h1>Privacy</h1>
+        <div className="box">
+          <label className="label">These group&apos;s members are open to</label>
+          <select value={this.props.currGroup?.privacy} onChange={(event) => this.setState({ privacy: event.target.value })}>
+            <option value={1}>Only administrators</option>
+            <option value={2}>All users</option>
+            <option value={3}>No one</option>
+          </select>
+        </div>
 
         <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
         <button onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</button>
@@ -42,6 +64,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getGroup: (id) => dispatch(actionCreators.getGroup(id)),
+  changeGroupPrivacy: (id, privacy) => dispatch(actionCreators.changeGroupPrivacy(id, privacy)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers);
+export default connect(mapStateToProps, mapDispatchToProps)(GroupPrivacy);

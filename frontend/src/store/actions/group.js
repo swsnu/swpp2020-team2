@@ -80,3 +80,5 @@ export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group
   group: id,
   content,
 });
+
+export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy`, { privacy });
