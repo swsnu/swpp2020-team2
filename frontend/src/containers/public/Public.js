@@ -66,6 +66,7 @@ class Public extends Component {
         for (var i = 0; i < tagArray.length; i += 1) {
           tagPromise.push(this.getTagByName(tagArray[i]));
         }
+        console.log(`tagPromise : ${tagPromise}`);
         await Promise.all(tagPromise).then((responses) => {
           responses.forEach((response) => {
             if (response !== undefined) _tag.push(response.data.id);
@@ -96,7 +97,6 @@ class Public extends Component {
     this.filterEvents = async () => {
       const prevState = this.state;
       const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
-      // console.log(_events)
       this.setState({
         events: _events.data,
       });
@@ -287,8 +287,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   onGetUser: () => dispatch(actionCreators.getUserFull()),
-  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
-  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  // onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  // onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);

@@ -28,6 +28,8 @@ class EventListModal extends Component {
   }
 
   onClickBringEvent = (id) => {
+    console.log(`asdfasdfasdfadf ${id}`);
+    console.log(this.props.bringEventIDs);
     if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
     else this.props.onBringEvent(id, 'add');
   }
@@ -98,7 +100,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
   onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
-  onGetUser: () => dispatch(actionCreators.getUserFull()),
+  // onGetUser: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventListModal);
