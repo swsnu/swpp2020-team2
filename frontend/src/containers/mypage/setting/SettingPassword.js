@@ -22,13 +22,11 @@ class SettingPassword extends Component {
   }
 
   onConfirmHandler=() => {
-    // need currPassword check
     if (this.state.newPassword !== this.state.confirmPassword)alert('Please confirm your password correctly');
     else this.props.changePassword(this.state.currPassword, this.state.newPassword);
   }
 
   onRouteHandler=(url) => {
-    // alert if there is unsaved content
     this.props.history.push(url);
   }
 

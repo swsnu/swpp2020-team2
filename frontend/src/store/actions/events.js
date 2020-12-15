@@ -186,7 +186,6 @@ export const getEvent_ = (event) => ({
 export const getEvent = (id) => (dispatch) => axios.get(`/api/event/${id}/full/`)
   .then((res) => dispatch(getEvent_(res.data)));
 
-
 export const uploadImage_ = (data) => ({ type: actionTypes.POST_IMAGE, data });
 
 export const uploadImage = (dictImg) => (dispatch) => axios.post('/api/image/', dictImg)
@@ -212,9 +211,9 @@ export const createEvent = (event) => (dispatch) => axios.post('/api/event/creat
   .then((res) => {
     if (res.status === 201) {
       dispatch(createEvent_(res.data));
-      alert("이벤트를 성공적으로 등록하였습니다.")
+      alert('이벤트를 성공적으로 등록하였습니다.');
     } else {
-      alert("예상치 못한 오류로 이벤트 등록이 실패하였습니다.")
+      alert('예상치 못한 오류로 이벤트 등록이 실패하였습니다.');
     }
   });
 

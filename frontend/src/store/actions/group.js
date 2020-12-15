@@ -58,7 +58,7 @@ export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtere
 export const getMyGroup_ = (data) => ({ type: actionTypes.GET_MY_GROUP, data });
 
 export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
-  including:[],
+  including: [],
   filter_options: {
     group: ['my'],
   },

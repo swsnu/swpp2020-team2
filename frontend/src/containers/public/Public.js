@@ -86,8 +86,8 @@ class Public extends Component {
 
   onClickCreateEvent(date) {
     this.props.history.push({
-      pathname: `/details/create/`,
-      state: { date: date }
+      pathname: '/details/create/',
+      state: { date },
     });
   }
 

@@ -42,17 +42,17 @@ class EventCreate extends Component {
     //  if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
-  uploadImageHandler(e){
+  uploadImageHandler(e) {
     const formData = new FormData();
-    formData.append('imagefile',e.target.files[0]);
-    this.props.onCraeteImage(formData)
+    formData.append('imagefile', e.target.files[0]);
+    this.props.onCraeteImage(formData);
   }
 
   createEventHandler = () => {
-    let message = "";
-    if (!(this.state.title?.length > 0)) message += " 행사 제목을 입력하세요 ! \n";
-    if (!(this.state.category?.length > 0)) message += " 행사 종류를 선택하세요 ! \n";
-    if (!(this.state.group?.length > 0)) message += " 행사 단체를 입력하세요 ! \n";
+    let message = '';
+    if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
+    if (!(this.state.category?.length > 0)) message += ' 행사 종류를 선택하세요 ! \n';
+    if (!(this.state.group?.length > 0)) message += ' 행사 단체를 입력하세요 ! \n';
 
     if (message.length > 0) alert(message);
     else {
@@ -63,13 +63,13 @@ class EventCreate extends Component {
         category: this.state.category,
         tag: this.state.tags,
         group: this.state.group,
-        begin_time: this.state.begin_time + ":00",
-        end_time: this.state.end_time + ":00",
+        begin_time: `${this.state.begin_time}:00`,
+        end_time: `${this.state.end_time}:00`,
         last_editor: this.props.signinedUser,
-        image: this.props.selectedImage.map((item) => { return item.id }),
+        image: this.props.selectedImage.map((item) => item.id),
         content: this.state.content,
       });
-      this.props.history.replace('/public')
+      this.props.history.replace('/public');
     }
   }
 
@@ -78,7 +78,6 @@ class EventCreate extends Component {
   }
 
   render() {
-
     var makeOption = function func(X) {
       return <option value={X.id}>{X.name}</option>;
     };
@@ -157,12 +156,12 @@ class EventCreate extends Component {
                   <label className="infoKey">시간</label>
                   <select className="event-begin_time-input" onChange={(event) => this.setState({ begin_time: event.target.value })}>
                     <option>--select start time--</option>
-                    {this.timeRange().map((item) => { return <option value={item}>{item}</option> })}
+                    {this.timeRange().map((item) => <option value={item}>{item}</option>)}
                   </select>
 
                   <select className="event-end_time-input" onChange={(event) => this.setState({ end_time: event.target.value })}>
                     <option>--select end time--</option>
-                    {this.timeRange().map((item) => { return <option value={item}>{item}</option> })}
+                    {this.timeRange().map((item) => <option value={item}>{item}</option>)}
                   </select>
                 </div>
 
@@ -182,9 +181,9 @@ class EventCreate extends Component {
 
                 />
               </div>
-              <div className="box">  
+              <div className="box">
                 <label>사진 업로드</label>
-                <input className="uploadImage" type="file" name="file" onChange={e => this.uploadImageHandler(e)}/>
+                <input className="uploadImage" type="file" name="file" onChange={(e) => this.uploadImageHandler(e)} />
               </div>
               <div className="box">
                 <button className="addTag" onClick={() => { }}>#태그 추가</button>
@@ -196,7 +195,8 @@ class EventCreate extends Component {
             <button
               className="confirm-create-event-button"
               onClick={() => this.createEventHandler()}
-            >Create
+            >
+              Create
             </button>
           </div>
         </div>

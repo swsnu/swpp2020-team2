@@ -30,7 +30,6 @@ class SettingPreference extends Component {
   }
 
   onRouteHandler=(url) => {
-    // alert if there is unsaved content
     this.props.history.push(url);
   }
 
