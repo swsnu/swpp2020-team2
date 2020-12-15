@@ -13,6 +13,7 @@ export {
   likeEvent,
   changePassword,
   changeLanguage,
+  changeUserInfo,
 } from './user';
 
 export {

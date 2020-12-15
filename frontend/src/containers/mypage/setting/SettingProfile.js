@@ -28,11 +28,11 @@ class SettingProfile extends Component {
   }
 
   onConfirmHandler=() => {
-    // use user info modify api
+    this.props.changeUserInfo(this.props.firstName, this.props.lastName, this.props.department);
+    alert('Setting has been applied');
   }
 
   onRouteHandler=(url) => {
-    // alert if there is unsaved content
     this.props.history.push(url);
   }
 
@@ -42,7 +42,7 @@ class SettingProfile extends Component {
     };
 
     return (
-      <div className="MyPage">
+      <div className="SettingProfile">
         <div className="topBar">
           <TopBar
             tabNum={null}
@@ -75,25 +75,25 @@ class SettingProfile extends Component {
         <div className="box">
           <label className="label">
             ID:
-            {this.props.userInfo.username}
+            {this.props.userInfo?.username}
           </label>
         </div>
         <div className="box">
           <label className="label">
             University:
-            {this.props.userInfo.university.name}
+            {this.props.userInfo?.university.name}
           </label>
         </div>
         <div className="box">
           <label className="label">Department:</label>
-          <select id="deparment-input" value={this.props.userInfo.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
-            {this.props.universities.map(makeOption)}
+          <select id="deparment-input" value={this.props.userInfo?.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
+            {this.props.departments.map(makeOption)}
           </select>
         </div>
         <div className="box">
           <label className="label">
             Email:
-            {this.props.userInfo.email}
+            {this.props.userInfo?.email}
           </label>
         </div>
         <button onClick={() => this.onConfirmHandler()}>Confirm</button>
@@ -115,6 +115,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(actionCreators.getUser()),
   getDepartments: () => dispatch(actionCreators.getDepartments()),
+  changeUserInfo: (firstName, lastName, department) => dispatch(actionCreators.changeUserInfo(firstName, lastName, department)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingProfile);

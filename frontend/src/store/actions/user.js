@@ -110,6 +110,15 @@ export const bringEvent = (id, oper) => (dispatch) => axios.put('/api/user/signi
     }
   });
 
-export const changePassword = (oldPassword, password) => (dispatch) => axios.put('/api/user/signin/change_password/', { oldPassword, password });
+export const changePassword = (oldPassword, password) => (dispatch) => axios.put('/api/user/signin/change_password/', { old_password: oldPassword, password })
+  .then((res) => {
+    if (res.status === 403)alert('current password is wrong');
+  });
 
 export const changeLanguage = (language) => (dispatch) => axios.put('/api/user/signin/change_language/', { language });
+
+export const changeUserInfo = (firstName, lastName, department) => (dispatch) => axios.put('/api/user/signin/change_info/', {
+  first_name: firstName,
+  last_name: lastName,
+  department,
+});
