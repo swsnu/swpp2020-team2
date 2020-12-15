@@ -32,6 +32,7 @@ export {
   createGroup,
   getAllGroup,
   getGroup,
+  getGroupFull,
   getLikeGroup,
   getNoticeGroup,
   getMyGroup,

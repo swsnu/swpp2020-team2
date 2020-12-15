@@ -13,6 +13,7 @@ import './GroupSearch.css';
 class GroupSearch extends Component {
   state = {
     searchQuery: '',
+    key:0,
   }
 
   componentDidMount() {
@@ -27,6 +28,10 @@ class GroupSearch extends Component {
     if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
+  shouldComponentUpdate(nextProps,nextState){
+    return true;
+  }
+
   onSearchHandler = () => {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
@@ -34,13 +39,13 @@ class GroupSearch extends Component {
   onLikeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
-    this.setState((prevState) => ({ ...prevState, key: prevState.key + 1 }));
+    this.setState({key:Math.random()});
   }
 
   onNoticeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.noticeGroup(id, oper);
-    this.setState((prevState) => ({ ...prevState, key: prevState.key + 1 }));
+    this.setState({key:Math.random()});
   }
 
   makeGroupBox = (group) => {

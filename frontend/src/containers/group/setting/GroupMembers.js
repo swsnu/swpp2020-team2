@@ -13,7 +13,7 @@ class GroupMembers extends Component {
   }
 
   componentDidMount() {
-    // this.props.getGroup(this.props.match.params.id);
+    // this.props.getGroupFull(this.props.match.params.id);
   }
 
   onConfirmHandler=() => {
@@ -74,7 +74,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getGroup: (id) => dispatch(actionCreators.getGroup(id)),
+  getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers);
