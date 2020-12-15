@@ -40,7 +40,7 @@ class MyPage extends Component {
           Email:
           {this.props.userInfo?.email}
         </h2>
-        <button onClick={() => { this.props.history.push('/mypage/setting/profile'); }}>settings</button>
+        <button className="setting-button" onClick={() => { this.props.history.push('/mypage/setting/profile'); }}>settings</button>
       </div>
     );
   }
