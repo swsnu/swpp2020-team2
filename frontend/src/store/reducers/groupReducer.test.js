@@ -50,6 +50,19 @@ describe('groupReducer', () => {
     expect(ret.currGroup).toEqual(sampleGroup);
   });
 
+  it('should handle get_group_full', () => {
+    const sampleGroup = {
+      id: 1,
+      name: 'test_group',
+      king: 1,
+      description: 'test_description',
+      privacy: 1,
+    };
+    const action = { type: actionTypes.GET_GROUP_FULL, data: sampleGroup };
+    const ret = groupReducer(stubInitialState, action);
+    expect(ret.currGroup).toEqual(sampleGroup);
+  });
+
   it('should handle get_like_group', () => {
     const sampleGroups = [{
       id: 1,

@@ -38,6 +38,8 @@ export {
   getMyGroup,
   searchGroup,
   changeGroupPrivacy,
+  manageMember,
+  manageAdmin,
 } from './group';
 
 export {

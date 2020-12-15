@@ -28,8 +28,11 @@ class SettingProfile extends Component {
   }
 
   onConfirmHandler=() => {
-    this.props.changeUserInfo(this.props.firstName, this.props.lastName, this.props.department);
-    alert('Setting has been applied');
+    if(this.state.firstName===''||this.state.lastName==='')alert('You should fill names!');
+    else{
+      this.props.changeUserInfo(this.props.firstName, this.props.lastName, this.props.department);
+      alert('Setting has been applied!');
+    }
   }
 
   onRouteHandler=(url) => {
