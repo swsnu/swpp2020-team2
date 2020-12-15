@@ -960,7 +960,7 @@ def get_event(request):
         'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
-        'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(id=event.last_editor_id).department.name},
+        'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
         'image': [image.id for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
@@ -1052,7 +1052,7 @@ def get_event_filtered(request):
     'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
     'begin_time': str(event.begin_time),
     'end_time': str(event.end_time),
-    'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(id=event.last_editor_id).department.name},
+    'last_editor': {'id': event.last_editor_id, 'name': User.objects.get(id=event.last_editor_id).username, 'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
     'image': [image.id for image in event.image.all()],
     'content': event.content,
     'likes': [up.user.id for up in event.likes_userpreference.all()],
@@ -1151,7 +1151,7 @@ def get_put_delete_event_full(request, event_id):
     group = Group.objects.get(id=event.group_id)
     category = Category.objects.get(id=event.category_id)
     last_editor = User.objects.get(id=event.last_editor_id)
-    up = UserPreference.objects.get(id=event.last_editor_id)
+    up = UserPreference.objects.get(user_id=event.last_editor_id)
 
     if request.method == 'GET':
         event_dict = {'id': event.id,
