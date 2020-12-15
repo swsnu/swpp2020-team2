@@ -113,6 +113,7 @@ export const bringEvent = (id, oper) => (dispatch) => axios.put('/api/user/signi
 export const changePassword = (oldPassword, password) => (dispatch) => axios.put('/api/user/signin/change_password/', { old_password: oldPassword, password })
   .then((res) => {
     if (res.status === 403)alert('current password is wrong');
+    else alert('setting has been applied');
   });
 
 export const changeLanguage = (language) => (dispatch) => axios.put('/api/user/signin/change_language/', { language });
