@@ -110,6 +110,6 @@ export const bringEvent = (id, oper) => (dispatch) => axios.put('/api/user/signi
     }
   });
 
-export const changePassword = (password) => (dispatch) => axios.put('/api/user/signin/change_password/', { password });
+export const changePassword = (oldPassword, password) => (dispatch) => axios.put('/api/user/signin/change_password/', { oldPassword, password });
 
 export const changeLanguage = (language) => (dispatch) => axios.put('/api/user/signin/change_language/', { language });

@@ -24,7 +24,7 @@ class SettingPassword extends Component {
   onConfirmHandler=() => {
     // need currPassword check
     if (this.state.newPassword !== this.state.confirmPassword)alert('Please confirm your password correctly');
-    else this.props.changePassword(this.state.newPassword);
+    else this.props.changePassword(this.state.currPassword, this.state.newPassword);
   }
 
   onRouteHandler=(url) => {
@@ -107,7 +107,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(actionCreators.getUser()),
-  changePassword: (password) => dispatch(actionCreators.changePassword(password)),
+  changePassword: (oldPassword, password) => dispatch(actionCreators.changePassword(oldPassword, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingPassword);
