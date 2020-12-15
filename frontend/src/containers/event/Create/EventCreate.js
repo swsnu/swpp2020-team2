@@ -19,6 +19,19 @@ class EventCreate extends Component {
     selectTags: [],
   }
 
+  componentDidMount() {
+    this.props.getUserId();
+    this.props.getCategories();
+    this.props.getMyGroup();
+  }
+
+  componentDidUpdate(prevProps) {
+    //  if (!this.props.signinedUser) this.props.history.replace('/main');
+    if (this.props.tagRecommend !== prevProps.tagRecommend) {
+      this.setState({ tags: this.props.tagRecommend });
+    }
+  }
+
   timeRange = () => {
     const timeRange = [];
     for (let i = 0; i < 24; i++) {
@@ -31,19 +44,6 @@ class EventCreate extends Component {
       }
     }
     return timeRange;
-  }
-
-  componentDidMount() {
-    this.props.getUserId();
-    this.props.getCategories();
-    this.props.getMyGroup();
-  }
-
-  componentDidUpdate(prevProps) {
-    //  if (!this.props.signinedUser) this.props.history.replace('/main');
-    if (this.props.tagRecommend !== prevProps.tagRecommend) {
-      this.setState({ tags: this.props.tagRecommend });
-    }
   }
 
   uploadImageHandler(e) {
