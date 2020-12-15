@@ -260,6 +260,28 @@ def get_user_full(request, user_id):
     return JsonResponse(user_dict)
 
 @ensure_csrf_cookie
+def change_info_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    user.first_name = req_data['first_name']
+    user.last_name = req_data['last_name']
+    user_preference.department_id = req_data['department']
+    return HttpResponse(status=204)
+
+@ensure_csrf_cookie
 def like_event_user(request):
 
     '''
@@ -400,7 +422,10 @@ def change_password_user(request):
     user = request.user
 
     req_data = json.loads(request.body.decode())
+    old_password = req_data['old_password']
     password = req_data['password']
+    if not user.check_password(old_password):
+        return HttpResponse(status=403)
     user.set_password(password)
     user.save()
     new_user = authenticate(request, username=user.username, password=password)

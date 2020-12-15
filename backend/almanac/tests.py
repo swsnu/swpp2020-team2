@@ -732,12 +732,12 @@ class AlmanacUserTestCase(TransactionTestCase):
         new_password = 'new_password'
 
         response = client.post('/api/user/signin/change_password/', json.dumps(
-            {'password': new_password}),
+            {'old_password': 'password2', 'password': new_password}),
             content_type='application/json')
         self.assertEqual(response.status_code, 405)
 
         response = client.put('/api/user/signin/change_password/', json.dumps(
-            {'password': new_password}),
+            {'old_password': 'password2', 'password': new_password}),
             content_type='application/json')
         self.assertEqual(response.status_code, 401)
 
@@ -747,7 +747,12 @@ class AlmanacUserTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
 
         response = client.put('/api/user/signin/change_password/', json.dumps(
-            {'password': new_password}),
+            {'old_password': 'password4', 'password': new_password}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.put('/api/user/signin/change_password/', json.dumps(
+            {'old_password': 'password2', 'password': new_password}),
             content_type='application/json')
         self.assertEqual(response.status_code, 204)
 

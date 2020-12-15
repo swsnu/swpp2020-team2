@@ -18,6 +18,7 @@ urlpatterns = [
     path('user/signin/full/', views.get_user_signin_full, name='get_user_signin_full'),
     path('user/<int:user_id>/', views.get_user, name='get_user'),
     path('user/<int:user_id>/full/', views.get_user_full, name='get_user_full'),
+    path('user/signin/change_info/', views.change_info_user, name='change_info_user'),
     path('user/signin/like_event/', views.like_event_user, name='like_event_user'),
     path('user/signin/bring_event/', views.bring_event_user, name='bring_event_user'),
     path('user/signin/like_group/', views.like_group_user, name='like_group_user'),
