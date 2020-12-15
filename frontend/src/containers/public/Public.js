@@ -106,9 +106,11 @@ class Public extends Component {
 
   componentDidMount() {
     this.props.onGetUser();
+    this.filterEvents();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    // this.filterEvents();
     return true;
   }
 
