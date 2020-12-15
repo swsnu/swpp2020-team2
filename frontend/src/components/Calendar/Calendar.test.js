@@ -10,7 +10,7 @@ const sampleDate2 = format(addDays(new Date(), 15), 'yyyy-MM-dd');
 const sampleDate3 = format(addDays(new Date(), 11), 'yyyy-MM-dd');
 const sample = [
   {
-    category: 1,
+    category: { id: 1 },
     date: sampleDate,
   },
   {

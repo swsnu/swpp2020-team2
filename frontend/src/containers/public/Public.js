@@ -140,6 +140,10 @@ class Public extends Component {
     });
   }
 
+  onClickDetailEvent = (id) => {
+    this.props.history.push(`/details/${id}`);
+  }
+
   setViewOption(str) {
     this.setState({
       viewOption: str,
@@ -233,10 +237,8 @@ class Public extends Component {
     } else {
       view = (
         <ListView
-          day={this.state.currentDate}
-          history={this.props.history}
+          onClickDetailEvent={this.onClickDetailEvent}
           monthEventList={this.state.events}
-          onClickCreateEvent={this.onClickCreateEvent}
         />
       );
     }

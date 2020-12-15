@@ -1,71 +1,41 @@
 import React, { Component } from 'react';
 import format from 'date-fns/format';
 import './ListView.css';
-import { connect } from 'react-redux';
-
-import { GrTableAdd } from 'react-icons/gr';
-import * as actionCreators from '../../store/actions/index';
-
-import Event from '../eventBox/EventBox';
 
 const ListView = ({
-  day, monthEventList, history, onClickCreateEvent,
+  monthEventList, onClickDetailEvent,
 }) => {
-  const NumEvents = (monthEventList === undefined) ? 0 : monthEventList.length;
-  const dateFormat = 'yyyy. MM.';
-  const date = format(day, dateFormat);
-
-  const onClickDetailEvent = (id) => {
-    history.push(`/details/${id}`);
-  };
-
-  const events = monthEventList?.map((event) => (
-    <Event
-      event={event}
-      bringEvent={() => {}}// this.onClickBringEvent(event.id)}
-      likeEvent={() => {}}// this.onClickLikeEvent(event.id)}
-      reportEvent={() => {}}// this.onClickReportEvent(event.id)}
-      detailEvent={() => onClickDetailEvent(event.id)}
-    />
+  const header = (
+    <div className="board_header">
+      <div className="board_id">번호</div>
+      <div className="board_title">제목</div>
+      <div className="board_group">단체</div>
+      <div className="board_date">날짜</div>
+      <div className="board_like">좋아요</div>
+      <div className="board_bring">가져오기</div>
+    </div>
+  );
+  const contents = monthEventList?.map((event, index) => (
+    <div className={`board_content${index%2}`} onClick={()=>onClickDetailEvent(event.id)}>
+      <div className="board_id">{event.id}</div>
+      <div className="board_title">{event.title}</div>
+      <div className="board_group">{event.group.name}</div>
+      <div className="board_date">{event.date}</div>
+      <div className="board_like">{event.likes.length}</div>
+      <div className="board_bring">{event.brings.length}</div>
+    </div>
   ));
 
   return (
     <div className="ListView">
-      <div className="top">
-        <div className="left">
-          {date}
-        </div>
-
-        <div className="right">
-          <div className="NumEvents">
-            {NumEvents}
-            {' '}
-            events
-          </div>
-
-          <div className="createEvent">
-            <button className="createEventButton" type="button" onClick={() => onClickCreateEvent(day)}>
-              <GrTableAdd size="100%" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="eventList">
+      <div className="board">
+        {header}
         <nav className="nav">
-          {events}
+          {contents}
         </nav>
       </div>
     </div>
   );
 };
-/*
-const mapStateToProps = (state) => ({
 
-});
-
-const mapDispatchToProps = (dispatch) => ({
-
-});
-*/
 export default ListView;

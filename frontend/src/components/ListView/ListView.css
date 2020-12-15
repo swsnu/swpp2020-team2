@@ -7,67 +7,87 @@
     left: 60%;
     transform: translate(-50%, 0%);
     flex-direction: column;
-    background-color: rgb(240,240,240);
     border-radius: 60px;
 }
 
-.ListView .top{
-    display: flex;
-    flex-direction: row;
-    height: 100px;
-    width: 100%;
-}
-
-.ListView .top .left{
-    display: flex;
-    flex:1;
-    flex-direction: row;
-    float: left;
-    align-items: center;
-    margin-left: 120px;
-}
-
-.ListView .top .right{
-    display: flex;
-    margin-left: auto;
-    flex-direction: row;
-    align-items: center;
-    margin-right: 150px;
-}
-
-.ListView .top .right .createEvent{
-    margin: 10px;
-    height: 36px;
-    width:36px;
-}
-
-.ListView .createEventButton{
-    cursor: pointer;    
-}
-
-.ListView .top .rightCorner{
-    position:absolute;
-    top: 4%;
-    right: 4%;
-}
-
-.ListView .top .closeButton{
-    font-size: 150%;
-    border: none;
-    color: gray;
-    outline: none;
-    cursor: pointer;
-}
-
-.ListView .eventList{
-    flex:1;
-    margin-left: 100px;
-    margin-right: 100px;
-    display: block;
+.ListView .board{
+    height: 600px;
 }
 
 .ListView .nav{
-    height: 450px;
+    height: 100%;
     width: 100%;
     overflow-y: scroll;
+}
+
+.ListView .board_header{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    background-color: rgb(245,245,245);
+    font-weight: bold;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+}
+
+.ListView .board_content0{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    text-align:center;
+    border-bottom: 1px solid gray;
+}
+
+.ListView .board_content1{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    text-align:center;
+    border-bottom: 1px solid gray;
+    background-color: rgb(250,250,250);
+}
+
+.ListView .board_id{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+}
+
+.ListView .board_title{
+    display:flex;
+    align-items: center;
+    width: 600px;
+}
+
+.ListView .board_header .board_title{
+    justify-content: center;
+}
+
+.ListView .board_group{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+}
+
+.ListView .board_date{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+}
+
+.ListView .board_like{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+}
+
+.ListView .board_bring{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
 }
