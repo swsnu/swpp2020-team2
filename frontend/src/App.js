@@ -8,7 +8,7 @@ import Private from './containers/private/Private';
 import Signup from './containers/signup/Signup';
 import Activate from './containers/signup/Activate';
 
-import MyPage from './containers/mypage/mypage/MyPage';
+import MyPage from './containers/mypage/mypage/Mypage';
 import SettingProfile from './containers/mypage/setting/SettingProfile';
 import SettingPassword from './containers/mypage/setting/SettingPassword';
 import SettingPreference from './containers/mypage/setting/SettingPreference';
