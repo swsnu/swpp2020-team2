@@ -66,7 +66,6 @@ class Public extends Component {
         for (var i = 0; i < tagArray.length; i += 1) {
           tagPromise.push(this.getTagByName(tagArray[i]));
         }
-        console.log(`tagPromise : ${tagPromise}`);
         await Promise.all(tagPromise).then((responses) => {
           responses.forEach((response) => {
             if (response !== undefined) _tag.push(response.data.id);

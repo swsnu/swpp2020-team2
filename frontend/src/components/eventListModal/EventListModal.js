@@ -28,8 +28,6 @@ class EventListModal extends Component {
   }
 
   onClickBringEvent = (id) => {
-    console.log(`asdfasdfasdfadf ${id}`);
-    console.log(this.props.bringEventIDs);
     if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
     else this.props.onBringEvent(id, 'add');
   }
