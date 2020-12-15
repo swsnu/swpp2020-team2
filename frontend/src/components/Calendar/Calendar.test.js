@@ -10,76 +10,12 @@ const sampleDate2 = format(addDays(new Date(), 15), 'yyyy-MM-dd');
 const sampleDate3 = format(addDays(new Date(), 11), 'yyyy-MM-dd');
 const sample = [
   {
-    category: {
-      id: 1,
-    },
+    category: 1,
     date: sampleDate,
   },
   {
-    category: {
-      id: 2,
-    },
-    date: sampleDate,
-  },
-  {
-    category: {
-      id: 1,
-    },
+    category: 2,
     date: sampleDate2,
-  },
-  {
-    category: {
-      id: 2,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 3,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 4,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 5,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 6,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 7,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 0,
-    },
-    date: sampleDate2,
-  },
-  {
-    category: {
-      id: 0,
-    },
-    date: sampleDate3,
-  },
-  {
-    category: {
-      id: 6,
-    },
-    date: sampleDate3,
   },
 ];
 

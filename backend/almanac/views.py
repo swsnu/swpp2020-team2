@@ -985,7 +985,9 @@ def get_event_filtered(request):
 
     req_data = json.loads(request.body.decode())
     filter_options_dict = req_data['filter_options']
+    print("filter : {}".format(filter_options_dict))
     sort_options_list = req_data['sort_options']
+    print("sort : {}".format(sort_options_list))
     count_options_dict = req_data['count_options']
     event_objects = Event.objects.all()
     # Filter(Dictionary)
