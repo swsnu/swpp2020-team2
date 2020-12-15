@@ -1392,6 +1392,83 @@ class AlmanacTag(TransactionTestCase):
         self.assertEqual(len(response.json()), 1)
         self.assertEqual(response.json()[0]['id'], id_technology)
 
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Energy, Entropy, Enthalpy',
+            'num': 1
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]['id'], id_economy)
+
+class AlmanacTag2(TransactionTestCase):
+
+    '''
+    a class docstring
+    '''
+
+    def setUp(self):
+
+        '''
+        a function docstring
+        '''
+
+        user1 = User.objects.create(
+            username='ray017', first_name='Raegeon',
+            last_name='Lee', password='password',
+            email='cbda117@snu.ac.kr', is_active=False
+        )
+        UserPreference.add_new_preference(
+            user_id=user1.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        user2 = User.objects.create_user(
+            username='taekop', first_name='Seungtaek',
+            last_name='Oh', password='password2',
+            email='taekop@snu.ac.kr', is_active=True
+        )
+        UserPreference.add_new_preference(
+            user_id=user2.id,
+            university_id=University.get_default_id(),
+            department_id=Department.get_default_id()
+        )
+        Tag.objects.create(
+            name='technology'
+        )
+        Tag.objects.create(
+            name='economy'
+        )
+        Tag.objects.create(
+            name='food'
+        )
+
+    def test_get_recommendation_tag2(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_technology=(Tag.objects.get(name='technology').id)
+        #id_economy=(Tag.objects.get(name='economy').id)
+        id_food=(Tag.objects.get(name='food').id)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.post('/api/tag/recommend/', json.dumps({
+            'content': 'Apples are very sweet and have better tastes than lime, melon, pineapple '
+            'or watermelon, so more customers look for apples.'
+        }),
+        content_type='application/json')
+        self.assertEqual(len(response.json()), 3)
+        self.assertEqual(response.json()[0]['id'], id_food)
+        self.assertEqual(response.json()[1]['id'], id_technology)
+
+
 class AlmanacBackLangImTestCase(TransactionTestCase):
 
     '''

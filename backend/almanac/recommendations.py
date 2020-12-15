@@ -36,7 +36,8 @@ def recommend_tag(content, num=3):
 
     train_data = [event['content'] for event in events[:100]]
     train_target = [[tag_to_int[t] for t in event['tag']] for event in events]
-    clf_ovr.fit(train_data, MultiLabelBinarizer().fit_transform(train_target))
+    if train_data:
+        clf_ovr.fit(train_data, MultiLabelBinarizer().fit_transform(train_target))
 
     predicted = clf_ovr.decision_function([content])
     pre_result = list(zip(
