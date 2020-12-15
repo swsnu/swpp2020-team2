@@ -23,6 +23,8 @@ import GroupSearchAll from './containers/group/search/GroupSearchAll';
 import GroupCreate from './containers/group/create/GroupCreate';
 import GroupDetail from './containers/group/detail/GroupDetail';
 
+import GroupProfile from './containers/group/setting/GroupProfile';
+
 function App({ history }) {
   return (
     <ConnectedRouter history={history}>
@@ -46,6 +48,7 @@ function App({ history }) {
           <Route path="/group/search/:searchQuery" exact component={GroupSearch} />
           <Route path="/group/create" exact component={GroupCreate} />
           <Route path="/group/details/:id" exact component={GroupDetail} />
+          <Route path="/group/:id/setting/profile" exact component={GroupProfile} />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>

@@ -18,6 +18,16 @@ class EventCreate extends Component {
     tags: [],
   }
 
+  componentDidMount() {
+    this.props.getUserId();
+    this.props.getCategories();
+    this.props.getMyGroup();
+  }
+
+  componentDidUpdate(prevProps) {
+    //  if (!this.props.signinedUser) this.props.history.replace('/main');
+  }
+
   timeRange = () => {
     const timeRange = [];
     for (let i = 0; i < 24; i++) {
@@ -30,22 +40,6 @@ class EventCreate extends Component {
       }
     }
     return timeRange;
-  }
-
-  componentDidMount() {
-    this.props.getUserId();
-    this.props.getCategories();
-    this.props.getMyGroup();
-  }
-
-  componentDidUpdate(prevProps) {
-    //  if (!this.props.signinedUser) this.props.history.replace('/main');
-  }
-
-  uploadImageHandler(e) {
-    const formData = new FormData();
-    formData.append('imagefile', e.target.files[0]);
-    this.props.onCraeteImage(formData);
   }
 
   createEventHandler = () => {
@@ -75,6 +69,12 @@ class EventCreate extends Component {
 
   onClickBack = () => {
     this.props.history.goBack();
+  }
+
+  uploadImageHandler(e) {
+    const formData = new FormData();
+    formData.append('imagefile', e.target.files[0]);
+    this.props.onCraeteImage(formData);
   }
 
   render() {

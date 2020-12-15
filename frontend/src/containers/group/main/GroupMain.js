@@ -167,6 +167,8 @@ const mapDispatchToProps = (dispatch) => ({
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
+  likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
+  noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMain);

@@ -100,7 +100,6 @@ class GroupSearch extends Component {
           <h2>Group Search Result</h2>
           {this.props.searchGroups.map(this.makeGroupBox)}
         </div>
-
       </div>
     );
   }
