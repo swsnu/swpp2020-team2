@@ -44,6 +44,7 @@ class EventListModal extends Component {
   render() {
     const events = this.state.dayEventList?.map((event) => (
       <Event
+        key={event}
         event={event}
         bringEvent={() => this.onClickBringEvent(event.id)}
         likeEvent={() => this.onClickLikeEvent(event.id)}
@@ -68,7 +69,7 @@ class EventListModal extends Component {
             </div>
 
             <div className="createEvent">
-              <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(format((this.props.day),'yyyy-MM-dd'))}>
+              <button className="createEventButton" type="button" onClick={() => this.props.onClickCreateEvent(format((this.props.day), 'yyyy-MM-dd'))}>
                 <GrTableAdd size="100%" />
               </button>
             </div>

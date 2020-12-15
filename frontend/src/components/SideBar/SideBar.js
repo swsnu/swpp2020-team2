@@ -37,15 +37,16 @@ const SideBar = ({
     setTagOption(document.getElementById('tagOption').value);
   }
 
-  const categoryName = ['#공연', '#전시회', '#일일호프', '#축제', '#장터', '#세미나', '#대회', '#해당없음'];
+  const categoryName = ['', '#공연', '#전시회', '#일일호프', '#축제', '#장터', '#세미나', '#대회', '#해당없음'];
   const FilterOption = () => {
     const categoryOptions = [];
     const selectedCategory = [];
-    for (let i = 0; i < 8; i += 1) {
+    selectedCategory.push(0);
+    for (let i = 1; i <= 8; i += 1) {
       if (selectedState.categoryOption.has(i)) selectedCategory.push(1);
       else selectedCategory.push(0);
     }
-    for (let i = 0; i < 8; i += 1) {
+    for (let i = 1; i <= 8; i += 1) {
       categoryOptions.push(
         <div key={i} className={`CategoryOptionButton${selectedCategory[i]}${i}`} src={categoryIcons[i]} label="categoryOption" type="button" onClick={() => setCategoryOption(i)}>
           {categoryName[i]}
@@ -99,7 +100,7 @@ const SideBar = ({
   const SortOptions = () => (
     <div className="SortOption">
       <div className="OptionName">Sort</div>
-      <select className="SortOptionSelect" onChange={(e) => setSortOption(e.value)}>
+      <select className="SortOptionSelect" onChange={(e) => setSortOption(e.target.value)}>
         <option value="recent">최근순</option>
         <option value="like">좋아요순</option>
       </select>
