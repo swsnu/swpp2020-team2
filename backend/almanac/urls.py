@@ -56,6 +56,8 @@ urlpatterns = [
     name='admin_modify_group'),
     path('group/<int:group_id>/king/', views.king_modify_group,
     name='king_modify_group'),
+    path('group/<int:group_id>/change_info/', views.change_info_group,
+    name='change_info_group'),
     path('group/<int:group_id>/change_profile/', views.change_profile_group,
     name='change_profile_group'),
     path('group/<int:group_id>/change_privacy/', views.change_privacy_group,

@@ -11,7 +11,7 @@ from sklearn.svm import SVC
 from sklearn.preprocessing import MultiLabelBinarizer
 from .models import Event, Tag
 
-clf_ovr = Pipeline([('vect', CountVectorizer(stop_words='english', max_features=7000, max_df=.15)),
+clf_ovr = Pipeline([('vect', CountVectorizer(stop_words='english', max_features=7000, max_df=.2)),
                 ('tfidf', TfidfTransformer(use_idf=True)),
                 ('clf', OneVsRestClassifier(SVC(kernel='linear')))])
 
