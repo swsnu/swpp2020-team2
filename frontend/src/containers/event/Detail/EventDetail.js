@@ -192,7 +192,7 @@ class EventDetail extends Component {
               <div className="infoBox">
                 <div className="infoKey">사진</div>
                 <div className="infoValue">
-                  <img src={"http://localhost:8000/api" + imageUrl} alt="event Image" />
+                  <img src={"http://ec2-23-21-93-176.compute-1.amazonaws.com:8000/api" + imageUrl} alt="event Image" />
                 </div>
               </div>
             </div>
