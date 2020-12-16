@@ -37,7 +37,9 @@ export {
   getNoticeGroup,
   getMyGroup,
   searchGroup,
+  changeGroupInfo,
   changeGroupPrivacy,
+  handleJoinRequest,
   manageMember,
   manageAdmin,
 } from './group';

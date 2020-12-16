@@ -20,6 +20,9 @@ class GroupDetail extends Component {
   }
 
   render() {
+    let settingButton=<button className="settingsBtn" onClick={this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}>Group Settings</button>
+    if(!this.props.currGroup.admin.find(e=>e.id===this.props.signinedUser))settingButton=null;
+
     return (
       <div className="GroupDetail">
         <div className="topBar">
@@ -31,6 +34,7 @@ class GroupDetail extends Component {
 
         {this.props.currGroup?.name}
         {this.props.currGroup?.description}
+        {settingButton}
       </div>
     );
   }

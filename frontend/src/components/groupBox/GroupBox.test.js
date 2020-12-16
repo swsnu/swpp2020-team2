@@ -13,8 +13,9 @@ describe('GroupSearchAll', () => {
     const mockedLike = jest.fn();
     const mockedNotice = jest.fn();
     const mockedReport = jest.fn();
-    const component = mount(<GroupBox like={() => mockedLike()} notice={() => mockedNotice()} report={() => mockedReport()} />);
-    const wrappers = component.find('.btn');
+    const component1 = mount(<GroupBox liked={true} like={() => mockedLike()} noticed={true} notice={() => mockedNotice()} report={() => mockedReport()} />);
+    const component2 = mount(<GroupBox liked={false} like={() => mockedLike()} noticed={false} notice={() => mockedNotice()} report={() => mockedReport()} />);
+    const wrappers = component1.find('.btn');
 
     wrappers.at(0).simulate('click');
     expect(mockedLike).toHaveBeenCalledTimes(1);

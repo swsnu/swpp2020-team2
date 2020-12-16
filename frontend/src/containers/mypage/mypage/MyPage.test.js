@@ -25,7 +25,7 @@ describe('MyPage', () => {
       .mockImplementation();
 
     const component = mount(makeComponent(getMockStore(mockedState)));
-    const wrapper = component.find('.setting-button');
+    const wrapper = component.find('.settingsBtn');
 
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/mypage/setting/profile');
