@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import TopBar from '../../../components/TopBar/TopBar';
 import * as actionCreators from '../../../store/actions/index';
 
+import './SettingPersonal.css'
+
 class SettingProfile extends Component {
-  state={
+  state = {
     firstName: '',
     lastName: '',
     department: null,
@@ -35,7 +37,7 @@ class SettingProfile extends Component {
     }
   }
 
-  onRouteHandler=(url) => {
+  onRouteHandler = (url) => {
     this.props.history.push(url);
   }
 
@@ -45,66 +47,92 @@ class SettingProfile extends Component {
     };
 
     return (
-      <div className="SettingProfile">
+      <div className="SettingPersonal">
         <div className="topBar">
           <TopBar
             tabNum={null}
             history={this.props.history}
           />
         </div>
-        <h1>Profile Setting</h1>
-        <div className="box">
-          <label className="label">First name:</label>
-          <div className="inputBox">
-            <input
-              id="firstname-input"
-              type="text"
-              value={this.state.firstName}
-              onChange={(event) => this.setState({ firstName: event.target.value })}
-            />
-          </div>
-        </div>
-        <div className="box">
-          <label className="label">Last name:</label>
-          <div className="inputBox">
-            <input
-              id="lastname-input"
-              type="text"
-              value={this.state.lastName}
-              onChange={(event) => this.setState({ lastName: event.target.value })}
-            />
-          </div>
-        </div>
-        <div className="box">
-          <label className="label">
-            ID:
-            {this.props.userInfo?.username}
-          </label>
-        </div>
-        <div className="box">
-          <label className="label">
-            University:
-            {this.props.userInfo?.university.name}
-          </label>
-        </div>
-        <div className="box">
-          <label className="label">Department:</label>
-          <select id="deparment-input" value={this.props.userInfo?.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
-            {this.props.departments.map(makeOption)}
-          </select>
-        </div>
-        <div className="box">
-          <label className="label">
-            Email:
-            {this.props.userInfo?.email}
-          </label>
-        </div>
-        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
-        <button onClick={() => this.onRouteHandler('/mypage')}>back</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</button>
+        <div className="container">
+          <div className="left">
+            <button onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
+
+            <div className="tabBar">
+              <label>Personal Settings</label>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/profile')} style={{color:"blue"}}>Profile</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
+            </div>
+          </div>
+
+          <div className="right">
+
+            <div className="header">
+              <label>Profile</label>
+              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+            </div>
+
+            <div className="body">
+
+              <div className="box">
+                <label>First name</label>
+                <div className="infoBox">
+                  <input
+                    id="firstname-input"
+                    type="text"
+                    value={this.state.firstName}
+                    onChange={(event) => this.setState({ firstName: event.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="box">
+                <label>Last name</label>
+                <div className="infoBox">
+                  <input
+                    id="lastname-input"
+                    type="text"
+                    value={this.state.lastName}
+                    onChange={(event) => this.setState({ lastName: event.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="box">
+                <label>ID</label>
+                <div className="infoBox">
+                  {this.props.userInfo?.username}
+                </div>
+
+              </div>
+              <div className="box">
+                <label>University</label>
+                <div className="infoBox">
+                  {this.props.userInfo?.university.name}
+                </div>
+
+              </div>
+
+              <div className="box">
+                <label>Department</label>
+                <div className="infoBox">
+                  <select id="deparment-input" value={this.props.userInfo?.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
+                    {this.props.departments.map(makeOption)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="box">
+                <label>Email</label>
+                <div className="infoBox">
+                  {this.props.userInfo?.email}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
