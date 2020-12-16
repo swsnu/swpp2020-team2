@@ -16,9 +16,9 @@ import {AiFillLike} from 'react-icons/ai'
 
 const GroupBox = (props) => (
   <div className="GroupBox">
-    <img src={props.image} alt="group logo" />
-    <div className="name">{props.name}</div>
-    <div className="description">{props.description}</div>
+    <img src={props.image} alt="group logo" onClick={() => props.detail()} />
+    <div className="name" onClick={() => props.detail()} >{props.name}</div>
+    <div className="description" onClick={() => props.detail()} >{props.description}</div>
     <div className="btnBox">
       <div className="btn" onClick={() => props.like()}>
         {props.liked?<AiFillLike color="blue" />:<GrLike color="black" />}

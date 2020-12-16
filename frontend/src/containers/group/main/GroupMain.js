@@ -48,6 +48,10 @@ class GroupMain extends Component {
     this.props.getNoticeGroup();
   }
 
+  onDetailHandler=(id) => {
+    this.props.history.push(`/group/details/${id}`);
+  }
+
   makeGroupBox = (group) => {
     function haveThisGroup(element) {
       if (element.id === group.id) return true;
@@ -66,6 +70,7 @@ class GroupMain extends Component {
         like={() => this.onLikeHandler(group.id, !liked)}
         noticed={noticed}
         notice={() => this.onNoticeHandler(group.id, !noticed)}
+        detail={() => this.onDetailHandler(group.id)}
         report={() => {}}
       />
     );
