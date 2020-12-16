@@ -19,7 +19,11 @@ INT_TO_TAG = []
 TAG_TO_INT = {}
 
 def add_tag(tag_id):
-    
+
+    '''
+    a function docstring
+    '''
+
     INT_TO_TAG.append(tag_id)
     TAG_TO_INT[tag_id] = len(INT_TO_TAG)
 
@@ -51,8 +55,10 @@ def recommend_tag(content, num=3):
         'content': e.content, 'tag': e.tag.values_list('id', flat=True)
         } for e in Event.objects.prefetch_related('tag').order_by('-date')]
 
-    train_data = [event['content'] for event in events[:100]]
-    train_target = [[TAG_TO_INT[t] for t in event['tag']] for event in events]
+    event_limit = 100
+
+    train_data = [event['content'] for event in events[:event_limit]]
+    train_target = [[TAG_TO_INT[t] for t in event['tag']] for event in events[:event_limit]]
     if train_data:
         clf_ovr.fit(train_data, MultiLabelBinarizer().fit_transform(train_target))
 
