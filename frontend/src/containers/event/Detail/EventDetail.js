@@ -80,6 +80,18 @@ class EventDetail extends Component {
     const eventContent = (this.props.event.content?.length > 0) ? this.props.event.content : '해당없음';
     const lastEditorName = (this.props.event.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
     const lastEditorDepartment = (eventLoaded) ? this.props.event.last_editor.department : '해당없음';
+    const imageUrl = (eventLoaded) ? this.props.event?.image[0].image_file_url : "";
+    const tags = (eventLoaded) ? this.props.event.tag : [];
+
+    const categoryColor = !(this.props.event.category?.name?.length > 0) ? "gray" : 
+                      this.props.event.category.id === 1 ? 'red'
+                      : this.props.event.category.id === 2 ? 'orange'
+                        : this.props.event.category.id === 3 ? 'yellow'
+                          : this.props.event.category.id === 4 ? 'green'
+                            : this.props.event.category.id === 5 ? 'skyblue'
+                              : this.props.event.category.id === 6 ? 'blue'
+                                : this.props.event.category.id === 7 ? 'purple'
+                                  : 'gray';
 
     const lastEditor = (
       <div className="lastEditor">
@@ -132,59 +144,77 @@ class EventDetail extends Component {
           </div>
 
           <div className="detailBox">
-            <div className="top">
 
-              <div className="box">
-                <div className="infoBox">
-                  <div className="infoKey">제목</div>
-                  <div className="infoValue">{eventTitle}</div>
-                </div>
-                <div className="infoBox">
-                  <div className="infoKey">분류</div>
-                  <div className="infoValue">{categoryName}</div>
-                </div>
+            <div className="box">
+              <div className="infoBox">
+                <div className="infoKey">제목</div>
+                <div className="infoValue">{eventTitle}</div>
               </div>
-
-              <div className="box">
-                <div className="infoBox">
-                  <div className="infoKey">단체</div>
-                  <div className="infoValue">{eventGroupName}</div>
-                </div>
-                <div className="infoBox">
-                  <div className="infoKey">장소</div>
-                  <div className="infoValue">{eventPlace}</div>
-                </div>
+              <div className="infoBox">
+                <div className="infoKey">분류</div>
+                <div className="infoValue" style={{color: categoryColor, fontWeight:"bold"}}>{categoryName}</div>
               </div>
-
-              <div className="box">
-                <div className="infoBox">
-                  <div className="infoKey">일시</div>
-                  <div className="infoValue">{formattedDate}</div>
-                </div>
-                <div className="infoBox">
-                  <div className="infoKey">시간</div>
-                  <div className="infoValue">
-                    {eventBeginTime}
-                    {' '}
-                    ~
-                    {' '}
-                    {eventEndTime}
-                  </div>
-                </div>
-              </div>
-
             </div>
 
-            <div className="content">
-              <div className="box">
-                {eventContent}
+            <div className="box">
+              <div className="infoBox">
+                <div className="infoKey">단체</div>
+                <div className="infoValue">{eventGroupName}</div>
               </div>
-              <div className="box">
-                이벤트 사진 업로드
+              <div className="infoBox">
+                <div className="infoKey">장소</div>
+                <div className="infoValue">{eventPlace}</div>
               </div>
-              <div className="box">
-                태그
+            </div>
+
+            <div className="box">
+              <div className="infoBox">
+                <div className="infoKey">일시</div>
+                <div className="infoValue">{formattedDate}</div>
               </div>
+              <div className="infoBox">
+                <div className="infoKey">시간</div>
+                <div className="infoValue">
+                  {eventBeginTime}
+                  {' '}
+                  ~
+                    {' '}
+                  {eventEndTime}
+                </div>
+              </div>
+            </div>
+
+            <div className="box large">
+              <div className="infoBox">
+                <div className="infoKey">내용</div>
+                <div className="infoValue">{eventContent}</div>
+              </div>
+            </div>
+
+            <div className="box large">
+              <div className="infoBox">
+                <div className="infoKey">사진</div>
+                <div className="infoValue">
+                  <img src={"/media/" + imageUrl} alt="event Image" />
+                </div>
+              </div>
+            </div>
+
+            <div className="box large">
+              <div className="infoBox">
+                <div className="infoKey">태그</div>
+                <div className="infoValue">
+                  <div className="tag" style={{color: categoryColor, fontWeight:"bold"}}># {categoryName}</div>
+                  {tags.map((tag) => {
+                    return (
+                      <div className="tag" style={{color: categoryColor, fontWeight:"bold"}}>
+                        # {tag.name}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
             </div>
           </div>
 
