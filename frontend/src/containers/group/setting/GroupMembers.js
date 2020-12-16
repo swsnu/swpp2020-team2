@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import TopBar from '../../../components/TopBar/TopBar';
+import JoinRequest from '../../../components/JoinRequest/JoinRequest';
+import ManageMember from '../../../components/ManageMember/ManageMember';
 import * as actionCreators from '../../../store/actions/index';
 
 class GroupMembers extends Component {
@@ -11,6 +13,7 @@ class GroupMembers extends Component {
   }
 
   componentDidMount() {
+    this.props.getUser();
     this.props.getGroupFull(this.props.match.params.id);
   }
 
@@ -32,6 +35,7 @@ class GroupMembers extends Component {
   }
 
   onConfirmHandler=() => {
+
     for(var user in this.props.currGroup.join_requests){
       if(this.state.joinRequests[user.id].accept){
         this.props.manageMember(this.props.match.params.id,user.id,'add');
@@ -76,47 +80,58 @@ class GroupMembers extends Component {
   }
 
   manageMembersHandler=(id,op)=>{
-    var manageMembers=this.state.manageMembers.slice();
-    if(op==='admin'){
-      manageMembers[id].admin=!manageMembers[id].admin;
-    }
+    if(id===this.props.signinedUser)alert('You cannot deauthorize/expel yourself!');
     else{
-      manageMembers[id].expel=!manageMembers[id].expel;
+      var manageMembers=this.state.manageMembers.slice();
+      if(op==='admin'){
+        if(this.state.manageMembers[id].admin){
+          manageMembers[id]={admin:false,expel:false};
+        }
+        else{
+          manageMembers[id]={admin:true,expel:false};
+        }
+      }
+      else{
+        if(this.state.manageMembers[id].expel){
+          manageMembers[id]={admin:false,expel:false};
+        }
+        else{
+          manageMembers[id]={admin:false,expel:true};
+        }
+      }
+      this.setState({...this.state,manageMembers});
     }
-    this.setState({...this.state,manageMembers});
   }
 
   makeJoinReqeustRow=(user) => {
-    return(<div className="JoinReqeust">
-      {user.last_name}&nbsp;{user.first_name}&nbsp;{user.email}&nbsp;{user.department.name}
-      <input
-        type="checkbox"
-        checked={this.state.joinRequests[user.id]?.accept}
-        onChange={()=>this.joinRequestHandler(user.id,'accept')}
+    return(
+      <JoinRequest
+        key={user.id}
+        firstName={user.first_name}
+        lastName={user.last_name}
+        email={user.email}
+        department={user.department.name}
+        accept={this.state.joinRequests[user.id]?.accept}
+        clickAccept={()=>this.joinRequestHandler(user.id,'accept')}
+        reject={this.state.joinRequests[user.id]?.reject}
+        clickReject={()=>this.joinRequestHandler(user.id,'reject')}
       />
-      <input
-        type="checkbox"
-        checked={this.state.joinRequests[user.id]?.reject}
-        onChange={()=>this.joinRequestHandler(user.id,'reject')}
-      />
-    </div>
     );
   }
 
   makeMembersManageRow=(member)=>{
-    return(<div className="ManageMember">
-      {member.last_name}&nbsp;{member.first_name}&nbsp;{member.email}&nbsp;{member.department.name}
-      <input
-        type="checkbox"
-        checked={this.state.manageMembers[member.id]?.admin}
-        onChange={()=>this.manageMembersHandler(member.id,'admin')}
+    return(
+      <ManageMember
+        key={member.id}
+        firstName={member.first_name}
+        lastName={member.last_name}
+        email={member.email}
+        department={member.department.name}
+        admin={this.state.manageMembers[member.id]?.admin}
+        clickAdmin={()=>this.manageMembersHandler(member.id,'admin')}
+        expel={this.state.manageMembers[member.id]?.expel}
+        clickExpel={()=>this.manageMembersHandler(member.id,'expel')}
       />
-      <input
-        type="checkbox"
-        checked={this.state.joinRequests[member.id]?.expel}
-        onChange={()=>this.manageMembersHandler(member.id,'expel')}
-      />
-    </div>
     );
   }
 
@@ -136,8 +151,6 @@ class GroupMembers extends Component {
           <div>{this.props.currGroup?.join_requests.map(this.makeJoinReqeustRow)}</div>
           <label className="label">Name/Email/Dept/Admin/Expel</label>
           <div>{this.props.currGroup?.member.map(this.makeMembersManageRow)}</div>
-          <label className="label">Name/Email/Dept/King</label>
-          <h3>king manage table</h3>
         </div>
         <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
@@ -151,10 +164,12 @@ class GroupMembers extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  signinedUser: state.ur.signinedUser,
   currGroup: state.gr.currGroup,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getUser:()=>dispatch(actionCreators.getUser()),
   getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
   manageMember: (groupId,userId,op)=>dispatch(actionCreators.manageMember(groupId,userId,op)),
   manageAdmin: (groupId,userId,op)=>dispatch(actionCreators.manageAdmin(groupId,userId,op)),
