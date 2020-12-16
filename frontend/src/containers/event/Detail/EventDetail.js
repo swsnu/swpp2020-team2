@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import format from 'date-fns/format';
 import { connect } from 'react-redux';
+import { MdRemoveShoppingCart, MdAddShoppingCart } from 'react-icons/md';
+
+import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 
 import { GoDiffAdded, GoReport } from 'react-icons/go';
 import { BiEditAlt } from 'react-icons/bi';
@@ -29,14 +32,17 @@ class EventDetail extends Component {
     this.props.history.push(`/details/modify/${this.props.event.id}/`);
   }
 
+  onClickBringEvent = (id) => {
+    if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
+    else this.props.onBringEvent(id, 'add');
+  }
+
+  onClickLikeEvent = (id) => {
+    if (this.props.likeEventIDs?.includes(id)) this.props.onLikeEvent(id, 'remove');
+    else this.props.onLikeEvent(id, 'add');
+  }
+
   /*
-  onClickBringEvent = () => {
-
-  }
-
-  onClickLikeEvent = () => {
-
-  }
   onClickDeleteEvent = () => {
 
   }
@@ -47,6 +53,9 @@ class EventDetail extends Component {
   }
 
   render() {
+    const likeBool = !!this.props.likeEventIDs?.includes(this.props.event.id);
+    const bringBool = !!this.props.bringEventIDs?.includes(this.props.event.id);
+
     let modal = null;
     if (this.state.modalBool) {
       modal = (
@@ -109,11 +118,11 @@ class EventDetail extends Component {
                 <button className="ModifyEvent" onClick={() => this.onClickModifyEvent()}>
                   <BiEditAlt size="100%" color="black" />
                 </button>
-                <button className="bringEvent" onClick={() => { }}>
-                  <GoDiffAdded size="100%" color="black" />
+                <button className="bringEvent" onClick={() => this.onClickBringEvent(this.props.event.id)}>
+                  {bringBool ? <MdRemoveShoppingCart size="100%" /> : <MdAddShoppingCart size="100%" />}
                 </button>
-                <button className="likeEvent" onClick={() => { }}>
-                  <GrLike size="100%" color="#fff" />
+                <button className="likeEvent" onClick={() => this.onClickLikeEvent(this.props.event.id)}>
+                  {likeBool ? <FcLike size="100%" /> : <FcLikePlaceholder size="100%" />}
                 </button>
                 <button className="reportEvent" onClick={() => this.onClickReportEvent()}>
                   <GoReport size="100%" color="red" />
@@ -196,11 +205,17 @@ class EventDetail extends Component {
 
 const mapStateToProps = (state) => ({
   //  signinedUser: state.ur.signinedUser,
+  likeEventIDs: state.ur.likeEvents,
+  bringEventIDs: state.ur.bringEvents,
+  loggedUser: state.ur.userFullInfo,
   event: state.evt.target,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
+  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  // onGetUser: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetail);
