@@ -217,6 +217,40 @@ export const createEvent = (event) => (dispatch) => axios.post('/api/event/creat
     }
   });
 
+export const modifyEvent_ = (event) => ({ type: actionTypes.MODIFY_EVENT, target: event });
+
+export const modifyEvent = (event) => (dispatch) => axios.put(`/api/event/${event.id}/full/`, {
+  title: event.title,
+  place: event.place,
+  date: event.date,
+  category: event.category,
+  tag: event.tag,
+  group: event.group,
+  begin_time: event.begin_time,
+  end_time: event.end_time,
+  last_editor: event.last_editor,
+  content: event.content,
+})
+  .then((res) => {
+    if (res.status === 201) {
+      dispatch(modifyEvent_(res.data));
+      alert('이벤트를 성공적으로 수정하였습니다.');
+    } else {
+      alert('예상치 못한 오류로 이벤트 등록이 실패하였습니다.');
+    }
+  });
+
+export const deleteEvent_ = (id) => ({ type: actionTypes.DELETE_EVENT, target: id });
+export const deleteEvent = (id) => (dispatch) => axios.delete(`/api/event/${id}/full/`)
+  .then((res) => {
+    if (res.status === 200) {
+      dispatch(deleteEvent_(id));
+      alert('이벤트를 성공적으로 삭제하였습니다.');
+    } else {
+      alert('예상치 못한 오류로 이벤트 삭제가 실패하였습니다.');
+    }
+  });
+
 export const getTagRecommend_ = (tagList) => ({ type: actionTypes.GET_TAG_RECOMMEND, target: tagList });
 
 export const getTagRecommend = (content) => (dispatch) => axios.post('/api/tag/recommend/', { 'content': content, 'num': 5 })

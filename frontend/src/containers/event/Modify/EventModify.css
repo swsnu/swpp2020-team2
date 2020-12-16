@@ -1,0 +1,137 @@
+.EventModify{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.EventModify .topBar{
+    width: 100%;
+}
+
+.EventModify .container{
+    display: flex;
+    flex-direction: column;
+    width:80%;
+    
+}
+
+.EventModify .container .btnBox{
+    display: flex;
+    flex-direction: row;
+}
+
+.EventModify .container .btnBox .left{
+    flex: 1;
+}
+.EventModify .container .btnBox .left .back{
+    margin-left: 5;
+}
+
+.EventModify .container .btnBox button{
+    align-items: center;
+    justify-content: center;
+    margin: 3px;
+    height: 30px;
+    width: 30px;
+}
+
+.EventModify .container .modifyBox{
+    display: flex;
+    flex-direction: column;
+    background-color: gainsboro;
+    border: solid;
+    border-width: 3px;
+    border-color: gray;
+}
+
+.EventModify .container .modifyBox .top{
+    display: flex;
+    flex-direction: column; 
+}
+.EventModify .container .modifyBox .top .box{
+    display: flex;
+    flex-direction: row; 
+}
+
+.EventModify .container .modifyBox .top .infoBox{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    align-items: center;
+    
+    border-bottom:solid;
+    border-right:solid;
+    border-width: 1px;
+    border-color: gray;
+
+}
+.EventModify .container .modifyBox .top .infoBox button{
+    background-color:#fff;
+    font-size: 16px;
+}
+
+.EventModify .container .modifyBox .top .infoBox .infoKey{
+    margin: 10px;
+    font-weight: bold;
+}
+
+.EventModify .container .modifyBox .content{
+    display: flex;
+    flex-direction: column;
+}
+
+.EventModify .container .modifyBox .content .box{
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: gray;
+}
+
+.EventModify .container .modifyBox .content .box .tag{
+    margin-left: 10px;
+    padding: 8px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.EventModify .container .modifyBox .content .box .tag:hover{
+    font-weight: bold;
+    opacity: 1;
+}
+
+.EventModify .container .modifyBox .content .box .UnSelected{
+    opacity: 0.3;
+}
+.EventModify .container .modifyBox .content .box .Selected{
+    color: blue;
+}
+
+
+.EventModify .container .confirmBox{
+    flex:1;
+    display: flex;
+    justify-content: center;
+    margin: 6px;
+}
+
+.EventModify .container .confirmBox button{
+    font-size: 18px;
+}
+
+.EventModify .container input{
+    background-color: gainsboro;
+    width:40%;
+    height:50%;
+    border: none;
+}
+.EventModify .container textarea{
+    background-color: gainsboro;
+    width:100%;
+    border: none;
+}

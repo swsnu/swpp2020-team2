@@ -22,6 +22,8 @@ export {
 
   uploadImage,
   createEvent,
+  modifyEvent,
+  deleteEvent,
   reportEvent,
 
   getTagRecommend,
