@@ -74,7 +74,7 @@ class GroupDetail extends Component {
 
     var joinReqeustButton=(
       <div className="btn" onClick={() => this.onJoinHandler(this.props.currGroup?.id, !joinRequested)}>
-        {joinRequested ? <BsPersonPlus color="orange" /> : <BiPersonPlus color="black" />}
+        {joinRequested ? <BsPersonPlus color="orange" /> : <BsPersonPlus color="black" />}
       </div>
     );
     if(joined){
@@ -119,11 +119,11 @@ class GroupDetail extends Component {
             </div>
           </div>
           <div className="row1">
-            <div className="key">단체명</div>
+            <div className="key">Group Name</div>
             <div className="value">{this.props.currGroup?.name}</div>
           </div>
           <div className="row2">
-            <div className="key">소개</div>
+            <div className="key">Description</div>
             <p className="value">{this.props.currGroup?.description}</p>
           </div>
         </div>
