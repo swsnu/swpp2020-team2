@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 import TopBar from '../../../components/TopBar/TopBar';
 import * as actionCreators from '../../../store/actions/index';
 
+import { FiSettings } from 'react-icons/fi'
+import { BsFillPersonLinesFill } from 'react-icons/bs'
+
+import './Mypage.css'
+
 class MyPage extends Component {
   componentDidMount() {
     this.props.getUser();
@@ -18,29 +23,59 @@ class MyPage extends Component {
             history={this.props.history}
           />
         </div>
-        <h1>My Page</h1>
-        <h2>
-          Name:
-          {this.props.userInfo?.first_name}
-          {this.props.userInfo?.last_name}
-        </h2>
-        <h2>
-          ID:
-          {this.props.userInfo?.username}
-        </h2>
-        <h2>
-          University:
-          {this.props.userInfo?.university.name}
-        </h2>
-        <h2>
-          Department:
-          {this.props.userInfo?.department.name}
-        </h2>
-        <h2>
-          Email:
-          {this.props.userInfo?.email}
-        </h2>
-        <button className="setting-button" onClick={() => { this.props.history.push('/mypage/setting/profile'); }}>settings</button>
+
+        <div className="header">
+          <label>My Page</label>
+          <div className="settingsBtn" onClick={() => this.props.history.push('/mypage/setting/profile')}>
+              <FiSettings size={40}/>
+          </div>
+        </div>
+
+        <div className="body">
+
+          <div className="profileImage">
+              <BsFillPersonLinesFill size={200}/>
+          </div>
+
+          <div className="infoBox">
+
+            <div className="line">
+              <label>Name</label>
+              <div className="info">
+                {this.props.userInfo?.first_name}{this.props.userInfo?.last_name}
+              </div>
+            </div>
+
+            <div className="line">
+              <label>ID</label>
+              <div className="info">
+                {this.props.userInfo?.username}
+              </div>
+            </div>
+
+            <div className="line">
+              <label>University</label>
+              <div className="info">
+                {this.props.userInfo?.university.name}
+              </div>
+            </div>
+
+            <div className="line">
+              <label>Department</label>
+              <div className="info">
+                {this.props.userInfo?.department.name}
+              </div>
+            </div>
+
+            <div className="line">
+              <label>Email</label>
+              <div className="info">
+                {this.props.userInfo?.email}
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     );
   }

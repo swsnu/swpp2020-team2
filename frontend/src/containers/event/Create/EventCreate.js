@@ -19,6 +19,19 @@ class EventCreate extends Component {
     selectTags: [],
   }
 
+  componentDidMount() {
+    this.props.getUserId();
+    this.props.getCategories();
+    this.props.getMyGroup();
+  }
+
+  componentDidUpdate(prevProps) {
+    //  if (!this.props.signinedUser) this.props.history.replace('/main');
+    if (this.props.tagRecommend !== prevProps.tagRecommend) {
+      this.setState({ tags: this.props.tagRecommend });
+    }
+  }
+
   timeRange = () => {
     const timeRange = [];
     for (let i = 0; i < 24; i++) {
@@ -31,19 +44,6 @@ class EventCreate extends Component {
       }
     }
     return timeRange;
-  }
-
-  componentDidMount() {
-    this.props.getUserId();
-    this.props.getCategories();
-    this.props.getMyGroup();
-  }
-
-  componentDidUpdate(prevProps) {
-    //  if (!this.props.signinedUser) this.props.history.replace('/main');
-    if (this.props.tagRecommend !== prevProps.tagRecommend) {
-      this.setState({ tags: this.props.tagRecommend });
-    }
   }
 
   uploadImageHandler(e) {
@@ -73,6 +73,8 @@ class EventCreate extends Component {
     if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
     if (!(this.state.category?.length > 0)) message += ' 행사 종류를 선택하세요 ! \n';
     if (!(this.state.group?.length > 0)) message += ' 행사 단체를 입력하세요 ! \n';
+    if (!(this.state.begin_time?.length > 0)) message += ' 행사 시작시간을 입력하세요 ! \n';
+    if (!(this.state.end_time?.length > 0)) message += ' 행사 시작시간을 입력하세요 ! \n';
 
     if (message.length > 0) alert(message);
     else {

@@ -15,16 +15,20 @@ const ListView = ({
       <div className="board_bring">가져오기</div>
     </div>
   );
-  const contents = monthEventList?.map((event, index) => (
-    <div className={`board_content${index%2}`} onClick={()=>onClickDetailEvent(event.id)}>
-      <div className="board_id">{event.id}</div>
-      <div className="board_title">{event.title}</div>
-      <div className="board_group">{event.group.name}</div>
-      <div className="board_date">{event.date}</div>
-      <div className="board_like">{event.likes.length}</div>
-      <div className="board_bring">{event.brings.length}</div>
-    </div>
-  ));
+  const contents = [];
+  for (let i = 0; i < monthEventList.length; i += 1) {
+    const event = monthEventList[i];
+    contents.push(
+      <div className={`board_content${i % 2}`} onClick={() => onClickDetailEvent(event.id)}>
+        <div className="board_id">{event.id}</div>
+        <div className="board_title">{event.title}</div>
+        <div className="board_group">{event.group.name}</div>
+        <div className="board_date">{event.date}</div>
+        <div className="board_like">{event.likes.length}</div>
+        <div className="board_bring">{event.brings.length}</div>
+      </div>,
+    );
+  }
 
   return (
     <div className="ListView">
