@@ -1175,7 +1175,8 @@ def get_put_delete_event_full(request, event_id):
         'last_editor': {'id': event.last_editor_id,
         'name': last_editor.username,
         'department': up.department.name},
-        'image': [image.id for image in event.image.all()],
+        'image': [{'id': image.id,
+        'image_file_url': image.image_file.url} for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
         'brings': [up.user.id for up in event.brings_userpreference.all()]}
