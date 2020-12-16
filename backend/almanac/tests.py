@@ -3073,6 +3073,77 @@ class AlmanacGroup(TransactionTestCase):
         response = client.get('/api/group/')
         self.assertEqual(len(response.json()), 4)
 
+    def test_join_request_modify_group(self):
+
+        '''
+        a function docstring
+        '''
+
+        client = Client()
+
+        id_group = self.group1.id
+        id_wrong = id_group+20
+
+        response = client.post('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        response = client.put('/api/group/{}/join_request/'.format(id_wrong), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        response = client.put('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 401)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'sdm000', 'password': 'password5'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
+        response = client.get('/api/signout/')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.post('/api/signin/', json.dumps(
+            {'username': 'taekop', 'password': 'password2'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        #self.assertEqual(response.json()['join_requests'],
+        #[self.user4.id])
+
+        response = client.put('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user4.id, 'operation': 'remove'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        self.assertEqual(response.json()['join_requests'],
+        [])
+
+        response = client.put('/api/group/{}/join_request/'.format(id_group), json.dumps(
+            {'user': self.user5.id, 'operation': 'add'}),
+            content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+
+        response = client.get('/api/group/{}/full/'.format(id_group))
+        #self.assertEqual(response.json()['join_requests'],
+        #[self.user5.id])
+
     def test_member_modify_group(self):
 
         '''
