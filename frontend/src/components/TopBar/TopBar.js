@@ -38,9 +38,10 @@ const TopBar = (props) => {
         </div>
         <div className="profile" onClick={() => SetProfileModalBool(!profileModalBool)}>
           <img src={appLogo} alt="app logo" />
-          {modal}
         </div>
       </div>
+
+      {modal}
     </div>
   );
 };
