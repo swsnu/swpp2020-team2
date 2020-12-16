@@ -11,12 +11,13 @@
 .EventDetail .container{
     display: flex;
     flex-direction: column;
-    width:80%;
+    width:80vw;
 }
 
 .EventDetail .container .btnBox{
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .EventDetail .container .btnBox .left{
@@ -26,9 +27,13 @@
     margin-left: 5;
 }
 
+.EventDetail .container .btnBox .middle{
+    flex: 1;
+    text-align: center;
+}
+
 .EventDetail .container .btnBox .right{
     flex: 1;
-    
 }
 .EventDetail .container .btnBox .right .btns{
     float: right;
@@ -52,7 +57,7 @@
     border: solid;
     border-width: 3px;
     border-color: gray;
-    height: 60vh;
+    height: 75vh;
 }
 
 .EventDetail .container .detailBox .box{
@@ -62,7 +67,6 @@
 }
 
 .EventDetail .container .detailBox .box .infoBox{
-    
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -72,7 +76,6 @@
     border-right:solid;
     border-width: 1px;
     border-color: gray;
-
 }
 
 .EventDetail .container .detailBox .infoBox .infoKey{
@@ -84,14 +87,22 @@
     margin: 10px;
     display: flex;
     flex-direction: row;
-}
-.EventDetail .container .detailBox .infoBox .infoValue img{
-    max-width: 50%;
-    max-height: 50%;
+    align-items: center;
+
+    object-fit: contain;
 }
 
 .EventDetail .container .detailBox .large {
     flex:2;
+}
+
+.EventDetail .container .detailBox .largest {
+    flex:4;
+}
+.EventDetail .container .detailBox .largest img{
+    flex:1;
+    max-width: 100%;
+    max-height: 200px;
 }
 
 .EventDetail .container .detailBox .box .tag{
