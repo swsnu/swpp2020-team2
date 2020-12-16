@@ -1,19 +1,17 @@
 import React from 'react';
 
-import { GrLike } from 'react-icons/gr';
-import { BiBellPlus } from 'react-icons/bi';
-import {BsBellFill} from 'react-icons/bs'
-import {AiFillLike} from 'react-icons/ai'
+import {AiFillStar} from 'react-icons/ai';
+import {HiBan} from 'react-icons/hi';
 
 const ManageMember=(props)=>(
   <div className="ManageMember">
     {props.lastName}&nbsp;{props.firstName}&nbsp;{props.email}&nbsp;{props.department}
     <div className="btnBox">
       <div className="btn" onClick={() => props.clickAdmin()}>
-        {props.admin?<AiFillLike color="blue" />:<GrLike color="black" />}
+        {props.admin?<AiFillStar color="yellow" />:<AiFillStar color="grey" />}
       </div>
       <div className="btn" onClick={() => props.clickExpel()}>
-        {props.expel?<BsBellFill color="orange" />:<BiBellPlus color="black" />}
+        {props.expel?<HiBan color="red" />:<HiBan color="grey" />}
       </div>
     </div>
   </div>
