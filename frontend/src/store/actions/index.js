@@ -42,6 +42,8 @@ export {
   handleJoinRequest,
   manageMember,
   manageAdmin,
+
+  reportGroup,
 } from './group';
 
 export {

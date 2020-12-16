@@ -86,26 +86,29 @@ export const searchGroup = (query) => (dispatch) => axios.get(`/api/group/search
 export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group_report/', {
   group: id,
   content,
+}).then((res) => {
+  if (res.status === 201) alert('신고가 접수되었습니다.');
+  else alert('예상치 못한 오류로 신고접수가 실패하였습니다. 잠시 뒤에 재시도해주세요');
 });
 
-export const changeGroupInfo=(id,name,description)=>(dispatch)=>axios.put(`/api/group/${id}/change_info/`,{
+export const changeGroupInfo = (id, name, description) => (dispatch) => axios.put(`/api/group/${id}/change_info/`, {
   name,
   description,
-})
+});
 
 export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy/`, { privacy });
 
-export const handleJoinRequest=(groupId,userId,op)=>(dispatch)=>axios.put(`/api/group/${groupId}/join_request/`,{
-  user:userId,
-  operation:op
+export const handleJoinRequest = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/join_request/`, {
+  user: userId,
+  operation: op
 });
 
-export const manageMember=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/member/`,{
-  user:userId,
-  operation:op
+export const manageMember = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/member/`, {
+  user: userId,
+  operation: op,
 });
 
-export const manageAdmin=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/admin/`,{
-  user:userId,
-  operation:op
+export const manageAdmin = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/admin/`, {
+  user: userId,
+  operation: op,
 });
