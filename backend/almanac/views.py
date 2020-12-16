@@ -1435,12 +1435,12 @@ def get_delete_group_full(request, group_id):
 
     if request.method == 'GET':
         group_dict = {'id': group.id, 'name': group.name,
-        'member': [user.id for user in group.member.all()],
+        'member': [{'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'department': {'id': UserPreference.objects.get(user=user).department.id, 'name': UserPreference.objects.get(user=user).department.name}} for user in group.member.all()],
         'admin': [user.id for user in group.admin.all()],
         'king': group.king_id,
         'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
         'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
-        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+        'join_requests': [{'id': up.user.id, 'first_name': up.user.first_name, 'last_name': up.user.last_name, 'email': up.user.email, 'department': {'id': up.department.id, 'name': up.department.name}} for up in group.join_requests_userpreference.all()],
         'profile': group.profile_id,
         'description': group.description, 'privacy': group.privacy
         }
@@ -1471,6 +1471,37 @@ def get_single_group(request, group_id):
     'description': group.description, 'privacy': group.privacy
     }
     return JsonResponse(group_dict)
+
+@ensure_csrf_cookie
+def join_request_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    user_preference = UserPreference.objects.get(user=user_id)
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.join_requests.add(group_id)
+    else: # remove
+        user_preference.join_requests.remove(group_id)
+    return HttpResponse(status=204)
 
 @ensure_csrf_cookie
 def member_modify_group(request, group_id):
