@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TopBar from '../../../components/TopBar/TopBar';
 import * as actionCreators from '../../../store/actions/index';
 
-import './SettingProfile.css'
+import './SettingPersonal.css'
 
 class SettingProfile extends Component {
   state = {
@@ -47,7 +47,7 @@ class SettingProfile extends Component {
     };
 
     return (
-      <div className="SettingProfile">
+      <div className="SettingPersonal">
         <div className="topBar">
           <TopBar
             tabNum={null}
@@ -57,20 +57,20 @@ class SettingProfile extends Component {
 
         <div className="container">
           <div className="left">
-            <button onClick={() => this.onRouteHandler('/mypage')}>back</button>
+            <button onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
 
             <div className="tabBar">
-              <lable>Profile Settings</lable>
-              <button onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</button>
-              <button onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</button>
-              <button onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</button>
+              <label>Personal Settings</label>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/profile')} style={{color:"blue"}}>Profile</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
             </div>
           </div>
 
           <div className="right">
 
             <div className="header">
-              <label>Profile Setting</label>
+              <label>Profile</label>
               <button onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 

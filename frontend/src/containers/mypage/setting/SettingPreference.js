@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import TopBar from '../../../components/TopBar/TopBar';
 import * as actionCreators from '../../../store/actions/index';
 
+import './SettingPersonal.css'
+
 // need to make background color box component for here
 // but low priority
 
 class SettingPreference extends Component {
-  state={
+  state = {
     language: 0,
   }
 
@@ -24,12 +26,12 @@ class SettingPreference extends Component {
     return state;
   }
 
-  onConfirmHandler=() => {
+  onConfirmHandler = () => {
     this.props.changeLanguage(this.state.language);
     alert('Setting has been applied!');
   }
 
-  onRouteHandler=(url) => {
+  onRouteHandler = (url) => {
     this.props.history.push(url);
   }
 
@@ -39,24 +41,45 @@ class SettingPreference extends Component {
     };
 
     return (
-      <div className="MyPage">
+      <div className="SettingPersonal">
         <div className="topBar">
           <TopBar
             tabNum={null}
             history={this.props.history}
           />
         </div>
-        <h1>Preference Setting</h1>
-        <h2>language</h2>
-        <select id="department-input" onChange={(event) => this.setState({ language: event.target.value })}>
-          {this.props.languages.map(makeOption)}
-        </select>
-        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
-        <button onClick={() => this.onRouteHandler('/mypage')}>back</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</button>
-        <button onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</button>
+        <div className="container">
+          <div className="left">
+            <button onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
+
+            <div className="tabBar">
+              <label>Personal Settings</label>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
+              <div onClick={() => this.onRouteHandler('/mypage/setting/preference')} style={{ color: "blue" }}>Preference</div>
+            </div>
+          </div>
+
+          <div className="right">
+            <div className="header">
+              <label>Preference Setting</label>
+              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+            </div>
+
+            <div className="body">
+              <div className="box">
+                <label>language</label>
+                <div className="infoBox">
+                  <select id="department-input" onChange={(event) => this.setState({ language: event.target.value })}>
+                    {this.props.languages.map(makeOption)}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   }
