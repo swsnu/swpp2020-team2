@@ -9,13 +9,13 @@ const EventBox = (props) => (
   <div
     className="EventBox"
     style={{
-      borderLeftColor: props.event?.category === 1 ? 'red'
-        : props.event?.category === 2 ? 'orange'
-          : props.event?.category === 3 ? 'yellow'
-            : props.event?.category === 4 ? 'green'
-              : props.event?.category === 5 ? 'skyblue'
-                : props.event?.category === 6 ? 'blue'
-                  : props.event?.category === 7 ? 'purple'
+      borderLeftColor: props.event?.category.id === 1 ? 'red'
+        : props.event?.category.id === 2 ? 'orange'
+          : props.event?.category.id === 3 ? 'yellow'
+            : props.event?.category.id === 4 ? 'green'
+              : props.event?.category.id === 5 ? 'skyblue'
+                : props.event?.category.id === 6 ? 'blue'
+                  : props.event?.category.id === 7 ? 'purple'
                     : 'gray',
     }}
   >

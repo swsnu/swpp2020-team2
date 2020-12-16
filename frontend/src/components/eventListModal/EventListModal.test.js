@@ -1,16 +1,57 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Provider } from 'react-redux';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import {
+  createStore, combineReducers, applyMiddleware, compose,
+} from 'redux';
 import { createBrowserHistory } from 'history';
-
-import getMockStore from '../../test-utils/mocks';
+import { ConnectedRouter, connectRouter } from 'connected-react-router';
 import EventListModal from './EventListModal';
+import { history, middlewares } from '../../store/store';
+
+const stubInitialState = {
+  events: [{ id: 1 }],
+  likeEvents: [1],
+  bringEvents: [1],
+};
+
+const getMockReducer = jest.fn(
+  (initialState) => (state = initialState, action) => {
+    switch (action.type) {
+      default:
+        break;
+    }
+    return state;
+  },
+);
+
+const getMockStore = (initialState) => {
+  const mockReducer = getMockReducer(initialState);
+  const rootReducer = combineReducers({
+    evt: mockReducer,
+    ur: mockReducer,
+    router: connectRouter(history),
+  });
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const mockStore = createStore(rootReducer,
+    composeEnhancers(applyMiddleware(...middlewares)));
+  return mockStore;
+};
+
+const mockStore = getMockStore(stubInitialState);
 
 // event component mocking
 jest.mock('../eventBox/EventBox', () => jest.fn((props) => (
   <div className="spyEvent">
     <button className="title" onClick={() => { props.detailEvent(props.event?.id); }}>
       {props.event?.title}
+    </button>
+    <button className="bringEvent" onClick={props.bringEvent}>
+      foo
+    </button>
+    <button className="likeEvent" onClick={props.likeEvent}>
+      bar
     </button>
   </div>
 )));
@@ -24,6 +65,49 @@ describe('<EventListModal />', () => {
     const component = shallow(<Provider store={getMockStore(mockedState)}><EventListModal /></Provider>);
     const wrapper = component.find('.EventListModal');
     expect(wrapper.length).toBe(0);
+  });
+
+  it('should handle click buttons', () => {
+    const events = [{ id: 1 }, { id: 2 }];
+    const _component = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() =>
+                (
+                  <EventListModal
+                    day={new Date()}
+                    dayEventList={events}
+                    onLikeEvent={jest.fn()}
+                    onBringEvent={jest.fn()}
+                    onGetUser={jest.fn()}
+                    onClickCreateEvent={jest.fn()}
+                    onClickCloseModal={jest.fn()}
+                    history={[]}
+                  />
+                )}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(_component);
+    const title = component.find('.title');
+    expect(title.length).toBe(2);
+    title.at(0).simulate('click');
+
+    const bring = component.find('.bringEvent');
+    expect(bring.length).toBe(2);
+    bring.at(0).simulate('click');
+    bring.at(1).simulate('click');
+
+    const like = component.find('.likeEvent');
+    expect(like.length).toBe(2);
+    like.at(0).simulate('click');
+    like.at(1).simulate('click');
   });
 /*
   it('should close modal after button', () => {

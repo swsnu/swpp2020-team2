@@ -19,4 +19,15 @@ describe('MyPage', () => {
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('MyPage').length).toBe(1);
   });
+
+  it('should route to setting page', () => {
+    const spyOnPush = jest.spyOn(history, 'push')
+      .mockImplementation();
+
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    const wrapper = component.find('.setting-button');
+
+    wrapper.simulate('click');
+    expect(spyOnPush).toHaveBeenCalledWith('/mypage/setting/profile');
+  });
 });

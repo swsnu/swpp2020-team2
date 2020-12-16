@@ -54,7 +54,7 @@ const Calendar = ({ currentDate, events, onClickDay }) => {
         const day_ = day;
         const containCategory = [0, 0, 0, 0, 0, 0, 0, 0];
         const eventInDay = (typeof events === 'undefined') ? [] : events.filter((evt) => evt.date === format(day_, 'yyyy-MM-dd'));
-        eventInDay.forEach((evt) => { containCategory[evt.category - 1] = 1; });
+        eventInDay.forEach((evt) => { containCategory[evt.category.id - 1] = 1; });
         const icons = [];
         for (let j = 0; j < 8; j += 1) {
           if (containCategory[j] === 1) icons.push(<img className="img" key={j} src={categoryIcons[j]} alt={categoryName[j]} />);

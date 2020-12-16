@@ -98,7 +98,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
   onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
-  onGetUser: () => dispatch(actionCreators.getUserFull()),
+  // onGetUser: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventListModal);

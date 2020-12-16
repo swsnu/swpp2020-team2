@@ -48,6 +48,7 @@ class GroupPrivacy extends Component {
             <option value={3}>No one</option>
           </select>
         </div>
+        <button onClick={() => this.onConfirmHandler()}>Confirm</button>
 
         <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
         <button onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</button>

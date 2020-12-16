@@ -10,7 +10,7 @@ import {
 import addDays from 'date-fns/addDays';
 import addMonths from 'date-fns/addMonths';
 import { history, middlewares } from '../../store/store';
-import Public from './Public';
+import Private from './Private';
 
 const sampleDate = new Date();
 const sampleDate2 = addDays(sampleDate, 25);
@@ -137,25 +137,25 @@ const getMockStore = (initialState) => {
 
 const mockStore = getMockStore(stubInitialState);
 
-describe('<Public />', () => {
-  let publicComponent;
+describe('<Private />', () => {
+  let PrivateComponent;
   beforeEach(() => {
     const mockStore_ = mockStore;
     const history_ = history;
-    publicComponent = (
+    PrivateComponent = (
       <Provider store={mockStore_}>
         <ConnectedRouter history={history_}>
           <Switch>
-            <Route path="/" exact render={() => <Public history={history_} />} />
+            <Route path="/" exact render={() => <Private history={history_} />} />
           </Switch>
         </ConnectedRouter>
       </Provider>
     );
   });
 
-  it('should render Public Calendar', () => {
-    const component = mount(publicComponent);
-    const wrapper = component.find('.Public');
+  it('should render Private Calendar', () => {
+    const component = mount(PrivateComponent);
+    const wrapper = component.find('.Private');
     expect(wrapper.length).toBe(1);
   });
 
@@ -168,7 +168,7 @@ describe('<Public />', () => {
     div2.setAttribute('id', 'tagOption');
     document.body.appendChild(div2);
 
-    const component = mount(publicComponent);
+    const component = mount(PrivateComponent);
 
     const wrapperArrow = component.find('.arrow');
     expect(wrapperArrow.length).toBe(2);
