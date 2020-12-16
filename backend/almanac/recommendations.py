@@ -43,13 +43,11 @@ def refresh_tag():
         TAG_TO_INT[t_id] = idx
         idx += 1
 
-def recommend_tag(content, num=3):
+def train_classifier():
 
     '''
     a function docstring
     '''
-
-    refresh_tag()
 
     events = [{
         'content': e.content, 'tag': e.tag.values_list('id', flat=True)
@@ -61,6 +59,16 @@ def recommend_tag(content, num=3):
     train_target = [[TAG_TO_INT[t] for t in event['tag']] for event in events[:event_limit]]
     if train_data:
         clf_ovr.fit(train_data, MultiLabelBinarizer().fit_transform(train_target))
+
+def recommend_tag(content, num=3):
+
+    '''
+    a function docstring
+    '''
+
+    refresh_tag()
+
+    train_classifier()
 
     predicted = clf_ovr.decision_function([content])
     pre_result = list(zip(
