@@ -239,7 +239,7 @@ class EventModify extends Component {
 
               <div className="box">
                 <label>사진</label>
-                <img src={"http://localhost:8000/api" + imageUrl} alt="event Image" style={{maxWidth:'80%', maxHeight:'80%',padding:10}} />
+                <img src={"http://ec2-100-25-237-244.compute-1.amazonaws.com:8000/api" + imageUrl} alt="event Image" style={{maxWidth:'80%', maxHeight:'80%',padding:10}} />
               </div>
 
               <div className="box">
