@@ -27,6 +27,7 @@ class EventListModal extends Component {
     });
   }
 
+  /*
   onClickBringEvent = (id) => {
     if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
     else this.props.onBringEvent(id, 'add');
@@ -36,6 +37,7 @@ class EventListModal extends Component {
     if (this.props.likeEventIDs?.includes(id)) this.props.onLikeEvent(id, 'remove');
     else this.props.onLikeEvent(id, 'add');
   }
+  */
 
   onClickDetailEvent = (id) => {
     this.props.history.push(`/details/${id}`);
@@ -46,8 +48,8 @@ class EventListModal extends Component {
       <Event
         key={event}
         event={event}
-        bringEvent={() => this.onClickBringEvent(event.id)}
-        likeEvent={() => this.onClickLikeEvent(event.id)}
+        bringEvent={() => this.props.onClickBringEvent(event.id)}
+        likeEvent={() => this.props.onClickLikeEvent(event.id)}
         detailEvent={() => this.onClickDetailEvent(event.id)}
         likeBool={!!this.props.likeEventIDs?.includes(event.id)}
         bringBool={!!this.props.bringEventIDs?.includes(event.id)}
@@ -96,8 +98,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
-  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  // onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  // onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
   // onGetUser: () => dispatch(actionCreators.getUserFull()),
 });
 
