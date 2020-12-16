@@ -53,7 +53,7 @@ class GroupDetail extends Component {
   render() {
     if (this.props.currGroup === null || this.props.currGroup === undefined) return null;
     if (this.props.currGroup.admin === undefined) return null;
-    let settingButton = <button className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}><FiSettings size={40} /></button>;
+    let settingButton = <div className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}><FiSettings size={40} /></div>;
     if (this.props.currGroup === null || !this.props.currGroup.admin.find((e) => e === this.props.signinedUser))settingButton = null;
 
     var liked = false;

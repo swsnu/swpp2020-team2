@@ -40,8 +40,8 @@ class EventModify extends Component {
       date: this.props.event.date
     })
   }
-  componentDidUpdate(prevProps){
-    if(this.props.event !== prevProps.event){
+  componentDidUpdate(prevProps) {
+    if (this.props.event !== prevProps.event) {
       this.setState({
         title: this.props.event.title,
         category: this.props.event.category.id,
@@ -55,10 +55,7 @@ class EventModify extends Component {
         date: this.props.event.date
       })
     }
-  }
 
-  componentDidUpdate(prevProps, prevState) {
-    //  if (!this.props.signinedUser) this.props.history.replace('/main');
     if (this.props.tagRecommend !== prevProps.tagRecommend) {
       this.setState({ tags: this.props.tagRecommend });
     }
@@ -95,9 +92,13 @@ class EventModify extends Component {
     }
   }
 
-  deleteEventHandler = () =>{
-    this.props.onDeleteEvent(this.props.match.params.event_id)
-    this.props.history.replace('/public');
+  deleteEventHandler = () => {
+    if (window.confirm("정말 행사를 삭제하시겠습니까?")) {
+      this.props.onDeleteEvent(this.props.match.params.event_id)
+      this.props.history.push('/public');
+    } else {
+
+    }
   }
 
   modifyEventHandler = () => {
@@ -110,20 +111,22 @@ class EventModify extends Component {
 
     if (message.length > 0) alert(message);
     else {
-      this.props.onModifyEvent({
-        id: this.props.match.params.event_id,
-        title: this.state.title,
-        place: this.state.place,
-        date: this.state.date,
-        category: this.state.category,
-        tag: this.state.selectTags,
-        group: this.state.group,
-        begin_time: `${this.state.begin_time}:00`,
-        end_time: `${this.state.end_time}:00`,
-        last_editor: this.props.signinedUser,
-        content: this.state.content,
-      });
-      this.props.history.replace('/public');
+      if (window.confirm("수정한 행사를 저장하시겠습니까?")) {
+        this.props.onModifyEvent({
+          id: this.props.match.params.event_id,
+          title: this.state.title,
+          place: this.state.place,
+          date: this.state.date,
+          category: this.state.category,
+          tag: this.state.selectTags,
+          group: this.state.group,
+          begin_time: `${this.state.begin_time}:00`,
+          end_time: `${this.state.end_time}:00`,
+          last_editor: this.props.signinedUser,
+          content: this.state.content,
+        });
+        this.props.history.replace('/public');
+      } else { }
     }
   }
 
@@ -143,7 +146,7 @@ class EventModify extends Component {
     return (
       <div className="EventModify">
         <div className="topBar">
-          <TopBar history={this.props.history} tabNum={0}/>
+          <TopBar history={this.props.history} tabNum={0} />
         </div>
 
         <h1>{this.state.title}</h1>
@@ -235,11 +238,6 @@ class EventModify extends Component {
                   value={this.state.content}
                   onChange={(event) => this.setState({ content: event.target.value })}
                 />
-              </div>
-
-              <div className="box">
-                <label>사진</label>
-                <img src={"http://ec2-100-25-237-244.compute-1.amazonaws.com:8000/api" + imageUrl} alt="event Image" style={{maxWidth:'80%', maxHeight:'80%',padding:10}} />
               </div>
 
               <div className="box">

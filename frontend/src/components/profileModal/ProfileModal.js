@@ -13,7 +13,7 @@ const ProfileModal = (props) => {
   return (
     <div className="ProfileModal">
       <div className="icon"><BsPersonSquare size={42}/></div>
-      <div className="btn" onClick={() => props.history.push('./mypage')}>Mypage</div>
+      <div className="btn" onClick={() => props.history.push('/mypage')}>Mypage</div>
       <div className="btn" onClick={() => onClickSignOut()}>Sign out</div>
     </div>
   );
