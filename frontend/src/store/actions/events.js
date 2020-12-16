@@ -219,7 +219,7 @@ export const createEvent = (event) => (dispatch) => axios.post('/api/event/creat
 
 export const getTagRecommend_ = (tagList) => ({ type: actionTypes.GET_TAG_RECOMMEND, target: tagList });
 
-export const getTagRecommend = (content) => (dispatch) => axios.post('/api/tag/recommend/', { 'content': content, 'num': 2 })
+export const getTagRecommend = (content) => (dispatch) => axios.post('/api/tag/recommend/', { 'content': content, 'num': 5 })
   .then((res) => {
     dispatch(getTagRecommend_(res.data));
   });
