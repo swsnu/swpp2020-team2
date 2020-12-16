@@ -6,6 +6,8 @@ import JoinRequest from '../../../components/JoinRequest/JoinRequest';
 import ManageMember from '../../../components/ManageMember/ManageMember';
 import * as actionCreators from '../../../store/actions/index';
 
+import {BsDot} from 'react-icons/bs'
+
 import './GroupSetting.css'
 
 class GroupMembers extends Component {
@@ -154,7 +156,7 @@ class GroupMembers extends Component {
             <div className="tabBar">
               <label>Group Settings</label>
               <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
+              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)} style={{ color: "blue" }}>Manage members</div>
               <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
             </div>
           </div>
@@ -166,21 +168,44 @@ class GroupMembers extends Component {
             </div>
 
             <div className="body">
+
               <div className="box">
-                <label>Join application</label>
+                <label><BsDot/> Join application ({this.props.currGroup?.join_requests?.length})</label>
                 <div className="infoBox">
-                  <label>Name/Email/Dept/Accept/Reject</label>
-                  <div>{this.props.currGroup?.join_requests?.map(this.makeJoinReqeustRow)}</div>
-                  <label>Name/Email/Dept/Admin/Expel</label>
-                  <div>{this.props.currGroup?.member?.map(this.makeMembersManageRow)}</div>
+                  <div className="label">
+                    <label className="col1" style={{ flex: 2 }}>Name</label>
+                    <label className="col2" style={{ flex: 3 }}>Email</label>
+                    <label className="col3" style={{ flex: 3 }}>Dept</label>
+                    <label className="col4" style={{ flex: 1, color: "blue" }}>Accept</label>
+                    <label className="col5" style={{ flex: 1, color: "red" }}>Reject</label>
+                  </div>
+
+                  <div className="info">
+                    {this.props.currGroup?.join_requests?.map(this.makeJoinReqeustRow)}
+                  </div>
                 </div>
+              </div>
+
+              <div className="box">
+                <label><BsDot/> Member List ({this.props.currGroup?.member?.length})</label>
+                <div className="infoBox">
+                  <div className="label">
+                    <label className="col1" style={{ flex: 2 }}>Name</label>
+                    <label className="col2" style={{ flex: 3 }}>Email</label>
+                    <label className="col3" style={{ flex: 3 }}>Dept</label>
+                    <label className="col4" style={{ flex: 1, color: "blue" }}>Admin</label>
+                    <label className="col5" style={{ flex: 1, color: "red" }}>Expel</label>
+                  </div>
+                  {this.props.currGroup?.member?.map(this.makeMembersManageRow)}
+                </div>
+
               </div>
 
             </div>
           </div>
 
         </div>
-      </div>
+      </div >
     );
   }
 }

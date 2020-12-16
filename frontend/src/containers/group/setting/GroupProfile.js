@@ -6,6 +6,8 @@ import * as actionCreators from '../../../store/actions/index';
 
 import './GroupSetting.css';
 
+import {BsDot} from 'react-icons/bs'
+
 class GroupProfile extends Component {
   state = {
     groupName: '',
@@ -60,7 +62,7 @@ class GroupProfile extends Component {
 
             <div className="body">
               <div className="box">
-                <label>Group name</label>
+                <label><BsDot/> Group name</label>
                 <div className="infoBox">
                   <input
                     id="groupname-input"
@@ -72,7 +74,7 @@ class GroupProfile extends Component {
               </div>
 
               <div className="box">
-                <label>Description</label>
+                <label><BsDot/> Description</label>
                 <div className="infoBox">
                   <input
                     id="description-input"

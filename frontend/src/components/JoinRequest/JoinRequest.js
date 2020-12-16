@@ -1,19 +1,17 @@
 import React from 'react';
 
-import {FaCheck} from 'react-icons/fa';
-import {ImCross} from 'react-icons/im';
+import { FaCheck } from 'react-icons/fa';
+import { ImCross } from 'react-icons/im';
 
-const JoinRequest=(props)=>(
+import './JoinRequest.css'
+
+const JoinRequest = (props) => (
   <div className="JoinRequest">
-    {props.lastName}&nbsp;{props.firstName}&nbsp;{props.email}&nbsp;{props.department}
-    <div className="btnBox">
-      <div className="btn" onClick={() => props.clickAccept()}>
-        {props.accept?<FaCheck color="blue" />:<FaCheck color="grey" />}
-      </div>
-      <div className="btn" onClick={() => props.clickReject()}>
-        {props.reject?<ImCross color="red" />:<ImCross color="grey" />}
-      </div>
-    </div>
+    <div className="col" style={{ flex: 2 }}>{props.lastName} {props.firstName}</div>
+    <div className="col" style={{ flex: 3 }}>{props.email}</div>
+    <div className="col" style={{ flex: 3 }}>{props.department}</div>
+    <div className="btn" style={{ flex: 1 }} onClick={() => props.clickAccept()}><FaCheck color={props.accept ? "blue" : "grey"} /></div>
+    <div className="btn" style={{ flex: 1 }} onClick={() => props.clickReject()}><ImCross color={props.reject ? "red" : "grey"} /></div>
   </div>
 );
 

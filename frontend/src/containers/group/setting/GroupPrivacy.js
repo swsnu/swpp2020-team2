@@ -6,6 +6,8 @@ import * as actionCreators from '../../../store/actions/index';
 
 import './GroupSetting.css'
 
+import {BsDot} from 'react-icons/bs'
+
 class GroupPrivacy extends Component {
   state = {
     privacy: null,
@@ -57,7 +59,7 @@ class GroupPrivacy extends Component {
 
             <div className="body">
               <div className="box">
-                <label>Allowed View Members</label>
+                <label><BsDot/> Allowed View Members</label>
                 <div className="infoBox">
                   <select value={this.state.privacy} onChange={(event) => this.setState({ privacy: event.target.value })}>
                     <option value={1}>Only administrators</option>
