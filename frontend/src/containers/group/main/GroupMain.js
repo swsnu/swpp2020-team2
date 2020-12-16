@@ -9,12 +9,15 @@ import TopBar from '../../../components/TopBar/TopBar';
 import './GroupMain.css';
 
 import GroupBox from '../../../components/groupBox/GroupBox';
+import ReportGroup from '../../../components/Report/ReportGroup';
 
 import { appLogo } from '../../../images/index';
 
 class GroupMain extends Component {
   state = {
     searchQuery: '',
+    modalBool: false,
+    modalReportGroup: null,
   }
 
   componentDidMount() {
@@ -24,12 +27,12 @@ class GroupMain extends Component {
     this.props.getNoticeGroup();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!this.props.signinedUser) this.props.history.replace('/main');
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
   }
 
-  shouldComponentUpdate(nextProps,nextState){
-    return true;
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onSearchHandler = () => {
@@ -52,6 +55,10 @@ class GroupMain extends Component {
     this.props.history.push(`/group/details/${id}`);
   }
 
+  onReportHandler = (group) => {
+    this.setState({ modalBool: true, modalReportGroup: group });
+  }
+
   makeGroupBox = (group) => {
     function haveThisGroup(element) {
       if (element.id === group.id) return true;
@@ -71,13 +78,22 @@ class GroupMain extends Component {
         noticed={noticed}
         notice={() => this.onNoticeHandler(group.id, !noticed)}
         detail={() => this.onDetailHandler(group.id)}
-        report={() => {}}
+        report={() => this.onReportHandler(group)}
       />
     );
   };
 
   render() {
     const otherGroupBoxes = null;// this var will not actually be used later
+    let modal = null;
+    if (this.state.modalBool) {
+      modal = (
+        <ReportGroup
+          group={this.state.modalReportGroup}
+          onClickCloseModal={() => this.setState({ modalBool: false })}
+        />
+      );
+    }
 
     return (
       <div className="GroupMain">
@@ -160,7 +176,7 @@ class GroupMain extends Component {
 
           </div>
         </div>
-
+        {modal}
       </div>
     );
   }

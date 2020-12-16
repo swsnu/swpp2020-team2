@@ -1,0 +1,76 @@
+.ReportGroup {
+    position: absolute;
+    width: 60%;
+    height: 480px;
+    transform: translate(0%, 20%);
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgb(240,240,240);
+    border-radius: 60px;
+}
+
+.ReportGroup .header{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: 30px;
+    width: auto;
+    height: 10%;
+    justify-content: center;
+    align-items: center;
+}
+
+.ReportGroup .header .closeBtn{
+    position: absolute;
+    right: 5px;
+}
+
+.ReportGroup .header label{
+    font-size: 36px;
+    font-weight: bold;
+    color: red;
+}
+
+.ReportGroup .description{
+    margin-left: 30px;
+}
+
+.ReportGroup .description label{
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+}
+
+.ReportGroup .description .text{
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.ReportGroup .content{
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+}
+
+.ReportGroup .content label{
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: red;
+}
+
+.ReportGroup .reportBtn{
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ReportGroup .reportBtn button{
+    font-size: 20px;
+    background-color: red;
+    cursor: pointer;
+    color: white;
+}

@@ -20,7 +20,7 @@ class GroupDetail extends Component {
   }
 
   render() {
-    let settingButton=<button className="settingsBtn" onClick={this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}>Group Settings</button>
+    let settingButton=<button className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}>Group Settings</button>
     if(!this.props.currGroup.admin.find(e=>e.id===this.props.signinedUser))settingButton=null;
 
     return (
@@ -48,7 +48,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
-  getGroup: (id) => dispatch(actionCreators.getGroup(id)),
+  getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupDetail);
