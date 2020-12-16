@@ -96,10 +96,11 @@ class Private extends Component {
     this.filterEvents = async () => {
       const prevState = this.state;
       const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
-      // console.log(_events)
-      this.setState({
-        events: _events.data,
-      });
+      if (_events !== undefined) {
+        this.setState({
+          events: _events.data,
+        });
+      }
     };
 
     this.filterEvents();
@@ -232,10 +233,8 @@ class Private extends Component {
     } else {
       view = (
         <ListView
-          day={this.state.currentDate}
-          history={this.props.history}
+          onClickDetailEvent={this.onClickDetailEvent}
           monthEventList={this.state.events}
-          onClickCreateEvent={this.onClickCreateEvent}
         />
       );
     }

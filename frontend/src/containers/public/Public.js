@@ -96,9 +96,11 @@ class Public extends Component {
     this.filterEvents = async () => {
       const prevState = this.state;
       const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
-      this.setState({
-        events: _events.data,
-      });
+      if (_events !== undefined) {
+        this.setState({
+          events: _events.data,
+        });
+      }
     };
 
     this.filterEvents();
@@ -138,6 +140,18 @@ class Public extends Component {
     this.setState({
       modalBool: false,
     });
+  }
+
+  onClickBringEvent = async (id) => {
+    if (this.props.bringEventIDs?.includes(id)) await this.props.onBringEvent(id, 'remove');
+    else await this.props.onBringEvent(id, 'add');
+    this.filterEvents();
+  }
+
+  onClickLikeEvent = async (id) => {
+    if (this.props.likeEventIDs?.includes(id)) await this.props.onLikeEvent(id, 'remove');
+    else await this.props.onLikeEvent(id, 'add');
+    this.filterEvents();
   }
 
   onClickDetailEvent = (id) => {
@@ -251,6 +265,8 @@ class Public extends Component {
           dayEventList={this.state.modalEvents}
           onClickCloseModal={this.onClickCloseModal}
           onClickCreateEvent={this.onClickCreateEvent}
+          onClickBringEvent={this.onClickBringEvent}
+          onClickLikeEvent={this.onClickLikeEvent}
           history={this.props.history}
         />
       );
@@ -286,12 +302,14 @@ const mapStateToProps = (state) => ({
   events: state.evt.events,
   loggedUser: state.ur.userFullInfo,
   signinedUser: state.ur.signinedUser,
+  likeEventIDs: state.ur.likeEvents,
+  bringEventIDs: state.ur.bringEvents,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onGetUser: () => dispatch(actionCreators.getUserFull()),
-  // onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
-  // onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
+  onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
+  onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Public);
