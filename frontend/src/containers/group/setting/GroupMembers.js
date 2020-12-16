@@ -11,12 +11,7 @@ class GroupMembers extends Component {
   }
 
   componentDidMount() {
-    // this.props.getGroupFull(this.props.match.params.id);
-    var joinRequests=[];
-    joinRequests[1]={accept:false,reject:false};
-    var manageMembers=[];
-    manageMembers[2]={admin:false,expel:false};
-    this.setState({joinRequests,manageMembers});
+    this.props.getGroupFull(this.props.match.params.id);
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -42,7 +37,7 @@ class GroupMembers extends Component {
         this.props.manageMember(this.props.match.params.id,user.id,'add');
       }
       if(this.state.joinRequests[user.id].reject){
-        this.props.manageMember(this.props.match.params.id,user.id,'remove');
+        this.props.handleJoinRequest(this.props.match.params.id,user.id,'remove');
       }
     }
     for(var member in this.props.currGroup.member){
@@ -93,7 +88,7 @@ class GroupMembers extends Component {
 
   makeJoinReqeustRow=(user) => {
     return(<div className="JoinReqeust">
-      {user.name}&nbsp;{user.email}&nbsp;{user.department.name}
+      {user.last_name}&nbsp;{user.first_name}&nbsp;{user.email}&nbsp;{user.department.name}
       <input
         type="checkbox"
         checked={this.state.joinRequests[user.id]?.accept}
@@ -110,7 +105,7 @@ class GroupMembers extends Component {
 
   makeMembersManageRow=(member)=>{
     return(<div className="ManageMember">
-      {member.name}&nbsp;{member.email}&nbsp;{member.department.name}
+      {member.last_name}&nbsp;{member.first_name}&nbsp;{member.email}&nbsp;{member.department.name}
       <input
         type="checkbox"
         checked={this.state.manageMembers[member.id]?.admin}
@@ -126,14 +121,6 @@ class GroupMembers extends Component {
   }
 
   render() {
-    const users = [
-      { id: 1, name: 'name', email: 'email', department: { id: 1, name: 'dept' } },
-    ];
-
-    const members=[
-      { id: 2, name: 'name2', email: 'email2', department: { id: 2, name: 'dept2' } },
-    ];
-
     return (
       <div className="GroupMembers">
         <div className="topBar">
@@ -146,9 +133,9 @@ class GroupMembers extends Component {
         <div className="box">
           <h2>Join application</h2>
           <label className="label">Name/Email/Dept/Accept/Reject</label>
-          {users.map(this.makeJoinReqeustRow)}
+          <div>{this.props.currGroup?.join_requests.map(this.makeJoinReqeustRow)}</div>
           <label className="label">Name/Email/Dept/Admin/Expel</label>
-          {members.map(this.makeMembersManageRow)}
+          <div>{this.props.currGroup?.member.map(this.makeMembersManageRow)}</div>
           <label className="label">Name/Email/Dept/King</label>
           <h3>king manage table</h3>
         </div>
@@ -171,6 +158,7 @@ const mapDispatchToProps = (dispatch) => ({
   getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
   manageMember: (groupId,userId,op)=>dispatch(actionCreators.manageMember(groupId,userId,op)),
   manageAdmin: (groupId,userId,op)=>dispatch(actionCreators.manageAdmin(groupId,userId,op)),
+  handleJoinRequest: (groupId,userId,op)=>dispatch(actionCreators.handleJoinRequest(groupId,userId,op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupMembers);

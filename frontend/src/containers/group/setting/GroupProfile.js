@@ -15,7 +15,8 @@ class GroupProfile extends Component {
   }
 
   onConfirmHandler=() => {
-
+    if(this.state.groupName===''||this.state.description==='')alert('please fill name and description!');
+    else this.props.changeGroupInfo(this.props.match.params.id,this.state.groupName,this.state.description);
   }
 
   onRouteHandler=(url) => {
@@ -68,6 +69,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getGroup: (id) => dispatch(actionCreators.getGroup(id)),
+  changeGroupInfo:(id,name,description)=>dispatch(actionCreators.changeGroupInfo(id,name,description)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupProfile);

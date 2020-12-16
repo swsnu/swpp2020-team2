@@ -88,14 +88,24 @@ export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group
   content,
 });
 
-export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy`, { privacy });
+export const changeGroupInfo=(id,name,description)=>(dispatch)=>axios.put(`/api/group/${id}/change_info/`,{
+  name,
+  description,
+})
 
-export const manageMember=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/member`,{
+export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy/`, { privacy });
+
+export const handleJoinRequest=(groupId,userId,op)=>(dispatch)=>axios.put(`/api/group/${groupId}/join_request/`,{
   user:userId,
   operation:op
 });
 
-export const manageAdmin=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/admin`,{
+export const manageMember=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/member/`,{
+  user:userId,
+  operation:op
+});
+
+export const manageAdmin=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/admin/`,{
   user:userId,
   operation:op
 });

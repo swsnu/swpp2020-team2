@@ -16,6 +16,12 @@ describe('GroupDetail', () => {
 
   const mockedState = {
     signinedUser: null,
+    currGroup:{
+      id:1,
+      name:'test_group_name',
+      description:'test_group_description',
+      admin:[],
+    }
   };
 
   beforeEach(() => {
@@ -33,6 +39,12 @@ describe('GroupDetail', () => {
   it('should redirect to main page when sign outed', () => {
     const mockedState2 = {
       signinedUser: 1,
+      currGroup:{
+        id:1,
+        name:'test_group_name',
+        description:'test_group_description',
+        admin:[],
+      }
     };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
@@ -46,5 +58,36 @@ describe('GroupDetail', () => {
     instance = component.find(GroupDetail.WrappedComponent).instance();
     instance.componentDidUpdate(mockedState2);
     expect(spyOnReplace).toHaveBeenCalledWith('/main');
+  });
+
+  it('should have setting button only when user is admin',()=>{
+    let mockedState2 = {
+      signinedUser: 1,
+      currGroup:{
+        id:1,
+        name:'test_group_name',
+        description:'test_group_description',
+        admin:[{id:2},{id:3}],
+      }
+    };
+    const spyOnPush = jest.spyOn(history, 'push')
+      .mockImplementation();
+
+    let component = mount(makeComponent(getMockStore(mockedState2)));
+    expect(component.find('.settingsBtn').length).toBe(0);
+
+    mockedState2 = {
+      signinedUser: 1,
+      currGroup:{
+        id:1,
+        name:'test_group_name',
+        description:'test_group_description',
+        admin:[{id:1},{id:2},{id:3}],
+      }
+    };
+    component = mount(makeComponent(getMockStore(mockedState2)));
+    const wrapper=component.find('.settingsBtn');
+    wrapper.simulate('click');
+    expect(spyOnPush).toHaveBeenCalledWith('/group/1/setting/profile');
   });
 });

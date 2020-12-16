@@ -43,7 +43,7 @@ class SettingProfile extends Component {
 
   render() {
     var makeOption = function func(X) {
-      return <option value={X.id}>{X.name}</option>;
+      return <option key={X.id} value={X.id}>{X.name}</option>;
     };
 
     return (
@@ -57,13 +57,13 @@ class SettingProfile extends Component {
 
         <div className="container">
           <div className="left">
-            <button onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
+            <button className="myPageBtn" onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
 
             <div className="tabBar">
               <label>Personal Settings</label>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/profile')} style={{color:"blue"}}>Profile</div>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
+              <div className="profileBtn" onClick={() => this.onRouteHandler('/mypage/setting/profile')} style={{color:"blue"}}>Profile</div>
+              <div className="passwordBtn" onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
+              <div className="preferenceBtn" onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
             </div>
           </div>
 

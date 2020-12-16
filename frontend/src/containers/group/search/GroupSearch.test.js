@@ -7,7 +7,6 @@ import getMockStore from '../../../test-utils/mocks';
 import { history } from '../../../store/store';
 
 import * as userActions from '../../../store/actions/user';
-import * as groupActions from '../../../store/actions/group';
 
 describe('GroupSearch', () => {
   function makeComponent(store) {
