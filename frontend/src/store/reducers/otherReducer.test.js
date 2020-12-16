@@ -7,6 +7,7 @@ describe('otherReducer', () => {
     universities: [],
     departments: [],
     categories: [],
+    languages: [],
   };
 
   it('should handle get_universities', () => {
@@ -34,5 +35,14 @@ describe('otherReducer', () => {
     const action = { type: actionTypes.GET_CATEGORIES, data: sampleCate };
     const ret = otherReducer(stubInitialState, action);
     expect(ret.categories).toEqual(sampleCate);
+  });
+
+  it('should handle get_languages', () => {
+    const sampleLang = [
+      { id: 1, name: 'test_lang' },
+    ];
+    const action = { type: actionTypes.GET_LANGUAGES, data: sampleLang };
+    const ret = otherReducer(stubInitialState, action);
+    expect(ret.languages).toEqual(sampleLang);
   });
 });

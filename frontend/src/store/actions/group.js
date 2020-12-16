@@ -29,6 +29,13 @@ export const getGroup = (id) => (dispatch) => axios.get(`/api/group/${id}/`)
     dispatch(getGroup_(res.data));
   });
 
+export const getGroupFull_=(data) => ({type:actionTypes.GET_GROUP_FULL,data});
+
+export const getGroupFull = (id) => (dispatch)=>axios.get(`/api/group/${id}/full/`)
+.then((res)=>{
+  dispatch(getGroupFull_(res.data));
+});
+
 export const getLikeGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
 
 export const getLikeGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
@@ -82,3 +89,13 @@ export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group
 });
 
 export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy`, { privacy });
+
+export const manageMember=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/member`,{
+  user:userId,
+  operation:op
+});
+
+export const manageAdmin=(groupId,userId,op) => (dispatch) => axios.put(`/api/group/${groupId}/admin`,{
+  user:userId,
+  operation:op
+});

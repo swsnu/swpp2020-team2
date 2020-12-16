@@ -67,4 +67,24 @@ describe('others', () => {
       done();
     });
   });
+
+  it('getLanguages should operate correctly', (done) => {
+    const stubLangs = [
+      { id: 1, name: 'test_lang' },
+    ];
+    const spyOnGet = jest.spyOn(axios, 'get')
+      .mockImplementation((url) => new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: stubLangs,
+        };
+        resolve(result);
+      }));
+
+    store.dispatch(actionCreators.getLanguages()).then(() => {
+      expect(spyOnGet).toHaveBeenCalledTimes(1);
+      expect(store.getState().or.languages).toEqual(stubLangs);
+      done();
+    });
+  });
 });

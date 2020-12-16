@@ -32,11 +32,14 @@ export {
   createGroup,
   getAllGroup,
   getGroup,
+  getGroupFull,
   getLikeGroup,
   getNoticeGroup,
   getMyGroup,
   searchGroup,
   changeGroupPrivacy,
+  manageMember,
+  manageAdmin,
 } from './group';
 
 export {

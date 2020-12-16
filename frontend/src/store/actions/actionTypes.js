@@ -19,6 +19,7 @@ export const GET_TAG_RECOMMEND = 'GET_TAG_RECOMMEND';
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const GET_ALL_GROUP = 'GET_ALL_GROUP';
 export const GET_GROUP = 'GET_GROUP';
+export const GET_GROUP_FULL = 'GET_GROUP_FULL';
 export const GET_LIKE_GROUP = 'GET_LIKE_GROUP';
 export const GET_NOTICE_GROUP = 'GET_NOTICE_GROUP';
 export const GET_MY_GROUP = 'GET_MY_GROUP';

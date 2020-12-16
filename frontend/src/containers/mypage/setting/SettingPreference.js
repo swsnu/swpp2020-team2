@@ -26,7 +26,7 @@ class SettingPreference extends Component {
 
   onConfirmHandler=() => {
     this.props.changeLanguage(this.state.language);
-    alert('Setting has been applied');
+    alert('Setting has been applied!');
   }
 
   onRouteHandler=(url) => {
