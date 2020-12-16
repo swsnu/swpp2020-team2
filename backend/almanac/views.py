@@ -20,7 +20,7 @@ from django.db.models import Q, Count
 from almanac.models import User, UserPreference, \
     University, Department, Event, Group, Background, Language, Category, Tag, \
     Image, EventReport, GroupReport
-from .recommendations import recommend_tag, refresh_tag
+from .recommendations import recommend_tag, refresh_tag, add_tag
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -735,7 +735,7 @@ def get_delete_tag(request, tag_id):
 
     if request.method == 'GET':
         tag_dict = {'id': tag.id, 'name': tag.name}
-        refresh_tag()
+        add_tag(tag_id)
         return JsonResponse(tag_dict)
     # DELETE
     tag.delete()

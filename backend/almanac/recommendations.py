@@ -19,7 +19,11 @@ INT_TO_TAG = []
 TAG_TO_INT = {}
 
 def add_tag(tag_id):
-    
+
+    '''
+    a function docstring
+    '''
+
     INT_TO_TAG.append(tag_id)
     TAG_TO_INT[tag_id] = len(INT_TO_TAG)
 
