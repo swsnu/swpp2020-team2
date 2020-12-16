@@ -25,7 +25,7 @@ class EventCreate extends Component {
     this.props.getMyGroup();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps,prevState) {
     //  if (!this.props.signinedUser) this.props.history.replace('/main');
     if (this.props.tagRecommend !== prevProps.tagRecommend) {
       this.setState({ tags: this.props.tagRecommend });
@@ -55,6 +55,7 @@ class EventCreate extends Component {
   onClickAddTag = () => {
     if (this.state.content.length > 0) {
       this.props.onGetTagRecommend(this.state.content); // content에 맞는 tag 추천
+      this.setState({selectTags:[]})
     } else alert('행사 내용을 입력하세요 !');
   }
 
@@ -83,7 +84,7 @@ class EventCreate extends Component {
         place: this.state.place,
         date: this.props.location.state.date,
         category: this.state.category,
-        tag: this.state.tags,
+        tag: this.state.selectTags,
         group: this.state.group,
         begin_time: `${this.state.begin_time}:00`,
         end_time: `${this.state.end_time}:00`,
@@ -198,6 +199,7 @@ class EventCreate extends Component {
             </div>
 
             <div className="content">
+
               <div className="box">
                 <textarea
                   className="event-content-input"
@@ -209,18 +211,20 @@ class EventCreate extends Component {
 
                 />
               </div>
+
               <div className="box">
                 <label>사진 업로드</label>
                 <input className="uploadImage" type="file" name="file" onChange={(e) => this.uploadImageHandler(e)} />
               </div>
+
               <div className="box">
-                <button className="addTag" onClick={() => this.onClickAddTag()}>#태그 추가</button>
+                <button className="addTag" onClick={() => this.onClickAddTag()}>태그 추천</button>
                 {this.state.tags.map((tag) => (
                   <div
-                    className={`tag ${this.state.selectTags.includes(tag.id)}` ? 'UnSelected' : 'Selected'}
+                    className={`tag ${this.state.selectTags.includes(tag.id)? 'Selected':'UnSelected'}`}
                     onClick={() => this.onClickTag(tag.id)}
                   >
-                    {tag.name}
+                    # {tag.name}
                   </div>
                 ))}
               </div>

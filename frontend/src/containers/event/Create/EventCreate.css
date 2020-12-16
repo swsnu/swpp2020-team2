@@ -92,6 +92,26 @@
     border-color: gray;
 }
 
+.EventCreate .container .createBox .content .box .tag{
+    margin-left: 10px;
+    padding: 8px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.EventCreate .container .createBox .content .box .tag:hover{
+    font-weight: bold;
+    opacity: 1;
+}
+
+.EventCreate .container .createBox .content .box .UnSelected{
+    opacity: 0.3;
+}
+.EventCreate .container .createBox .content .box .Selected{
+    color: blue;
+}
+
 
 .EventCreate .container .confirmBox{
     flex:1;
