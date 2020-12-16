@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { GrLike } from 'react-icons/gr';
 import { BiBellPlus } from 'react-icons/bi';
 import { RiAlarmWarningFill } from 'react-icons/ri';
-
+import { FiSettings } from 'react-icons/fi'
 import { BsBellFill } from 'react-icons/bs';
 import { AiFillLike } from 'react-icons/ai';
 
@@ -13,6 +13,8 @@ import * as actionCreators from '../../../store/actions/index';
 
 import GroupBox from '../../../components/groupBox/GroupBox';
 import ReportGroup from '../../../components/Report/ReportGroup';
+
+import './GroupDetail.css';
 
 class GroupDetail extends Component {
   state={
@@ -50,13 +52,14 @@ class GroupDetail extends Component {
 
   render() {
     if (this.props.currGroup === null || this.props.currGroup === undefined) return null;
-    let settingButton = <button className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}>Group Settings</button>
+    if (this.props.currGroup.admin === undefined) return null;
+    let settingButton = <button className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}><FiSettings size={40} /></button>;
     if (this.props.currGroup === null || !this.props.currGroup.admin.find((e) => e === this.props.signinedUser))settingButton = null;
 
     var liked = false;
-    if (this.props.likeGroups.find((e) => e.id === this.props.currGroup.id))liked = true;
+    if (this.props.likeGroups?.find((e) => e.id === this.props.currGroup.id))liked = true;
     var noticed = false;
-    if (this.props.noticeGroups.find((e) => e.id === this.props.currGroup.id))noticed = true;
+    if (this.props.noticeGroups?.find((e) => e.id === this.props.currGroup.id))noticed = true;
 
     let modal = null;
     if (this.state.modalBool) {
@@ -98,7 +101,7 @@ class GroupDetail extends Component {
           </div>
           <div className="row2">
             <div className="key">소개</div>
-            <div className="value">{this.props.currGroup?.description}</div>
+            <p className="value">{this.props.currGroup?.description}</p>
           </div>
         </div>
         {modal}
