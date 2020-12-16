@@ -1,19 +1,17 @@
 import React from 'react';
 
-import { GrLike } from 'react-icons/gr';
-import { BiBellPlus } from 'react-icons/bi';
-import {BsBellFill} from 'react-icons/bs'
-import {AiFillLike} from 'react-icons/ai'
+import {FaCheck} from 'react-icons/fa';
+import {ImCross} from 'react-icons/im';
 
 const JoinRequest=(props)=>(
-  <div className="joinRequest">
+  <div className="JoinRequest">
     {props.lastName}&nbsp;{props.firstName}&nbsp;{props.email}&nbsp;{props.department}
     <div className="btnBox">
       <div className="btn" onClick={() => props.clickAccept()}>
-        {props.accept?<AiFillLike color="blue" />:<GrLike color="black" />}
+        {props.accept?<FaCheck color="blue" />:<FaCheck color="grey" />}
       </div>
       <div className="btn" onClick={() => props.clickReject()}>
-        {props.reject?<BsBellFill color="orange" />:<BiBellPlus color="black" />}
+        {props.reject?<ImCross color="red" />:<ImCross color="grey" />}
       </div>
     </div>
   </div>
