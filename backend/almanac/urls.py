@@ -48,6 +48,8 @@ urlpatterns = [
     path('group/create/', views.create_group, name='create_group'),
     path('group/<int:group_id>/', views.get_single_group, name='get_single_group'),
     path('group/<int:group_id>/full/', views.get_delete_group_full, name='get_delete_group_full'),
+    path('group/<int:group_id>/join_request/', views.join_request_modify_group,
+    name='join_request_modify_group'),
     path('group/<int:group_id>/member/', views.member_modify_group,
     name='member_modify_group'),
     path('group/<int:group_id>/admin/', views.admin_modify_group,
