@@ -81,7 +81,7 @@ class AlmanacCsrfTestCase(TestCase):
         user = User.objects.get(username='taekop')
         self.assertEqual(user.is_active, False)
         body_pt = ('Hello, taekop. Welcome to the Almanac Service. You can activate your account '
-        'via the link \nhttp://localhost:3000/signup/activate/{}/').format(
+        'via the link \nhttp://almanac2.shop/signup/activate/{}/').format(
             urlsafe_base64_encode(force_bytes(user.id)))
         self.assertIn(body_pt, mail_sent.body)
 
@@ -184,7 +184,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://almanac2.shop/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
         token_wrong = token[:-1] + ('1' if token[-1] == '0' else '0')
@@ -227,7 +227,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://almanac2.shop/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
 
@@ -277,7 +277,7 @@ class AlmanacSignupTestCase(TransactionTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(mail.outbox), 1)
         mail_sent = mail.outbox[0]
-        regx = re.search(r"http://localhost:3000/signup/activate/(\S+)/(\S+)", mail_sent.body)
+        regx = re.search(r"http://almanac2.shop/signup/activate/(\S+)/(\S+)", mail_sent.body)
         uidb64 = regx.group(1)
         token = regx.group(2)
 
