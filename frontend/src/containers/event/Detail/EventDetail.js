@@ -80,7 +80,7 @@ class EventDetail extends Component {
     const eventContent = (this.props.event.content?.length > 0) ? this.props.event.content : '해당없음';
     const lastEditorName = (this.props.event.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
     const lastEditorDepartment = (eventLoaded) ? this.props.event.last_editor.department : '해당없음';
-    const imageUrl = (eventLoaded) ? this.props.event?.image[0].image_file_url : "";
+    const imageUrl = (eventLoaded) ? this.props.event?.image[0]?.image_file_url : "";
     const tags = (eventLoaded) ? this.props.event.tag : [];
 
     const categoryColor = !(this.props.event.category?.name?.length > 0) ? "gray" : 
