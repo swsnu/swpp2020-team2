@@ -30,7 +30,7 @@ class EventDetail extends Component {
   }
 
   onClickModifyEvent = (auth) => {
-    if(auth) this.props.history.push(`/details/modify/${this.props.event.id}/`);
+    if (auth) this.props.history.push(`/details/modify/${this.props.event.id}/`);
     else alert("행사 그룹에 소속된 사용자만 수정할 수 있습니다 ! ")
   }
 
@@ -63,32 +63,28 @@ class EventDetail extends Component {
       );
     }
 
-    let eventLoaded;
-    if (!(this.props.event.title?.length > 0)) eventLoaded = false;
-    else eventLoaded = true;
-
-    const eventTitle = (eventLoaded) ? this.props.event.title : '해당없음';
+    const eventTitle = (this.props.event.title?.length>0) ? this.props.event.title : '해당없음';
     const eventGroupName = (this.props.event.group?.name?.length > 0) ? this.props.event.group.name : '해당없음';
     const eventPlace = (this.props.event.place?.length > 0) ? this.props.event.place : '해당없음';
-    const formattedDate = (eventLoaded) ? this.props.event.date : '해당없음';
+    const formattedDate = (this.props.event.date?.length>0) ? this.props.event.date : '해당없음';
     const categoryName = (this.props.event.category?.name?.length > 0) ? this.props.event.category.name : '해당없음';
-    const eventBeginTime = (eventLoaded) ? this.props.event.begin_time : '해당없음';
-    const eventEndTime = (eventLoaded) ? this.props.event.end_time : '해당없음';
+    const eventBeginTime = (this.props.event.begin_time?.length>0) ? this.props.event.begin_time : '해당없음';
+    const eventEndTime = (this.props.event.end_time?.length>0) ? this.props.event.end_time : '해당없음';
     const eventContent = (this.props.event.content?.length > 0) ? this.props.event.content : '해당없음';
     const lastEditorName = (this.props.event.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
-    const lastEditorDepartment = (eventLoaded) ? this.props.event.last_editor.department : '해당없음';
-    const imageUrl = (eventLoaded) ? this.props.event?.image[0]?.image_file_url : "";
-    const tags = (eventLoaded) ? this.props.event.tag : [];
+    const lastEditorDepartment = (this.props.event.last_editor?.department?.length>0) ? this.props.event.last_editor.department : '해당없음';
+    const imageUrl = (this.props.event.image?.length>0) ? this.props.event.image[0].image_file_url : "";
+    const tags = (this.props.event.tag?.length>=0) ? this.props.event.tag : [];
 
-    const categoryColor = !(this.props.event.category?.name?.length > 0) ? "gray" : 
-                      this.props.event.category.id === 1 ? 'red'
-                      : this.props.event.category.id === 2 ? 'orange'
-                        : this.props.event.category.id === 3 ? 'yellow'
-                          : this.props.event.category.id === 4 ? 'green'
-                            : this.props.event.category.id === 5 ? 'skyblue'
-                              : this.props.event.category.id === 6 ? 'blue'
-                                : this.props.event.category.id === 7 ? 'purple'
-                                  : 'gray';
+    const categoryColor = !(this.props.event.category?.name?.length > 0) ? "gray" :
+      this.props.event.category.id === 1 ? 'red'
+        : this.props.event.category.id === 2 ? 'orange'
+          : this.props.event.category.id === 3 ? 'yellow'
+            : this.props.event.category.id === 4 ? 'green'
+              : this.props.event.category.id === 5 ? 'skyblue'
+                : this.props.event.category.id === 6 ? 'blue'
+                  : this.props.event.category.id === 7 ? 'purple'
+                    : 'gray';
 
     const lastEditor = (
       <div className="lastEditor">
@@ -111,7 +107,7 @@ class EventDetail extends Component {
           />
         </div>
 
-        <h1>{eventTitle}</h1>
+
 
         <div className="container">
 
@@ -120,6 +116,10 @@ class EventDetail extends Component {
               <button className="back" onClick={() => this.onClickBack()} style={{ width: 50 }}>
                 Back
               </button>
+            </div>
+
+            <div className="middle">
+              <h1>{eventTitle}</h1>
             </div>
 
             <div className="right">
@@ -149,7 +149,7 @@ class EventDetail extends Component {
               </div>
               <div className="infoBox">
                 <div className="infoKey">분류</div>
-                <div className="infoValue" style={{color: categoryColor, fontWeight:"bold"}}>{categoryName}</div>
+                <div className="infoValue" style={{ color: categoryColor, fontWeight: "bold" }}>{categoryName}</div>
               </div>
             </div>
 
@@ -188,23 +188,23 @@ class EventDetail extends Component {
               </div>
             </div>
 
-            <div className="box large">
+            <div className="box largest">
               <div className="infoBox">
                 <div className="infoKey">사진</div>
                 <div className="infoValue">
-                  <img src={"http://ec2-100-25-237-244.compute-1.amazonaws.com:8000/api" + imageUrl} alt="event Image" />
+                  <img src={"http://localhost:8000/api" + imageUrl} alt="event Image" />
                 </div>
               </div>
             </div>
 
-            <div className="box large">
+            <div className="box">
               <div className="infoBox">
                 <div className="infoKey">태그</div>
                 <div className="infoValue">
-                  <div className="tag" style={{color: categoryColor, fontWeight:"bold"}}># {categoryName}</div>
+                  <div className="tag" style={{ color: categoryColor, fontWeight: "bold" }}># {categoryName}</div>
                   {tags.map((tag) => {
                     return (
-                      <div className="tag" style={{color: categoryColor, fontWeight:"bold"}}>
+                      <div className="tag" style={{ color: categoryColor, fontWeight: "bold" }}>
                         # {tag.name}
                       </div>
                     )

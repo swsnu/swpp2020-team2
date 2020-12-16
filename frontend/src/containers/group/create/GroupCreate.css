@@ -1,0 +1,86 @@
+.GroupCreate{
+    flex:1;
+    display: flex;
+    
+    width: 100vw;
+    flex-direction: column;
+
+}
+.GroupCreate .topBar{
+    width: 100%;
+}
+
+.GroupCreate .container{
+    width: 100vw;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.GroupCreate .container .header{
+    width: 60%;
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px;
+
+    border-bottom: solid;
+    border-width: 1px;
+}
+
+.GroupCreate .container .header button{
+    font-size: 24px;
+}
+
+
+.GroupCreate .container .body{
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.GroupCreate .container .body .left{
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.GroupCreate .container .body .right{
+    flex:4;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.GroupCreate .container .body .inputBox{
+    flex:1;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.GroupCreate .container .body .inputBox label{
+    flex: 1.5;
+    width: 50px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+.GroupCreate .container .body .inputBox input{
+    flex:3;
+    margin: 10px;
+    padding: 5px;
+}
+.GroupCreate .container .body .inputBox textarea{
+    flex:3;
+    margin: 10px;
+    padding: 5px;
+}

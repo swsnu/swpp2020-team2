@@ -8,12 +8,17 @@ import GroupBox from '../../../components/groupBox/GroupBox';
 
 import * as actionCreators from '../../../store/actions/index';
 
+import ReportGroup from '../../../components/Report/ReportGroup';
+
+
 import './GroupSearch.css';
 
 class GroupSearchAll extends Component {
   state={
     searchQuery: '',
     key:0,
+    modalBool: false,
+    modalReportGroup: null,
   }
 
   componentDidMount() {
@@ -47,6 +52,14 @@ class GroupSearchAll extends Component {
     this.setState({key:Math.random()});
   }
 
+  onDetailHandler=(id) => {
+    this.props.history.push(`/group/details/${id}`);
+  }
+
+  onReportHandler = (group) => {
+    this.setState({ modalBool: true, modalReportGroup: group });
+  }
+
   makeGroupBox = (group) => {
     function haveThisGroup(element) {
       if (element.id === group.id) return true;
@@ -65,12 +78,22 @@ class GroupSearchAll extends Component {
         like={() => this.onLikeHandler(group.id, !liked)}
         noticed={noticed}
         notice={() => this.onNoticeHandler(group.id, !noticed)}
-        report={() => {}}
+        detail={() => this.onDetailHandler(group.id)}
+        report={() => this.onReportHandler(group)}
       />
     );
   };
 
   render() {
+    let modal = null;
+    if (this.state.modalBool) {
+      modal = (
+        <ReportGroup
+          group={this.state.modalReportGroup}
+          onClickCloseModal={() => this.setState({ modalBool: false })}
+        />
+      );
+    }
     return (
       <div className="GroupSearch">
         <div className="topBar">
@@ -106,6 +129,7 @@ class GroupSearchAll extends Component {
           <h2>All Groups Result</h2>
           {this.props.searchGroups.map(this.makeGroupBox)}
         </div>
+        {modal}
       </div>
     );
   }

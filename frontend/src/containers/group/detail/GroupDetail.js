@@ -6,6 +6,7 @@ import { RiAlarmWarningFill } from 'react-icons/ri';
 import { FiSettings } from 'react-icons/fi'
 import { BsBellFill } from 'react-icons/bs';
 import { AiFillLike } from 'react-icons/ai';
+import {BsPersonPlus, BsPersonPlusFill} from 'react-icons/bs';
 
 import TopBar from '../../../components/TopBar/TopBar';
 
@@ -46,6 +47,12 @@ class GroupDetail extends Component {
     this.props.getNoticeGroup();
   }
 
+  onJoinHandler=async (id,op)=>{
+    const oper = op ? 'add' : 'remove';
+    await this.props.joinGroup(id, oper);
+    this.props.getUserFull();
+  }
+
   onReportHandler = (group) => {
     this.setState({ modalBool: true, modalReportGroup: group });
   }
@@ -53,13 +60,31 @@ class GroupDetail extends Component {
   render() {
     if (this.props.currGroup === null || this.props.currGroup === undefined) return null;
     if (this.props.currGroup.admin === undefined) return null;
-    let settingButton = <button className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}><FiSettings size={40} /></button>;
+    let settingButton = <div className="settingsBtn" onClick={() => this.props.history.push(`/group/${this.props.match.params.id}/setting/profile`)}><FiSettings size={40} /></div>;
     if (this.props.currGroup === null || !this.props.currGroup.admin.find((e) => e === this.props.signinedUser))settingButton = null;
 
     var liked = false;
     if (this.props.likeGroups?.find((e) => e.id === this.props.currGroup.id))liked = true;
     var noticed = false;
     if (this.props.noticeGroups?.find((e) => e.id === this.props.currGroup.id))noticed = true;
+    var joined=false;
+    if(this.props.myGroups?.find((e)=>e.id===this.props.currGroup.id))joined=true;
+    var joinRequested=false;
+    if(this.props.userFullInfo?.join_requests.find((e)=>e.id===this.props.currGroup.id))joinRequested=true;
+
+    var joinReqeustButton=(
+      <div className="btn" onClick={() => this.onJoinHandler(this.props.currGroup?.id, !joinRequested)}>
+        {joinRequested ? <BsPersonPlus color="orange" /> : <BsPersonPlus color="black" />}
+      </div>
+    );
+    if(joined){
+      joinReqeustButton=(
+        <div className="btn" onClick={() => alert("You already joined this group!")}>
+          <BsPersonPlusFill color="blue" />
+        </div>
+      );
+    }
+
 
     let modal = null;
     if (this.state.modalBool) {
@@ -88,19 +113,17 @@ class GroupDetail extends Component {
             <div className="btn" onClick={() => this.onLikeHandler(this.props.currGroup?.id, !liked)}>
               {liked ? <AiFillLike color="blue" /> : <GrLike color="black" />}
             </div>
-            <div className="btn" onClick={() => this.onNoticeHandler(this.props.currGroup?.id, !noticed)}>
-              {noticed ? <BsBellFill color="orange" /> : <BiBellPlus color="black" />}
-            </div>
+            {joinReqeustButton}
             <div className="btn" onClick={() => this.onReportHandler(this.props.currGroup)}>
               <RiAlarmWarningFill color="red" />
             </div>
           </div>
           <div className="row1">
-            <div className="key">단체명</div>
+            <div className="key">Group Name</div>
             <div className="value">{this.props.currGroup?.name}</div>
           </div>
           <div className="row2">
-            <div className="key">소개</div>
+            <div className="key">Description</div>
             <p className="value">{this.props.currGroup?.description}</p>
           </div>
         </div>
@@ -127,6 +150,7 @@ const mapDispatchToProps = (dispatch) => ({
   getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
+  joinGroup: (id,op) => dispatch(actionCreators.joinGroup(id,op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupDetail);

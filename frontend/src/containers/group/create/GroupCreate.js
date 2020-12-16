@@ -5,8 +5,12 @@ import TopBar from '../../../components/TopBar/TopBar';
 
 import * as actionCreators from '../../../store/actions/index';
 
+import './GroupCreate.css'
+
+import { HiUserGroup } from 'react-icons/hi';
+
 class GroupCreate extends Component {
-  state={
+  state = {
     groupName: '',
     groupDescription: '',
   }
@@ -20,8 +24,8 @@ class GroupCreate extends Component {
     if (this.props.currGroup) this.props.history.push(`/group/details/${this.props.currGroup.id}`);
   }
 
-  onCreateHandler=() => {
-    if (this.state.groupName === '' || this.state.groupDescription === '')alert('You should write group name and description!');
+  onCreateHandler = () => {
+    if (this.state.groupName === '' || this.state.groupDescription === '') alert('You should write group name and description!');
     else {
       this.props.createGroup({
         name: this.state.groupName,
@@ -34,6 +38,7 @@ class GroupCreate extends Component {
   render() {
     return (
       <div className="GroupCreate">
+
         <div className="topBar">
           <TopBar
             tabNum={2}
@@ -41,28 +46,44 @@ class GroupCreate extends Component {
           />
         </div>
 
-        <h1>Create Group</h1>
+        <div className="container">
+          <div className="header">
+            <h1>Create Group</h1>
+            <button id="create-group-button" onClick={() => this.onCreateHandler()}>Create</button>
+          </div>
 
-        <div>
-          Group Name:
-          <input
-            id="group-name-input"
-            type="text"
-            value={this.state.groupName}
-            onChange={(event) => this.setState({ groupName: event.target.value })}
-          />
+          <div className="body">
+
+            <div className="left">
+              <HiUserGroup size={100} />
+            </div>
+
+            <div className="right">
+
+              <div className="inputBox">
+                <label>Group Name</label>
+                <input
+                  id="group-name-input"
+                  type="text"
+                  value={this.state.groupName}
+                  onChange={(event) => this.setState({ groupName: event.target.value })}
+                />
+              </div>
+
+              <div className="inputBox">
+                <label>Group Description</label>
+                <textarea
+                  id="group-description-input"
+                  type="text"
+                  rows="4"
+                  value={this.state.groupDescription}
+                  onChange={(event) => this.setState({ groupDescription: event.target.value })}
+                />
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div>
-          Group Description:
-          <textarea
-            id="group-description-input"
-            type="text"
-            rows="4"
-            value={this.state.groupDescription}
-            onChange={(event) => this.setState({ groupDescription: event.target.value })}
-          />
-        </div>
-        <button id="create-group-button" onClick={() => this.onCreateHandler()}>Create group!</button>
       </div>
     );
   }
