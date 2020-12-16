@@ -1,0 +1,19 @@
+.JoinRequest{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 30px;
+}
+
+.JoinRequest .col{
+    text-align: center;
+
+    border: solid;
+    border-width: 1px;
+
+}
+
+.JoinRequest .btn{
+    text-align: center;
+}
