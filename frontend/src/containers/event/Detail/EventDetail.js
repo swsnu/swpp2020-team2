@@ -22,14 +22,16 @@ class EventDetail extends Component {
 
   componentDidMount() {
     this.props.onGetEvent(parseInt(this.props.match.params.event_id));
+    this.props.onGetUser();
   }
 
   onClickBack = () => {
     this.props.history.goBack();
   }
 
-  onClickModifyEvent = () => {
-    this.props.history.push(`/details/modify/${this.props.event.id}/`);
+  onClickModifyEvent = (auth) => {
+    if(auth) this.props.history.push(`/details/modify/${this.props.event.id}/`);
+    else alert("행사 그룹에 소속된 사용자만 수정할 수 있습니다 ! ")
   }
 
   onClickBringEvent = (id) => {
@@ -42,12 +44,6 @@ class EventDetail extends Component {
     else this.props.onLikeEvent(id, 'add');
   }
 
-  /*
-  onClickDeleteEvent = () => {
-
-  }
-  */
-
   onClickReportEvent = () => {
     this.setState((prevState) => ({ modalBool: !prevState.modalBool }));
   }
@@ -55,6 +51,7 @@ class EventDetail extends Component {
   render() {
     const likeBool = !!this.props.likeEventIDs?.includes(this.props.event.id);
     const bringBool = !!this.props.bringEventIDs?.includes(this.props.event.id);
+    const managerBool = (this.props.userFullInfo?.members?.includes(this.props.event?.group?.id));
 
     let modal = null;
     if (this.state.modalBool) {
@@ -127,7 +124,7 @@ class EventDetail extends Component {
 
             <div className="right">
               <div className="btns">
-                <button className="ModifyEvent" onClick={() => this.onClickModifyEvent()}>
+                <button className="ModifyEvent" onClick={() => this.onClickModifyEvent(managerBool)} >
                   <BiEditAlt size="100%" color="black" />
                 </button>
                 <button className="bringEvent" onClick={() => this.onClickBringEvent(this.props.event.id)}>
@@ -196,7 +193,6 @@ class EventDetail extends Component {
                 <div className="infoKey">사진</div>
                 <div className="infoValue">
                   <img src={"http://localhost:8000/api" + imageUrl} alt="event Image" />
-                  {console.log("/localhost:8000/api" + imageUrl)}
                 </div>
               </div>
             </div>
@@ -235,10 +231,9 @@ class EventDetail extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  //  signinedUser: state.ur.signinedUser,
+  userFullInfo: state.ur.userFullInfo,
   likeEventIDs: state.ur.likeEvents,
   bringEventIDs: state.ur.bringEvents,
-  loggedUser: state.ur.userFullInfo,
   event: state.evt.target,
 });
 
@@ -246,7 +241,7 @@ const mapDispatchToProps = (dispatch) => ({
   onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
   onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
   onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
-  // onGetUser: () => dispatch(actionCreators.getUserFull()),
+  onGetUser: () => dispatch(actionCreators.getUserFull()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventDetail);

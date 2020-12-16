@@ -26,6 +26,15 @@ const eventReducer = (state = initialState, action) => {
       const newEvents = [...state.events, action.event];
       return { ...state, events: newEvents, selectedImage: [] };
     }
+    case actionTypes.MODIFY_EVENT: {
+      const originEvents = state.events.filter(event=>event.id!==action.target.id)
+      const newEvents = [originEvents, action.target];
+      return { ...state, events: newEvents, selectedImage: [] };
+    }
+    case actionTypes.DELETE_EVENT: {
+      const removedEvents = state.events.filter(event=>event.id!==action.target)
+      return { ...state, events: removedEvents };
+    }
     default:
       break;
   }
