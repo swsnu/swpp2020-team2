@@ -8,7 +8,7 @@ export const createGroup_ = (data) => ({ type: actionTypes.CREATE_GROUP, data })
 
 export const createGroup = (args) => (dispatch) => axios.post('/api/group/create/', {
   name: args.name,
-  king: args.user,
+  king: args.king,
   description: args.description,
 })
   .then((res) => {
@@ -29,11 +29,17 @@ export const getGroup = (id) => (dispatch) => axios.get(`/api/group/${id}/`)
     dispatch(getGroup_(res.data));
   });
 
+export const getGroupFull_=(data) => ({type:actionTypes.GET_GROUP_FULL,data});
+
+export const getGroupFull = (id) => (dispatch)=>axios.get(`/api/group/${id}/full/`)
+.then((res)=>{
+  dispatch(getGroupFull_(res.data));
+});
+
 export const getLikeGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
 
 export const getLikeGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
   filter_options: {
-    including: [],
     group: ['like'],
   },
   sort_options: [],
@@ -43,11 +49,10 @@ export const getLikeGroup = () => (dispatch) => axios.post('/api/group/filtered/
     dispatch(getLikeGroup_(res.data));
   });
 
-export const getNoticeGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
+export const getNoticeGroup_ = (data) => ({ type: actionTypes.GET_NOTICE_GROUP, data });
 
 export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
   filter_options: {
-    including: [],
     group: ['notification'],
   },
   sort_options: [],
@@ -57,11 +62,11 @@ export const getNoticeGroup = () => (dispatch) => axios.post('/api/group/filtere
     dispatch(getNoticeGroup_(res.data));
   });
 
-export const getMyGroup_ = (data) => ({ type: actionTypes.GET_LIKE_GROUP, data });
+export const getMyGroup_ = (data) => ({ type: actionTypes.GET_MY_GROUP, data });
 
 export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
+  including: [],
   filter_options: {
-    including: [],
     group: ['my'],
   },
   sort_options: [],
@@ -81,4 +86,29 @@ export const searchGroup = (query) => (dispatch) => axios.get(`/api/group/search
 export const reportGroup = (id, content) => (dispatch) => axios.post('/api/group_report/', {
   group: id,
   content,
+}).then((res) => {
+  if (res.status === 201) alert('신고가 접수되었습니다.');
+  else alert('예상치 못한 오류로 신고접수가 실패하였습니다. 잠시 뒤에 재시도해주세요');
+});
+
+export const changeGroupInfo = (id, name, description) => (dispatch) => axios.put(`/api/group/${id}/change_info/`, {
+  name,
+  description,
+});
+
+export const changeGroupPrivacy = (id, privacy) => (dispatch) => axios.put(`/api/group/${id}/change_privacy/`, { privacy });
+
+export const handleJoinRequest = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/join_request/`, {
+  user: userId,
+  operation: op
+});
+
+export const manageMember = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/member/`, {
+  user: userId,
+  operation: op,
+});
+
+export const manageAdmin = (groupId, userId, op) => (dispatch) => axios.put(`/api/group/${groupId}/admin/`, {
+  user: userId,
+  operation: op,
 });

@@ -70,7 +70,6 @@ class GroupCreate extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userInfo: state.ur.userInfo,
   currGroup: state.gr.currGroup,
 });
 

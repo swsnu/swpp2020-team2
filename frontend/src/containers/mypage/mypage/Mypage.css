@@ -1,0 +1,80 @@
+.MyPage{
+    width: 100vw;
+    height: 80vh;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+.MyPage .topBar{
+    width: 100%;
+}
+
+.MyPage .header{
+    width: 60vw;
+
+    flex:1;
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.MyPage .header label{
+    font-size: 60px;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.MyPage .header .settingsBtn{
+    margin-right: 30px;
+}
+
+.MyPage .header .settingsBtn:hover{
+    cursor: pointer;
+    color: red;
+}
+
+.MyPage .body{
+    flex:3;
+    display: flex;
+    flex-direction: row;
+    width: auto;
+}
+
+.MyPage .body .profileImage{
+    flex:1;
+    display: flex;
+    align-items: center;
+    margin-right: 100px;
+}
+
+.MyPage .body .infoBox{
+    flex:2;
+    display: flex;
+    flex-direction: column;
+}
+
+.MyPage .body .infoBox .line{
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.MyPage .body .infoBox .line label{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 12px;
+    color:blue;
+}
+
+.MyPage .body .infoBox .line .info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 16px;
+   
+}

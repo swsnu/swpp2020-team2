@@ -70,7 +70,7 @@ describe('<SideBar />', () => {
     expect(eventOptionButton.length).toBe(1);
     eventOptionButton.simulate('click');
 
-    const categoryOptionButton = component.find('.CategoryOptionButton00');
+    const categoryOptionButton = component.find('.CategoryOptionButton01');
     expect(categoryOptionButton.length).toBe(1);
     categoryOptionButton.at(0).simulate('click');
 
@@ -129,7 +129,7 @@ describe('<SideBar />', () => {
     expect(eventOptionButton.length).toBe(1);
     eventOptionButton.simulate('click');
 
-    const categoryOptionButton = component.find('.CategoryOptionButton10');
+    const categoryOptionButton = component.find('.CategoryOptionButton11');
     expect(categoryOptionButton.length).toBe(1);
     categoryOptionButton.at(0).simulate('click');
   });

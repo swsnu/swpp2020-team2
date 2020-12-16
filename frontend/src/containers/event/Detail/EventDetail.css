@@ -41,6 +41,8 @@
     margin: 3px;
     height: 30px;
     width: 30px;
+
+    cursor: pointer;
 }
 
 .EventDetail .container .detailBox{
@@ -50,22 +52,20 @@
     border: solid;
     border-width: 3px;
     border-color: gray;
+    height: 60vh;
 }
 
-.EventDetail .container .detailBox .top{
-    display: flex;
-    flex-direction: column; 
-}
-.EventDetail .container .detailBox .top .box{
+.EventDetail .container .detailBox .box{
+    flex:1;
     display: flex;
     flex-direction: row; 
 }
 
-.EventDetail .container .detailBox .top .infoBox{
+.EventDetail .container .detailBox .box .infoBox{
+    
     flex: 1;
     display: flex;
     flex-direction: row;
-    height: 40px;
     align-items: center;
     
     border-bottom:solid;
@@ -75,24 +75,31 @@
 
 }
 
-.EventDetail .container .detailBox .top .infoBox .infoKey{
+.EventDetail .container .detailBox .infoBox .infoKey{
     margin: 10px;
     font-weight: bold;
+    width: 50px;
 }
-
-.EventDetail .container .detailBox .content{
-    display: flex;
-    flex-direction: column;
-}
-
-.EventDetail .container .detailBox .content .box{
+.EventDetail .container .detailBox .infoBox .infoValue{
+    margin: 10px;
     display: flex;
     flex-direction: row;
-    padding: 20px;
+}
+.EventDetail .container .detailBox .infoBox .infoValue img{
+    max-width: 50%;
+    max-height: 50%;
+}
 
-    border-bottom: solid;
+.EventDetail .container .detailBox .large {
+    flex:2;
+}
+
+.EventDetail .container .detailBox .box .tag{
+    margin: 10px;
+    padding: 8px;
+    border: solid;
     border-width: 1px;
-    border-color: gray;
+    border-radius: 10px;
 }
 
 

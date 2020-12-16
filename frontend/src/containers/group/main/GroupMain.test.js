@@ -15,6 +15,9 @@ describe('GroupMain', () => {
 
   const mockedState = {
     signinedUser: null,
+    myGroups: [],
+    likeGroups: [],
+    noticeGroups: [],
   };
 
   it('should render without error', () => {
@@ -25,6 +28,9 @@ describe('GroupMain', () => {
   it('should redirect to main page when sign outed', () => {
     const mockedState2 = {
       signinedUser: 1,
+      myGroups: [],
+      likeGroups: [],
+      noticeGroups: [],
     };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
@@ -76,5 +82,19 @@ describe('GroupMain', () => {
 
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/group/search');
+  });
+
+  it('should show GroupBoxes', () => {
+    const mockedState2 = {
+      signinedUser: 1,
+      myGroups: [
+        { id: 1, name: 'test_group_name', description: 'test_group_description' },
+      ],
+      likeGroups: [],
+      noticeGroups: [],
+    };
+    const component = mount(makeComponent(getMockStore(mockedState2)));
+
+    expect(component.find('GroupBox').length).toBe(1);
   });
 });

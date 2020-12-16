@@ -12,7 +12,7 @@ class Signup extends Component {
   state = {
     username: '',
     password: '',
-    pwConfirm: '',
+    confirmPassword: '',
     university: 1,
     department: 1,
     email: '',
@@ -34,7 +34,7 @@ class Signup extends Component {
   }
 
   signupHandler = () => {
-    if (this.state.username === '' || this.state.password === '' || this.state.pwConfirm === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
+    if (this.state.username === '' || this.state.password === '' || this.state.confirmPassword === '' || this.state.email === '' || this.state.firstName === '' || this.state.lastName === '') {
       alert('All fields must be filled.');
       return;
     }
@@ -47,7 +47,7 @@ class Signup extends Component {
       alert('ID can only contain alphabet, number or underscore.');
       return;
     }
-    if (this.state.password !== this.state.pwConfirm) {
+    if (this.state.password !== this.state.confirmPassword) {
       alert('Confirmed password is not the same as password.');
       return;
     }
@@ -86,17 +86,9 @@ class Signup extends Component {
     });
   }
 
-  toggleRevealPassword = () => {
-    this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }));
-  }
-
-  toggleRevealConfirmPassword = () => {
-    this.setState((prevState) => ({ revealConfirmPassword: !prevState.revealConfirmPassword }));
-  }
-
   render() {
     var makeOption = function func(X) {
-      return <option value={X.id}>{X.name}</option>;
+      return <option key={X.id} value={X.id}>{X.name}</option>;
     };
 
     return (
@@ -123,7 +115,7 @@ class Signup extends Component {
                   <input
                     id="username-input"
                     type="text"
-                    value={this.state.title}
+                    value={this.state.username}
                     onChange={(event) => this.setState({ username: event.target.value })}
                   />
                 </div>
@@ -136,10 +128,10 @@ class Signup extends Component {
                   <input
                     id="password-input"
                     type={this.state.revealPassword ? 'text' : 'password'}
-                    value={this.state.title}
+                    value={this.state.password}
                     onChange={(event) => this.setState({ password: event.target.value })}
                   />
-                  <div className="toggle" onClick={this.toggleRevealPassword}>
+                  <div className="toggle" onClick={() => this.setState((prevState) => ({ revealPassword: !prevState.revealPassword }))}>
                     {this.state.revealPassword
                       ? <FontAwesomeIcon icon={faEyeSlash} />
                       : <FontAwesomeIcon icon={faEye} />}
@@ -153,12 +145,12 @@ class Signup extends Component {
                 <label className="label">Confirm Password</label>
                 <div className="inputBox">
                   <input
-                    id="pwConfirm-input"
+                    id="confirmPassword-input"
                     type={this.state.revealConfirmPassword ? 'text' : 'password'}
-                    value={this.state.title}
-                    onChange={(event) => this.setState({ pwConfirm: event.target.value })}
+                    value={this.state.confirmPassword}
+                    onChange={(event) => this.setState({ confirmPassword: event.target.value })}
                   />
-                  <div className="toggle" onClick={this.toggleRevealConfirmPassword}>
+                  <div className="toggle" onClick={() => this.setState((prevState) => ({ revealConfirmPassword: !prevState.revealConfirmPassword }))}>
                     {this.state.revealConfirmPassword
                       ? <FontAwesomeIcon icon={faEyeSlash} />
                       : <FontAwesomeIcon icon={faEye} />}
@@ -191,7 +183,7 @@ class Signup extends Component {
                   <input
                     id="email-input"
                     type="text"
-                    value={this.state.title}
+                    value={this.state.email}
                     onChange={(event) => this.setState({ email: event.target.value })}
                   />
                 </div>
@@ -204,7 +196,7 @@ class Signup extends Component {
                   <input
                     id="firstName-input"
                     type="text"
-                    value={this.state.title}
+                    value={this.state.firstName}
                     onChange={(event) => this.setState({ firstName: event.target.value })}
                   />
                 </div>
@@ -217,7 +209,7 @@ class Signup extends Component {
                   <input
                     id="lastName-input"
                     type="text"
-                    value={this.state.title}
+                    value={this.state.lastName}
                     onChange={(event) => this.setState({ lastName: event.target.value })}
                   />
                 </div>

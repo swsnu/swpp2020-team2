@@ -12,40 +12,24 @@ import subMonths from 'date-fns/subMonths';
 import { categoryIcons } from '../../images/index';
 import './Calendar.css';
 
-const Calendar = ({
-  events, onClickDay,
-}) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const nextMonth = () => {
-    setCurrentDate(addMonths(currentDate, 1));
-  };
-  const prevMonth = () => {
-    setCurrentDate(subMonths(currentDate, 1));
-  };
-  const header = () => {
-    const dateFormat = 'yyyy. MM.';
-    return (
-      <div className="header">
-        <div className="arrow" onClick={() => prevMonth()} onKeyPress={() => prevMonth()} role="button" tabIndex="-1">
-          {'<'}
-        </div>
-        <div className="year_month">
-          <span>{format(currentDate, dateFormat)}</span>
-        </div>
-        <div className="arrow" onClick={() => nextMonth()} onKeyPress={() => nextMonth()} role="button" tabIndex="-1">
-          {'>'}
-        </div>
-      </div>
-    );
-  };
+const Calendar = ({ currentDate, events, onClickDay }) => {
   const weekDays = () => {
     const weekName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const weekList = [];
+
     for (let j = 0; j < 7; j += 1) {
-      weekList.push(<div key={weekName[j]} className="column cell"><span key={weekName[j]} className="number">{weekName[j]}</span></div>);
+      weekList.push(
+        <div key={weekName[j]} className="column cell">
+          <span key={weekName[j]} className="number">
+            {weekName[j]}
+          </span>
+        </div>,
+      );
     }
+
     return <div className="row" key="week">{weekList}</div>;
   };
+
   const cells = () => {
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(monthStart);
@@ -57,6 +41,7 @@ const Calendar = ({
     let daylist = [];
     let day = startDate;
     let formattedDate = '';
+
     const classNameConstructor = (_day, _monthStart) => {
       if (!isSameMonth(_day, _monthStart)) return 'column cell disabled';
       return 'column cell abled';
@@ -68,8 +53,8 @@ const Calendar = ({
       for (let i = 0; i < 7; i += 1) {
         const day_ = day;
         const containCategory = [0, 0, 0, 0, 0, 0, 0, 0];
-        const eventInDay = (typeof events === 'undefined') ? [] : events.filter((evt) => isSameDay(evt.date, day_));
-        eventInDay.forEach((evt) => { containCategory[evt.category.id] = 1; });
+        const eventInDay = (typeof events === 'undefined') ? [] : events.filter((evt) => evt.date === format(day_, 'yyyy-MM-dd'));
+        eventInDay.forEach((evt) => { containCategory[evt.category.id - 1] = 1; });
         const icons = [];
         for (let j = 0; j < 8; j += 1) {
           if (containCategory[j] === 1) icons.push(<img className="img" key={j} src={categoryIcons[j]} alt={categoryName[j]} />);
@@ -103,7 +88,6 @@ const Calendar = ({
   return (
     <div className="View">
       <div className="Calendar">
-        <div>{header()}</div>
         <div>{cells()}</div>
       </div>
     </div>

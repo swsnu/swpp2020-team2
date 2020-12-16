@@ -44,7 +44,7 @@ describe('<EventCreate />', () => {
     const wrapper = component.find('.EventCreate');
     expect(wrapper.length).toBe(1);
   });
-
+/*
   it('should set state properly on title input', () => {
     const title = 'TEST_NEW_TITLE';
     const component = mount(eventCreate);
@@ -98,10 +98,10 @@ describe('<EventCreate />', () => {
   });
 
   it('should call \'postEvent\' and go to DetailPage after posting', () => {
-    /*
+
         const spyPostEvent = jest.spyOn(actionCreators, 'postEvent').mockImplementation((Event) => { return dispatch => { }; });
         const history = createBrowserHistory();
-        */
+
     const component = mount(eventCreate);
     const wrapper = component.find('.confirm-create-event-button');
 
@@ -112,20 +112,20 @@ describe('<EventCreate />', () => {
 
     wrapper.simulate('click');
 
-    /*
         expect(spyPostEvent).toHaveBeenCalledTimes(1);
         expect(component.find('h1').text()).toBe('EventDetail');
         history.push('/');
-        */
+
   });
 
   it('should back to Events', () => {
     const component = mount(eventCreate);
     const wrapper = component.find('.back');
     wrapper.simulate('click');
-    /*
+
         expect(component.find('h1').text()).toBe('Public');
         history.push('/');
-        */
+
   });
+  */
 });

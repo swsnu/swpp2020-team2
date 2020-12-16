@@ -20,7 +20,7 @@ from django.db.models import Q, Count
 from almanac.models import User, UserPreference, \
     University, Department, Event, Group, Background, Language, Category, Tag, \
     Image, EventReport, GroupReport
-from .recommendations import recommend_tag
+from .recommendations import recommend_tag, refresh_tag, add_tag
 from .tokens import account_activation_token
 from .forms import ImageForm
 
@@ -162,8 +162,8 @@ def get_user_signin(request):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': user_preference.university_id,
-    'department': user_preference.department_id}
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
+    'department': {'id': user_preference.department_id, 'name': user_preference.department.name}}
     return JsonResponse(user_dict)
 
 @ensure_csrf_cookie
@@ -185,8 +185,8 @@ def get_user_signin_full(request):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': user_preference.university_id,
-    'department': user_preference.department_id,
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
+    'department': {'id': user_preference.department_id, 'name': user_preference.department.name},
     'profile': user_preference.profile_id,
     'background': user_preference.background_id,
     'language': user_preference.language_id,
@@ -220,8 +220,8 @@ def get_user(request, user_id):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': user_preference.university_id,
-    'department': user_preference.department_id}
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
+    'department': {'id': user_preference.department_id, 'name': user_preference.department.name}}
     return JsonResponse(user_dict)
 
 @ensure_csrf_cookie
@@ -243,8 +243,8 @@ def get_user_full(request, user_id):
     user_dict = {'id': user.id, 'username': user.username,
     'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
     'email': user.email, 'is_active': user.is_active,
-    'university': user_preference.university_id,
-    'department': user_preference.department_id,
+    'university': {'id': user_preference.university_id, 'name': user_preference.university.name},
+    'department': {'id': user_preference.department_id, 'name': user_preference.department.name},
     'profile': user_preference.profile_id,
     'background': user_preference.background_id,
     'language': user_preference.language_id,
@@ -258,6 +258,28 @@ def get_user_full(request, user_id):
     'kings': [group.id for group in user.king_group.all()],
     }
     return JsonResponse(user_dict)
+
+@ensure_csrf_cookie
+def change_info_user(request):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    user = request.user
+    user_preference = UserPreference.objects.get(user=user.id)
+
+    req_data = json.loads(request.body.decode())
+    user.first_name = req_data['first_name']
+    user.last_name = req_data['last_name']
+    user_preference.department_id = req_data['department']
+    return HttpResponse(status=204)
 
 @ensure_csrf_cookie
 def like_event_user(request):
@@ -400,7 +422,10 @@ def change_password_user(request):
     user = request.user
 
     req_data = json.loads(request.body.decode())
+    old_password = req_data['old_password']
     password = req_data['password']
+    if not user.check_password(old_password):
+        return HttpResponse(status=403)
     user.set_password(password)
     user.save()
     new_user = authenticate(request, username=user.username, password=password)
@@ -710,9 +735,11 @@ def get_delete_tag(request, tag_id):
 
     if request.method == 'GET':
         tag_dict = {'id': tag.id, 'name': tag.name}
+        add_tag(tag_id)
         return JsonResponse(tag_dict)
     # DELETE
     tag.delete()
+    refresh_tag()
     return HttpResponse(status=200)
 
 @ensure_csrf_cookie
@@ -754,7 +781,7 @@ def get_recommendation_tag(request):
     else:
         recommendation = recommend_tag(content)
 
-    tags = [{'id': tag_id,
+    tags = [{'id': tag_id, 'name': Tag.objects.get(id=tag_id).name
     } for tag_id in recommendation]
     return JsonResponse(tags, safe=False)
 
@@ -928,19 +955,22 @@ def get_event(request):
         return HttpResponseNotAllowed(['GET'])
 
     events = [{'id': event.id,
-    'title': event.title,
-    'place': event.place, 'date': str(event.date),
-    'category': event.category_id,
-    'tag': [tag.id for tag in event.tag.all()],
-    'group': event.group_id,
-    'begin_time': str(event.begin_time),
-    'end_time': str(event.end_time),
-    'last_editor': event.last_editor_id,
-    'image': [image.id for image in event.image.all()],
-    'content': event.content,
-    'likes': [up.user.id for up in event.likes_userpreference.all()],
-    'brings': [up.user.id for up in event.brings_userpreference.all()]
-    } for event in Event.objects.all().order_by('id')]
+        'title': event.title,
+        'place': event.place, 'date': event.date,
+        'category': {'id': event.category_id,
+        'name': Category.objects.get(id=event.category_id).name},
+        'tag': [{'id': tag.id, 'name': Tag.objects.get(id=tag.id).name} for tag in event.tag.all()],
+        'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
+        'begin_time': event.begin_time,
+        'end_time': event.end_time,
+        'last_editor': {'id': event.last_editor_id,
+        'name': User.objects.get(id=event.last_editor_id).username,
+        'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
+        'image': [image.id for image in event.image.all()],
+        'content': event.content,
+        'likes': [up.user.id for up in event.likes_userpreference.all()],
+        'brings': [up.user.id for up in event.brings_userpreference.all()]}
+        for event in Event.objects.all().order_by('id')]
     return JsonResponse(events, safe=False)
 
 @ensure_csrf_cookie
@@ -961,7 +991,9 @@ def get_event_filtered(request):
 
     req_data = json.loads(request.body.decode())
     filter_options_dict = req_data['filter_options']
+    #print("filter : {}".format(filter_options_dict))
     sort_options_list = req_data['sort_options']
+    #print("sort : {}".format(sort_options_list))
     count_options_dict = req_data['count_options']
     event_objects = Event.objects.all()
     # Filter(Dictionary)
@@ -1023,12 +1055,14 @@ def get_event_filtered(request):
     events = [{'id': event.id,
     'title': event.title,
     'place': event.place, 'date': str(event.date),
-    'category': event.category.id,
-    'tag': [tag.id for tag in event.tag.all()],
-    'group': event.group.id,
+    'category': {'id': event.category_id, 'name': Category.objects.get(id=event.category_id).name},
+    'tag': [{'id': tag.id, 'name': Tag.objects.get(id=tag.id).name} for tag in event.tag.all()],
+    'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
     'begin_time': str(event.begin_time),
     'end_time': str(event.end_time),
-    'last_editor': event.last_editor.id,
+    'last_editor': {'id': event.last_editor_id,
+    'name': User.objects.get(id=event.last_editor_id).username,
+    'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
     'image': [image.id for image in event.image.all()],
     'content': event.content,
     'likes': [up.user.id for up in event.likes_userpreference.all()],
@@ -1124,18 +1158,25 @@ def get_put_delete_event_full(request, event_id):
         return HttpResponseNotFound()
 
     event = Event.objects.get(id=event_id)
+    group = Group.objects.get(id=event.group_id)
+    category = Category.objects.get(id=event.category_id)
+    last_editor = User.objects.get(id=event.last_editor_id)
+    up = UserPreference.objects.get(user_id=event.last_editor_id)
 
     if request.method == 'GET':
         event_dict = {'id': event.id,
         'title': event.title,
         'place': event.place, 'date': event.date,
-        'category': event.category_id,
-        'tag': [tag.id for tag in event.tag.all()],
-        'group': event.group_id,
+        'category': {'id': event.category_id, 'name': category.name},
+        'tag': [{'id': tag.id, 'name': Tag.objects.get(id=tag.id).name} for tag in event.tag.all()],
+        'group': {'id': event.group_id, 'name': group.name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
-        'last_editor': event.last_editor_id,
-        'image': [image.id for image in event.image.all()],
+        'last_editor': {'id': event.last_editor_id,
+        'name': last_editor.username,
+        'department': up.department.name},
+        'image': [{'id': image.id,
+        'image_file_url': image.image_file.url} for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
         'brings': [up.user.id for up in event.brings_userpreference.all()]}
@@ -1319,6 +1360,14 @@ def get_group_filtered(request):
             group_objects = group_objects.filter(
                 id__in=user_preference.gets_notification.values_list('id', flat=True)
             )
+        if 'nothing' in filter_options_dict['group']:
+            group_objects = group_objects.exclude(
+                id__in=user_preference.likes_group.values_list('id', flat=True)
+            ).exclude(
+                id__in=user_preference.gets_notification.values_list('id', flat=True)
+            ).exclude(
+                id__in=user_preference.gets_notification.values_list('id', flat=True)
+            )
     if 'group_exact' in filter_options_dict.keys():
         group_objects = group_objects.filter(id__in=filter_options_dict['group_exact'])
     # Sort(List (length 1))
@@ -1399,12 +1448,24 @@ def get_delete_group_full(request, group_id):
 
     if request.method == 'GET':
         group_dict = {'id': group.id, 'name': group.name,
-        'member': [user.id for user in group.member.all()],
+        'member': [{'id': user.id,
+        'first_name': user.first_name, 'last_name': user.last_name,
+        'email': user.email,
+        'department': {
+            'id': UserPreference.objects.get(user=user).department.id,
+            'name': UserPreference.objects.get(user=user).department.name
+            }} for user in group.member.all()],
         'admin': [user.id for user in group.admin.all()],
         'king': group.king_id,
         'likes_group': [up.user.id for up in group.likes_group_userpreference.all()],
         'gets_notification': [up.user.id for up in group.gets_notification_userpreference.all()],
-        'join_requests': [up.user.id for up in group.join_requests_userpreference.all()],
+        'join_requests': [{'id': up.user.id,
+        'first_name': up.user.first_name, 'last_name': up.user.last_name,
+        'email': up.user.email,
+        'department': {
+            'id': up.department.id,
+            'name': up.department.name
+            }} for up in group.join_requests_userpreference.all()],
         'profile': group.profile_id,
         'description': group.description, 'privacy': group.privacy
         }
@@ -1435,6 +1496,37 @@ def get_single_group(request, group_id):
     'description': group.description, 'privacy': group.privacy
     }
     return JsonResponse(group_dict)
+
+@ensure_csrf_cookie
+def join_request_modify_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    user_id = req_data['user']
+    user_preference = UserPreference.objects.get(user=user_id)
+    operation = req_data['operation']
+    if operation == 'add':
+        user_preference.join_requests.add(group_id)
+    else: # remove
+        user_preference.join_requests.remove(group_id)
+    return HttpResponse(status=204)
 
 @ensure_csrf_cookie
 def member_modify_group(request, group_id):
@@ -1526,6 +1618,32 @@ def king_modify_group(request, group_id):
     group.pre_change_king(user_id)
     group.king_id = user_id
     group.save()
+    return HttpResponse(status=204)
+
+@ensure_csrf_cookie
+def change_info_group(request, group_id):
+
+    '''
+    a function docstring
+    '''
+
+    if request.method not in ['PUT']:
+        return HttpResponseNotAllowed(['PUT'])
+
+    if not Group.objects.filter(id=group_id).exists():
+        return HttpResponseNotFound()
+
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    group = Group.objects.get(id=group_id)
+
+    if not group.admin.filter(id=request.user.id).exists():
+        return HttpResponseForbidden()
+
+    req_data = json.loads(request.body.decode())
+    group.name = req_data['name']
+    group.description = req_data['description']
     return HttpResponse(status=204)
 
 @ensure_csrf_cookie

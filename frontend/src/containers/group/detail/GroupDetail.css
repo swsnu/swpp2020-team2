@@ -1,0 +1,88 @@
+.GroupDetail{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.GroupDetail .topBar{
+    width: 100%;
+}
+
+.GroupDetail .header{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid gray;
+}
+
+.GroupDetail .header .name{
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.GroupDetail .header .settingsBtn{
+    position: absolute;
+    top: 20%;
+    left: 90%;
+    width: 60px;
+    background-color: lightgray;
+}
+
+.GroupDetail .row0{
+    margin-left: 1200px;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+.GroupDetail .row0 .btn{
+    height: 20px;
+    width: 20px;
+}
+
+.GroupDetail .row1{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.GroupDetail .row1 .key{
+    font-weight: bold;
+    font-size: 30px;
+    width: 200px;
+}
+
+.GroupDetail .row1 .value{
+    font-size: 30px;
+    width: 200px;
+}
+
+.GroupDetail .row2{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}
+
+.GroupDetail .row2 .key{
+    font-weight: bold;
+    font-size: 30px;
+    width: 200px;
+}
+
+.GroupDetail .row2 .value{
+    font-size: 30px;
+    width: 200px;
+}

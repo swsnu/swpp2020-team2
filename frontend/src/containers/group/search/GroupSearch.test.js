@@ -7,7 +7,6 @@ import getMockStore from '../../../test-utils/mocks';
 import { history } from '../../../store/store';
 
 import * as userActions from '../../../store/actions/user';
-import * as groupActions from '../../../store/actions/group';
 
 describe('GroupSearch', () => {
   function makeComponent(store) {
@@ -77,5 +76,19 @@ describe('GroupSearch', () => {
 
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/group/create');
+  });
+
+  it('should show GroupBoxes', () => {
+    const mockedState2 = {
+      signinedUser: null,
+      searchGroups: [
+        { id: 1, name: 'test_group_name', description: 'test_group_description' },
+      ],
+      likeGroups: [],
+      noticeGroups: [],
+    };
+    const component = mount(makeComponent(getMockStore(mockedState2)));
+
+    expect(component.find('GroupBox').length).toBe(1);
   });
 });

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ImSearch } from 'react-icons/im';
 import { MdGroupAdd } from 'react-icons/md';
 import TopBar from '../../../components/TopBar/TopBar';
-import groupBox from '../../../components/groupBox/GroupBox';
+import GroupBox from '../../../components/groupBox/GroupBox';
 
 import * as actionCreators from '../../../store/actions/index';
 
@@ -13,16 +13,23 @@ import './GroupSearch.css';
 class GroupSearch extends Component {
   state = {
     searchQuery: '',
+    key:0,
   }
 
   componentDidMount() {
     this.setState({ searchQuery: this.props.match.params.searchQuery });
-    this.props.getUserFull();
+    this.props.searchGroup(this.props.match.params.searchQuery);
+    this.props.getUser();
+    this.props.getLikeGroup();
+    this.props.getNoticeGroup();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.signinedUser) this.props.history.replace('/main');
-    if (this.state.searchQuery) this.props.searchGroup(this.state.searchQuery);
+  }
+
+  shouldComponentUpdate(nextProps,nextState){
+    return true;
   }
 
   onSearchHandler = () => {
@@ -32,43 +39,39 @@ class GroupSearch extends Component {
   onLikeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
+    this.setState({key:Math.random()});
   }
 
   onNoticeHandler=(id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
+    this.props.noticeGroup(id, oper);
+    this.setState({key:Math.random()});
   }
 
-  onJoinHandler=(id, op) => {
-    const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
-  }
+  makeGroupBox = (group) => {
+    function haveThisGroup(element) {
+      if (element.id === group.id) return true;
+      return false;
+    }
+    var liked = false;
+    if (this.props.likeGroups.find(haveThisGroup))liked = true;
+    var noticed = false;
+    if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+    return (
+      <GroupBox
+        key={group.id}
+        name={group.name}
+        description={group.description}
+        liked={liked}
+        like={() => this.onLikeHandler(group.id, !liked)}
+        noticed={noticed}
+        notice={() => this.onNoticeHandler(group.id, !noticed)}
+        report={() => {}}
+      />
+    );
+  };
 
   render() {
-    var makeGroupBox = function func(group) {
-      function haveThisGroup(element) {
-        if (element.id === group.id) return true;
-        return false;
-      }
-      var liked = false;
-      if (this.props.likeGroups.find(haveThisGroup))liked = true;
-      var noticed = false;
-      if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
-      var joined = false;
-      if (this.props.MyGroups.find(haveThisGroup))joined = true;
-      return (
-        <groupBox
-          name={group.name}
-          description={group.description}
-          liked={liked}
-          like={() => this.onLikeHandler(group.id, !liked)}
-          noticed={noticed}
-          notice={() => this.onNoticeHandler(group.id, !noticed)}
-          report={() => {}}
-        />
-      );
-    };
-
     return (
       <div className="GroupSearch">
         <div className="topBar">
@@ -102,9 +105,8 @@ class GroupSearch extends Component {
           </div>
 
           <h2>Group Search Result</h2>
-          {this.props.searchGroups.map(makeGroupBox)}
+          {this.props.searchGroups.map(this.makeGroupBox)}
         </div>
-
       </div>
     );
   }
@@ -112,22 +114,18 @@ class GroupSearch extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
-  userFullInfo: state.ur.userFullInfo,
   searchGroups: state.gr.searchGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
-  myGroups: state.gr.myGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUserFull: () => dispatch(actionCreators.getUserFull()),
+  getUser: () => dispatch(actionCreators.getUser()),
   searchGroup: (query) => dispatch(actionCreators.searchGroup(query)),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
-  getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
-  joinGroup: (id, op) => dispatch(actionCreators.joinGroup(id, op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearch);

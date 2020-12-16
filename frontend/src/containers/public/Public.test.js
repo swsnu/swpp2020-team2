@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { mount } from 'enzyme';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -93,6 +94,24 @@ const stubInitialState = {
   events: sample,
 };
 
+axios.get = jest.fn((url) => {
+  return new Promise((resolve, reject) => {
+    const result = {
+      status: 200, data: { id: 1 },
+    };
+    resolve(result);
+  });
+});
+
+axios.post = jest.fn((url, body) => {
+  return new Promise((resolve, reject) => {
+    const result = {
+      status: 200, data: [{ id: 1 }],
+    };
+    resolve(result);
+  });
+});
+
 const getMockReducer = jest.fn(
   (initialState) => (state = initialState, action) => {
     switch (action.type) {
@@ -107,6 +126,7 @@ const getMockStore = (initialState) => {
   const mockReducer = getMockReducer(initialState);
   const rootReducer = combineReducers({
     evt: mockReducer,
+    ur: mockReducer,
     router: connectRouter(history),
   });
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -117,14 +137,16 @@ const getMockStore = (initialState) => {
 
 const mockStore = getMockStore(stubInitialState);
 
-describe('<Articles />', () => {
+describe('<Public />', () => {
   let publicComponent;
   beforeEach(() => {
+    const mockStore_ = mockStore;
+    const history_ = history;
     publicComponent = (
-      <Provider store={mockStore}>
-        <ConnectedRouter history={history}>
+      <Provider store={mockStore_}>
+        <ConnectedRouter history={history_}>
           <Switch>
-            <Route path="/" exact render={() => <Public history={history} />} />
+            <Route path="/" exact render={() => <Public history={history_} />} />
           </Switch>
         </ConnectedRouter>
       </Provider>
@@ -146,11 +168,27 @@ describe('<Articles />', () => {
     div2.setAttribute('id', 'tagOption');
     document.body.appendChild(div2);
 
-    const component = mount(publicComponent, { attachTo: document.getElementById('including') });
+    const component = mount(publicComponent);
 
-    const viewOptionButton = component.find('.ViewOptionButton0');
+    const wrapperArrow = component.find('.arrow');
+    expect(wrapperArrow.length).toBe(2);
+
+    const wrapperYearMonth = component.find('.year_month');
+    expect(wrapperYearMonth.length).toBe(1);
+
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
+    wrapperArrow.at(0).simulate('click');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 11.');
+    wrapperArrow.at(1).simulate('click');
+    expect(wrapperYearMonth.at(0).text()).toEqual('2020. 12.');
+
+    const viewOptionButton = component.find('.ViewOptionButton1');
     expect(viewOptionButton.length).toBe(1);
     viewOptionButton.at(0).simulate('click');
+
+    const viewOptionButton2 = component.find('.ViewOptionButton1');
+    expect(viewOptionButton2.length).toBe(1);
+    viewOptionButton2.at(0).simulate('click');
 
     const includingSubmit = component.find('.IncludingSubmit');
     expect(includingSubmit.length).toBe(1);
@@ -158,6 +196,11 @@ describe('<Articles />', () => {
 
     const tagSubmit = component.find('.TagSubmit');
     expect(tagSubmit.length).toBe(1);
+    tagSubmit.simulate('click');
+
+    const tagInput = component.find('.TagText');
+    expect(tagInput.length).toBe(1);
+    tagInput.simulate('change', { target: { value: 'Hello two' } });
     tagSubmit.simulate('click');
 
     const groupOptionButton = component.find('.GroupOptionButton0');
@@ -172,7 +215,7 @@ describe('<Articles />', () => {
     eventOptionButton.simulate('click');
     eventOptionButton.simulate('click');
 
-    const categoryOptionButton = component.find('.CategoryOptionButton00');
+    const categoryOptionButton = component.find('.CategoryOptionButton01');
     expect(categoryOptionButton.length).toBe(1);
     categoryOptionButton.at(0).simulate('click');
     categoryOptionButton.at(0).simulate('click');
@@ -193,8 +236,9 @@ describe('<Articles />', () => {
     expect(close.length).toBe(1);
     close.simulate('click');
 
-    const createEventButtonInCalendar = component.find('.createEventButtonInCalendar');
-    expect(createEventButtonInCalendar.length).toBe(1);
-    createEventButtonInCalendar.simulate('click');
+    dayComponent.at(0).simulate('click');
+    const createButton = component.find('.createEventButton');
+    expect(createButton.length).toBe(1);
+    createButton.simulate('click');
   });
 });

@@ -1,0 +1,93 @@
+.ListView {
+    display: flex;
+    position: absolute;
+    margin-top: 30px;
+    width: 70%;
+    height: 600px;
+    left: 60%;
+    transform: translate(-50%, 0%);
+    flex-direction: column;
+    border-radius: 60px;
+}
+
+.ListView .board{
+    height: 600px;
+}
+
+.ListView .nav{
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.ListView .board_header{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    background-color: rgb(245,245,245);
+    font-weight: bold;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+}
+
+.ListView .board_content0{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    text-align:center;
+    border-bottom: 1px solid gray;
+}
+
+.ListView .board_content1{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    text-align:center;
+    border-bottom: 1px solid gray;
+    background-color: rgb(250,250,250);
+}
+
+.ListView .board_id{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+}
+
+.ListView .board_title{
+    display:flex;
+    align-items: center;
+    width: 600px;
+}
+
+.ListView .board_header .board_title{
+    justify-content: center;
+}
+
+.ListView .board_group{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+}
+
+.ListView .board_date{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+}
+
+.ListView .board_like{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+}
+
+.ListView .board_bring{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+}

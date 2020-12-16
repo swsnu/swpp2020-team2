@@ -51,6 +51,11 @@
   border-radius: 100px;
 }
 
+.TopBar .right img:hover{
+  width: 50px;
+  height: 50px;
+}
+
 .TopBar .right .notice:hover{
   color:yellow;
 }

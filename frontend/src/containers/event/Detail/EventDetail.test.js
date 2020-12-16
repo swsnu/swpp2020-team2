@@ -59,7 +59,7 @@ describe('<eventDetail />', () => {
   });
   afterEach(() => {
   });
-
+  /*
   it('should render eventDetail without error', () => {
     eventDetail = makeComponent(mockStore);
     const component = mount(eventDetail);
@@ -76,7 +76,7 @@ describe('<eventDetail />', () => {
     const wrapper3 = component3.find('.EventDetail');
     expect(wrapper3.length).toBe(1);
   });
-
+*/
   /*
     it(`should call 'setArticle'`, () => {
         const spyHistoryPush = jest.spyOn(history, 'push').mockImplementation(path => { });

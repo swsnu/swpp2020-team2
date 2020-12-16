@@ -1,7 +1,7 @@
 import React from 'react';
-import { GoDiffAdded, GoReport } from 'react-icons/go';
+import { MdRemoveShoppingCart, MdAddShoppingCart } from 'react-icons/md';
 
-import { GrLike } from 'react-icons/gr';
+import { FcLike, FcLikePlaceholder } from 'react-icons/fc';
 
 import './EventBox.css';
 
@@ -9,20 +9,20 @@ const EventBox = (props) => (
   <div
     className="EventBox"
     style={{
-      borderLeftColor: props.event?.category.id === 0 ? 'red'
-        : props.event?.category.id === 1 ? 'orange'
-          : props.event?.category.id === 2 ? 'yellow'
-            : props.event?.category.id === 3 ? 'green'
-              : props.event?.category.id === 4 ? 'skyblue'
-                : props.event?.category.id === 5 ? 'blue'
-                  : props.event?.category.id === 6 ? 'purple'
+      borderLeftColor: props.event?.category.id === 1 ? 'red'
+        : props.event?.category.id === 2 ? 'orange'
+          : props.event?.category.id === 3 ? 'yellow'
+            : props.event?.category.id === 4 ? 'green'
+              : props.event?.category.id === 5 ? 'skyblue'
+                : props.event?.category.id === 6 ? 'blue'
+                  : props.event?.category.id === 7 ? 'purple'
                     : 'gray',
     }}
   >
     <div className="left">
       <div className="top">
         <div className="group">
-          {props.event?.group}
+          {props.event?.group?.name}
         </div>
       </div>
 
@@ -48,13 +48,10 @@ const EventBox = (props) => (
     <div className="right">
       <div className="btns">
         <button className="bringEvent" onClick={props.bringEvent}>
-          <GoDiffAdded size="100%" color="black" />
+          {props.bringBool ? <MdRemoveShoppingCart size="100%" /> : <MdAddShoppingCart size="100%" />}
         </button>
         <button className="likeEvent" onClick={props.likeEvent}>
-          <GrLike size="100%" color="#fff" />
-        </button>
-        <button className="reportEvent" onClick={props.reportEvent}>
-          <GoReport size="100%" color="red" />
+          {props.likeBool ? <FcLike size="100%" /> : <FcLikePlaceholder size="100%" />}
         </button>
       </div>
 
