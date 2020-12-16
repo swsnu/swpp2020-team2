@@ -15,12 +15,16 @@ clf_ovr = Pipeline([('vect', CountVectorizer(stop_words='english',max_features=7
                 ('tfidf', TfidfTransformer(use_idf=True)),
                 ('clf', OneVsRestClassifier(SVC(kernel='linear')))])
 
-def recommend_tag(content, num=3):
+int_to_tag = []
+tag_to_int = {}
+
+def refresh_tag():
 
     '''
     a function docstring
     '''
 
+    global int_to_tag, tag_to_int
     int_to_tag = []
     tag_to_int = {}
     idx = 1
@@ -29,6 +33,15 @@ def recommend_tag(content, num=3):
         int_to_tag.append(t_id)
         tag_to_int[t_id] = idx
         idx += 1
+
+
+def recommend_tag(content, num=3):
+
+    '''
+    a function docstring
+    '''
+
+    refresh_tag()
 
     events = [{
         'content': e.content, 'tag': e.tag.values_list('id', flat=True)
