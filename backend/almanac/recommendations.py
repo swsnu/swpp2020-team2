@@ -68,7 +68,7 @@ def recommend_tag(content, num=3):
     '''
 
     if Event.objects.count() <= 6 or Tag.objects.annotate(q_count=
-        Count('tag_event')).count() <= 2:
+        Count('tag_event')).filter(q_count__gte=0).count() <= 2:
         return []
 
     refresh_tag()
