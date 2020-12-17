@@ -101,8 +101,9 @@ const SideBar = ({
     <div className="SortOption">
       <div className="OptionName">Sort</div>
       <select className="SortOptionSelect" onChange={(e) => setSortOption(e.target.value)}>
-        <option value="recent">최근순</option>
-        <option value="like">좋아요순</option>
+        <option value="date">날짜순</option>
+        <option value="likes">좋아요순</option>
+        <option value="brings">가져오기순</option>
       </select>
     </div>
   );

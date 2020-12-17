@@ -92,16 +92,16 @@ class EventModify extends Component {
     }
   }
 
-  deleteEventHandler = () => {
+  deleteEventHandler = async () => {
     if (window.confirm("정말 행사를 삭제하시겠습니까?")) {
-      this.props.onDeleteEvent(this.props.match.params.event_id)
+      await this.props.onDeleteEvent(this.props.match.params.event_id)
       this.props.history.push('/public');
     } else {
 
     }
   }
 
-  modifyEventHandler = () => {
+  modifyEventHandler = async () => {
     let message = '';
     if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
     if (!(this.state.category > 0)) message += ' 행사 종류를 선택하세요 ! \n';
@@ -112,7 +112,7 @@ class EventModify extends Component {
     if (message.length > 0) alert(message);
     else {
       if (window.confirm("수정한 행사를 저장하시겠습니까?")) {
-        this.props.onModifyEvent({
+        await this.props.onModifyEvent({
           id: this.props.match.params.event_id,
           title: this.state.title,
           place: this.state.place,
