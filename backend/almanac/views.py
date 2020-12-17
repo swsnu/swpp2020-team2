@@ -959,13 +959,15 @@ def get_event(request):
         'place': event.place, 'date': event.date,
         'category': {'id': event.category_id,
         'name': Category.objects.get(id=event.category_id).name},
-        'tag': [{'id': tag.id, 'name': Tag.objects.get(id=tag.id).name} for tag in event.tag.all()],
-        'group': {'id': event.group_id, 'name': Group.objects.get(id=event.group_id).name},
+        'tag': [{'id': tag.id, 'name': tag.name} for tag in
+        event.tag.all().prefetch_related('name')],
+        'group': {'id': event.group_id, 'name': event.group.name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
         'last_editor': {'id': event.last_editor_id,
         'name': User.objects.get(id=event.last_editor_id).username,
-        'department': UserPreference.objects.get(user_id=event.last_editor_id).department.name},
+        'department': UserPreference.objects.prefetch_related('department')
+        .get(user_id=event.last_editor_id).department.name},
         'image': [image.id for image in event.image.all()],
         'content': event.content,
         'likes': [up.user.id for up in event.likes_userpreference.all()],
