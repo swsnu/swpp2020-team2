@@ -97,7 +97,7 @@ class GroupMain extends Component {
   };
 
   handleKeyPress=(e)=>{
-    if(e.key==="enter"){
+    if(e.key==="Enter"){
       this.onSearchHandler();
     }
   }

@@ -80,6 +80,11 @@ export const noticeGroup = (id, op) => (dispatch) => axios.put('/api/user/signin
 export const joinGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/join_request/', {
   group: id,
   operation: op,
+})
+.then((res)=>{
+  if(res.status<300){
+    alert("Join request is sent!");
+  }
 });
 
 // like / bring events for loggedUser
