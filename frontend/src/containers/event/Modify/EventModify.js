@@ -135,10 +135,6 @@ class EventModify extends Component {
   }
 
   render() {
-
-    const imageUrl = this.props.event?.image[0]?.image_file_url;
-
-
     var makeOption = function func(X) {
       return <option value={X.id}>{X.name}</option>;
     };
@@ -279,7 +275,6 @@ const mapStateToProps = (state) => ({
   categories: state.or.categories,
   myGroups: state.gr.myGroups,
 
-  selectedImage: state.evt.selectedImage,
   tagRecommend: state.evt.tagRecommend,
 
   event: state.evt.target,
@@ -291,7 +286,6 @@ const mapDispatchToProps = (dispatch) => ({
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   onGetEvent: (id) => dispatch(actionCreators.getEvent(id)),
 
-  onCraeteImage: (dictImg) => dispatch(actionCreators.uploadImage(dictImg)),
   onGetTagRecommend: (content) => dispatch(actionCreators.getTagRecommend(content)),
 
   onModifyEvent: (event) => dispatch(actionCreators.modifyEvent(event)),
