@@ -98,5 +98,8 @@
     display: flex;
     flex:1;
     margin-left: auto;
-    color: red;
+}
+
+.EventBox .right .tags .tag{
+    margin: 3px;
 }
