@@ -227,12 +227,38 @@ describe('actions', () => {
     expect(spyOnPut).toHaveBeenCalledTimes(1);
   });
 
-  it('joinGroup should operate correctly', () => {
+  it('joinGroup should operate correctly', (done) => {
     const spyOnPut = jest.spyOn(axios, 'put')
-      .mockImplementation(()=>{});
+      .mockImplementation((url)=>new Promise((resolve,reject)=>{
+        const result={
+          status:204,
+        }
+        resolve(result);
+      }));
+    const spyOnAlert=jest.spyOn(window,'alert');
 
-    store.dispatch(actionCreators.joinGroup(1,'add'));
-    expect(spyOnPut).toHaveBeenCalledTimes(1);
+    store.dispatch(actionCreators.joinGroup(1,'add')).then(()=>{
+      expect(spyOnPut).toHaveBeenCalledTimes(1);
+      expect(spyOnAlert).toHaveBeenCalledWith('Join request is sent!');
+      done();
+    })
+  });
+
+  it('joinGroup should operate correctly 2', (done) => {
+    const spyOnPut = jest.spyOn(axios, 'put')
+      .mockImplementation((url)=>new Promise((resolve,reject)=>{
+        const result={
+          status:502,
+        }
+        resolve(result);
+      }));
+    const spyOnAlert=jest.spyOn(window,'alert');
+
+    store.dispatch(actionCreators.joinGroup(1,'add')).then(()=>{
+      expect(spyOnPut).toHaveBeenCalledTimes(1);
+      expect(spyOnAlert).toHaveBeenCalledTimes(0);
+      done();
+    })
   });
 
   it('likeEvent should operate correctly', (done) => {

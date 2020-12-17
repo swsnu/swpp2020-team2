@@ -24,26 +24,17 @@ describe('GroupSearch', () => {
   });
 
   it('should render without error', () => {
+    global.localStorage.setItem('isLogin','true');
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('GroupSearch').length).toBe(1);
   });
 
   it('should redirect to main page when sign outed', () => {
-    const mockedState2 = {
-      signinedUser: 1,
-      searchGroups: [],
-    };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
-
-    let component = mount(makeComponent(getMockStore(mockedState2)));
-    let instance = component.find(GroupSearch.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState);
-    expect(spyOnReplace).toHaveBeenCalledTimes(0);
-
-    component = mount(makeComponent(getMockStore(mockedState)));
-    instance = component.find(GroupSearch.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState2);
+      
+    global.localStorage.removeItem('isLogin');
+    const component = mount(makeComponent(getMockStore(mockedState)));
     expect(spyOnReplace).toHaveBeenCalledWith('/main');
   });
 
@@ -80,12 +71,16 @@ describe('GroupSearch', () => {
 
   it('should show GroupBoxes', () => {
     const mockedState2 = {
-      signinedUser: null,
+      signinedUser: 1,
+      userFullInfo:{
+        id:1, join_requests:[],
+      },
       searchGroups: [
         { id: 1, name: 'test_group_name', description: 'test_group_description' },
       ],
       likeGroups: [],
       noticeGroups: [],
+      myGroups: [],
     };
     const component = mount(makeComponent(getMockStore(mockedState2)));
 
