@@ -32,7 +32,7 @@ class Public extends Component {
       categoryOption: new Set(),
       groupOption: '',
       eventOption: '',
-      sortOption: 'recent',
+      sortOption: 'date',
     };
     this.onClickDay = this.onClickDay.bind(this);
     this.onClickCloseModal = this.onClickCloseModal.bind(this);
@@ -224,6 +224,7 @@ class Public extends Component {
   }
 
   render() {
+    console.log(this.state.events);
     const dateFormat = 'yyyy. MM.';
     const header = (
       <div className="header">
