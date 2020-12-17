@@ -8,6 +8,7 @@ import {BsPersonSquare} from 'react-icons/bs'
 const ProfileModal = (props) => {
   const onClickSignOut = () => {
     props.onSignOut();
+    props.history.push('/main');
   };
 
   return (
