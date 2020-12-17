@@ -80,12 +80,7 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: true };
       }
     }
-<<<<<<< HEAD
     this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers, firstUpdate:false }));
-=======
-    //this.setState({ ...this.state, joinRequests });
-    this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers }));
->>>>>>> b3b198fbb489ed30ef57ea2cd27f5d2829701cb3
   }
 
   manageMembersHandler = (id, op) => {
