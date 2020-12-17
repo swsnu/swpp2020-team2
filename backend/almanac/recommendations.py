@@ -77,12 +77,12 @@ def recommend_tag(content, num=3):
 
     predicted = clf_ovr.decision_function([content])
     pred_list = predicted.tolist()[0]
-    b = [[i, pred_list[i]] for i in range(len(pred_list))]
-    b.sort(key=(lambda x: x[1]), reverse=True)
-    c = list(map(lambda x: x[0], b[:num]))
+    pred2 = [[i, pred_list[i]] for i in range(len(pred_list))]
+    pred2.sort(key=(lambda x: x[1]), reverse=True)
+    pred3 = list(map(lambda x: x[0], pred2[:num]))
     #pre_result = list(zip(
     #    *heapq.nlargest(num, enumerate(pred_list[0]), key=operator.itemgetter(1))
     #))[0]
     #presult = list(map(lambda x: INT_TO_TAG[x], pre_result))
-    result = list(map(lambda x: INT_TO_TAG[x], c))
+    result = list(map(lambda x: INT_TO_TAG[x], pred3))
     return result
