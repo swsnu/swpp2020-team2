@@ -109,3 +109,9 @@
 
     cursor: pointer;
 }
+
+.GroupMain .container .sectionBox .section .containerBox{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

@@ -107,6 +107,7 @@ class Public extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.onGetUser();
     this.filterEvents();
   }
@@ -114,10 +115,6 @@ class Public extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     // this.filterEvents();
     return true;
-  }
-
-  componentDidUpdate() {
-    if (this.props.signinedUser === null) this.props.history.replace('/');
   }
 
   onClickCreateEvent(date) {

@@ -38,6 +38,7 @@ export {
   getLikeGroup,
   getNoticeGroup,
   getMyGroup,
+  getNothingGroup,
   searchGroup,
   changeGroupInfo,
   changeGroupPrivacy,

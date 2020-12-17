@@ -15,12 +15,13 @@ class SettingPreference extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getUserFull();
     this.props.getLanguages();
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.userFullInfo && !this.state.language) {
+    if (props.userFullInfo && !state.language) {
       return { ...state, language: props.userFullInfo.language };
     }
     return state;
