@@ -1083,12 +1083,14 @@ def create_event(request):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
+    user = request.user
+
     req_data = json.loads(request.body.decode())
     tag_id_list = req_data['tag']
     image_id_list = req_data['image']
     category_id = req_data['category']
     group_id = req_data['group']
-    last_editor_id = req_data['last_editor']
+    last_editor_id = user.id
     event = Event(
         title=req_data['title'],
         place=req_data['place'], date=req_data['date'],
@@ -1187,12 +1189,13 @@ def get_put_delete_event_full(request, event_id):
 
         req_data = json.loads(request.body.decode())
         with transaction.atomic():
+            event.last_editor_id = request.user.id
             if 'category' in req_data.keys():
                 event.category_id = req_data['category']
             if 'group' in req_data.keys():
                 event.group_id = req_data['group']
-            if 'last_editor' in req_data.keys():
-                event.last_editor_id = req_data['last_editor']
+            #if 'last_editor' in req_data.keys():
+            #    event.last_editor_id = req_data['last_editor']
             if 'title' in req_data.keys():
                 event.title = req_data['title']
             if 'place' in req_data.keys():
