@@ -11,7 +11,7 @@ import './SettingPersonal.css'
 
 class SettingPreference extends Component {
   state = {
-    language: 0,
+    language: null,
   }
 
   componentDidMount() {
@@ -20,7 +20,7 @@ class SettingPreference extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.userFullInfo) {
+    if (props.userFullInfo && !this.state.language) {
       return { ...state, language: props.userFullInfo.language };
     }
     return state;

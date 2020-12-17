@@ -14,6 +14,7 @@ class GroupMembers extends Component {
   state = {
     joinRequests: [],
     manageMembers: [],
+    firstUpdate:true,
   }
 
   componentDidMount() {
@@ -22,7 +23,7 @@ class GroupMembers extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.currGroup) {
+    if (props.currGroup && this.state.firstUpdate) {
       var joinRequests = [];
       for (var user of props.currGroup.join_requests) {
         joinRequests[user.id] = { accept: false, reject: false };
@@ -33,7 +34,7 @@ class GroupMembers extends Component {
         if (props.currGroup.admin.find(e => e.id === member.id)) admin = true;
         manageMembers[member.id] = { admin, expel: false };
       }
-      return { joinRequests, manageMembers };
+      return { joinRequests, manageMembers, firstUpdate:false };
     }
     return state;
   }
@@ -80,7 +81,7 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: true };
       }
     }
-    this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers }));
+    this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers, firstUpdate:false }));
   }
 
   manageMembersHandler = (id, op) => {
@@ -103,7 +104,7 @@ class GroupMembers extends Component {
           manageMembers[id] = { admin: false, expel: true };
         }
       }
-      this.setState((prevState)=>({ joinRequests:prevState.joinRequests,manageMembers }));
+      this.setState((prevState)=>({ joinRequests:prevState.joinRequests,manageMembers, firstUpdate:false }));
     }
   }
 
