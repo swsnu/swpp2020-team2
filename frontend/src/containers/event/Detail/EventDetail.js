@@ -21,6 +21,7 @@ class EventDetail extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.onGetEvent(parseInt(this.props.match.params.event_id));
     this.props.onGetUser();
   }

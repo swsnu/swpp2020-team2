@@ -24,15 +24,12 @@ class GroupDetail extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getUserFull();
     this.props.getGroupFull(this.props.match.params.id);
     this.props.getMyGroup();
     this.props.getLikeGroup();
     this.props.getNoticeGroup();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onLikeHandler=async (id, op) => {

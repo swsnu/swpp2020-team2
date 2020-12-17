@@ -16,22 +16,19 @@ class GroupCreate extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getUser();
   }
 
-  componentDidUpdate(prevProps) {
-    if (!this.props.signinedUser) this.props.history.replace('/main');
-    if (this.props.currGroup) this.props.history.push(`/group/details/${this.props.currGroup.id}`);
-  }
-
-  onCreateHandler = () => {
+  onCreateHandler = async() => {
     if (this.state.groupName === '' || this.state.groupDescription === '') alert('You should write group name and description!');
     else {
-      this.props.createGroup({
+      await this.props.createGroup({
         name: this.state.groupName,
         king: this.props.signinedUser,
         description: this.state.groupDescription,
       });
+      this.props.history.push(`/group/details/${this.props.currGroup?.id}`);
     }
   }
 
