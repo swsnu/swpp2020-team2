@@ -47,6 +47,7 @@ export {
   manageAdmin,
 
   reportGroup,
+  searchGroup,
 } from './group';
 
 export {
