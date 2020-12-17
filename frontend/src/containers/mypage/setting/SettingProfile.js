@@ -20,7 +20,7 @@ class SettingProfile extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.userInfo && !this.state.department) {
+    if (props.userInfo && !state.department) {
       return {
         firstName: props.userInfo.first_name,
         lastName: props.userInfo.last_name,
