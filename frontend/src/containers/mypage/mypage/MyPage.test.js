@@ -16,8 +16,18 @@ describe('MyPage', () => {
   };
 
   it('should render without error', () => {
+    global.localStorage.setItem('isLogin','true');
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('MyPage').length).toBe(1);
+  });
+
+  it('should redirect to main page when sign outed', () => {
+    const spyOnReplace = jest.spyOn(history, 'replace')
+      .mockImplementation();
+      
+    global.localStorage.removeItem('isLogin');
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    expect(spyOnReplace).toHaveBeenCalledWith('/main');
   });
 
   it('should route to setting page', () => {

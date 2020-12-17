@@ -32,31 +32,17 @@ describe('GroupDetail', () => {
   });
 
   it('should render without error', () => {
+    global.localStorage.setItem('isLogin','true');
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('GroupDetail').length).toBe(1);
   });
 
   it('should redirect to main page when sign outed', () => {
-    const mockedState2 = {
-      signinedUser: 1,
-      currGroup:{
-        id:1,
-        name:'test_group_name',
-        description:'test_group_description',
-        admin:[],
-      }
-    };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
 
-    let component = mount(makeComponent(getMockStore(mockedState2)));
-    let instance = component.find(GroupDetail.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState);
-    expect(spyOnReplace).toHaveBeenCalledTimes(0);
-
-    component = mount(makeComponent(getMockStore(mockedState)));
-    instance = component.find(GroupDetail.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState2);
+    global.localStorage.removeItem('isLogin');
+    const component = mount(makeComponent(getMockStore(mockedState)));
     expect(spyOnReplace).toHaveBeenCalledWith('/main');
   });
 
@@ -67,7 +53,7 @@ describe('GroupDetail', () => {
         id:1,
         name:'test_group_name',
         description:'test_group_description',
-        admin:[{id:2},{id:3}],
+        admin:[2,3],
       }
     };
     const spyOnPush = jest.spyOn(history, 'push')
@@ -82,7 +68,7 @@ describe('GroupDetail', () => {
         id:1,
         name:'test_group_name',
         description:'test_group_description',
-        admin:[{id:1},{id:2},{id:3}],
+        admin:[1,2,3],
       }
     };
     component = mount(makeComponent(getMockStore(mockedState2)));

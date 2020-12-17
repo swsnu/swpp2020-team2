@@ -102,6 +102,19 @@ describe('groupReducer', () => {
     expect(ret.myGroups).toEqual(sampleGroups);
   });
 
+  it('should handle get_nothing_group', () => {
+    const sampleGroups = [{
+      id: 1,
+      name: 'test_group',
+      king: 1,
+      description: 'test_description',
+      privacy: 1,
+    }];
+    const action = { type: actionTypes.GET_NOTHING_GROUP, data: sampleGroups };
+    const ret = groupReducer(stubInitialState, action);
+    expect(ret.nothingGroups).toEqual(sampleGroups);
+  });
+
   it('should handle search_group', () => {
     const sampleGroups = [{
       id: 1,

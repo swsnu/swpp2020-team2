@@ -72,7 +72,7 @@ class SettingProfile extends Component {
 
             <div className="header">
               <label>Profile</label>
-              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+              <button className="confirmBtn" onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 
             <div className="body">

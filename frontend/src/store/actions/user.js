@@ -82,7 +82,7 @@ export const joinGroup = (id, op) => (dispatch) => axios.put('/api/user/signin/j
   operation: op,
 })
 .then((res)=>{
-  if(res.status<300){
+  if(res.status===204){
     alert("Join request is sent!");
   }
 });

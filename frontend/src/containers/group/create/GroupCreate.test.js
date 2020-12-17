@@ -14,29 +14,21 @@ describe('GroupCreate', () => {
   }
 
   const mockedState = {
-    currGroup: null,
+    currGroup: {id:1},
   };
 
   it('should render without error', () => {
+    global.localStorage.setItem('isLogin','true');
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('GroupCreate').length).toBe(1);
   });
 
   it('should redirect to main page when sign outed', () => {
-    const mockedState2 = {
-      signinedUser: 1,
-    };
     const spyOnReplace = jest.spyOn(history, 'replace')
       .mockImplementation();
 
-    let component = mount(makeComponent(getMockStore(mockedState2)));
-    let instance = component.find(GroupCreate.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState);
-    expect(spyOnReplace).toHaveBeenCalledTimes(0);
-
-    component = mount(makeComponent(getMockStore(mockedState)));
-    instance = component.find(GroupCreate.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState2);
+    global.localStorage.removeItem('isLogin');
+    const component = mount(makeComponent(getMockStore(mockedState)));
     expect(spyOnReplace).toHaveBeenCalledWith('/main');
   });
 
@@ -61,17 +53,20 @@ describe('GroupCreate', () => {
     expect(spyOnCreateGroup).toHaveBeenCalledTimes(1);
   });
 
-  it('should route to group detail page when group is created', () => {
-    const mockedState2 = {
-      currGroup: 1,
-    };
-
+  it('should route to group detail page when group is created', (done) => {
     const spyOnPush = jest.spyOn(history, 'push')
       .mockImplementation();
 
-    const component = mount(makeComponent(getMockStore(mockedState2)));
+    const component = mount(makeComponent(getMockStore(mockedState)));
+    const wrapper1 = component.find('#group-name-input');
+    const wrapper2 = component.find('#group-description-input');
+    wrapper1.simulate('change', { target: { value: 'test_name_input' } });
+    wrapper2.simulate('change', { target: { value: 'test_description_input' } });
+
     const instance = component.find(GroupCreate.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState);
-    expect(spyOnPush).toHaveBeenCalledTimes(1);
+    instance.onCreateHandler().then(()=>{
+      expect(spyOnPush).toHaveBeenCalledWith('/group/details/1');
+      done();
+    });
   });
 });

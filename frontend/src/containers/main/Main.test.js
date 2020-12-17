@@ -18,8 +18,27 @@ describe('Main', () => {
   };
 
   it('should render without error', () => {
+    global.localStorage.removeItem('isLogin');
     const component = mount(makeComponent(getMockStore(mockedState)));
     expect(component.find('Main').length).toBe(1);
+  });
+
+  it('should redirect to /public page when logined', () => {
+    const mockedState2={
+      signinedUser:1,
+    }
+    const spyOnReplace = jest.spyOn(history, 'replace')
+      .mockImplementation();
+
+    let component = mount(makeComponent(getMockStore(mockedState)));
+    let instance = component.find(Main.WrappedComponent).instance();
+    instance.componentDidUpdate(mockedState2);
+    expect(spyOnReplace).toHaveBeenCalledTimes(0);
+    
+    component = mount(makeComponent(getMockStore(mockedState2)));
+    instance = component.find(Main.WrappedComponent).instance();
+    instance.componentDidUpdate(mockedState);
+    expect(spyOnReplace).toHaveBeenCalledWith('/public');
   });
 
   it('should work properly with ID and password input', () => {
@@ -46,27 +65,11 @@ describe('Main', () => {
 
     wrapper2.simulate('change', { target: { value: 'abcd' } });
     wrapper3.simulate('change', { target: { value: 'abcd' } });
-    wrapper1.simulate('click');
+    const instance = component.find(Main.WrappedComponent).instance();
+    instance.handleKeyPress({key:"Shift"});
+    instance.handleKeyPress({key:"Enter"});
     expect(spyOnSignin).toHaveBeenCalledTimes(1);
     expect(spyOnAlert).toHaveBeenCalledTimes(2);
-  });
-
-  it('should redirect to /public page when logined', () => {
-    const mockedState2 = {
-      signinedUser: 1,
-    };
-    const spyOnReplace = jest.spyOn(history, 'replace')
-      .mockImplementation();
-
-    let component = mount(makeComponent(getMockStore(mockedState)));
-    let instance = component.find(Main.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState2);
-    expect(spyOnReplace).toHaveBeenCalledTimes(0);
-
-    component = mount(makeComponent(getMockStore(mockedState2)));
-    instance = component.find(Main.WrappedComponent).instance();
-    instance.componentDidUpdate(mockedState);
-    expect(spyOnReplace).toHaveBeenCalledWith('/public');
   });
 
   it('should route to signup page when link is clicked', () => {
