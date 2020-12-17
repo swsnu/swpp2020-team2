@@ -14,6 +14,7 @@ class SettingProfile extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getUser();
     this.props.getDepartments();
   }

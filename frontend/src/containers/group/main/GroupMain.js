@@ -151,7 +151,7 @@ class GroupMain extends Component {
                 {this.props.myGroups.map(this.makeGroupBox)}
               </div>
             </div>
-
+            {/*
             <div className="section">
               <div className="labelBox">
                 <label>Noticing Groups</label>
@@ -161,6 +161,7 @@ class GroupMain extends Component {
                 {this.props.noticeGroups.map(this.makeGroupBox)}
               </div>
             </div>
+            */}
 
             <div className="section">
               <div className="labelBox">

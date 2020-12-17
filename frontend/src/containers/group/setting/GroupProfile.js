@@ -15,6 +15,7 @@ class GroupProfile extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getGroup(this.props.match.params.id);
     this.setState({
       groupName:this.props.currGroup?.name,

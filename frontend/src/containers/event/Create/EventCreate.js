@@ -20,6 +20,7 @@ class EventCreate extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getUserId();
     this.props.getCategories();
     this.props.getMyGroup();

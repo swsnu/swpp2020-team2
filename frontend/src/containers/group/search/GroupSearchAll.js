@@ -14,14 +14,15 @@ import ReportGroup from '../../../components/Report/ReportGroup';
 import './GroupSearch.css';
 
 class GroupSearchAll extends Component {
-  state={
+  state = {
     searchQuery: '',
-    key:0,
+    key: 0,
     modalBool: false,
     modalReportGroup: null,
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getAllGroup();
     this.props.getUserFull();
     this.props.getMyGroup();
@@ -29,40 +30,36 @@ class GroupSearchAll extends Component {
     this.props.getNoticeGroup();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!this.props.signinedUser) this.props.history.replace('/main');
-  }
-
-  shouldComponentUpdate(nextProps,nextState){
+  shouldComponentUpdate(nextProps, nextState) {
     return true;
   }
 
-  onSearchHandler=() => {
+  onSearchHandler = () => {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  onLikeHandler=(id, op) => {
+  onLikeHandler = (id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.likeGroup(id, oper);
-    this.setState({key:Math.random()});
+    this.setState({ key: Math.random() });
   }
 
-  onNoticeHandler=(id, op) => {
+  onNoticeHandler = (id, op) => {
     const oper = op ? 'add' : 'remove';
     this.props.noticeGroup(id, oper);
-    this.setState({key:Math.random()});
+    this.setState({ key: Math.random() });
   }
 
-  onJoinHandler=async(id,op,joined)=>{
-    if(joined)alert("You alreday joined this group!");
-    else{
+  onJoinHandler = async (id, op, joined) => {
+    if (joined) alert("You alreday joined this group!");
+    else {
       const oper = op ? 'add' : 'remove';
       await this.props.joinGroup(id, oper);
       this.props.getUserFull();
     }
   }
 
-  onDetailHandler=(id) => {
+  onDetailHandler = (id) => {
     this.props.history.push(`/group/details/${id}`);
   }
 
@@ -76,13 +73,13 @@ class GroupSearchAll extends Component {
       return false;
     }
     var liked = false;
-    if (this.props.likeGroups.find(haveThisGroup))liked = true;
+    if (this.props.likeGroups.find(haveThisGroup)) liked = true;
     var noticed = false;
-    if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+    if (this.props.noticeGroups.find(haveThisGroup)) noticed = true;
     var joined = false;
-    if(this.props.myGroups.find(haveThisGroup))joined=true;
-    var joinRequested=false;
-    if(this.props.userFullInfo.join_requests.find(haveThisGroup))joinRequested=true;
+    if (this.props.myGroups.find(haveThisGroup)) joined = true;
+    var joinRequested = false;
+    if (this.props.userFullInfo.join_requests.find(haveThisGroup)) joinRequested = true;
     return (
       <GroupBox
         key={group.id}
@@ -92,7 +89,7 @@ class GroupSearchAll extends Component {
         like={() => this.onLikeHandler(group.id, !liked)}
         joined={joined}
         joinRequested={joinRequested}
-        join={()=>this.onJoinHandler(group.id,!joinRequested,joined)}
+        join={() => this.onJoinHandler(group.id, !joinRequested, joined)}
         detail={() => this.onDetailHandler(group.id)}
         report={() => this.onReportHandler(group)}
       />
@@ -142,7 +139,9 @@ class GroupSearchAll extends Component {
           </div>
 
           <h2>All Groups Result</h2>
-          {this.props.searchGroups.map(this.makeGroupBox)}
+          <div className="groupContainer">
+            {this.props.searchGroups.map(this.makeGroupBox)}
+          </div>
         </div>
         {modal}
       </div>
@@ -167,7 +166,7 @@ const mapDispatchToProps = (dispatch) => ({
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
-  joinGroup:(id,op)=>dispatch(actionCreators.joinGroup(id,op)),
+  joinGroup: (id, op) => dispatch(actionCreators.joinGroup(id, op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearchAll);

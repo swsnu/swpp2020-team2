@@ -107,15 +107,12 @@ class Private extends Component {
   }
 
   componentDidMount() {
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.onGetUser();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return true;
-  }
-
-  componentDidUpdate() {
-    if (this.props.signinedUser === null) this.props.history.replace('/');
   }
 
   onClickCreateEvent(date) {
