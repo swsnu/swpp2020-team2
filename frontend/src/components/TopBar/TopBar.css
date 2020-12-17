@@ -33,7 +33,6 @@
 
 .TopBar .right div{
   height: 48px;
-  cursor: pointer;
   display: flex;
   align-items: center;
 }
@@ -51,11 +50,11 @@
   border-radius: 100px;
 }
 
-.TopBar .right img:hover{
-  width: 50px;
-  height: 50px;
+.TopBar .right .profile{
+  cursor: pointer;
 }
 
-.TopBar .right .notice:hover{
-  color:yellow;
+.TopBar .right .profile:hover{
+  height: 60px;
+  width: auto;
 }
