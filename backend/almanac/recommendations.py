@@ -76,8 +76,22 @@ def recommend_tag(content, num=3):
     train_classifier()
 
     predicted = clf_ovr.decision_function([content])
-    pre_result = list(zip(
-        *heapq.nlargest(num, enumerate(predicted[0]), key=operator.itemgetter(1))
-    ))[0]
-    result = list(map(lambda x: INT_TO_TAG[x], pre_result))
+    pred_list = predicted.tolist()[0]
+    b = [[i, pred_list[i]] for i in range(len(pred_list))]
+    b.sort(key=(lambda x: x[1]), reverse=True)
+    c = list(map(lambda x: x[0], b[:num]))
+    #pre_result = list(zip(
+    #    *heapq.nlargest(num, enumerate(pred_list[0]), key=operator.itemgetter(1))
+    #))[0]
+    #presult = list(map(lambda x: INT_TO_TAG[x], pre_result))
+    result = list(map(lambda x: INT_TO_TAG[x], c))
+    #print('???\n')
+    #print(pred_list)
+    #print(b)
+    #print(c)
+    #print(pre_result)
+    #print('---')
+    #print(result)
+    #print(presult)
+    #print('\n')
     return result
