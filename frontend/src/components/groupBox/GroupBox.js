@@ -5,6 +5,7 @@ import './GroupBox.css';
 import { GrLike } from 'react-icons/gr';
 import { BiBellPlus } from 'react-icons/bi';
 import { RiAlarmWarningFill } from 'react-icons/ri';
+import {BsPersonPlus, BsPersonPlusFill} from 'react-icons/bs';
 
 
 import { BsBellFill } from 'react-icons/bs'
@@ -23,8 +24,8 @@ const GroupBox = (props) => (
       <div className="btn" onClick={() => props.like()}>
         {props.liked ? <AiFillLike color="blue" /> : <GrLike color="black" />}
       </div>
-      <div className="btn" onClick={() => props.notice()}>
-        {props.noticed ? <BsBellFill color="orange" /> : <BiBellPlus color="black" />}
+      <div className="btn" onClick={() => props.join()}>
+        {props.joined ? <BsPersonPlusFill color="blue" /> : props.joinRequested? <BsPersonPlus color="orange" />:<BsPersonPlus color="black" />}
       </div>
       <div className="btn" onClick={() => props.report()}>
         <RiAlarmWarningFill color="red" />

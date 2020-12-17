@@ -23,7 +23,8 @@ class GroupSearchAll extends Component {
 
   componentDidMount() {
     this.props.getAllGroup();
-    this.props.getUser();
+    this.props.getUserFull();
+    this.props.getMyGroup();
     this.props.getLikeGroup();
     this.props.getNoticeGroup();
   }
@@ -52,6 +53,15 @@ class GroupSearchAll extends Component {
     this.setState({key:Math.random()});
   }
 
+  onJoinHandler=async(id,op,joined)=>{
+    if(joined)alert("You alreday joined this group!");
+    else{
+      const oper = op ? 'add' : 'remove';
+      await this.props.joinGroup(id, oper);
+      this.props.getUserFull();
+    }
+  }
+
   onDetailHandler=(id) => {
     this.props.history.push(`/group/details/${id}`);
   }
@@ -69,6 +79,10 @@ class GroupSearchAll extends Component {
     if (this.props.likeGroups.find(haveThisGroup))liked = true;
     var noticed = false;
     if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
+    var joined = false;
+    if(this.props.myGroups.find(haveThisGroup))joined=true;
+    var joinRequested=false;
+    if(this.props.userFullInfo.join_requests.find(haveThisGroup))joinRequested=true;
     return (
       <GroupBox
         key={group.id}
@@ -76,8 +90,9 @@ class GroupSearchAll extends Component {
         description={group.description}
         liked={liked}
         like={() => this.onLikeHandler(group.id, !liked)}
-        noticed={noticed}
-        notice={() => this.onNoticeHandler(group.id, !noticed)}
+        joined={joined}
+        joinRequested={joinRequested}
+        join={()=>this.onJoinHandler(group.id,!joinRequested,joined)}
         detail={() => this.onDetailHandler(group.id)}
         report={() => this.onReportHandler(group)}
       />
@@ -137,18 +152,22 @@ class GroupSearchAll extends Component {
 
 const mapStateToProps = (state) => ({
   signinedUser: state.ur.signinedUser,
+  userFullInfo: state.ur.userFullInfo,
   searchGroups: state.gr.searchGroups,
+  myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getUser: () => dispatch(actionCreators.getUser()),
+  getUserFull: () => dispatch(actionCreators.getUserFull()),
   getAllGroup: () => dispatch(actionCreators.getAllGroup()),
+  getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
+  joinGroup:(id,op)=>dispatch(actionCreators.joinGroup(id,op)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSearchAll);
