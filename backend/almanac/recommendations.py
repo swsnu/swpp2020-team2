@@ -4,6 +4,7 @@ a standard docstring
 
 import heapq
 import operator
+from django.db.models import Count
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.multiclass import OneVsRestClassifier
@@ -66,7 +67,8 @@ def recommend_tag(content, num=3):
     a function docstring
     '''
 
-    if Event.objects.count() <= 6:
+    if Event.objects.count() <= 6 or Tag.objects.annotate(q_count=
+        Count('tag_event')).count() <= 2:
         return []
 
     refresh_tag()
