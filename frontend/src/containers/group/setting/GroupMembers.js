@@ -68,7 +68,6 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: false };
       }
       else {
-        console.log("shit");
         joinRequests[id] = { accept: true, reject: false };
       }
     }
@@ -80,6 +79,7 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: true };
       }
     }
+    //this.setState({ ...this.state, joinRequests });
     this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers }));
   }
 

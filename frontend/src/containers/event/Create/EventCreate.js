@@ -10,10 +10,10 @@ class EventCreate extends Component {
   state = {
     title: '',
     category: null,
-    group: '',
+    group: null,
     place: '',
-    begin_time: {},
-    end_time: {},
+    begin_time: "",
+    end_time: "",
     content: '',
     tags: [],
     selectTags: [],
@@ -52,9 +52,10 @@ class EventCreate extends Component {
     this.props.onCraeteImage(formData);
   }
 
-  onClickAddTag = () => {
+  onClickAddTag = async() => {
     if (this.state.content.length > 0) {
-      this.props.onGetTagRecommend(this.state.content); // content에 맞는 tag 추천
+      await this.props.onGetTagRecommend(this.state.content); // content에 맞는 tag 추천
+      if(this.props.tagRecommend.length==0) alert("추천할 태그가 없습니다 !");
       this.setState({selectTags:[]})
     } else alert('행사 내용을 입력하세요 !');
   }
@@ -72,10 +73,10 @@ class EventCreate extends Component {
   createEventHandler = async () => {
     let message = '';
     if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
-    if (!(this.state.category?.length > 0)) message += ' 행사 종류를 선택하세요 ! \n';
-    if (!(this.state.group?.length > 0)) message += ' 행사 단체를 입력하세요 ! \n';
+    if (!(this.state.category > 0)) message += ' 행사 종류를 선택하세요 ! \n';
+    if (!(this.state.group > 0)) message += ' 행사 단체를 입력하세요 ! \n';
     if (!(this.state.begin_time?.length > 0)) message += ' 행사 시작시간을 입력하세요 ! \n';
-    if (!(this.state.end_time?.length > 0)) message += ' 행사 시작시간을 입력하세요 ! \n';
+    if (!(this.state.end_time?.length > 0)) message += ' 행사 종료시간을 입력하세요 ! \n';
 
     if (message.length > 0) alert(message);
     else {

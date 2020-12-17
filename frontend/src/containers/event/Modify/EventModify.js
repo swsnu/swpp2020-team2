@@ -29,8 +29,8 @@ class EventModify extends Component {
 
     this.setState({
       title: this.props.event.title,
-      category: this.props.event.category.id,
-      group: this.props.event.group.id,
+      category: this.props.event.category?.id,
+      group: this.props.event.group?.id,
       place: this.props.event.place,
       begin_time: this.props.event.begin_time,
       end_time: this.props.event.end_time,
@@ -44,8 +44,8 @@ class EventModify extends Component {
     if (this.props.event !== prevProps.event) {
       this.setState({
         title: this.props.event.title,
-        category: this.props.event.category.id,
-        group: this.props.event.group.id,
+        category: this.props.event.category?.id,
+        group: this.props.event.group?.id,
         place: this.props.event.place,
         begin_time: this.props.event.begin_time,
         end_time: this.props.event.end_time,
@@ -244,8 +244,8 @@ class EventModify extends Component {
                 <button className="addTag" onClick={() => this.onClickAddTag()}>태그 추천</button>
                 {this.state.tags?.map((tag) => (
                   <div
-                    className={`tag ${this.state.selectTags.includes(tag.id) ? 'Selected' : 'UnSelected'}`}
-                    onClick={() => this.onClickTag(tag.id)}
+                    className={`tag ${this.state.selectTags.includes(tag?.id) ? 'Selected' : 'UnSelected'}`}
+                    onClick={() => this.onClickTag(tag?.id)}
                   >
                     # {tag.name}
                   </div>
