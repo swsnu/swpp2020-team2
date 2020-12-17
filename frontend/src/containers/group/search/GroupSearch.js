@@ -38,21 +38,21 @@ class GroupSearch extends Component {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  onLikeHandler = (id, op) => {
+  onLikeHandler=async (id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
-    this.setState({ key: Math.random() });
+    await this.props.likeGroup(id, oper);
+    this.props.getLikeGroup();
   }
 
-  onNoticeHandler = (id, op) => {
+  onNoticeHandler=async (id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.noticeGroup(id, oper);
-    this.setState({ key: Math.random() });
+    await this.props.noticeGroup(id, oper);
+    this.props.getNoticeGroup();
   }
 
-  onJoinHandler = async (id, op, joined) => {
-    if (joined) alert("You alreday joined this group!");
-    else {
+  onJoinHandler=async(id,op,joined)=>{
+    if(joined)alert("You alreday joined this group!");
+    else{
       const oper = op ? 'add' : 'remove';
       await this.props.joinGroup(id, oper);
       this.props.getUserFull();
