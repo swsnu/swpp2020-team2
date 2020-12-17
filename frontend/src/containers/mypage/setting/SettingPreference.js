@@ -21,7 +21,7 @@ class SettingPreference extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.userFullInfo && !this.state.language) {
+    if (props.userFullInfo && !state.language) {
       return { ...state, language: props.userFullInfo.language };
     }
     return state;
