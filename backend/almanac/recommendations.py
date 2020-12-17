@@ -4,6 +4,7 @@ a standard docstring
 
 import heapq
 import operator
+from django.db.models import Count
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.multiclass import OneVsRestClassifier
@@ -66,13 +67,31 @@ def recommend_tag(content, num=3):
     a function docstring
     '''
 
+    if Event.objects.count() <= 6 or Tag.objects.annotate(q_count=
+        Count('tag_event')).filter(q_count__gte=0).count() <= 2:
+        return []
+
     refresh_tag()
 
     train_classifier()
 
     predicted = clf_ovr.decision_function([content])
-    pre_result = list(zip(
-        *heapq.nlargest(num, enumerate(predicted[0]), key=operator.itemgetter(1))
-    ))[0]
-    result = list(map(lambda x: INT_TO_TAG[x], pre_result))
+    pred_list = predicted.tolist()[0]
+    b = [[i, pred_list[i]] for i in range(len(pred_list))]
+    b.sort(key=(lambda x: x[1]), reverse=True)
+    c = list(map(lambda x: x[0], b[:num]))
+    #pre_result = list(zip(
+    #    *heapq.nlargest(num, enumerate(pred_list[0]), key=operator.itemgetter(1))
+    #))[0]
+    #presult = list(map(lambda x: INT_TO_TAG[x], pre_result))
+    result = list(map(lambda x: INT_TO_TAG[x], c))
+    #print('???\n')
+    #print(pred_list)
+    #print(b)
+    #print(c)
+    #print(pre_result)
+    #print('---')
+    #print(result)
+    #print(presult)
+    #print('\n')
     return result

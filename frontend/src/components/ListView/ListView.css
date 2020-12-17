@@ -51,10 +51,18 @@
     display:flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 70px;
+}
+
+.ListView .board_category{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
 }
 
 .ListView .board_title{
+    margin-left: 20px;
     display:flex;
     align-items: center;
     width: 600px;
