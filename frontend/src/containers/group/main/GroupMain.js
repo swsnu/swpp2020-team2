@@ -95,6 +95,12 @@ class GroupMain extends Component {
     );
   };
 
+  handleKeyPress=(e)=>{
+    if(e.key==="enter"){
+      this.onSearchHandler();
+    }
+  }
+
   render() {
     const otherGroupBoxes = null;// this var will not actually be used later
     let modal = null;
@@ -126,6 +132,7 @@ class GroupMain extends Component {
                 value={this.state.searchKey}
                 onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
+                onKeyPress={this.handleKeyPress}
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>
                 <ImSearch size="24" />
