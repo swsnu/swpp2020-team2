@@ -960,7 +960,7 @@ def get_event(request):
         'category': {'id': event.category_id,
         'name': Category.objects.get(id=event.category_id).name},
         'tag': [{'id': tag.id, 'name': tag.name} for tag in
-        event.tag.all().prefetch_related('name')],
+        event.tag.all()],
         'group': {'id': event.group_id, 'name': event.group.name},
         'begin_time': event.begin_time,
         'end_time': event.end_time,
