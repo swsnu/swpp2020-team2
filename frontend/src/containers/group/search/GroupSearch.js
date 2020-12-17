@@ -97,7 +97,7 @@ class GroupSearch extends Component {
   };
 
   handleKeyPress=(e)=>{
-    if(e.key==="enter"){
+    if(e.key==="Enter"){
       this.onSearchHandler();
     }
   }
@@ -127,7 +127,7 @@ class GroupSearch extends Component {
               <input
                 className="search-group-input"
                 type="text"
-                value={this.state.searchKey}
+                value={this.state.searchQuery}
                 onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
                 onKeyPress={this.handleKeyPress}

@@ -50,6 +50,7 @@ class GroupMembers extends Component {
       for (var user of this.props.currGroup?.join_requests) {
         if (this.state.joinRequests[user.id].accept) {
           this.props.manageMember(this.props.match.params.id, user.id, 'add');
+          this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
         }
         if (this.state.joinRequests[user.id].reject) {
           this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
