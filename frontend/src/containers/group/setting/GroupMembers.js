@@ -51,7 +51,7 @@ class GroupMembers extends Component {
         if (this.state.joinRequests[user.id].accept) {
           this.props.manageMember(this.props.match.params.id, user.id, 'add');
         }
-        if (this.state.joinRequests[user.id]?.reject) {
+        if (this.state.joinRequests[user.id].reject) {
           this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
         }
       }
@@ -67,6 +67,7 @@ class GroupMembers extends Component {
         }
       }
     }
+    alert("Setting has been applied!");
   }
 
   onRouteHandler = (url) => {

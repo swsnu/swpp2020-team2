@@ -76,6 +76,20 @@ export const getMyGroup = () => (dispatch) => axios.post('/api/group/filtered/',
     dispatch(getMyGroup_(res.data));
   });
 
+export const getNothingGroup_ = (data) => ({ type: actionTypes.GET_NOTHING_GROUP, data });
+
+export const getNothingGroup = () => (dispatch) => axios.post('/api/group/filtered/', {
+  including: [],
+  filter_options: {
+    group: ['nothing'],
+  },
+  sort_options: [],
+  count_options: {num:5},
+})
+  .then((res) => {
+    dispatch(getNothingGroup_(res.data));
+  });
+
 export const searchGroup_ = (data) => ({ type: actionTypes.SEARCH_GROUP, data });
 
 export const searchGroup = (query) => (dispatch) => axios.get(`/api/group/search/${query}/`)

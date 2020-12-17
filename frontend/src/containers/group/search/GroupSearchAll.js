@@ -96,6 +96,12 @@ class GroupSearchAll extends Component {
     );
   };
 
+  handleKeyPress=(e)=>{
+    if(e.key==="enter"){
+      this.onSearchHandler();
+    }
+  }
+
   render() {
     let modal = null;
     if (this.state.modalBool) {
@@ -124,6 +130,7 @@ class GroupSearchAll extends Component {
                 value={this.state.searchKey}
                 onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
+                onKeyPress={this.handleKeyPress}
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>
                 <ImSearch size="24" />
