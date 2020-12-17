@@ -33,9 +33,11 @@ const TopBar = (props) => {
         <div className="logo">
           <img src={uniLogo} alt="university logo" />
         </div>
+        {/*
         <div className="notice">
           <BiBell size="30px" />
         </div>
+        */}
         <div className="profile" onClick={() => SetProfileModalBool(!profileModalBool)}>
           <img src={appLogo} alt="app logo" />
         </div>

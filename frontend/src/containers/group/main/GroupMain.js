@@ -21,6 +21,8 @@ class GroupMain extends Component {
   }
 
   componentDidMount() {
+    if (localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
+
     this.props.getUserFull();
     this.props.getMyGroup();
     this.props.getLikeGroup();
@@ -29,10 +31,6 @@ class GroupMain extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return true;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!this.props.signinedUser) this.props.history.replace('/main');
   }
 
   onSearchHandler = () => {
@@ -80,7 +78,7 @@ class GroupMain extends Component {
     var joined = false;
     if(this.props.myGroups.find(haveThisGroup))joined=true;
     var joinRequested=false;
-    if(this.props.userFullInfo.join_requests.find(haveThisGroup))joinRequested=true;
+    if(this.props.userFullInfo?.join_requests?.find(haveThisGroup))joinRequested=true;
     return (
       <GroupBox
         key={group.id}

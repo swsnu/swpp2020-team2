@@ -19,6 +19,12 @@ class Main extends Component {
     if (this.props.signinedUser) this.props.history.replace('/public');
   }
 
+  handleKeyPress=(e)=>{
+    if(e.key==="Enter"){
+      this.signinHandler();
+    }
+  }
+
   signinHandler = () => {
     if (this.state.username === '' || this.state.password === '') {
       alert('please fill in ID and password.');
@@ -69,6 +75,7 @@ class Main extends Component {
                     type={this.state.revealPassword ? 'text' : 'password'}
                     value={this.state.password}
                     onChange={(event) => this.setState({ password: event.target.value })}
+                    onKeyPress={this.handleKeyPress}
                   />
                   <div className="toggle" onClick={this.toggleRevealPassword}>
                     {this.state.revealPassword
