@@ -62,6 +62,7 @@ class Main extends Component {
                     type="text"
                     value={this.state.username}
                     onChange={(event) => this.setState({ username: event.target.value })}
+                    onKeyPress={this.handleKeyPress}
                   />
                 </div>
               </div>
