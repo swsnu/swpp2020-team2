@@ -66,6 +66,9 @@ def recommend_tag(content, num=3):
     a function docstring
     '''
 
+    if Event.objects.count() <= 6:
+        return []
+
     refresh_tag()
 
     train_classifier()
