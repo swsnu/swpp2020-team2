@@ -57,6 +57,7 @@ class GroupMembers extends Component {
         this.props.manageAdmin(this.props.match.params.id, member.id, 'add');
       }
     }
+    alert("Setting has been applied!");
   }
 
   onRouteHandler = (url) => {
