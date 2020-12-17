@@ -27,6 +27,7 @@ class GroupMain extends Component {
     this.props.getMyGroup();
     this.props.getLikeGroup();
     this.props.getNoticeGroup();
+    this.props.getNothingGroup();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -190,7 +191,7 @@ class GroupMain extends Component {
               </div>
 
               <div className="containerBox">
-                {otherGroupBoxes}
+                {this.props.nothingGroups.map(this.makeGroupBox)}
               </div>
             </div>
 
@@ -208,6 +209,7 @@ const mapStateToProps = (state) => ({
   myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
   noticeGroups: state.gr.noticeGroups,
+  nothingGroups: state.gr.nothingGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -215,6 +217,7 @@ const mapDispatchToProps = (dispatch) => ({
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
   getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
+  getNothingGroup: () => dispatch(actionCreators.getNothingGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
   noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
   joinGroup:(id,op)=>dispatch(actionCreators.joinGroup(id,op)),
