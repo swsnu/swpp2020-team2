@@ -24,11 +24,11 @@ class GroupMembers extends Component {
   static getDerivedStateFromProps(props, state) {
     if (props.currGroup) {
       var joinRequests = [];
-      for (var user in props.currGroup.join_requests) {
+      for (var user of props.currGroup.join_requests) {
         joinRequests[user.id] = { accept: false, reject: false };
       }
       var manageMembers = [];
-      for (var member in props.currGroup.member) {
+      for (var member of props.currGroup.member) {
         var admin = false;
         if (props.currGroup.admin.find(e => e.id === member.id)) admin = true;
         manageMembers[member.id] = { admin, expel: false };
@@ -39,8 +39,7 @@ class GroupMembers extends Component {
   }
 
   onConfirmHandler = () => {
-
-    for (var user in this.props.currGroup.join_requests) {
+    for (var user of this.props.currGroup.join_requests) {
       if (this.state.joinRequests[user.id].accept) {
         this.props.manageMember(this.props.match.params.id, user.id, 'add');
       }
@@ -48,7 +47,7 @@ class GroupMembers extends Component {
         this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
       }
     }
-    for (var member in this.props.currGroup.member) {
+    for (var member of this.props.currGroup.member) {
       if (this.state.manageMembers[member.id].expel) {
         this.props.manageMember(this.props.match.params.id, member.id, 'remove');
       }
@@ -69,6 +68,7 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: false };
       }
       else {
+        console.log("shit");
         joinRequests[id] = { accept: true, reject: false };
       }
     }
@@ -80,7 +80,7 @@ class GroupMembers extends Component {
         joinRequests[id] = { accept: false, reject: true };
       }
     }
-    this.setState({ ...this.state, joinRequests });
+    this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers }));
   }
 
   manageMembersHandler = (id, op) => {
@@ -103,7 +103,7 @@ class GroupMembers extends Component {
           manageMembers[id] = { admin: false, expel: true };
         }
       }
-      this.setState({ ...this.state, manageMembers });
+      this.setState((prevState)=>({ joinRequests:prevState.joinRequests,manageMembers }));
     }
   }
 
@@ -170,7 +170,7 @@ class GroupMembers extends Component {
             <div className="body">
 
               <div className="box">
-                <label><BsDot/> Join application ({this.props.currGroup?.join_requests?.length})</label>
+                <label><BsDot/> Join application ({this.props.currGroup?.join_requests.length})</label>
                 <div className="infoBox">
                   <div className="label">
                     <label className="col1" style={{ flex: 2 }}>Name</label>
@@ -181,13 +181,13 @@ class GroupMembers extends Component {
                   </div>
 
                   <div className="info">
-                    {this.props.currGroup?.join_requests?.map(this.makeJoinReqeustRow)}
+                    {this.props.currGroup?.join_requests.map(this.makeJoinReqeustRow)}
                   </div>
                 </div>
               </div>
 
               <div className="box">
-                <label><BsDot/> Member List ({this.props.currGroup?.member?.length})</label>
+                <label><BsDot/> Member List ({this.props.currGroup?.member.length})</label>
                 <div className="infoBox">
                   <div className="label">
                     <label className="col1" style={{ flex: 2 }}>Name</label>
@@ -196,7 +196,7 @@ class GroupMembers extends Component {
                     <label className="col4" style={{ flex: 1, color: "blue" }}>Admin</label>
                     <label className="col5" style={{ flex: 1, color: "red" }}>Expel</label>
                   </div>
-                  {this.props.currGroup?.member?.map(this.makeMembersManageRow)}
+                  {this.props.currGroup?.member.map(this.makeMembersManageRow)}
                 </div>
 
               </div>
