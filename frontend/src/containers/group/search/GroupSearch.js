@@ -38,21 +38,21 @@ class GroupSearch extends Component {
     if (this.state.searchQuery !== '') this.props.history.push(`/group/search/${this.state.searchQuery}`);
   }
 
-  onLikeHandler = (id, op) => {
+  onLikeHandler=async (id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.likeGroup(id, oper);
-    this.setState({ key: Math.random() });
+    await this.props.likeGroup(id, oper);
+    this.props.getLikeGroup();
   }
 
-  onNoticeHandler = (id, op) => {
+  onNoticeHandler=async (id, op) => {
     const oper = op ? 'add' : 'remove';
-    this.props.noticeGroup(id, oper);
-    this.setState({ key: Math.random() });
+    await this.props.noticeGroup(id, oper);
+    this.props.getNoticeGroup();
   }
 
-  onJoinHandler = async (id, op, joined) => {
-    if (joined) alert("You alreday joined this group!");
-    else {
+  onJoinHandler=async(id,op,joined)=>{
+    if(joined)alert("You alreday joined this group!");
+    else{
       const oper = op ? 'add' : 'remove';
       await this.props.joinGroup(id, oper);
       this.props.getUserFull();
@@ -96,6 +96,12 @@ class GroupSearch extends Component {
     );
   };
 
+  handleKeyPress=(e)=>{
+    if(e.key==="enter"){
+      this.onSearchHandler();
+    }
+  }
+
   render() {
     let modal = null;
     if (this.state.modalBool) {
@@ -124,6 +130,7 @@ class GroupSearch extends Component {
                 value={this.state.searchKey}
                 onChange={(event) => this.setState({ searchQuery: event.target.value })}
                 placeholder=" 그룹명 입력 "
+                onKeyPress={this.handleKeyPress}
               />
               <button className="search-button" onClick={() => this.onSearchHandler()}>
                 <ImSearch size="24" />

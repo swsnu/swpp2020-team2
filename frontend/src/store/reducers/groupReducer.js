@@ -6,6 +6,7 @@ const initialState = {
   likeGroups: [],
   noticeGroups: [],
   myGroups: [],
+  nothingGroups: [],
 };
 
 const groupReducer = (state = initialState, action) => {
@@ -24,6 +25,8 @@ const groupReducer = (state = initialState, action) => {
       return { ...state, noticeGroups: action.data };
     case actionTypes.GET_MY_GROUP:
       return { ...state, myGroups: action.data };
+    case actionTypes.GET_NOTHING_GROUP:
+      return { ...state, nothingGroups: action.data };
     case actionTypes.SEARCH_GROUP:
       return { ...state, searchGroups: action.data };
     default:

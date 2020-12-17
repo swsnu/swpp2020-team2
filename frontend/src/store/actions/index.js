@@ -38,7 +38,7 @@ export {
   getLikeGroup,
   getNoticeGroup,
   getMyGroup,
-  searchGroup,
+  getNothingGroup,
   changeGroupInfo,
   changeGroupPrivacy,
   handleJoinRequest,

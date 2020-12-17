@@ -6,7 +6,7 @@ import JoinRequest from '../../../components/JoinRequest/JoinRequest';
 import ManageMember from '../../../components/ManageMember/ManageMember';
 import * as actionCreators from '../../../store/actions/index';
 
-import {BsDot} from 'react-icons/bs'
+import { BsDot } from 'react-icons/bs'
 
 import './GroupSetting.css'
 
@@ -14,7 +14,7 @@ class GroupMembers extends Component {
   state = {
     joinRequests: [],
     manageMembers: [],
-    firstUpdate:true,
+    firstUpdate: true,
   }
 
   componentDidMount() {
@@ -23,39 +23,51 @@ class GroupMembers extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.currGroup && this.state.firstUpdate) {
+    if (props.currGroup && state.firstUpdate) {
+
       var joinRequests = [];
-      for (var user of props.currGroup.join_requests) {
-        joinRequests[user.id] = { accept: false, reject: false };
+      if (props.currGroup?.join_requests?.length > 0) {
+        for (var user of props.currGroup.join_requests) {
+          joinRequests[user.id] = { accept: false, reject: false };
+        }
       }
+
       var manageMembers = [];
-      for (var member of props.currGroup.member) {
-        var admin = false;
-        if (props.currGroup.admin.find(e => e.id === member.id)) admin = true;
-        manageMembers[member.id] = { admin, expel: false };
+      if (props.currGroup?.member?.length > 0) {
+        for (var member of props.currGroup?.member) {
+          var admin = false;
+          if (props.currGroup.admin.find(e => e.id === member.id)) admin = true;
+          manageMembers[member.id] = { admin, expel: false };
+        }
       }
-      return { joinRequests, manageMembers, firstUpdate:false };
+      return { joinRequests, manageMembers, firstUpdate: false };
     }
     return state;
   }
 
   onConfirmHandler = () => {
-    for (var user of this.props.currGroup.join_requests) {
-      if (this.state.joinRequests[user.id].accept) {
-        this.props.manageMember(this.props.match.params.id, user.id, 'add');
-      }
-      if (this.state.joinRequests[user.id].reject) {
-        this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
-      }
-    }
-    for (var member of this.props.currGroup.member) {
-      if (this.state.manageMembers[member.id].expel) {
-        this.props.manageMember(this.props.match.params.id, member.id, 'remove');
-      }
-      else if (this.state.manageMembers[member.id].admin) {
-        this.props.manageAdmin(this.props.match.params.id, member.id, 'add');
+    if (this.props.currGroup?.join_requests?.length > 0) {
+      for (var user of this.props.currGroup?.join_requests) {
+        if (this.state.joinRequests[user.id].accept) {
+          this.props.manageMember(this.props.match.params.id, user.id, 'add');
+        }
+        if (this.state.joinRequests[user.id].reject) {
+          this.props.handleJoinRequest(this.props.match.params.id, user.id, 'remove');
+        }
       }
     }
+
+    if (this.props.currGroup?.member?.length > 0) {
+      for (var member of this.props.currGroup?.member) {
+        if (this.state.manageMembers[member.id]?.expel) {
+          this.props.manageMember(this.props.match.params.id, member.id, 'remove');
+        }
+        else if (this.state.manageMembers[member.id]?.admin) {
+          this.props.manageAdmin(this.props.match.params.id, member.id, 'add');
+        }
+      }
+    }
+    alert("Setting has been applied!");
   }
 
   onRouteHandler = (url) => {
@@ -65,7 +77,7 @@ class GroupMembers extends Component {
   joinRequestHandler = (id, op) => {
     var joinRequests = this.state.joinRequests.slice();
     if (op === 'accept') {
-      if (this.state.joinRequests[id].accept) {
+      if (this.state.joinRequests[id]?.accept) {
         joinRequests[id] = { accept: false, reject: false };
       }
       else {
@@ -73,14 +85,14 @@ class GroupMembers extends Component {
       }
     }
     else {
-      if (this.state.joinRequests[id].reject) {
+      if (this.state.joinRequests[id]?.reject) {
         joinRequests[id] = { accept: false, reject: false };
       }
       else {
         joinRequests[id] = { accept: false, reject: true };
       }
     }
-    this.setState((prevState)=>({ joinRequests,manageMembers:prevState.manageMembers, firstUpdate:false }));
+    this.setState((prevState) => ({ joinRequests, manageMembers: prevState.manageMembers, firstUpdate: false }));
   }
 
   manageMembersHandler = (id, op) => {
@@ -88,7 +100,7 @@ class GroupMembers extends Component {
     else {
       var manageMembers = this.state.manageMembers.slice();
       if (op === 'admin') {
-        if (this.state.manageMembers[id].admin) {
+        if (this.state.manageMembers[id]?.admin) {
           manageMembers[id] = { admin: false, expel: false };
         }
         else {
@@ -96,14 +108,14 @@ class GroupMembers extends Component {
         }
       }
       else {
-        if (this.state.manageMembers[id].expel) {
+        if (this.state.manageMembers[id]?.expel) {
           manageMembers[id] = { admin: false, expel: false };
         }
         else {
           manageMembers[id] = { admin: false, expel: true };
         }
       }
-      this.setState((prevState)=>({ joinRequests:prevState.joinRequests,manageMembers, firstUpdate:false }));
+      this.setState((prevState) => ({ joinRequests: prevState.joinRequests, manageMembers, firstUpdate: false }));
     }
   }
 
@@ -114,7 +126,7 @@ class GroupMembers extends Component {
         firstName={user.first_name}
         lastName={user.last_name}
         email={user.email}
-        department={user.department.name}
+        department={user.department?.name}
         accept={this.state.joinRequests[user.id]?.accept}
         clickAccept={() => this.joinRequestHandler(user.id, 'accept')}
         reject={this.state.joinRequests[user.id]?.reject}
@@ -130,7 +142,7 @@ class GroupMembers extends Component {
         firstName={member.first_name}
         lastName={member.last_name}
         email={member.email}
-        department={member.department.name}
+        department={member.department?.name}
         admin={this.state.manageMembers[member.id]?.admin}
         clickAdmin={() => this.manageMembersHandler(member.id, 'admin')}
         expel={this.state.manageMembers[member.id]?.expel}
@@ -170,7 +182,7 @@ class GroupMembers extends Component {
             <div className="body">
 
               <div className="box">
-                <label><BsDot/> Join application ({this.props.currGroup?.join_requests.length})</label>
+                <label><BsDot /> Join application ({this.props.currGroup?.join_requests?.length})</label>
                 <div className="infoBox">
                   <div className="label">
                     <label className="col1" style={{ flex: 2 }}>Name</label>
@@ -181,13 +193,13 @@ class GroupMembers extends Component {
                   </div>
 
                   <div className="info">
-                    {this.props.currGroup?.join_requests.map(this.makeJoinReqeustRow)}
+                    {this.props.currGroup?.join_requests?.map(this.makeJoinReqeustRow)}
                   </div>
                 </div>
               </div>
 
               <div className="box">
-                <label><BsDot/> Member List ({this.props.currGroup?.member.length})</label>
+                <label><BsDot /> Member List ({this.props.currGroup?.member?.length})</label>
                 <div className="infoBox">
                   <div className="label">
                     <label className="col1" style={{ flex: 2 }}>Name</label>
@@ -196,7 +208,7 @@ class GroupMembers extends Component {
                     <label className="col4" style={{ flex: 1, color: "blue" }}>Admin</label>
                     <label className="col5" style={{ flex: 1, color: "red" }}>Expel</label>
                   </div>
-                  {this.props.currGroup?.member.map(this.makeMembersManageRow)}
+                  {this.props.currGroup?.member?.map(this.makeMembersManageRow)}
                 </div>
 
               </div>

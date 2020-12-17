@@ -25,6 +25,7 @@ export const GET_GROUP_FULL = 'GET_GROUP_FULL';
 export const GET_LIKE_GROUP = 'GET_LIKE_GROUP';
 export const GET_NOTICE_GROUP = 'GET_NOTICE_GROUP';
 export const GET_MY_GROUP = 'GET_MY_GROUP';
+export const GET_NOTHING_GROUP = 'GET_NOTHING_GROUP';
 export const SEARCH_GROUP = 'SEARCH_GROUP';
 
 /* other */
