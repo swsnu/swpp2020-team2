@@ -146,7 +146,7 @@ class EventCreate extends Component {
                 </div>
 
                 <div className="infoBox">
-                  <label className="infoKey">분류</label>
+                  <label className="infoKey">종류</label>
                   <select className="event-category-input" onChange={(event) => this.setState({ category: event.target.value })}>
                     <option value={null}>--select category--</option>
                     {this.props.categories.map(makeOption)}
