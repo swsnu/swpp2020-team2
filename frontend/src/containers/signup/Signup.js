@@ -51,12 +51,12 @@ class Signup extends Component {
       alert('Confirmed password is not the same as password.');
       return;
     }
-    /*
+    
     if (this.state.email.length < 10 || this.state.email.substr(this.state.email.length - 10, 10) !== '@snu.ac.kr') {
       alert('Email does not match with university.');
       return;
     }
-    */
+    
     len = this.state.firstName.length;
     for (i = 0; i < len; ++i) {
       ch = this.state.firstName[i];
