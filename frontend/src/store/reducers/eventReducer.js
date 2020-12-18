@@ -23,7 +23,7 @@ const eventReducer = (state = initialState, action) => {
       return { ...state, tagRecommend: action.target };
 
     case actionTypes.CREATE_EVENT: {
-      const newEvents = [...state.events, action.event];
+      const newEvents = [...state.events, action.target];
       return { ...state, events: newEvents, selectedImage: [] };
     }
     case actionTypes.MODIFY_EVENT: {

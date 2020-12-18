@@ -50,7 +50,7 @@ describe('Event reducer', () => {
       tagRecommend: [],
     };
     const sampleEvent={id:2};
-    const action = { type: actionTypes.CREATE_EVENT, event: sampleEvent };
+    const action = { type: actionTypes.CREATE_EVENT, target: sampleEvent };
     const ret = eventReducer(stubInitialState2, action);
     expect(ret.events).toEqual([{id:1},{id:2}]);
     expect(ret.selectedImage).toEqual([]);
