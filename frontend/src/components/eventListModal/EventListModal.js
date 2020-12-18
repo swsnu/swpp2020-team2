@@ -16,8 +16,6 @@ class EventListModal extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('isLogin') === 'false') this.props.history.replace('/');
-
     const dateFormat = 'yyyy. MM. d. EEE';
     const formattedDate = format(this.props.day, dateFormat);
     this.setState({
@@ -26,18 +24,6 @@ class EventListModal extends Component {
       dayEventList: this.props.dayEventList,
     });
   }
-
-  /*
-  onClickBringEvent = (id) => {
-    if (this.props.bringEventIDs?.includes(id)) this.props.onBringEvent(id, 'remove');
-    else this.props.onBringEvent(id, 'add');
-  }
-
-  onClickLikeEvent = (id) => {
-    if (this.props.likeEventIDs?.includes(id)) this.props.onLikeEvent(id, 'remove');
-    else this.props.onLikeEvent(id, 'add');
-  }
-  */
 
   onClickDetailEvent = (id) => {
     this.props.history.push(`/details/${id}`);
@@ -98,9 +84,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // onBringEvent: (id, oper) => dispatch(actionCreators.bringEvent(id, oper)),
-  // onLikeEvent: (id, oper) => dispatch(actionCreators.likeEvent(id, oper)),
-  // onGetUser: () => dispatch(actionCreators.getUserFull()),
+  
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventListModal);

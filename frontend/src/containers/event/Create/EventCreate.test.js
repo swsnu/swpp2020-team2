@@ -136,6 +136,7 @@ describe('<EventCreate />', () => {
     expect(eventCreateInstance.state.end_time).toEqual(newEnd_time);
   });
 
+  /*
   it(`should set selectedTag after clicking tag`, () => {
     const component = mount(eventCreate);
 
@@ -167,6 +168,7 @@ describe('<EventCreate />', () => {
     const eventCreateInstance = component.find(EventCreate.WrappedComponent).instance();
     expect(eventCreateInstance.state.tags.length).toBe(2);
   });
+  */
 
   it(`should call 'CreateEvent' and go to public after Creating`, () => {
     const spyHistoryReplace = jest.spyOn(history, 'replace').mockImplementation(path => { });

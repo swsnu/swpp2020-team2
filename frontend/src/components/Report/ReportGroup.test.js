@@ -1,28 +1,29 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { Provider } from 'react-redux';
+
 
 import { connectRouter, ConnectedRouter } from 'connected-react-router';
-import ReportEvent from './ReportEvent';
+import ReportGroup from './ReportGroup';
 import getMockStore from '../../test-utils/mocks';
 import { history } from '../../store/store';
+import { Provider } from 'react-redux';
 
-import * as eventActions from '../../store/actions/events';
+import * as groupActions from '../../store/actions/group';
 
-const stubEvent = { id: 1, title: 'test_event_title' };
+const stubGroup = { id: 1, title: 'test_group_title' };
 const mockStore = getMockStore({});
 
-describe('<ReportEvent />', () => {
-  let reportEventModal;
+describe('<ReportGroup />', () => {
+  let reportGroupModal;
   let spyOnCloseModal;
 
   beforeEach(() => {
     spyOnCloseModal = jest.fn();
-    reportEventModal = (
+    reportGroupModal = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
-          <ReportEvent
-            event={stubEvent}
+          <ReportGroup
+            group={stubGroup}
             onClickCloseModal={() => spyOnCloseModal()}
           />
         </ConnectedRouter>
@@ -33,31 +34,31 @@ describe('<ReportEvent />', () => {
   afterEach(() => { jest.clearAllMocks(); });
 
   it('should render without error', () => {
-    const component = mount(reportEventModal);
-    const wrapper = component.find('.ReportEvent');
+    const component = mount(reportGroupModal);
+    const wrapper = component.find('.ReportGroup');
     expect(wrapper.length).toBe(1);
   });
 
   it('should set state properly on content input', () => {
     const content = 'TEST_CONTENT';
-    const component = mount(reportEventModal);
+    const component = mount(reportGroupModal);
     const wrapper = component.find('textarea');
     wrapper.simulate('change', { target: { value: content } });
-    const newTodoInstance = component.find(ReportEvent.WrappedComponent).instance();
+    const newTodoInstance = component.find(ReportGroup.WrappedComponent).instance();
     expect(newTodoInstance.state.content).toEqual(content);
   });
 
   it('should close modal clicking close btn', () => {
-    const component = mount(reportEventModal);
+    const component = mount(reportGroupModal);
     const wrapper = component.find('button').at(0);
     wrapper.simulate('click');
     expect(spyOnCloseModal).toHaveBeenCalledTimes(1);
   });
 
-  it('should alert with no content click \'reportEvent\'', () => {
+  it('should alert with no content click \'reportGroup\'', () => {
     const spyOnAlert = jest.spyOn(window, 'alert')
       .mockImplementation();
-    const component = mount(reportEventModal);
+    const component = mount(reportGroupModal);
 
     const wrapper = component.find('button').at(1);
     wrapper.simulate('click');
@@ -65,16 +66,16 @@ describe('<ReportEvent />', () => {
     expect(spyOnAlert).toHaveBeenCalledTimes(1);
   });
   
-  it(`should call 'reportEvent' successfully`, () => {
-    const spyReportEvent = jest.spyOn(eventActions, 'reportEvent').mockImplementation((id, content) => (dispatch) => { });
-    const component = mount(reportEventModal);
+  it(`should call 'reportGroup' successfully`, () => {
+    const spyReportGroup = jest.spyOn(groupActions, 'reportGroup').mockImplementation((id, content) => (dispatch) => { });
+    const component = mount(reportGroupModal);
 
     const wrapper = component.find('textarea');
     wrapper.simulate('change', { target: { value: "TEST_CONTENT" } });
     const wrapper2 = component.find('button').at(1);
     wrapper2.simulate('click');
 
-    expect(spyReportEvent).toHaveBeenCalledTimes(1);
+    expect(spyReportGroup).toHaveBeenCalledTimes(1);
     expect(spyOnCloseModal).toHaveBeenCalledTimes(1);
   });
 });
