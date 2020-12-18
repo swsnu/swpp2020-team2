@@ -4,6 +4,10 @@ import store from '../store';
 import * as actionCreators from './group';
 
 describe('group', () => {
+  beforeEach(()=>{
+    window.alert=jest.fn();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });

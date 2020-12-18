@@ -75,12 +75,16 @@ describe('SettingProfile', () => {
     const component = mount(makeComponent(getMockStore(mockedState)));
     const wrapper1=component.find('.confirmBtn');
     const wrapper2=component.find('#firstname-input');
+    const wrapper3=component.find('#lastname-input');
+    const wrapper4=component.find('#department-input');
     
     wrapper2.simulate('change',{target:{value:''}});
     wrapper1.simulate('click');
     expect(spyOnAlert).toHaveBeenCalledWith('You should fill names!');
 
     wrapper2.simulate('change',{target:{value:'first_name'}});
+    wrapper3.simulate('change',{target:{value:'last_name'}});
+    wrapper4.simulate('change',{target:{value:1}});
     wrapper1.simulate('click');
     expect(spyOnChangeUserInfo).toHaveBeenCalledTimes(1);
     expect(spyOnAlert).toHaveBeenCalledWith('Setting has been applied!');

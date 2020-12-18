@@ -26,7 +26,6 @@ class GroupMain extends Component {
     this.props.getUserFull();
     this.props.getMyGroup();
     this.props.getLikeGroup();
-    this.props.getNoticeGroup();
     this.props.getNothingGroup();
   }
 
@@ -42,12 +41,6 @@ class GroupMain extends Component {
     const oper = op ? 'add' : 'remove';
     await this.props.likeGroup(id, oper);
     this.props.getLikeGroup();
-  }
-
-  onNoticeHandler=async (id, op) => {
-    const oper = op ? 'add' : 'remove';
-    await this.props.noticeGroup(id, oper);
-    this.props.getNoticeGroup();
   }
 
   onJoinHandler=async(id,op,joined)=>{
@@ -74,8 +67,6 @@ class GroupMain extends Component {
     }
     var liked = false;
     if (this.props.likeGroups.find(haveThisGroup))liked = true;
-    var noticed = false;
-    if (this.props.noticeGroups.find(haveThisGroup))noticed = true;
     var joined = false;
     if(this.props.myGroups.find(haveThisGroup))joined=true;
     var joinRequested=false;
@@ -159,17 +150,6 @@ class GroupMain extends Component {
                 {this.props.myGroups.map(this.makeGroupBox)}
               </div>
             </div>
-            {/*
-            <div className="section">
-              <div className="labelBox">
-                <label>Noticing Groups</label>
-              </div>
-
-              <div className="containerBox">
-                {this.props.noticeGroups.map(this.makeGroupBox)}
-              </div>
-            </div>
-            */}
 
             <div className="section">
               <div className="labelBox">
@@ -208,7 +188,6 @@ const mapStateToProps = (state) => ({
   userFullInfo: state.ur.userFullInfo,
   myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
-  noticeGroups: state.gr.noticeGroups,
   nothingGroups: state.gr.nothingGroups,
 });
 
@@ -216,10 +195,8 @@ const mapDispatchToProps = (dispatch) => ({
   getUserFull: () => dispatch(actionCreators.getUserFull()),
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
-  getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   getNothingGroup: () => dispatch(actionCreators.getNothingGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
-  noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
   joinGroup:(id,op)=>dispatch(actionCreators.joinGroup(id,op)),
 });
 

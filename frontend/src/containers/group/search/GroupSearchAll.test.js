@@ -15,8 +15,15 @@ describe('GroupSearchAll', () => {
   }
 
   const mockedState = {
-    signinedUser: null,
-    searchGroups: [],
+    signinedUser: 1,
+    userFullInfo:{
+      join_requests:[],
+    },
+    searchGroups:[
+      {id:1,name:'test_name',description:'test_desc'},
+    ],
+    myGroups:[],
+    likeGroups:[],
   };
 
   beforeEach(() => {
@@ -48,11 +55,14 @@ describe('GroupSearchAll', () => {
 
     const spyOnPush = jest.spyOn(history, 'push')
       .mockImplementation();
+    
     wrapper2.simulate('click');
     expect(spyOnPush).toHaveBeenCalledTimes(0);
 
     wrapper1.simulate('change', { target: { value: 'test_input' } });
-    wrapper2.simulate('click');
+    const instance = component.find(GroupSearchAll.WrappedComponent).instance();
+    instance.handleKeyPress({key:"Shift"});
+    instance.handleKeyPress({key:"Enter"});
     expect(spyOnPush).toHaveBeenCalledWith('/group/search/test_input');
   });
 
@@ -65,5 +75,71 @@ describe('GroupSearchAll', () => {
 
     wrapper.simulate('click');
     expect(spyOnPush).toHaveBeenCalledWith('/group/create');
+  });
+
+  it('should show GroupBoxes', () => {
+    const spyOnLikeGroup=jest.spyOn(userActions,'likeGroup')
+    .mockImplementation(()=>()=>{});
+    const spyOnJoinGroup=jest.spyOn(userActions,'joinGroup')
+    .mockImplementation(()=>()=>{});
+    const spyOnAlert=jest.spyOn(window,'alert')
+    .mockImplementation();
+    const spyOnPush=jest.spyOn(history,'push')
+    .mockImplementation();
+
+    let component = mount(makeComponent(getMockStore(mockedState)));
+    expect(component.find('GroupBox').length).toBe(1);
+
+    let wrappers=component.find('.btn');
+
+    wrappers.at(0).simulate('click');
+    expect(spyOnLikeGroup).toHaveBeenCalledWith(1,'add');
+    wrappers.at(1).simulate('click');
+    expect(spyOnJoinGroup).toHaveBeenCalledWith(1,'add');
+    wrappers.at(2).simulate('click');
+    let wrapper=component.find('.closeBtn');
+    wrapper.simulate('click');
+
+    wrapper=component.find('.name');
+    wrapper.simulate('click');
+    expect(spyOnPush).toHaveBeenCalledWith('/group/details/1');
+
+    const mockedState2 = {
+      signinedUser: 1,
+      userFullInfo:{
+        join_requests:[{id:1}],
+      },
+      searchGroups:[
+        {id:1,name:'test_name',description:'test_desc'},
+      ],
+      myGroups:[],
+      likeGroups:[{id:1}],
+    };
+
+    component = mount(makeComponent(getMockStore(mockedState2)));
+    wrappers=component.find('.btn');
+
+    wrappers.at(0).simulate('click');
+    expect(spyOnLikeGroup).toHaveBeenCalledWith(1,'remove');
+    wrappers.at(1).simulate('click');
+    expect(spyOnJoinGroup).toHaveBeenCalledWith(1,'remove');
+
+    const mockedState3 = {
+      signinedUser: 1,
+      userFullInfo:{
+        join_requests:[{id:2}],
+      },
+      searchGroups:[
+        {id:1,name:'test_name',description:'test_desc'},
+      ],
+      myGroups:[{id:1}],
+      likeGroups:[{id:1}],
+    };
+
+    component = mount(makeComponent(getMockStore(mockedState3)));
+    wrappers=component.find('.btn');
+
+    wrappers.at(1).simulate('click');
+    expect(spyOnAlert).toHaveBeenCalledWith("You alreday joined this group!");
   });
 });
