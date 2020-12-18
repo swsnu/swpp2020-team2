@@ -45,13 +45,13 @@ class SettingPassword extends Component {
 
         <div className="container">
           <div className="left">
-            <button onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
+            <button className="myPageBtn" onClick={() => this.onRouteHandler('/mypage')}>My Page</button>
 
             <div className="tabBar">
               <label>Personal Settings</label>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/profile')}>Profile</div>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/password')} style={{ color: "blue" }}>Change Password</div>
-              <div onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
+              <div className="profileBtn" onClick={() => this.onRouteHandler('/mypage/setting/profile')} style={{color:"blue"}}>Profile</div>
+              <div className="passwordBtn" onClick={() => this.onRouteHandler('/mypage/setting/password')}>Change Password</div>
+              <div className="preferenceBtn" onClick={() => this.onRouteHandler('/mypage/setting/preference')}>Preference</div>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ class SettingPassword extends Component {
 
             <div className="header">
               <label>Password Setting</label>
-              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+              <button className="confirmBtn" onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 
             <div className="body">

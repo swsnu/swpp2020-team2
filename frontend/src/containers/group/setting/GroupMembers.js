@@ -18,8 +18,9 @@ class GroupMembers extends Component {
   }
 
   componentDidMount() {
-    this.props.getUser();
+    if(localStorage.getItem('isLogin')!='true') this.props.history.replace('/main');
     this.props.getGroupFull(this.props.match.params.id);
+    this.props.getUser();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -163,21 +164,21 @@ class GroupMembers extends Component {
         </div>
 
         <div className="container">
-
           <div className="left">
-            <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
+            <button className="groupPageBtn" onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
+
             <div className="tabBar">
               <label>Group Settings</label>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)} style={{ color: "blue" }}>Manage members</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
+              <div className="profileBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)} style={{color:"blue"}}>Profile</div>
+              <div className="membersBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
+              <div className="privacyBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
             </div>
           </div>
 
           <div className="right">
             <div className="header">
               <label>Manage members</label>
-              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+              <button className="confirmBtn" onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 
             <div className="body">

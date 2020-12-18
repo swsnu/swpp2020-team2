@@ -44,13 +44,13 @@ class GroupProfile extends Component {
 
         <div className="container">
           <div className="left">
-            <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
+            <button className="groupPageBtn" onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
 
             <div className="tabBar">
               <label>Group Settings</label>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)} style={{color:"blue"}}>Profile</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
+              <div className="profileBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)} style={{color:"blue"}}>Profile</div>
+              <div className="membersBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
+              <div className="privacyBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
             </div>
           </div>
 
@@ -58,7 +58,7 @@ class GroupProfile extends Component {
 
             <div className="header">
               <label>Profile</label>
-              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+              <button className="confirmBtn" onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 
             <div className="body">

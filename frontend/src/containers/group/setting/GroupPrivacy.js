@@ -10,7 +10,7 @@ import {BsDot} from 'react-icons/bs'
 
 class GroupPrivacy extends Component {
   state = {
-    privacy: null,
+    privacy: 1,
   }
 
   componentDidMount() {
@@ -22,7 +22,7 @@ class GroupPrivacy extends Component {
   }
 
   onConfirmHandler = () => {
-    this.props.changeGroupPrivacy(this.state.privacy);
+    this.props.changeGroupPrivacy(this.props.match.params.id, this.state.privacy);
   }
 
   onRouteHandler = (url) => {
@@ -40,14 +40,14 @@ class GroupPrivacy extends Component {
         </div>
 
         <div className="container">
-
           <div className="left">
-            <button onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
+            <button className="groupPageBtn" onClick={() => this.onRouteHandler(`/group/details/${this.props.match.params.id}`)}>back</button>
+
             <div className="tabBar">
               <label>Group Settings</label>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)}>Profile</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
-              <div onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)} style={{ color: "blue" }}>Privacy</div>
+              <div className="profileBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/profile`)} style={{color:"blue"}}>Profile</div>
+              <div className="membersBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/members`)}>Manage members</div>
+              <div className="privacyBtn" onClick={() => this.onRouteHandler(`/group/${this.props.match.params.id}/setting/privacy`)}>Privacy</div>
             </div>
           </div>
 
@@ -55,14 +55,14 @@ class GroupPrivacy extends Component {
 
             <div className="header">
               <label>Privacy</label>
-              <button onClick={() => this.onConfirmHandler()}>Confirm</button>
+              <button className="confirmBtn" onClick={() => this.onConfirmHandler()}>Confirm</button>
             </div>
 
             <div className="body">
               <div className="box">
                 <label><BsDot/> Allowed View Members</label>
                 <div className="infoBox">
-                  <select value={this.state.privacy} onChange={(event) => this.setState({ privacy: event.target.value })}>
+                  <select id="privacy-input" value={this.state.privacy} onChange={(event) => this.setState({ privacy: event.target.value })}>
                     <option value={1}>Only administrators</option>
                     <option value={2}>All users</option>
                     <option value={3}>No one</option>
