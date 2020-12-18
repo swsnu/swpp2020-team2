@@ -9,6 +9,7 @@ import { createBrowserHistory } from 'history';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
 import EventListModal from './EventListModal';
 import { history, middlewares } from '../../store/store';
+import { createEvent } from '../../store/actions';
 
 const stubInitialState = {
   events: [{ id: 1 }],
@@ -68,6 +69,8 @@ describe('<EventListModal />', () => {
   });
 
   it('should handle click buttons', () => {
+    const spyCreateEvent = jest.fn();
+    const spyCloseEvent = jest.fn();
     const events = [{ id: 1 }, { id: 2 }];
     const _component = (
       <Provider store={mockStore}>
@@ -81,11 +84,11 @@ describe('<EventListModal />', () => {
                   <EventListModal
                     day={new Date()}
                     dayEventList={events}
-                    onLikeEvent={jest.fn()}
-                    onBringEvent={jest.fn()}
+                    onClickLikeEvent={jest.fn()}
+                    onClickBringEvent={jest.fn()}
                     onGetUser={jest.fn()}
-                    onClickCreateEvent={jest.fn()}
-                    onClickCloseModal={jest.fn()}
+                    onClickCreateEvent={spyCreateEvent}
+                    onClickCloseModal={spyCloseEvent}
                     history={[]}
                   />
                 )}
@@ -108,14 +111,21 @@ describe('<EventListModal />', () => {
     expect(like.length).toBe(2);
     like.at(0).simulate('click');
     like.at(1).simulate('click');
+
+    const create = component.find('.createEventButton');
+    expect(create.length).toBe(1);
+    create.simulate('click');
+    expect(spyCreateEvent).toHaveBeenCalledTimes(1);
+
+    const close = component.find('.closeButton');
+    expect(close.length).toBe(1);
+    close.simulate('click');
+    expect(spyCloseEvent).toHaveBeenCalledTimes(1);
+
   });
+
+  
 /*
-  it('should close modal after button', () => {
-    const component = shallow(<EventListModal onClickCloseModal={() => { }} />);
-    const wrapper = component.find('.closeButton');
-    wrapper.simulate('click');
-    expect(wrapper.length).toBe(1);
-  });
 
   it('should redirect to create page after click the button', () => {
     const component = shallow(<EventListModal onClickCreateEvent={(day) => { }} />);
