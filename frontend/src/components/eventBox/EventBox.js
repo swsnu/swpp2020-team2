@@ -60,7 +60,7 @@ const EventBox = (props) => {
         <div className="tags" style={{ color: eventColor, fontWeight:'bold' }}>
           {props.event?.tag?.map((tag) => {
             return (
-              <div className="tag">
+              <div key={tag.id} className="tag">
                 #{tag.name}
               </div>
             )
