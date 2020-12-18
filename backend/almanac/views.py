@@ -1165,7 +1165,7 @@ def get_put_delete_event_full(request, event_id):
     group = Group.objects.get(id=event.group_id)
     category = Category.objects.get(id=event.category_id)
     last_editor = User.objects.get(id=event.last_editor_id)
-    up = UserPreference.objects.get(user_id=event.last_editor_id)
+    user_pref = UserPreference.objects.get(user_id=event.last_editor_id)
 
     if request.method == 'GET':
         event_dict = {'id': event.id,
@@ -1178,7 +1178,7 @@ def get_put_delete_event_full(request, event_id):
         'end_time': event.end_time,
         'last_editor': {'id': event.last_editor_id,
         'name': last_editor.username,
-        'department': up.department.name},
+        'department': user_pref.department.name},
         'image': [{'id': image.id,
         'image_file_url': image.image_file.url} for image in event.image.all()],
         'content': event.content,
