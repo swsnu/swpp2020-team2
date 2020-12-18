@@ -4,7 +4,7 @@ import EventBox from './EventBox';
 
 describe('<EventBox />', () => {
   it('should render without errors', () => {
-    const component = mount(<EventBox />);
+    const component = mount(<EventBox event={{tag:[{id:1,name:'TAG'}], category:{id:1}}}/>);
     const wrapper = component.find('.EventBox');
     expect(wrapper.length).toBe(1);
   });

@@ -41,22 +41,8 @@ class EventModify extends Component {
       date: this.props.event.date
     })
   }
-  componentDidUpdate(prevProps) {
-    if (this.props.event !== prevProps.event) {
-      this.setState({
-        title: this.props.event.title,
-        category: this.props.event.category?.id,
-        group: this.props.event.group?.id,
-        place: this.props.event.place,
-        begin_time: this.props.event.begin_time,
-        end_time: this.props.event.end_time,
-        content: this.props.event.content,
-        tags: this.props.event.tag,
-        selectTags: this.props.event.tag,
-        date: this.props.event.date
-      })
-    }
 
+  componentDidUpdate(prevProps) {
     if (this.props.tagRecommend !== prevProps.tagRecommend) {
       this.setState({ tags: this.props.tagRecommend });
     }
@@ -93,16 +79,16 @@ class EventModify extends Component {
     }
   }
 
-  deleteEventHandler = async () => {
+  deleteEventHandler = () => {
     if (window.confirm("정말 행사를 삭제하시겠습니까?")) {
-      await this.props.onDeleteEvent(this.props.match.params.event_id)
+      this.props.onDeleteEvent(this.props.match.params.event_id)
       this.props.history.push('/public');
     } else {
 
     }
   }
 
-  modifyEventHandler = async () => {
+  modifyEventHandler = () => {
     let message = '';
     if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
     if (!(this.state.category > 0)) message += ' 행사 종류를 선택하세요 ! \n';
@@ -113,7 +99,7 @@ class EventModify extends Component {
     if (message.length > 0) alert(message);
     else {
       if (window.confirm("수정한 행사를 저장하시겠습니까?")) {
-        await this.props.onModifyEvent({
+        this.props.onModifyEvent({
           id: this.props.match.params.event_id,
           title: this.state.title,
           place: this.state.place,
@@ -176,7 +162,7 @@ class EventModify extends Component {
                   <label className="infoKey">분류</label>
                   <select className="event-category-input" onChange={(event) => this.setState({ category: event.target.value })}>
                     <option value={this.props.event?.category?.id}>{this.props.event?.category?.name}</option>
-                    {this.props.categories.map(makeOption)}
+                    {this.props.categories?.map(makeOption)}
                   </select>
                 </div>
               </div>
@@ -186,7 +172,7 @@ class EventModify extends Component {
                   <label className="infoKey">단체</label>
                   <select className="event-group-input" onChange={(event) => this.setState({ group: event.target.value })}>
                     <option value={this.props.event?.group?.id}>{this.props.event?.group?.name}</option>
-                    {this.props.myGroups.map(makeOption)}
+                    {this.props.myGroups?.map(makeOption)}
                   </select>
                 </div>
                 <div className="infoBox">

@@ -71,7 +71,7 @@ class EventCreate extends Component {
     }
   }
 
-  createEventHandler = async () => {
+  createEventHandler = () => {
     let message = '';
     if (!(this.state.title?.length > 0)) message += ' 행사 제목을 입력하세요 ! \n';
     if (!(this.state.category > 0)) message += ' 행사 종류를 선택하세요 ! \n';
@@ -81,7 +81,7 @@ class EventCreate extends Component {
 
     if (message.length > 0) alert(message);
     else {
-      await this.props.onPostEvent({
+      this.props.onPostEvent({
         title: this.state.title,
         place: this.state.place,
         date: this.props.location.state.date,
