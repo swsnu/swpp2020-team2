@@ -29,19 +29,12 @@ class GroupDetail extends Component {
     this.props.getGroupFull(this.props.match.params.id);
     this.props.getMyGroup();
     this.props.getLikeGroup();
-    this.props.getNoticeGroup();
   }
 
   onLikeHandler=async (id, op) => {
     const oper = op ? 'add' : 'remove';
     await this.props.likeGroup(id, oper);
     this.props.getLikeGroup();
-  }
-
-  onNoticeHandler=async (id, op) => {
-    const oper = op ? 'add' : 'remove';
-    await this.props.noticeGroup(id, oper);
-    this.props.getNoticeGroup();
   }
 
   onJoinHandler=async (id,op)=>{
@@ -62,8 +55,6 @@ class GroupDetail extends Component {
 
     var liked = false;
     if (this.props.likeGroups?.find((e) => e.id === this.props.currGroup.id))liked = true;
-    var noticed = false;
-    if (this.props.noticeGroups?.find((e) => e.id === this.props.currGroup.id))noticed = true;
     var joined=false;
     if(this.props.myGroups?.find((e)=>e.id===this.props.currGroup.id))joined=true;
     var joinRequested=false;
@@ -136,17 +127,14 @@ const mapStateToProps = (state) => ({
   currGroup: state.gr.currGroup,
   myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
-  noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
-  getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   getUserFull: () => dispatch(actionCreators.getUserFull()),
   getGroupFull: (id) => dispatch(actionCreators.getGroupFull(id)),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
-  noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
   joinGroup: (id,op) => dispatch(actionCreators.joinGroup(id,op)),
 });
 

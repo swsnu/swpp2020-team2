@@ -15,7 +15,6 @@ import './GroupSearch.css';
 class GroupSearch extends Component {
   state = {
     searchQuery: '',
-    key: 0,
     modalBool: false,
     modalReportGroup: null,
   }
@@ -27,7 +26,6 @@ class GroupSearch extends Component {
     this.props.getUserFull();
     this.props.getMyGroup();
     this.props.getLikeGroup();
-    this.props.getNoticeGroup();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -42,12 +40,6 @@ class GroupSearch extends Component {
     const oper = op ? 'add' : 'remove';
     await this.props.likeGroup(id, oper);
     this.props.getLikeGroup();
-  }
-
-  onNoticeHandler=async (id, op) => {
-    const oper = op ? 'add' : 'remove';
-    await this.props.noticeGroup(id, oper);
-    this.props.getNoticeGroup();
   }
 
   onJoinHandler=async(id,op,joined)=>{
@@ -74,8 +66,6 @@ class GroupSearch extends Component {
     }
     var liked = false;
     if (this.props.likeGroups.find(haveThisGroup)) liked = true;
-    var noticed = false;
-    if (this.props.noticeGroups.find(haveThisGroup)) noticed = true;
     var joined = false;
     if (this.props.myGroups.find(haveThisGroup)) joined = true;
     var joinRequested = false;
@@ -162,7 +152,6 @@ const mapStateToProps = (state) => ({
   searchGroups: state.gr.searchGroups,
   myGroups: state.gr.myGroups,
   likeGroups: state.gr.likeGroups,
-  noticeGroups: state.gr.noticeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -170,9 +159,7 @@ const mapDispatchToProps = (dispatch) => ({
   searchGroup: (query) => dispatch(actionCreators.searchGroup(query)),
   getMyGroup: () => dispatch(actionCreators.getMyGroup()),
   getLikeGroup: () => dispatch(actionCreators.getLikeGroup()),
-  getNoticeGroup: () => dispatch(actionCreators.getNoticeGroup()),
   likeGroup: (id, op) => dispatch(actionCreators.likeGroup(id, op)),
-  noticeGroup: (id, op) => dispatch(actionCreators.noticeGroup(id, op)),
   joinGroup: (id, op) => dispatch(actionCreators.joinGroup(id, op)),
 });
 

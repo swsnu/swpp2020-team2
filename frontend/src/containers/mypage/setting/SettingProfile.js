@@ -118,7 +118,7 @@ class SettingProfile extends Component {
               <div className="box">
                 <label>Department</label>
                 <div className="infoBox">
-                  <select id="deparment-input" value={this.props.userInfo?.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
+                  <select id="department-input" value={this.props.userInfo?.department.id} onChange={(event) => this.setState({ department: event.target.value })}>
                     {this.props.departments.map(makeOption)}
                   </select>
                 </div>
