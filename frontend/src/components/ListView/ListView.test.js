@@ -16,6 +16,7 @@ describe('<ListView />', () => {
       date: '1111',
       likes: [1],
       brings: [1, 2],
+      category: { id: 1 },
     };
     const event2 = {
       id: 2,
@@ -24,6 +25,7 @@ describe('<ListView />', () => {
       date: '1112',
       likes: [1, 2, 3],
       brings: [1, 2],
+      category: { id: 2 },
     };
     const listview = (
       <SideBar

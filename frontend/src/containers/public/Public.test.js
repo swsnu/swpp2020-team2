@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
@@ -92,25 +92,25 @@ const sample = [
 
 const stubInitialState = {
   events: sample,
+  userFullInfo: {},
+  signinedUser: {},
+  likeEvents: sample,
+  bringEvents: sample,
 };
 
-axios.get = jest.fn((url) => {
-  return new Promise((resolve, reject) => {
-    const result = {
-      status: 200, data: { id: 1 },
-    };
-    resolve(result);
-  });
-});
+axios.get = jest.fn((url) => new Promise((resolve, reject) => {
+  const result = {
+    status: 200, data: { id: 1 },
+  };
+  resolve(result);
+}));
 
-axios.post = jest.fn((url, body) => {
-  return new Promise((resolve, reject) => {
-    const result = {
-      status: 200, data: [{ id: 1 }],
-    };
-    resolve(result);
-  });
-});
+axios.post = jest.fn((url, body) => new Promise((resolve, reject) => {
+  const result = {
+    status: 200, data: [{ id: 1 }],
+  };
+  resolve(result);
+}));
 
 const getMockReducer = jest.fn(
   (initialState) => (state = initialState, action) => {
@@ -155,20 +155,14 @@ describe('<Public />', () => {
 
   it('should render Public Calendar', () => {
     const component = mount(publicComponent);
+    // console.log(component.debug());
     const wrapper = component.find('.Public');
     expect(wrapper.length).toBe(1);
   });
 
   it('should handle click', () => {
-    const div1 = document.createElement('div');
-    div1.setAttribute('id', 'including');
-    document.body.appendChild(div1);
-
-    const div2 = document.createElement('div');
-    div2.setAttribute('id', 'tagOption');
-    document.body.appendChild(div2);
-
     const component = mount(publicComponent);
+    // console.log(component.debug());
 
     const wrapperArrow = component.find('.arrow');
     expect(wrapperArrow.length).toBe(2);
