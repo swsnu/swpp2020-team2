@@ -64,27 +64,27 @@ class EventDetail extends Component {
       );
     }
 
-    const eventTitle = (this.props.event.title?.length>0) ? this.props.event.title : '해당없음';
-    const eventGroupName = (this.props.event.group?.name?.length > 0) ? this.props.event.group.name : '해당없음';
-    const eventPlace = (this.props.event.place?.length > 0) ? this.props.event.place : '해당없음';
-    const formattedDate = (this.props.event.date?.length>0) ? this.props.event.date : '해당없음';
-    const categoryName = (this.props.event.category?.name?.length > 0) ? this.props.event.category.name : '해당없음';
-    const eventBeginTime = (this.props.event.begin_time?.length>0) ? this.props.event.begin_time : '해당없음';
-    const eventEndTime = (this.props.event.end_time?.length>0) ? this.props.event.end_time : '해당없음';
-    const eventContent = (this.props.event.content?.length > 0) ? this.props.event.content : '해당없음';
-    const lastEditorName = (this.props.event.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
-    const lastEditorDepartment = (this.props.event.last_editor?.department?.length>0) ? this.props.event.last_editor.department : '해당없음';
-    const imageUrl = (this.props.event.image?.length>0) ? this.props.event.image[0].image_file_url : "";
-    const tags = (this.props.event.tag?.length>=0) ? this.props.event.tag : [];
+    const eventTitle = (this.props.event?.title?.length>0) ? this.props.event.title : '해당없음';
+    const eventGroupName = (this.props.event?.group?.name?.length > 0) ? this.props.event.group.name : '해당없음';
+    const eventPlace = (this.props.event?.place?.length > 0) ? this.props.event.place : '해당없음';
+    const formattedDate = (this.props.event?.date?.length>0) ? this.props.event.date : '해당없음';
+    const categoryName = (this.props.event?.category?.name?.length > 0) ? this.props.event.category.name : '해당없음';
+    const eventBeginTime = (this.props.event?.begin_time?.length>0) ? this.props.event.begin_time : '해당없음';
+    const eventEndTime = (this.props.event?.end_time?.length>0) ? this.props.event.end_time : '해당없음';
+    const eventContent = (this.props.event?.content?.length > 0) ? this.props.event.content : '해당없음';
+    const lastEditorName = (this.props.event?.last_editor?.name?.length > 0) ? this.props.event.last_editor.name : '해당없음';
+    const lastEditorDepartment = (this.props.event?.last_editor?.department?.length>0) ? this.props.event.last_editor.department : '해당없음';
+    const imageUrl = (this.props.event?.image?.length>0) ? this.props.event.image[0].image_file_url : "";
+    const tags = (this.props.event?.tag?.length>=0) ? this.props.event.tag : [];
 
-    const categoryColor = !(this.props.event.category?.name?.length > 0) ? "gray" :
-      this.props.event.category.id === 1 ? 'red'
-        : this.props.event.category.id === 2 ? 'orange'
-          : this.props.event.category.id === 3 ? 'yellow'
-            : this.props.event.category.id === 4 ? 'green'
-              : this.props.event.category.id === 5 ? 'skyblue'
-                : this.props.event.category.id === 6 ? 'blue'
-                  : this.props.event.category.id === 7 ? 'purple'
+    const categoryColor = !(this.props.event?.category?.name?.length > 0) ? "gray" :
+      this.props.event?.category.id === 1 ? 'red'
+        : this.props.event?.category.id === 2 ? 'orange'
+          : this.props.event?.category.id === 3 ? 'yellow'
+            : this.props.event?.category.id === 4 ? 'green'
+              : this.props.event?.category.id === 5 ? 'skyblue'
+                : this.props.event?.category.id === 6 ? 'blue'
+                  : this.props.event?.category.id === 7 ? 'purple'
                     : 'gray';
 
     const lastEditor = (
