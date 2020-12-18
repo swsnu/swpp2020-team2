@@ -21,7 +21,7 @@ const ListView = ({
   for (let i = 0; i < monthEventList.length; i += 1) {
     const event = monthEventList[i];
     contents.push(
-      <div className={`board_content${i % 2}`} onClick={() => onClickDetailEvent(event.id)}>
+      <div key={i} className={`board_content${i % 2}`} onClick={() => onClickDetailEvent(event.id)}>
         <div className="board_id">{event.id}</div>
         <div className="board_category">{categoryName[event.category.id]}</div>
         <div className="board_title">{event.title}</div>

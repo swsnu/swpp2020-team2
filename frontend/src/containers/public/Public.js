@@ -18,7 +18,6 @@ import EventListModal from '../../components/eventListModal/EventListModal';
 class Public extends Component {
   constructor(props) {
     super(props);
-    this._isMounted = false;
     this.state = {
       events: [],
       monthBegin: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
@@ -55,7 +54,6 @@ class Public extends Component {
     };
 
     this.getFilteredEvents = async (including, tagOption, categoryOption, groupOption, eventOption, sortOption, dateBegin, dateEnd) => {
-      if (this.isMounted === false) return [];
       const includingArray = including.split(' ');
       const _including = includingArray;
       const categoryArray = Array.from(categoryOption);
@@ -96,14 +94,12 @@ class Public extends Component {
     };
 
     this.filterEvents = async () => {
-      if (this.isMounted) {
-        const prevState = this.state;
-        const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
-        if (_events !== undefined) {
-          this.setState({
-            events: _events.data,
-          });
-        }
+      const prevState = this.state;
+      const _events = await this.getFilteredEvents(prevState.including, prevState.tagOption, prevState.categoryOption, prevState.groupOption, prevState.eventOption, prevState.sortOption, prevState.monthBegin, prevState.monthEnd);
+      if (_events !== undefined) {
+        this.setState({
+          events: _events.data,
+        });
       }
     };
 
@@ -111,19 +107,16 @@ class Public extends Component {
   }
 
   componentDidMount() {
-    this.isMounted = true;
     if (localStorage.getItem('isLogin') !== 'true') this.props.history.replace('/main');
     this.props.onGetUser();
     this.filterEvents();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    // this.filterEvents();
     return true;
   }
 
   componentWillUnmount() {
-    this.isMounted = false;
     this.state = (state, callback) => { };
   }
 
@@ -135,8 +128,7 @@ class Public extends Component {
   }
 
   onClickDay(day, events) {
-    // show modal window
-    if (this.isMounted === false) return;
+    // show modal windowz
     this.setState({
       modalBool: true,
       modalEvents: events,
@@ -145,18 +137,9 @@ class Public extends Component {
   }
 
   onClickCloseModal() {
-    if (this.isMounted === false) return;
     this.setState({
       modalBool: false,
     });
-  }
-
-  get isMounted() {
-    return this._isMounted;
-  }
-
-  set isMounted(value) {
-    this._isMounted = value;
   }
 
   onClickBringEvent = async (id) => {
@@ -176,28 +159,24 @@ class Public extends Component {
   }
 
   setViewOption(str) {
-    if (this.isMounted === false) return;
     this.setState({
       viewOption: str,
     });
   }
 
   setIncluding(str) {
-    if (this.isMounted === false) return;
     this.setState({
       including: str,
     }, () => this.filterEvents());
   }
 
   setTagOption(str) {
-    if (this.isMounted === false) return;
     this.setState({
       tagOption: str,
     }, () => this.filterEvents());
   }
 
   setCategoryOption(id) {
-    if (this.isMounted === false) return;
     this.setState((state) => {
       const categoryOption_ = state.categoryOption;
       if (categoryOption_.has(id)) categoryOption_.delete(id);
@@ -209,7 +188,6 @@ class Public extends Component {
   }
 
   setGroupOption(str) {
-    if (this.isMounted === false) return;
     this.setState((state) => {
       if (str === state.groupOption) return { groupOption: '' };
       return { groupOption: str };
@@ -217,7 +195,6 @@ class Public extends Component {
   }
 
   setEventOption(str) {
-    if (this.isMounted === false) return;
     this.setState((state) => {
       if (str === state.eventOption) return { eventOption: '' };
       return { eventOption: str };
@@ -225,14 +202,12 @@ class Public extends Component {
   }
 
   setSortOption(str) {
-    if (this.isMounted === false) return;
     this.setState({
       sortOption: str,
     }, () => this.filterEvents());
   }
 
   nextMonth() {
-    if (this.isMounted === false) return;
     this.setState((prevState) => ({
       monthBegin: format(startOfMonth(addMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
       monthEnd: format(endOfMonth(addMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
@@ -241,7 +216,6 @@ class Public extends Component {
   }
 
   prevMonth() {
-    if (this.isMounted === false) return;
     this.setState((prevState) => ({
       monthBegin: format(startOfMonth(subMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
       monthEnd: format(endOfMonth(subMonths(prevState.currentDate, 1)), 'yyyy-MM-dd'),
